@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Vigik Pirate</string>
+
+    <string name="check_nfc_title">Check NFC</string>
+    <string name="nfc_not_available">NFC is not available</string>
+    <string name="nfc_settings">Settings</string>
+
+    <string name="hub_title">HUB</string>
+    <string name="scan_button_label">NFC scan</string>
+    <string name="emulate_button_label">Emulate NFC tag</string>
+
+    <string name="scan_nfc_title">Scan NFC</string>
+    <string name="menu_action_stop_scan">Stop</string>
+
+    <string name="emulate_tag_title">Emulate tag</string>
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/checkFragment">
+
+    <fragment
+        android:id="@+id/checkFragment"
+        android:name="com.kidor.vigik.check.CheckFragment"
+        android:label="@string/check_nfc_title"
+        tools:layout="@layout/fragment_check_nfc" >
+
+        <action
+            android:id="@+id/go_to_hub"
+            app:destination="@id/hubFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/hubFragment"
+        android:name="com.kidor.vigik.hub.HubFragment"
+        android:label="@string/hub_title"
+        tools:layout="@layout/fragment_hub" >
+
+        <action
+            android:id="@+id/go_to_scan_nfc"
+            app:destination="@id/scanFragment"/>
+
+        <action
+            android:id="@+id/go_to_emulate_tag"
+            app:destination="@id/emulateFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/scanFragment"
+        android:name="com.kidor.vigik.scan.ScanFragment"
+        android:label="@string/scan_nfc_title"
+        tools:layout="@layout/fragment_scan_nfc" />
+
+    <fragment
+        android:id="@+id/emulateFragment"
+        android:name="com.kidor.vigik.emulate.EmulateFragment"
+        android:label="@string/emulate_tag_title"
+        tools:layout="@layout/fragment_emulate_tag" />
+
+</navigation>

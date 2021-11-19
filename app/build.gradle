@@ -1,0 +1,124 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'androidx.navigation.safeargs'
+    id 'jacoco'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.kidor.vigik"
+        minSdk 23
+        targetSdk 31
+        versionCode 1
+        versionName "1.0.0-alpha.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+    buildTypes {
+        debug {
+            testCoverageEnabled false // Set to false because JaCoCo 0.8.7 fails to work with dagger/hilt
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    sourceSets {
+        final String SHARED_TEST_DIR = 'src/sharedTest/java'
+        test.java.srcDirs += SHARED_TEST_DIR
+        androidTest.java.srcDirs += SHARED_TEST_DIR
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+    reportsDirectory = layout.buildDirectory.dir('"$buildDir/reports/')
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
+
+// Custom task to merge code coverage reports from unit and instrumentation tests
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    reports {
+        html.required = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            '**/*Args*.*',          // filtering Navigation Component generated classes
+            '**/*Directions*.*',    // filtering Navigation Component generated classes
+            '**/databinding/**',    // filtering Data Binding generated classes
+            'android/**/*.*'
+    ]
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/javac/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    getSourceDirectories().setFrom(files([mainSrc]))
+    getClassDirectories().setFrom(files([debugTree]))
+    getExecutionData().setFrom(
+            fileTree(dir: project.buildDir, includes: [
+                    'jacoco/testDebugUnitTest.exec',
+                    'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'
+            ])
+    )
+}
+
+dependencies {
+    def nav_version = "2.3.5"
+    def hilt_version = "2.38.1"
+
+    // Android X
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
+
+    //Material
+    implementation 'com.google.android.material:material:1.4.0'
+
+    // Dependency Injection
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // Log
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Test
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:4.0.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Testing Navigation
+    // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.
+    debugImplementation 'androidx.fragment:fragment-testing:1.4.0-rc01'
+    androidTestImplementation "androidx.navigation:navigation-testing:$nav_version"
+}

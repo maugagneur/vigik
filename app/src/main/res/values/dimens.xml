@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Common -->
+    <dimen name="common_space_small">8dp</dimen>
+    <dimen name="common_space_medium">16dp</dimen>
+    <dimen name="common_space_large">24dp</dimen>
+    <dimen name="common_space_xlarge">32dp</dimen>
+    <dimen name="text_size_medium">16sp</dimen>
+</resources>
