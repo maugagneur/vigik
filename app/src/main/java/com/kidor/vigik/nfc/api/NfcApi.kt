@@ -6,7 +6,6 @@ import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
-import com.kidor.vigik.extensions.toHex
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,24 +51,12 @@ class NfcApi @Inject constructor(
             return
         }
 
-        // Decode intent
-        var tagUID = "N/A"
-        var tagTechList = "N/A"
-        getTag(intent)?.let { tag ->
-            tagUID = tag.id.toHex()
-            tagTechList = tag.toString()
-        }
-        val tagData = extractData(intent)
-        val tagId = extractLowLevelId(intent)
-
-        val tagInfo = "Tag UID -> $tagUID" +
-                "\nTag tech list -> $tagTechList" +
-                "\nTag data -> $tagData" +
-                "\nTag ID-> $tagId"
+        val tag: Tag? = getTag(intent)
+        val tagData = TagData(tag?.id, tag?.toString(), extractData(intent), extractLowLevelId(intent))
 
         // Notify listeners
         listeners.forEach {
-            it.onNfcTagRead(tagInfo)
+            it.onNfcTagRead(tagData)
         }
     }
 
@@ -86,24 +73,23 @@ class NfcApi @Inject constructor(
         listeners.remove(listener)
     }
 
-    private fun getTag(intent: Intent) : Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+    private fun getTag(intent: Intent): Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
 
-    private fun extractData(intent: Intent) : String {
-        val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) ?: return "No NDEF messages"
+    private fun extractData(intent: Intent): String {
+        val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+            ?: return "No NDEF messages"
         val messages = rawMessages.map { it as NdefMessage }
         val records = messages[0].records
         var recordData = ""
         records.forEachIndexed { index, ndefRecord ->
             recordData += ndefRecord.toString()
-            if (index < records.size -1) {
+            if (index < records.size - 1) {
                 recordData += "\n"
             }
         }
         return recordData
     }
 
-    private fun extractLowLevelId(intent: Intent) : String {
-        val id = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
-        return id?.toHex() ?: "N/A"
-    }
+    private fun extractLowLevelId(intent: Intent): ByteArray? =
+        intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)
 }

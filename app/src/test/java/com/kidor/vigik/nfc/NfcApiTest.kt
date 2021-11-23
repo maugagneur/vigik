@@ -7,6 +7,7 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.api.NfcApiListener
+import com.kidor.vigik.nfc.api.TagData
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -14,8 +15,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.never
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.kotlin.any
 
 /**
  * Unit tests for [NfcApi].
@@ -79,7 +83,7 @@ class NfcApiTest {
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener, never()).onNfcTagRead(anyString())
+        verify(listener, never()).onNfcTagRead(any())
     }
 
     @Test
@@ -94,38 +98,33 @@ class NfcApiTest {
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener).onNfcTagRead(
-            "Tag UID -> N/A\n" +
-                    "Tag tech list -> N/A\n" +
-                    "Tag data -> No NDEF messages\n" +
-                    "Tag ID-> N/A"
-        )
+        verify(listener).onNfcTagRead(TagData(null, null, "No NDEF messages", null))
     }
 
     @Test
     fun notNotifyWhenReceiveIntentWithData() {
         logTestName()
 
+        val tagUid = byteArrayOf(0x42, 0x13, 0x37, 0xFF.toByte())
+        val tagDescription = "TAG: Tech [NfcA, MifareClassic, NdefFormatable]"
+        val tagData = "Fake NDEF description"
+        val tagId = byteArrayOf(0xDE.toByte(), 0xAD.toByte(), 0xBE.toByte(), 0xEF.toByte())
+
         // When
-        `when`(tag.id).thenReturn(byteArrayOf(0x42, 0x13, 0x37, 0xFF.toByte()))
-        `when`(tag.toString()).thenReturn("TAG: Tech [NfcA, MifareClassic, NdefFormatable]")
+        `when`(tag.id).thenReturn(tagUid)
+        `when`(tag.toString()).thenReturn(tagDescription)
         `when`(intent.action).thenReturn(NfcAdapter.ACTION_TAG_DISCOVERED)
         `when`(intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)).thenReturn(tag)
         `when`(intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)).thenReturn(arrayOf(ndefMessage))
-        `when`(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)).thenReturn(byteArrayOf(0xDE.toByte(), 0xAD.toByte(), 0xBE.toByte(), 0xEF.toByte()))
+        `when`(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)).thenReturn(tagId)
         `when`(ndefMessage.records).thenReturn(arrayOf(ndefRecord))
-        `when`(ndefRecord.toString()).thenReturn("Fake NDEF description")
+        `when`(ndefRecord.toString()).thenReturn(tagData)
 
         // Run
         nfcApi.register(listener)
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener).onNfcTagRead(
-            "Tag UID -> 42 13 37 FF\n" +
-                    "Tag tech list -> TAG: Tech [NfcA, MifareClassic, NdefFormatable]\n" +
-                    "Tag data -> Fake NDEF description\n" +
-                    "Tag ID-> DE AD BE EF"
-        )
+        verify(listener).onNfcTagRead(TagData(tagUid, tagDescription, tagData, tagId))
     }
 }

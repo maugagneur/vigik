@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.scan
 
 import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.nfc.api.TagData
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Before
 import org.junit.Test
@@ -59,10 +60,10 @@ class ScanViewModelTest {
         logTestName()
 
         // Run
-        val tagInfo = "Dummy tag info"
-        viewModel.onNfcTagRead(tagInfo)
+        val tagData = TagData()
+        viewModel.onNfcTagRead(tagData)
 
         // Verify
-        verify(view).displayScanResult(tagInfo)
+        verify(view).displayScanResult(tagData.toString())
     }
 }
