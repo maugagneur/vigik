@@ -5,6 +5,8 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.nfc.api.NfcApiListener
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

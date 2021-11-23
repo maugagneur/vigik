@@ -2,7 +2,6 @@ package com.kidor.vigik.ui.scan
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.scan.ScanFragment
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName

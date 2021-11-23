@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/checkFragment"
-        android:name="com.kidor.vigik.check.CheckFragment"
+        android:name="com.kidor.vigik.ui.check.CheckFragment"
         android:label="@string/check_nfc_title"
         tools:layout="@layout/fragment_check_nfc" >
 
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/hubFragment"
-        android:name="com.kidor.vigik.hub.HubFragment"
+        android:name="com.kidor.vigik.ui.hub.HubFragment"
         android:label="@string/hub_title"
         tools:layout="@layout/fragment_hub" >
 
@@ -35,13 +35,13 @@
 
     <fragment
         android:id="@+id/scanFragment"
-        android:name="com.kidor.vigik.scan.ScanFragment"
+        android:name="com.kidor.vigik.ui.scan.ScanFragment"
         android:label="@string/scan_nfc_title"
         tools:layout="@layout/fragment_scan_nfc" />
 
     <fragment
         android:id="@+id/emulateFragment"
-        android:name="com.kidor.vigik.emulate.EmulateFragment"
+        android:name="com.kidor.vigik.ui.emulate.EmulateFragment"
         android:label="@string/emulate_tag_title"
         tools:layout="@layout/fragment_emulate_tag" />
 

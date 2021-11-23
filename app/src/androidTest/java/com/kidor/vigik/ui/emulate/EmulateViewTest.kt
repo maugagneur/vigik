@@ -2,7 +2,6 @@ package com.kidor.vigik.ui.emulate
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.emulate.EmulateFragment
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
 import com.kidor.vigik.utils.launchFragmentInHiltContainer

@@ -6,7 +6,6 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.hub.HubFragment
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisibleWithText
 import com.kidor.vigik.utils.EspressoUtils.performClickOnView

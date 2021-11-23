@@ -10,6 +10,6 @@
     app:defaultNavHost="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     app:navGraph="@navigation/nav_graph"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
 </androidx.fragment.app.FragmentContainerView>

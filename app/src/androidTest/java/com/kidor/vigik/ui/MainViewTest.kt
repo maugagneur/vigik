@@ -2,7 +2,6 @@ package com.kidor.vigik.ui
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.kidor.vigik.MainActivity
 import com.kidor.vigik.R
 import com.kidor.vigik.utils.EspressoUtils.checkTextViewInParentIsVisibleWithText
 import com.kidor.vigik.utils.TestUtils.logTestName
