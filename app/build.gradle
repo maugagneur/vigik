@@ -97,6 +97,13 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:${androidxVer.navigation}"
     implementation "androidx.navigation:navigation-ui-ktx:${androidxVer.navigation}"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:${androidxVer.navigation}"
+    implementation "androidx.room:room-runtime:${androidxVer.room}"
+    implementation "androidx.room:room-ktx:${androidxVer.room}"
+    kapt "androidx.room:room-compiler:${androidxVer.room}"
+
+    // Kotlin
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinVer.coroutines}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinVer.coroutines}"
 
     // Material
     implementation "com.google.android.material:material:${androidxVer.material}"

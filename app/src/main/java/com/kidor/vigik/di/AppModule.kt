@@ -2,6 +2,9 @@ package com.kidor.vigik.di
 
 import android.content.Context
 import android.nfc.NfcAdapter
+import androidx.room.Room
+import com.kidor.vigik.db.AppDataBase
+import com.kidor.vigik.db.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,5 +24,19 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter = NfcAdapter.getDefaultAdapter(context)
+    fun provideDatabase(@ApplicationContext context: Context): AppDataBase =
+        Room.databaseBuilder(
+            context,
+            AppDataBase::class.java,
+            DATABASE_NAME
+        ).build()
+
+    @Singleton
+    @Provides
+    fun provideTagDao(dataBase: AppDataBase) = dataBase.tagDao()
+
+    @Singleton
+    @Provides
+    fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter =
+        NfcAdapter.getDefaultAdapter(context)
 }

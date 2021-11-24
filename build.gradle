@@ -9,7 +9,7 @@ buildscript {
 
     dependencies {
         classpath "com.android.tools.build:gradle:$gradleBuildVer"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVer"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVer.plugin}"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${androidxVer.navigation}"
         classpath "com.google.dagger:hilt-android-gradle-plugin:${androidxVer.hilt}"
 

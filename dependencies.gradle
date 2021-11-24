@@ -1,7 +1,6 @@
 ext {
 
     gradleBuildVer = '7.0.3'
-    kotlinVer = '1.6.0'
 
     sdkVer = [
             'compile': 31,
@@ -16,7 +15,13 @@ ext {
             'fragment'        : '1.4.0',
             'hilt'            : '2.40.1',
             'material'        : '1.4.0',
-            'navigation'      : '2.3.5'
+            'navigation'      : '2.3.5',
+            'room'            : '2.3.0'
+    ]
+
+    kotlinVer = [
+            'plugin'    : '1.6.0',
+            'coroutines': '1.5.2'
     ]
 
     timberVer = '5.0.1'
