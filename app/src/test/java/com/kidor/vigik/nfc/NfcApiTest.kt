@@ -7,7 +7,7 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.api.NfcApiListener
-import com.kidor.vigik.nfc.api.TagData
+import com.kidor.vigik.utils.SystemWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -32,6 +32,8 @@ class NfcApiTest {
 
     @Mock
     lateinit var nfcAdapter: NfcAdapter
+    @Mock
+    lateinit var systemWrapper: SystemWrapper
     @Mock
     lateinit var listener: NfcApiListener
     @Mock
@@ -90,7 +92,10 @@ class NfcApiTest {
     fun notNotifyWhenReceiveEmptyIntent() {
         logTestName()
 
+        val now = System.currentTimeMillis()
+
         // When
+        `when`(systemWrapper.currentTimeMillis()).thenReturn(now)
         `when`(intent.action).thenReturn(NfcAdapter.ACTION_TAG_DISCOVERED)
 
         // Run
@@ -98,19 +103,21 @@ class NfcApiTest {
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener).onNfcTagRead(TagData(null, null, "No NDEF messages", null))
+        verify(listener).onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, null, null, "No NDEF messages", null))
     }
 
     @Test
-    fun notNotifyWhenReceiveIntentWithData() {
+    fun notifyWhenReceiveIntentWithData() {
         logTestName()
 
+        val now = System.currentTimeMillis()
         val tagUid = byteArrayOf(0x42, 0x13, 0x37, 0xFF.toByte())
         val tagDescription = "TAG: Tech [NfcA, MifareClassic, NdefFormatable]"
         val tagData = "Fake NDEF description"
         val tagId = byteArrayOf(0xDE.toByte(), 0xAD.toByte(), 0xBE.toByte(), 0xEF.toByte())
 
         // When
+        `when`(systemWrapper.currentTimeMillis()).thenReturn(now)
         `when`(tag.id).thenReturn(tagUid)
         `when`(tag.toString()).thenReturn(tagDescription)
         `when`(intent.action).thenReturn(NfcAdapter.ACTION_TAG_DISCOVERED)
@@ -125,6 +132,6 @@ class NfcApiTest {
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener).onNfcTagRead(TagData(tagUid, tagDescription, tagData, tagId))
+        verify(listener).onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, tagUid, tagDescription, tagData, tagId))
     }
 }

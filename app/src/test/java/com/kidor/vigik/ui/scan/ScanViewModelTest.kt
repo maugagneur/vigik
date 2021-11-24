@@ -1,7 +1,8 @@
 package com.kidor.vigik.ui.scan
 
+import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
-import com.kidor.vigik.nfc.api.TagData
+import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Before
 import org.junit.Test
@@ -23,6 +24,8 @@ class ScanViewModelTest {
 
     @Mock
     lateinit var nfcApi: NfcApi
+    @Mock
+    lateinit var tagRepository: TagRepository
     @Mock
     lateinit var view: ScanContract.ScanView
 
@@ -60,7 +63,7 @@ class ScanViewModelTest {
         logTestName()
 
         // Run
-        val tagData = TagData()
+        val tagData = Tag()
         viewModel.onNfcTagRead(tagData)
 
         // Verify

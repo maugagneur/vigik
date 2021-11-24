@@ -6,6 +6,7 @@ import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import com.kidor.vigik.utils.SystemWrapper
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,7 +21,8 @@ import javax.inject.Singleton
  */
 @Singleton
 class NfcApi @Inject constructor(
-    private val nfcAdapter: NfcAdapter
+    private val nfcAdapter: NfcAdapter,
+    private val systemWrapper: SystemWrapper
 ) {
 
     private val listeners: MutableList<NfcApiListener> = mutableListOf()
@@ -52,7 +54,13 @@ class NfcApi @Inject constructor(
         }
 
         val tag: Tag? = getTag(intent)
-        val tagData = TagData(tag?.id, tag?.toString(), extractData(intent), extractLowLevelId(intent))
+        val tagData = com.kidor.vigik.nfc.model.Tag(
+            timestamp = systemWrapper.currentTimeMillis(),
+            uid = tag?.id,
+            techList = tag?.toString(),
+            data = extractData(intent),
+            id = extractLowLevelId(intent)
+        )
 
         // Notify listeners
         listeners.forEach {
