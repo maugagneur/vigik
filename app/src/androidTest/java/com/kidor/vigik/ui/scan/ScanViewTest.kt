@@ -31,5 +31,8 @@ class ScanViewTest {
 
         // Check that the textview for tag's data is hidden
         checkViewIsNotVisible(R.id.tag_information_textview, "Tag information")
+
+        // Check that the floating action button for saving tag is hidden
+        checkViewIsNotVisible(R.id.save_fab, "Save FAB")
     }
 }

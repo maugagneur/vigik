@@ -7,7 +7,13 @@ interface ScanContract {
 
     interface ScanView : BaseView {
         fun displayScanResult(tagInfo: String)
+        fun hideSaveButton()
+        fun showSaveButton()
+        fun promptSaveSuccess()
+        fun promptSaveFail()
     }
 
-    interface ScanViewModel : BaseViewModel<ScanView>
+    interface ScanViewModel : BaseViewModel<ScanView> {
+        fun saveTag()
+    }
 }
