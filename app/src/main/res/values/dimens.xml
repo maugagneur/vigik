@@ -6,5 +6,5 @@
     <dimen name="common_space_large">24dp</dimen>
     <dimen name="common_space_xlarge">32dp</dimen>
     <dimen name="text_size_medium">16sp</dimen>
-    <dimen name="recycler_item_minimum_height">32dp</dimen>
+    <dimen name="recycler_item_minimum_height">40dp</dimen>
 </resources>

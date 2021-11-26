@@ -1,9 +1,6 @@
 package com.kidor.vigik.ui.history
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.model.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,17 +10,28 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val repository: TagRepository
-) : ViewModel(), HistoryContract.HistoryViewModel {
+) : ViewModel() {
 
-    private lateinit var view: HistoryContract.HistoryView
+    private val viewStateMediator: MediatorLiveData<HistoryViewState> = MediatorLiveData<HistoryViewState>()
 
-    override fun setView(view: HistoryContract.HistoryView) {
-        this.view = view
+    val viewState: LiveData<HistoryViewState> get() = viewStateMediator
+
+    init {
+        val initialViewState: MutableLiveData<HistoryViewState> = MutableLiveData<HistoryViewState>()
+        initialViewState.value = HistoryViewState.Initializing
+
+        viewStateMediator.addSource(initialViewState) { viewStateMediator.value = it }
+        viewStateMediator.addSource(repository.allTags.asLiveData()) { tags ->
+            viewStateMediator.removeSource(initialViewState)
+            viewStateMediator.value = if (tags.isEmpty()) {
+                HistoryViewState.NoTag
+            } else {
+                HistoryViewState.DisplayTags(tags.sortedByDescending { it.timestamp })
+            }
+        }
     }
 
-    override val allTags: LiveData<List<Tag>> = repository.allTags.asLiveData()
-
-    override fun deleteTag(tag: Tag) {
+    fun deleteTag(tag: Tag) {
         viewModelScope.launch {
             repository.delete(tag)
         }

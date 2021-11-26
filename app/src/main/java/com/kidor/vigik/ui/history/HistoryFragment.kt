@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,13 +14,11 @@ import com.kidor.vigik.ui.history.list.OnDeleteTagClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HistoryFragment : Fragment(), HistoryContract.HistoryView, OnDeleteTagClickListener {
+class HistoryFragment : Fragment(), OnDeleteTagClickListener {
 
     private lateinit var binding: FragmentHistoryBinding
     private val viewModel by viewModels<HistoryViewModel>()
     private lateinit var historyAdapter: HistoryAdapter
-
-    override fun isActive() = isAdded
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         historyAdapter = HistoryAdapter(this)
@@ -36,15 +33,25 @@ class HistoryFragment : Fragment(), HistoryContract.HistoryView, OnDeleteTagClic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setView(this)
-        viewModel.allTags.observe(this) { tags ->
-            historyAdapter.submitList(tags)
-        }
-    }
 
-    override fun showError(message: String) {
-        activity?.runOnUiThread {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        viewModel.viewState.observe(this) { viewState ->
+            when (viewState) {
+                is HistoryViewState.Initializing -> {
+                    binding.tagHistoryRecyclerview.visibility = View.GONE
+                    binding.noDataTextview.visibility = View.GONE
+                    historyAdapter.submitList(emptyList())
+                }
+                is HistoryViewState.DisplayTags -> {
+                    binding.tagHistoryRecyclerview.visibility = View.VISIBLE
+                    binding.noDataTextview.visibility = View.GONE
+                    historyAdapter.submitList(viewState.tags)
+                }
+                HistoryViewState.NoTag -> {
+                    binding.tagHistoryRecyclerview.visibility = View.GONE
+                    binding.noDataTextview.visibility = View.VISIBLE
+                    historyAdapter.submitList(emptyList())
+                }
+            }
         }
     }
 
