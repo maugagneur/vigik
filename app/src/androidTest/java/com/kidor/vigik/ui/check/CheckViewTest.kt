@@ -7,6 +7,7 @@ import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
 import com.kidor.vigik.utils.launchFragmentInHiltContainer
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -34,5 +35,13 @@ class CheckViewTest {
 
         // Check that settings button is hidden
         checkViewIsNotVisible(R.id.nfc_settings_button, "Settings button")
+    }
+
+    @Test
+    @Ignore("Needs to mock NFC adapter or NFC API")
+    fun displayButtonWhenNfcDisable() {
+        logTestName()
+
+        // TODO
     }
 }

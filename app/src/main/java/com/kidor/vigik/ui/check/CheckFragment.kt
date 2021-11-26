@@ -13,12 +13,10 @@ import com.kidor.vigik.databinding.FragmentCheckNfcBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CheckFragment : Fragment(), CheckContract.CheckView {
+class CheckFragment : Fragment() {
 
     private lateinit var binding: FragmentCheckNfcBinding
     private val viewModel by viewModels<CheckViewModel>()
-
-    override fun isActive() = isAdded
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentCheckNfcBinding.inflate(inflater, container, false).also {
@@ -31,40 +29,36 @@ class CheckFragment : Fragment(), CheckContract.CheckView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.setView(this)
+        viewModel.viewState.observe(this) { viewState ->
+            when (viewState) {
+                CheckViewState.Loading -> {
+                    binding.progressBar.visibility = View.VISIBLE
+                    binding.nfcRefreshButton.visibility = View.GONE
+                    binding.nfcSettingsButton.visibility = View.GONE
+                }
+                CheckViewState.NfcIsDisable -> {
+                    binding.progressBar.visibility = View.GONE
+                    binding.nfcRefreshButton.visibility = View.VISIBLE
+                    binding.nfcSettingsButton.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        viewModel.viewEvent.observe(this) {
+            it.getContentIfNotHandled()?.let { event ->
+                when (event) {
+                    CheckViewEvent.NavigateToHub ->
+                        Navigation.findNavController(requireView()).navigate(CheckFragmentDirections.goToHub())
+                    CheckViewEvent.NavigateToSettings ->
+                        startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        viewModel.onStart()
-    }
-
-    override fun displayLoader() {
-        activity?.runOnUiThread {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.nfcRefreshButton.visibility = View.GONE
-            binding.nfcSettingsButton.visibility = View.GONE
-        }
-    }
-
-    override fun displayNfcDisableMessage() {
-        activity?.runOnUiThread {
-            binding.progressBar.visibility = View.GONE
-            binding.nfcRefreshButton.visibility = View.VISIBLE
-            binding.nfcSettingsButton.visibility = View.VISIBLE
-        }
-    }
-
-    override fun displayNfcSettings() {
-        activity?.runOnUiThread {
-            startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
-        }
-    }
-
-    override fun goToNextStep() {
-        activity?.runOnUiThread {
-            Navigation.findNavController(requireView()).navigate(CheckFragmentDirections.goToHub())
-        }
+        viewModel.onActionRefresh()
     }
 }
