@@ -28,8 +28,9 @@ ext {
     timberVer = '5.0.1'
 
     testVer = [
-            'junit'        : '4.13.2',
+            'coreTesting'  : '2.1.0',
             'espresso'     : '3.4.0',
+            'junit'        : '4.13.2',
             'mockitoKotlin': '4.0.0',
             'testExt'      : '1.1.3'
     ]

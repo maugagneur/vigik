@@ -1,64 +1,77 @@
 package com.kidor.vigik.ui.hub
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import com.kidor.vigik.utils.AssertUtils.assertEquals
+import com.kidor.vigik.utils.Event
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class HubViewModelTest {
 
-    private lateinit var viewModel: HubContract.HubViewModel
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
+
+    private lateinit var viewModel: HubViewModel
 
     @Mock
-    private lateinit var view: HubContract.HubView
+    private lateinit var observer: Observer<Event<HubViewEvent>>
 
     @Before
     fun setUp() {
         viewModel = HubViewModel()
-        viewModel.setView(view)
 
-        `when`(view.isActive()).thenReturn(true)
+        viewModel.viewEvent.observeForever(observer)
     }
 
     @Test
     fun redirectToReadTag() {
         logTestName()
 
-        // Run
+        // When
         viewModel.onActionReadTag()
 
-        // Verify
-        verify(view).goToReadTag()
-        verify(view, never()).goToEmulatedTag()
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(HubViewEvent.NavigateToScanView, event?.peekContent(), "Navigation event")
+    }
+
+    @Test
+    fun redirectToTagsHistory() {
+        logTestName()
+
+        // When
+        viewModel.onActionTagHistory()
+
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(HubViewEvent.NavigateToHistoryView, event?.peekContent(), "Navigation event")
     }
 
     @Test
     fun redirectToEmulateTag() {
         logTestName()
 
-        // Run
+        // When
         viewModel.onActionEmulateTag()
 
-        // Verify
-        verify(view, never()).goToReadTag()
-        verify(view).goToEmulatedTag()
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(HubViewEvent.NavigateToEmulateView, event?.peekContent(), "Navigation event")
     }
 
     @Test
     fun noAutomaticRedirectionAtStart() {
         logTestName()
 
-        // Run
-        viewModel.onStart()
-
-        // Verify
-        verify(view, never()).goToReadTag()
-        verify(view, never()).goToEmulatedTag()
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(null, event?.peekContent(), "Navigation event")
     }
 }
