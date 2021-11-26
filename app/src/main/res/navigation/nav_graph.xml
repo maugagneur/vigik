@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/checkFragment">
 
@@ -9,11 +9,11 @@
         android:id="@+id/checkFragment"
         android:name="com.kidor.vigik.ui.check.CheckFragment"
         android:label="@string/check_nfc_title"
-        tools:layout="@layout/fragment_check_nfc" >
+        tools:layout="@layout/fragment_check_nfc">
 
         <action
             android:id="@+id/go_to_hub"
-            app:destination="@id/hubFragment"/>
+            app:destination="@id/hubFragment" />
 
     </fragment>
 
@@ -21,15 +21,19 @@
         android:id="@+id/hubFragment"
         android:name="com.kidor.vigik.ui.hub.HubFragment"
         android:label="@string/hub_title"
-        tools:layout="@layout/fragment_hub" >
+        tools:layout="@layout/fragment_hub">
 
         <action
             android:id="@+id/go_to_scan_nfc"
-            app:destination="@id/scanFragment"/>
+            app:destination="@id/scanFragment" />
+
+        <action
+            android:id="@+id/go_to_tag_history"
+            app:destination="@id/historyFragment" />
 
         <action
             android:id="@+id/go_to_emulate_tag"
-            app:destination="@id/emulateFragment"/>
+            app:destination="@id/emulateFragment" />
 
     </fragment>
 
@@ -38,6 +42,12 @@
         android:name="com.kidor.vigik.ui.scan.ScanFragment"
         android:label="@string/scan_nfc_title"
         tools:layout="@layout/fragment_scan_nfc" />
+
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.kidor.vigik.ui.history.HistoryFragment"
+        android:label="@string/tag_history_fragment"
+        tools:layout="@layout/fragment_history" />
 
     <fragment
         android:id="@+id/emulateFragment"

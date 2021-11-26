@@ -8,10 +8,12 @@ interface HubContract {
     interface HubView : BaseView {
         fun goToEmulatedTag()
         fun goToReadTag()
+        fun goToTagHistory()
     }
 
     interface HubViewModel : BaseViewModel<HubView> {
         fun onActionEmulateTag()
         fun onActionReadTag()
+        fun onActionTagHistory()
     }
 }

@@ -7,6 +7,7 @@
 
     <string name="hub_title">HUB</string>
     <string name="scan_button_label">NFC scan</string>
+    <string name="history_button_label">Tags history</string>
     <string name="emulate_button_label">Emulate NFC tag</string>
 
     <string name="scan_nfc_title">Scan NFC</string>
@@ -14,6 +15,10 @@
     <string name="fab_save_scan_result">Save</string>
     <string name="save_tag_success">Tag saved successfully</string>
     <string name="save_tag_fail">Fail to save tag</string>
+
+    <string name="tag_history_fragment">History</string>
+    <string name="recyclerview_content_description">Saved tags</string>
+    <string name="no_data_label">No data available</string>
 
     <string name="emulate_tag_title">Emulate tag</string>
 </resources>

@@ -18,6 +18,7 @@ class HubFragment : Fragment(), HubContract.HubView {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentHubBinding.inflate(inflater, container, false).also {
             it.scanButton.setOnClickListener { viewModel.onActionReadTag() }
+            it.historyButton.setOnClickListener { viewModel.onActionTagHistory() }
             it.emulateButton.setOnClickListener { viewModel.onActionEmulateTag() }
         }
         return binding.root
@@ -38,6 +39,12 @@ class HubFragment : Fragment(), HubContract.HubView {
     override fun goToReadTag() {
         activity?.runOnUiThread {
             Navigation.findNavController(requireView()).navigate(HubFragmentDirections.goToScanNfc())
+        }
+    }
+
+    override fun goToTagHistory() {
+        activity?.runOnUiThread {
+            Navigation.findNavController(requireView()).navigate(HubFragmentDirections.goToTagHistory())
         }
     }
 }

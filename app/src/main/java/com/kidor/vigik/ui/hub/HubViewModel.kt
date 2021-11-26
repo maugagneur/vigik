@@ -25,4 +25,10 @@ class HubViewModel : ViewModel(), HubContract.HubViewModel {
             view.goToReadTag()
         }
     }
+
+    override fun onActionTagHistory() {
+        if (view.isActive()) {
+            view.goToTagHistory()
+        }
+    }
 }
