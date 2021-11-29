@@ -1,11 +1,16 @@
 package com.kidor.vigik.ui.scan
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.utils.AssertUtils.assertEquals
+import com.kidor.vigik.utils.Event
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
@@ -21,6 +26,9 @@ import org.mockito.kotlin.doSuspendableAnswer
 @RunWith(MockitoJUnitRunner::class)
 class ScanViewModelTest {
 
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
+
     @InjectMocks
     lateinit var viewModel: ScanViewModel
 
@@ -28,79 +36,112 @@ class ScanViewModelTest {
     lateinit var nfcApi: NfcApi
     @Mock
     lateinit var tagRepository: TagRepository
+
     @Mock
-    lateinit var view: ScanContract.ScanView
+    private lateinit var stateObserver: Observer<ScanViewState>
+    @Mock
+    private lateinit var eventObserver: Observer<Event<ScanViewEvent>>
 
     @Before
     fun setUp() {
-        viewModel.setView(view)
-
-        `when`(view.isActive()).thenReturn(true)
+        viewModel.viewState.observeForever(stateObserver)
+        viewModel.viewEvent.observeForever(eventObserver)
     }
 
     @Test
     fun registerViewOnStart() {
         logTestName()
 
-        // Run
-        viewModel.onStart()
-
-        // Verify
+        // Then
         verify(nfcApi).register(viewModel)
+        val state = viewModel.viewState.value
+        assertEquals(ScanViewState.Loading, state, "View state")
     }
 
     @Test
     fun unregisterViewOnStart() {
         logTestName()
 
-        // Run
-        viewModel.onStop()
+        // When
+        viewModel.onCleared()
 
-        // Verify
+        // Then
         verify(nfcApi).unregister(viewModel)
     }
 
     @Test
-    fun forwardTagInfoToView() {
+    fun forwardGoodTagInfoToView() {
         logTestName()
 
-        // Run
-        val tag = Tag()
+        // Given
+        val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
+
+        // When
         viewModel.onNfcTagRead(tag)
 
-        // Verify
-        verify(view).displayScanResult(tag.toString())
+        // Then
+        val state = viewModel.viewState.value
+        assertEquals(ScanViewState.DisplayTag(tag, true), state, "View state")
+    }
+
+    @Test
+    fun forwardInvalidTagInfoToView() {
+        logTestName()
+
+        // Given
+        val tag = Tag()
+
+        // When
+        viewModel.onNfcTagRead(tag)
+
+        // Then
+        val state = viewModel.viewState.value
+        assertEquals(ScanViewState.DisplayTag(tag, false), state, "View state")
+    }
+
+    @Test
+    fun promptErrorWhenTryingToSaveTagBeforeAnyResult() = runBlocking {
+        logTestName()
+
+        // When
+        viewModel.saveTag()
+
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekContent(), "Failure event")
     }
 
     @Test
     fun promptSuccessWhenTagIsSaved() = runBlocking {
         logTestName()
 
-        // When
+        // Given
         val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
         `when`(tagRepository.insert(tag)).doSuspendableAnswer { 1L }
 
-        // Run
+        // When
         viewModel.onNfcTagRead(tag)
         viewModel.saveTag()
 
-        // Verify
-        verify(view).promptSaveSuccess()
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(ScanViewEvent.SaveTagSuccess, event?.peekContent(), "Success event")
     }
 
     @Test
     fun promptErrorWhenTagIsNotSaved() = runBlocking {
         logTestName()
 
-        // When
+        // Given
         val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
         `when`(tagRepository.insert(tag)).doSuspendableAnswer { -1L }
 
-        // Run
+        // When
         viewModel.onNfcTagRead(tag)
         viewModel.saveTag()
 
-        // Verify
-        verify(view).promptSaveFail()
+        // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekContent(), "Failure event")
     }
 }

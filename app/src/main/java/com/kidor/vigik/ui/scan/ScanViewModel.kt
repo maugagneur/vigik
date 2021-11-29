@@ -1,11 +1,15 @@
 package com.kidor.vigik.ui.scan
 
+import androidx.annotation.RestrictTo
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.api.NfcApiListener
 import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -15,42 +19,37 @@ import javax.inject.Inject
 class ScanViewModel @Inject constructor(
     private val nfcApi: NfcApi,
     private val tagRepository: TagRepository
-) : ViewModel(), NfcApiListener, ScanContract.ScanViewModel {
+) : ViewModel(), NfcApiListener {
 
-    private lateinit var view: ScanContract.ScanView
-    private var tag: Tag? = null
+    private val _viewState = MutableLiveData<ScanViewState>()
+    val viewState: LiveData<ScanViewState> get() = _viewState
 
-    override fun setView(view: ScanContract.ScanView) {
-        this.view = view
-    }
+    private val _viewEvent = MutableLiveData<Event<ScanViewEvent>>()
+    val viewEvent: LiveData<Event<ScanViewEvent>> get() = _viewEvent
 
-    override fun onStart() {
+    private var lastTagScanned: Tag? = null
+
+    init {
+        _viewState.value = ScanViewState.Loading
         nfcApi.register(this)
     }
 
-    override fun onStop() {
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    public override fun onCleared() {
+        super.onCleared()
         nfcApi.unregister(this)
     }
 
     override fun onNfcTagRead(tag: Tag) {
-        // Memorized last read tag
-        this.tag = tag
-
-        // Update view
-        if (view.isActive()) {
-            view.displayScanResult(tag.toString())
-            if (tag.uid == null) {
-                view.hideSaveButton()
-            } else {
-                view.showSaveButton()
-            }
-        }
+        this.lastTagScanned = tag
+        _viewState.value = ScanViewState.DisplayTag(tag, tag.uid != null)
     }
 
-    override fun saveTag() {
-        tag.let { tag ->
+    fun saveTag() {
+        lastTagScanned.let { tag ->
             if (tag == null) {
                 Timber.w("Trying to save invalid tag into database")
+                _viewEvent.value = Event(ScanViewEvent.SaveTagFailure)
             } else {
                 insertTagInTheDatabase(tag)
             }
@@ -61,14 +60,10 @@ class ScanViewModel @Inject constructor(
         viewModelScope.launch {
             if (tagRepository.insert(tag) > 0) {
                 Timber.i("Tag saved into database with success")
-                if (view.isActive()) {
-                    view.promptSaveSuccess()
-                }
+                _viewEvent.value = Event(ScanViewEvent.SaveTagSuccess)
             } else {
                 Timber.e("Fail to save tag into database")
-                if (view.isActive()) {
-                    view.promptSaveFail()
-                }
+                _viewEvent.value = Event(ScanViewEvent.SaveTagFailure)
             }
         }
     }
