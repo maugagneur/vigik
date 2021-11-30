@@ -23,4 +23,6 @@ sealed class HistoryViewState {
      * State when the view has not tags to display.
      */
     object NoTag: HistoryViewState()
+
+    override fun toString(): String = javaClass.simpleName
 }

@@ -20,5 +20,5 @@ sealed class ScanViewState {
      */
     data class DisplayTag(val tag: Tag, val canBeSaved: Boolean) : ScanViewState()
 
-    override fun toString() = javaClass.simpleName
+    override fun toString(): String = javaClass.simpleName
 }
