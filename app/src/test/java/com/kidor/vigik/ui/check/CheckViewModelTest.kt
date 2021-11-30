@@ -2,15 +2,14 @@ package com.kidor.vigik.ui.check
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.Event
 import com.kidor.vigik.utils.TestUtils.logTestName
-import kotlinx.coroutines.runBlocking
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Rule
-import org.junit.Test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -23,6 +22,10 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class CheckViewModelTest {
 
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
+
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -34,6 +37,7 @@ class CheckViewModelTest {
 
     @Mock
     private lateinit var stateObserver: Observer<CheckViewState>
+
     @Mock
     private lateinit var eventObserver: Observer<Event<CheckViewEvent>>
 
@@ -43,9 +47,9 @@ class CheckViewModelTest {
         viewModel.viewEvent.observeForever(eventObserver)
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    @Ignore("Find a way to handle coroutine's delay")
-    fun goToNextScreenWhenNfcEnableOnStart() = runBlocking {
+    fun goToNextScreenWhenNfcEnableOnStart() {
         logTestName()
 
         // Given
@@ -53,15 +57,15 @@ class CheckViewModelTest {
 
         // When
         viewModel.onActionRefresh()
-        Thread.sleep(TIME_BEFORE_NFC_CHECK * 2)
+        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
         val event = viewModel.viewEvent.value
         assertEquals(CheckViewEvent.NavigateToHub, event?.peekContent(), "Navigation event")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    @Ignore("Find a way to handle coroutine's delay")
     fun displayErrorWhenNfcDisableOnStart() {
         logTestName()
 
@@ -70,12 +74,15 @@ class CheckViewModelTest {
 
         // When
         viewModel.onActionRefresh()
+        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
+        val event = viewModel.viewState.value
+        assertEquals(CheckViewState.NfcIsDisable, event, "View state")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    @Ignore("Find a way to handle coroutine's delay")
     fun goToNextScreenWhenNfcEnableOnRefresh() {
         logTestName()
 
@@ -84,13 +91,16 @@ class CheckViewModelTest {
 
         // When
         viewModel.onActionRefresh()
+        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
+        val event = viewModel.viewEvent.value
+        assertEquals(CheckViewEvent.NavigateToHub, event?.peekContent(), "Navigation event")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
-    @Ignore("Find a way to handle coroutine's delay")
-    fun displayErrorWhenNfcDisableOnRefresh() {
+    fun displayErrorWhenNfcDisableOnRefresh() = runBlockingTest {
         logTestName()
 
         // Given
@@ -98,8 +108,11 @@ class CheckViewModelTest {
 
         // When
         viewModel.onActionRefresh()
+        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
+        val event = viewModel.viewState.value
+        assertEquals(CheckViewState.NfcIsDisable, event, "View state")
     }
 
     @Test
@@ -108,6 +121,7 @@ class CheckViewModelTest {
 
         // When
         viewModel.onActionSettings()
+        mainCoroutineRule.testDispatcher.advanceUntilIdle()
 
         // Then
         val event = viewModel.viewEvent.value

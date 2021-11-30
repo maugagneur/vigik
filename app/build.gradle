@@ -96,6 +96,7 @@ dependencies {
     implementation "androidx.core:core-ktx:${androidxVer.coreKtx}"
     implementation "androidx.lifecycle:lifecycle-common-java8:${androidxVer.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:${androidxVer.lifecycle}"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidxVer.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidxVer.lifecycle}"
     implementation "androidx.navigation:navigation-fragment-ktx:${androidxVer.navigation}"
     implementation "androidx.navigation:navigation-ui-ktx:${androidxVer.navigation}"
@@ -107,6 +108,7 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinVer.coroutines}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinVer.coroutines}"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${kotlinVer.coroutines}"
 
     // Material
     implementation "com.google.android.material:material:${androidxVer.material}"
