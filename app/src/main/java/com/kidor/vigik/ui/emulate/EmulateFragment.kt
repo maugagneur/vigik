@@ -10,12 +10,10 @@ import com.kidor.vigik.databinding.FragmentEmulateTagBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EmulateFragment : Fragment(), EmulateContract.EmulateView {
+class EmulateFragment : Fragment() {
 
     private lateinit var binding: FragmentEmulateTagBinding
     private val viewModel by viewModels<EmulateViewModel>()
-
-    override fun isActive() = isAdded
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentEmulateTagBinding.inflate(inflater, container, false)
@@ -25,22 +23,8 @@ class EmulateFragment : Fragment(), EmulateContract.EmulateView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.setView(this)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.onStart()
-    }
-
-    override fun onStop() {
-        viewModel.onStop()
-        super.onStop()
-    }
-
-    override fun addLogLine(newLine: String) {
-        activity?.runOnUiThread {
-            binding.logTextview.append("\n" + newLine)
+        viewModel.viewState.observe(this) { viewState ->
+            if (viewState is EmulateViewState.DisplayLogLine) binding.logTextview.append("\n" + viewState.newLine)
         }
     }
 }

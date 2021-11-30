@@ -2,58 +2,59 @@ package com.kidor.vigik.ui.emulate
 
 import android.nfc.cardemulation.HostApduService
 import android.os.RemoteException
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import com.kidor.vigik.nfc.hostapdu.HostApduManager
+import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.anyString
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
-import org.mockito.kotlin.atLeastOnce
 import org.mockito.kotlin.doAnswer
 
 @RunWith(MockitoJUnitRunner::class)
 class EmulateViewModelTest {
 
+    @get:Rule
+    val instantExecutorRule = InstantTaskExecutorRule()
+
     @InjectMocks
     private lateinit var viewModel: EmulateViewModel
 
     @Mock
-    private lateinit var view: EmulateContract.EmulateView
-    @Mock
     private lateinit var hostApduManager: HostApduManager
+
+    @Mock
+    private lateinit var stateObserver: Observer<EmulateViewState>
 
     @Before
     fun setUp() {
-        viewModel.setView(view)
-
-        `when`(view.isActive()).thenReturn(true)
+        viewModel.viewState.observeForever(stateObserver)
     }
 
     @Test
-    fun registerOnStart() {
+    fun registerOnInit() {
         logTestName()
 
-        // Run
-        viewModel.onStart()
-
-        // Verify
+        // Then
         verify(hostApduManager).register(viewModel)
     }
 
     @Test
-    fun unregisterOnStop() {
+    fun unregisterOnCleared() {
         logTestName()
 
-        // Run
-        viewModel.onStop()
+        // When
+        viewModel.onCleared()
 
-        // Verify
+        // Then
         verify(hostApduManager).unregister(viewModel)
     }
 
@@ -61,62 +62,84 @@ class EmulateViewModelTest {
     fun displayErrorWhenUnexpectedConnectionLost() {
         logTestName()
 
-        // Run
+        // When
         viewModel.onConnectionLost(-1)
 
-        // Verify
-        verify(view).addLogLine(anyString())
+        // Then
+        val viewState = viewModel.viewState.value
+        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
     fun displayErrorWhenConnectionLost() {
         logTestName()
 
-        // Run
+        // When
         viewModel.onConnectionLost(HostApduService.DEACTIVATION_LINK_LOSS)
 
-        // Verify
-        verify(view).addLogLine(anyString())
+        // Then
+        val viewState = viewModel.viewState.value
+        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
     fun displayErrorWhenWrongAid() {
         logTestName()
 
-        // Run
+        // When
         viewModel.onConnectionLost(HostApduService.DEACTIVATION_DESELECTED)
 
-        // Verify
-        verify(view).addLogLine(anyString())
+        // Then
+        val viewState = viewModel.viewState.value
+        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
     fun sendApduResponseWhenReceiveAidSelect() {
         logTestName()
 
-        // When
+        // Given
         val receivedApduCommand = byteArrayOf(0x00, 0xA4.toByte(), 0x04, 0x00, 0x42, 0x13, 0x37, 0x42)
 
-        // Run
+        // When
         viewModel.onApduCommandReceived(receivedApduCommand)
 
-        // Verify
+        // Then
         verify(hostApduManager).sendApduResponse(any())
+        val viewState = viewModel.viewState.value
+        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+    }
+
+    @Test
+    fun sendApduResponseWhenReceiveUnknownCommand() {
+        logTestName()
+
+        // Given
+        val receivedApduCommand = byteArrayOf(0x42, 0x42, 0x42, 0x42, 0x42)
+
+        // When
+        viewModel.onApduCommandReceived(receivedApduCommand)
+
+        // Then
+        verify(hostApduManager).sendApduResponse(any())
+        val viewState = viewModel.viewState.value
+        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
     fun displayLogWhenErrorOccursWhenSendingApduResponse() {
         logTestName()
 
-        // When
+        // Given
         val receivedApduCommand = byteArrayOf(0x00, 0xA4.toByte(), 0x04, 0x00, 0x42, 0x13, 0x37, 0x42)
         `when`(hostApduManager.sendApduResponse(any())).doAnswer { throw RemoteException("Test exception") }
 
-        // Run
+        // When
         viewModel.onApduCommandReceived(receivedApduCommand)
 
-        // Verify
+        // Then
         verify(hostApduManager).sendApduResponse(any())
-        verify(view, atLeastOnce()).addLogLine(anyString())
+        val viewState = viewModel.viewState.value
+        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 }

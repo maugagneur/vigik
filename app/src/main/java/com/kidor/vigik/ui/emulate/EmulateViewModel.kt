@@ -2,6 +2,9 @@ package com.kidor.vigik.ui.emulate
 
 import android.nfc.cardemulation.HostApduService
 import android.os.RemoteException
+import androidx.annotation.RestrictTo
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.kidor.vigik.extensions.startWith
 import com.kidor.vigik.extensions.toHex
@@ -22,28 +25,25 @@ private val TAG_ID = byteArrayOf(0x4E.toByte(), 0x57, 0x86.toByte(), 0xAC.toByte
 @HiltViewModel
 class EmulateViewModel @Inject constructor(
     private val hostApduManager: HostApduManager
-) : ViewModel(), EmulateContract.EmulateViewModel, HostApduListener {
+) : ViewModel(), HostApduListener {
 
-    private lateinit var view: EmulateContract.EmulateView
+    private val _viewState = MutableLiveData<EmulateViewState>()
+    val viewState: LiveData<EmulateViewState> get() = _viewState
 
-    override fun setView(view: EmulateContract.EmulateView) {
-        this.view = view
-    }
-
-    override fun onStart() {
-        if (view.isActive()) view.addLogLine("Start -> Register to host APDU manager")
+    init {
+        _viewState.value = EmulateViewState.DisplayLogLine("Start -> Register to host APDU manager")
         hostApduManager.register(this)
     }
 
-    override fun onStop() {
-        if (view.isActive()) view.addLogLine("Stop -> Unregister to host APDU manager")
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    public override fun onCleared() {
+        super.onCleared()
+        _viewState.value = EmulateViewState.DisplayLogLine("Stop -> Unregister to host APDU manager")
         hostApduManager.unregister(this)
     }
 
     override fun onApduCommandReceived(apduCommand: ByteArray?) {
-        if (view.isActive()) {
-            view.addLogLine("APDU command received: " + apduCommand?.toHex() + ")")
-        }
+        _viewState.value = EmulateViewState.DisplayLogLine("APDU command received: " + apduCommand?.toHex() + ")")
 
         val apduResponse = when {
             apduCommand == null -> ApduStatusBytes.UNKNOWN_COMMAND.value
@@ -51,19 +51,15 @@ class EmulateViewModel @Inject constructor(
             else -> ApduStatusBytes.INSTRUCTION_NOT_SUPPORTED.value
         }
 
-        if (view.isActive()) {
-            view.addLogLine("Sending APDU response: " + apduResponse.toHex())
-        }
+        _viewState.value = EmulateViewState.DisplayLogLine("Sending APDU response: " + apduResponse.toHex())
         sendCommandApdu(apduResponse)
     }
 
     override fun onConnectionLost(reason: Int) {
-        if (view.isActive()) {
-            when (reason) {
-                HostApduService.DEACTIVATION_DESELECTED -> view.addLogLine("Deactivation's reason: An other AID has been selected")
-                HostApduService.DEACTIVATION_LINK_LOSS -> view.addLogLine("Deactivation's reason: NFC link lost")
-                else -> view.addLogLine("Deactivation's reason: Unknown")
-            }
+        when (reason) {
+            HostApduService.DEACTIVATION_DESELECTED -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: An other AID has been selected")
+            HostApduService.DEACTIVATION_LINK_LOSS -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: NFC link lost")
+            else -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: Unknown")
         }
     }
 
@@ -82,9 +78,7 @@ class EmulateViewModel @Inject constructor(
         try {
             hostApduManager.sendApduResponse(commandApdu)
         } catch (exception: RemoteException) {
-            if (view.isActive()) {
-                view.addLogLine("Error when sending message to service")
-            }
+            _viewState.value = EmulateViewState.DisplayLogLine("Error when sending message to service")
             Timber.e(exception, "Error when sending message to service")
         }
     }
