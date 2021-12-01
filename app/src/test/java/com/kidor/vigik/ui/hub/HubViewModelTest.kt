@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.hub
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.kidor.vigik.utils.AssertUtils.assertEquals
-import com.kidor.vigik.utils.Event
+import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Before
 import org.junit.Rule
@@ -21,7 +21,7 @@ class HubViewModelTest {
     private lateinit var viewModel: HubViewModel
 
     @Mock
-    private lateinit var observer: Observer<Event<HubViewEvent>>
+    private lateinit var observer: Observer<EventWrapper<HubViewEvent>>
 
     @Before
     fun setUp() {
@@ -39,7 +39,7 @@ class HubViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(HubViewEvent.NavigateToScanView, event?.peekContent(), "Navigation event")
+        assertEquals(HubViewEvent.NavigateToScanView, event?.peekEvent(), "Navigation event")
     }
 
     @Test
@@ -51,7 +51,7 @@ class HubViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(HubViewEvent.NavigateToHistoryView, event?.peekContent(), "Navigation event")
+        assertEquals(HubViewEvent.NavigateToHistoryView, event?.peekEvent(), "Navigation event")
     }
 
     @Test
@@ -63,7 +63,7 @@ class HubViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(HubViewEvent.NavigateToEmulateView, event?.peekContent(), "Navigation event")
+        assertEquals(HubViewEvent.NavigateToEmulateView, event?.peekEvent(), "Navigation event")
     }
 
     @Test
@@ -72,6 +72,6 @@ class HubViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(null, event?.peekContent(), "Navigation event")
+        assertEquals(null, event?.peekEvent(), "Navigation event")
     }
 }

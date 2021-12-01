@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.ui.base.BaseViewModel
-import com.kidor.vigik.utils.Event
+import com.kidor.vigik.ui.base.EventWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class CheckViewModel @Inject constructor(
     }
 
     fun onActionSettings() {
-        _viewEvent.value = Event(CheckViewEvent.NavigateToSettings)
+        _viewEvent.value = EventWrapper(CheckViewEvent.NavigateToSettings)
     }
 
     private fun performNfcCheck() {
@@ -40,7 +40,7 @@ class CheckViewModel @Inject constructor(
 
     private fun checkIfNfcIsAvailable() {
         if (nfcApi.isNfcEnable()) {
-            _viewEvent.value = Event(CheckViewEvent.NavigateToHub)
+            _viewEvent.value = EventWrapper(CheckViewEvent.NavigateToHub)
         } else {
             _viewState.value = CheckViewState.NfcIsDisable
         }

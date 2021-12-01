@@ -3,7 +3,6 @@ package com.kidor.vigik.ui.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kidor.vigik.utils.Event
 
 /**
  * Base class for [ViewModel] which exposes [VIEW_STATE] and [VIEW_EVENT].
@@ -30,6 +29,6 @@ abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : V
      * Internal event holder that can be modify by the view model.
      */
     @Suppress("PropertyName")
-    protected open val _viewEvent = MutableLiveData<Event<VIEW_EVENT>>()
-    override val viewEvent: LiveData<Event<VIEW_EVENT>> get() = _viewEvent
+    protected open val _viewEvent = MutableLiveData<EventWrapper<VIEW_EVENT>>()
+    override val viewEvent: LiveData<EventWrapper<VIEW_EVENT>> get() = _viewEvent
 }

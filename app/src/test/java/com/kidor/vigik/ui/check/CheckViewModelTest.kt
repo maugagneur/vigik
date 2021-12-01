@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.utils.AssertUtils.assertEquals
-import com.kidor.vigik.utils.Event
+import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -39,7 +39,7 @@ class CheckViewModelTest {
     private lateinit var stateObserver: Observer<CheckViewState>
 
     @Mock
-    private lateinit var eventObserver: Observer<Event<CheckViewEvent>>
+    private lateinit var eventObserver: Observer<EventWrapper<CheckViewEvent>>
 
     @Before
     fun setUp() {
@@ -61,7 +61,7 @@ class CheckViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(CheckViewEvent.NavigateToHub, event?.peekContent(), "Navigation event")
+        assertEquals(CheckViewEvent.NavigateToHub, event?.peekEvent(), "Navigation event")
     }
 
     @ExperimentalCoroutinesApi
@@ -95,7 +95,7 @@ class CheckViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(CheckViewEvent.NavigateToHub, event?.peekContent(), "Navigation event")
+        assertEquals(CheckViewEvent.NavigateToHub, event?.peekEvent(), "Navigation event")
     }
 
     @ExperimentalCoroutinesApi
@@ -125,6 +125,6 @@ class CheckViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(CheckViewEvent.NavigateToSettings, event?.peekContent(), "Navigation event")
+        assertEquals(CheckViewEvent.NavigateToSettings, event?.peekEvent(), "Navigation event")
     }
 }

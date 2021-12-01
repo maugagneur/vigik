@@ -1,9 +1,8 @@
 package com.kidor.vigik.ui.base
 
 import androidx.lifecycle.LiveData
-import com.kidor.vigik.utils.Event
 
-interface IViewModel<VIEW_STATE, VIEW_EVENT> {
+interface IViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> {
 
     /**
      * Observe this to be notify of every view state's changes.
@@ -13,5 +12,5 @@ interface IViewModel<VIEW_STATE, VIEW_EVENT> {
     /**
      * Observe this to be notify of every view event.
      */
-    val viewEvent: LiveData<Event<VIEW_EVENT>>
+    val viewEvent: LiveData<EventWrapper<VIEW_EVENT>>
 }

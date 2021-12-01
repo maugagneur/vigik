@@ -1,6 +1,6 @@
 package com.kidor.vigik.ui.base
 
-interface IView<VIEW_STATE, VIEW_EVENT> {
+interface IView<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> {
 
     /**
      * Defines how the UI must be displayed.

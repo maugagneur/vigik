@@ -6,7 +6,7 @@ import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils.assertEquals
-import com.kidor.vigik.utils.Event
+import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -40,7 +40,7 @@ class ScanViewModelTest {
     @Mock
     private lateinit var stateObserver: Observer<ScanViewState>
     @Mock
-    private lateinit var eventObserver: Observer<Event<ScanViewEvent>>
+    private lateinit var eventObserver: Observer<EventWrapper<ScanViewEvent>>
 
     @Before
     fun setUp() {
@@ -108,7 +108,7 @@ class ScanViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekContent(), "Failure event")
+        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
     }
 
     @Test
@@ -125,7 +125,7 @@ class ScanViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(ScanViewEvent.SaveTagSuccess, event?.peekContent(), "Success event")
+        assertEquals(ScanViewEvent.SaveTagSuccess, event?.peekEvent(), "Success event")
     }
 
     @Test
@@ -142,6 +142,6 @@ class ScanViewModelTest {
 
         // Then
         val event = viewModel.viewEvent.value
-        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekContent(), "Failure event")
+        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
     }
 }

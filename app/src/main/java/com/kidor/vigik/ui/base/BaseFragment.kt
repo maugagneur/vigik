@@ -22,9 +22,9 @@ abstract class BaseFragment<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent, VIEW
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(this) { stateRender(it) }
-        viewModel.viewEvent.observe(this) {
+        viewModel.viewEvent.observe(this) { eventWrapper ->
             // React on events only once
-            it.getContentIfNotHandled()?.let { event -> eventRender(event) }
+            eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
         }
     }
 }
