@@ -1,11 +1,12 @@
 package com.kidor.vigik.ui.scan
 
 import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.ui.base.ViewState
 
 /**
  * Possible states of scan view.
  */
-sealed class ScanViewState {
+sealed class ScanViewState : ViewState() {
 
     /**
      * Initial state when the NFC sensor is looking for tag.
@@ -19,6 +20,4 @@ sealed class ScanViewState {
      * @param canBeSaved Indicate if the tag can be save in local database.
      */
     data class DisplayTag(val tag: Tag, val canBeSaved: Boolean) : ScanViewState()
-
-    override fun toString(): String = javaClass.simpleName
 }

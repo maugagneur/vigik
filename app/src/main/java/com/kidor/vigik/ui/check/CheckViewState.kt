@@ -1,9 +1,11 @@
 package com.kidor.vigik.ui.check
 
+import com.kidor.vigik.ui.base.ViewState
+
 /**
  * Possible states of check view.
  */
-sealed class CheckViewState {
+sealed class CheckViewState : ViewState() {
 
     /**
      * State when the NFC state is checked.
@@ -14,6 +16,4 @@ sealed class CheckViewState {
      * State when the NFC reader is seen as disabled.
      */
     object NfcIsDisable: CheckViewState()
-
-    override fun toString(): String = javaClass.simpleName
 }

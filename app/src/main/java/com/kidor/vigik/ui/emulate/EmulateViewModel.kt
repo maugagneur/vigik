@@ -3,14 +3,12 @@ package com.kidor.vigik.ui.emulate
 import android.nfc.cardemulation.HostApduService
 import android.os.RemoteException
 import androidx.annotation.RestrictTo
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.kidor.vigik.extensions.startWith
 import com.kidor.vigik.extensions.toHex
 import com.kidor.vigik.nfc.hostapdu.ApduStatusBytes
 import com.kidor.vigik.nfc.hostapdu.HostApduListener
 import com.kidor.vigik.nfc.hostapdu.HostApduManager
+import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,10 +23,7 @@ private val TAG_ID = byteArrayOf(0x4E.toByte(), 0x57, 0x86.toByte(), 0xAC.toByte
 @HiltViewModel
 class EmulateViewModel @Inject constructor(
     private val hostApduManager: HostApduManager
-) : ViewModel(), HostApduListener {
-
-    private val _viewState = MutableLiveData<EmulateViewState>()
-    val viewState: LiveData<EmulateViewState> get() = _viewState
+) : BaseViewModel<EmulateViewState, Nothing>(), HostApduListener {
 
     init {
         _viewState.value = EmulateViewState.DisplayLogLine("Start -> Register to host APDU manager")

@@ -1,6 +1,8 @@
 package com.kidor.vigik.ui.check
 
-sealed class CheckViewEvent {
+import com.kidor.vigik.ui.base.ViewEvent
+
+sealed class CheckViewEvent : ViewEvent() {
 
     /**
      * Event when we have to navigate to phone's Settings.
@@ -11,6 +13,4 @@ sealed class CheckViewEvent {
      * Event when we have to navigate to Hub view.
      */
     object NavigateToHub: CheckViewEvent()
-
-    override fun toString(): String = javaClass.simpleName
 }

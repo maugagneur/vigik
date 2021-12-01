@@ -1,11 +1,12 @@
 package com.kidor.vigik.ui.history
 
 import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.ui.base.ViewState
 
 /**
  * Possible states of tag history's view.
  */
-sealed class HistoryViewState {
+sealed class HistoryViewState : ViewState() {
 
     /**
      * Initial state of the view.
@@ -23,6 +24,4 @@ sealed class HistoryViewState {
      * State when the view has not tags to display.
      */
     object NoTag: HistoryViewState()
-
-    override fun toString(): String = javaClass.simpleName
 }

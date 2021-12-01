@@ -1,11 +1,9 @@
 package com.kidor.vigik.ui.check
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.ui.base.BaseViewModel
 import com.kidor.vigik.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -18,13 +16,7 @@ internal const val TIME_BEFORE_NFC_CHECK = 1000L
 @HiltViewModel
 class CheckViewModel @Inject constructor(
     private val nfcApi: NfcApi
-) : ViewModel() {
-
-    private val _viewState = MutableLiveData<CheckViewState>()
-    val viewState: LiveData<CheckViewState> get() = _viewState
-
-    private val _viewEvent = MutableLiveData<Event<CheckViewEvent>>()
-    val viewEvent: LiveData<Event<CheckViewEvent>> get() = _viewEvent
+) : BaseViewModel<CheckViewState, CheckViewEvent>() {
 
     init {
         performNfcCheck()

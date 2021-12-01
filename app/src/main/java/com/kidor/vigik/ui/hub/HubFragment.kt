@@ -4,15 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import com.kidor.vigik.databinding.FragmentHubBinding
+import com.kidor.vigik.ui.base.BaseFragment
 
-class HubFragment : Fragment() {
+class HubFragment : BaseFragment<Nothing, HubViewEvent, HubViewModel>() {
 
-    private val viewModel by viewModels<HubViewModel>()
+    override val viewModel by viewModels<HubViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentHubBinding.inflate(inflater, container, false).also {
@@ -23,17 +23,11 @@ class HubFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.viewEvent.observe(this) { event ->
-            event.getContentIfNotHandled()?.let { viewEvent ->
-                when (viewEvent) {
-                    HubViewEvent.NavigateToEmulateView -> navigateTo(HubFragmentDirections.goToEmulateTag())
-                    HubViewEvent.NavigateToHistoryView -> navigateTo(HubFragmentDirections.goToTagHistory())
-                    HubViewEvent.NavigateToScanView -> navigateTo(HubFragmentDirections.goToScanNfc())
-                }
-            }
+    override fun eventRender(viewEvent: HubViewEvent) {
+        when (viewEvent) {
+            HubViewEvent.NavigateToEmulateView -> navigateTo(HubFragmentDirections.goToEmulateTag())
+            HubViewEvent.NavigateToHistoryView -> navigateTo(HubFragmentDirections.goToTagHistory())
+            HubViewEvent.NavigateToScanView -> navigateTo(HubFragmentDirections.goToScanNfc())
         }
     }
 

@@ -1,14 +1,12 @@
 package com.kidor.vigik.ui.scan
 
 import androidx.annotation.RestrictTo
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.api.NfcApiListener
 import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.ui.base.BaseViewModel
 import com.kidor.vigik.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,13 +17,7 @@ import javax.inject.Inject
 class ScanViewModel @Inject constructor(
     private val nfcApi: NfcApi,
     private val tagRepository: TagRepository
-) : ViewModel(), NfcApiListener {
-
-    private val _viewState = MutableLiveData<ScanViewState>()
-    val viewState: LiveData<ScanViewState> get() = _viewState
-
-    private val _viewEvent = MutableLiveData<Event<ScanViewEvent>>()
-    val viewEvent: LiveData<Event<ScanViewEvent>> get() = _viewEvent
+) : BaseViewModel<ScanViewState, ScanViewEvent>(), NfcApiListener {
 
     private var lastTagScanned: Tag? = null
 

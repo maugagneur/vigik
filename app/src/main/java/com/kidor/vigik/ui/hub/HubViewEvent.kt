@@ -1,6 +1,8 @@
 package com.kidor.vigik.ui.hub
 
-sealed class HubViewEvent {
+import com.kidor.vigik.ui.base.ViewEvent
+
+sealed class HubViewEvent : ViewEvent() {
 
     /**
      * Event when we have to navigate to Scan view.
@@ -16,6 +18,4 @@ sealed class HubViewEvent {
      * Event when we have to navigate to Emulate view.
      */
     object NavigateToEmulateView: HubViewEvent()
-
-    override fun toString(): String = javaClass.simpleName
 }
