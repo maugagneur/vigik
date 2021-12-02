@@ -7,7 +7,6 @@ import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.api.NfcApiListener
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.ui.base.BaseViewModel
-import com.kidor.vigik.ui.base.EventWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -41,7 +40,7 @@ class ScanViewModel @Inject constructor(
         lastTagScanned.let { tag ->
             if (tag == null) {
                 Timber.w("Trying to save invalid tag into database")
-                _viewEvent.value = EventWrapper(ScanViewEvent.SaveTagFailure)
+                _viewEvent.value = ScanViewEvent.SaveTagFailure.wrap()
             } else {
                 insertTagInTheDatabase(tag)
             }
@@ -52,10 +51,10 @@ class ScanViewModel @Inject constructor(
         viewModelScope.launch {
             if (tagRepository.insert(tag) > 0) {
                 Timber.i("Tag saved into database with success")
-                _viewEvent.value = EventWrapper(ScanViewEvent.SaveTagSuccess)
+                _viewEvent.value = ScanViewEvent.SaveTagSuccess.wrap()
             } else {
                 Timber.e("Fail to save tag into database")
-                _viewEvent.value = EventWrapper(ScanViewEvent.SaveTagFailure)
+                _viewEvent.value = ScanViewEvent.SaveTagFailure.wrap()
             }
         }
     }

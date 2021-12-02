@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModel
  * ```
  *      _viewState.value = VIEW_STATE
  *      ...
- *      _viewEvent.value = Event(VIEW_EVENT)
+ *      _viewEvent.value = VIEW_EVENT.wrap()
  * ```
  */
 abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel(),
