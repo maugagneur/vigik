@@ -4,12 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.nfc.api.NfcApi
-import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.ui.base.EventWrapper
+import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.*
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -100,7 +101,7 @@ class CheckViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
-    fun displayErrorWhenNfcDisableOnRefresh() = runBlockingTest {
+    fun displayErrorWhenNfcDisableOnRefresh() {
         logTestName()
 
         // Given
@@ -115,6 +116,7 @@ class CheckViewModelTest {
         assertEquals(CheckViewState.NfcIsDisable, event, "View state")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun openNfcSettingsWhenActionOnSettingsButton() {
         logTestName()

@@ -112,36 +112,38 @@ class ScanViewModelTest {
     }
 
     @Test
-    fun promptSuccessWhenTagIsSaved() = runBlocking {
+    fun promptSuccessWhenTagIsSaved() {
         logTestName()
+        runBlocking {
+            // Given
+            val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
+            `when`(tagRepository.insert(tag)).doSuspendableAnswer { 1L }
 
-        // Given
-        val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
-        `when`(tagRepository.insert(tag)).doSuspendableAnswer { 1L }
+            // When
+            viewModel.onNfcTagRead(tag)
+            viewModel.saveTag()
 
-        // When
-        viewModel.onNfcTagRead(tag)
-        viewModel.saveTag()
-
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(ScanViewEvent.SaveTagSuccess, event?.peekEvent(), "Success event")
+            // Then
+            val event = viewModel.viewEvent.value
+            assertEquals(ScanViewEvent.SaveTagSuccess, event?.peekEvent(), "Success event")
+        }
     }
 
     @Test
-    fun promptErrorWhenTagIsNotSaved() = runBlocking {
+    fun promptErrorWhenTagIsNotSaved() {
         logTestName()
+        runBlocking {
+            // Given
+            val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
+            `when`(tagRepository.insert(tag)).doSuspendableAnswer { -1L }
 
-        // Given
-        val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
-        `when`(tagRepository.insert(tag)).doSuspendableAnswer { -1L }
+            // When
+            viewModel.onNfcTagRead(tag)
+            viewModel.saveTag()
 
-        // When
-        viewModel.onNfcTagRead(tag)
-        viewModel.saveTag()
-
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
+            // Then
+            val event = viewModel.viewEvent.value
+            assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
+        }
     }
 }

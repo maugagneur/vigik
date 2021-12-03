@@ -9,10 +9,8 @@ import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.single
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Ignore
@@ -22,7 +20,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doSuspendableAnswer
 
 /**
@@ -70,15 +67,52 @@ class HistoryViewModelTest {
     @Test
     fun displayEmptyHistoryWhenNoTagInRepository() {
         logTestName()
+        runBlockingTest {
+            // Given
+            `when`(repository.allTags).doSuspendableAnswer {
+                flow {
+                    emit(emptyList())
+                }
+            }
 
-        // Given
-        `when`(repository.allTags).doSuspendableAnswer { flow { emit(emptyList()) } }
+            // Then
+            var state = viewModel.viewState.value
+            AssertUtils.assertEquals(HistoryViewState.Initializing, state, "View state")
 
-        // When
-        mainCoroutineRule.testDispatcher.advanceTimeBy(1000)
+            // When
+            mainCoroutineRule.testDispatcher.advanceTimeBy(10)
 
-        // Then
-        val state = viewModel.viewState.value
-        AssertUtils.assertEquals(HistoryViewState.NoTag, state, "View state")
+            // Then
+            state = viewModel.viewState.value
+            AssertUtils.assertEquals(HistoryViewState.NoTag, state, "View state")
+        }
+    }
+
+    @Ignore("Not working")
+    @ExperimentalCoroutinesApi
+    @Test
+    fun displayOneTag() {
+        logTestName()
+        runBlockingTest {
+            // Given
+            val tags = listOf(Tag())
+            val tagFlow = flow {
+                emit(emptyList())
+                delay(100)
+                emit(tags)
+            }
+            `when`(repository.allTags).doSuspendableAnswer { tagFlow }
+
+            // Then
+            var state = viewModel.viewState.value
+            AssertUtils.assertEquals(HistoryViewState.Initializing, state, "View state")
+
+            // When
+            mainCoroutineRule.testDispatcher.advanceTimeBy(100)
+
+            // Then
+            state = viewModel.viewState.value
+            AssertUtils.assertEquals(HistoryViewState.DisplayTags(tags), state, "View state")
+        }
     }
 }
