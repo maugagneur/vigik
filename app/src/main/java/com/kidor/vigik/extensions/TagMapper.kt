@@ -6,7 +6,7 @@ import com.kidor.vigik.nfc.model.Tag
 /**
  * Converts a [Tag] into [RoomTag].
  */
-fun Tag.convert(): RoomTag = RoomTag(
+fun Tag.toRoomTag(): RoomTag = RoomTag(
     timestamp = timestamp,
     uid = uid,
     techList = techList,
@@ -17,7 +17,7 @@ fun Tag.convert(): RoomTag = RoomTag(
 /**
  * Converts a [RoomTag] into [Tag].
  */
-fun RoomTag.convert(): Tag = Tag(
+fun RoomTag.toTag(): Tag = Tag(
     timestamp = timestamp,
     uid = uid,
     techList = techList,
@@ -28,4 +28,4 @@ fun RoomTag.convert(): Tag = Tag(
 /**
  * Converts a list of [RoomTag] into a list of [Tag].
  */
-fun List<RoomTag>.convert(): List<Tag> = this.map { it.convert() }
+fun List<RoomTag>.toTagList(): List<Tag> = this.map { it.toTag() }

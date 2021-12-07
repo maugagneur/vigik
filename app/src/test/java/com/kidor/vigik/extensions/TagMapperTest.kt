@@ -18,14 +18,14 @@ class TagMapperTest(private val data: TagMapperDataSet) {
     fun convertTagToRoomTag() {
         logTestName()
 
-        assertEquals(data.roomTag, data.tag.convert(), "Tag to RoomTag conversion")
+        assertEquals(data.roomTag, data.tag.toRoomTag(), "Tag to RoomTag conversion")
     }
 
     @Test
     fun convertRoomTagToTag() {
         logTestName()
 
-        assertEquals(data.tag, data.roomTag.convert(), "RoomTag to Tag conversion")
+        assertEquals(data.tag, data.roomTag.toTag(), "RoomTag to Tag conversion")
     }
 
     companion object {

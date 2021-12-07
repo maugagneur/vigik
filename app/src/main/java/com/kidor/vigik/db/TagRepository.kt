@@ -2,7 +2,8 @@ package com.kidor.vigik.db
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.annotation.WorkerThread
-import com.kidor.vigik.extensions.convert
+import com.kidor.vigik.extensions.toRoomTag
+import com.kidor.vigik.extensions.toTagList
 import com.kidor.vigik.nfc.model.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 class TagRepository @Inject constructor(private val tagDao: TagDao) {
 
-    val allTags: Flow<List<Tag>> = tagDao.getAll().map { it.convert() }
+    val allTags: Flow<List<Tag>> = tagDao.getAll().map { it.toTagList() }
 
     /**
      * Inserts a tag in a database table.
@@ -22,7 +23,7 @@ class TagRepository @Inject constructor(private val tagDao: TagDao) {
     @WorkerThread
     suspend fun insert(tag: Tag): Long {
         return try {
-            tagDao.insert(tag.convert())
+            tagDao.insert(tag.toRoomTag())
         } catch (exception: SQLiteConstraintException) {
             Timber.e(exception, "Error when trying to insert following item in database: $tag")
             -1
@@ -36,7 +37,7 @@ class TagRepository @Inject constructor(private val tagDao: TagDao) {
      * @return the number of rows that were updated successfully
      */
     @WorkerThread
-    suspend fun update(tag: Tag) = tagDao.update(tag.convert())
+    suspend fun update(tag: Tag) = tagDao.update(tag.toRoomTag())
 
     /**
      * Deletes a tag from a database table.
@@ -45,5 +46,5 @@ class TagRepository @Inject constructor(private val tagDao: TagDao) {
      * @return the number of rows that were deleted successfully
      */
     @WorkerThread
-    suspend fun delete(tag: Tag) = tagDao.delete(tag.convert())
+    suspend fun delete(tag: Tag) = tagDao.delete(tag.toRoomTag())
 }
