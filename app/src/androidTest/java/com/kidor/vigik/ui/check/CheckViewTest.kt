@@ -5,9 +5,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import com.kidor.vigik.utils.launchFragmentInHiltContainer
-import org.junit.Before
-import org.junit.Ignore
+import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -17,15 +15,12 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CheckViewTest {
 
-    @Before
-    fun setUp() {
+    @Test
+    fun checkUiElementsAtStart() {
+        logTestName()
+
         // Load fragment in empty fragment activity
         launchFragmentInHiltContainer<CheckFragment>()
-    }
-
-    @Test
-    fun checkUiElements() {
-        logTestName()
 
         // Check that loader is visible
         checkViewIsVisible(R.id.progress_bar, "Loader")
@@ -38,10 +33,21 @@ class CheckViewTest {
     }
 
     @Test
-    @Ignore("Needs to mock NFC adapter or NFC API")
-    fun displayButtonWhenNfcDisable() {
+    fun displayButtonsWhenNfcDisable() {
         logTestName()
 
-        // TODO
+        // Load fragment in empty fragment activity and force state `NfcIsDisable`
+        launchFragmentInHiltContainer<CheckFragment> { fragment ->
+            fragment.forceState(CheckViewState.NfcIsDisable)
+        }
+
+        // Check that loader is hidden
+        checkViewIsNotVisible(R.id.progress_bar, "Loader")
+
+        // Check that refresh button is visible
+        checkViewIsVisible(R.id.nfc_refresh_button, "Refresh button")
+
+        // Check that settings button is visible
+        checkViewIsVisible(R.id.nfc_settings_button, "Settings button")
     }
 }

@@ -4,7 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import com.kidor.vigik.utils.launchFragmentInHiltContainer
+import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

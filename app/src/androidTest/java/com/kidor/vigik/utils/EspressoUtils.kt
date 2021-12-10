@@ -1,9 +1,12 @@
 package com.kidor.vigik.utils
 
+import android.app.Activity
 import android.widget.TextView
+import androidx.annotation.StringRes
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.platform.app.InstrumentationRegistry
 import org.hamcrest.CoreMatchers
@@ -60,7 +63,7 @@ object EspressoUtils {
     /**
      * Checks that the view is visible and displays the text associated with given resource ID.
      */
-    fun checkViewIsVisibleWithText(viewId: Int, stringResourceId: Int, objectName: String) {
+    fun checkViewIsVisibleWithText(viewId: Int, @StringRes stringResourceId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is visible and contains text: " + getStringResource(stringResourceId))
         Espresso.onView(ViewMatchers.withId(viewId))
@@ -107,6 +110,18 @@ object EspressoUtils {
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is not checked")
         Espresso.onView(ViewMatchers.withId(viewId))
             .check(ViewAssertions.matches(ViewMatchers.isNotChecked()))
+        println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
+    }
+
+    /**
+     * Checks that a Toast is showing the text associated with given resource ID.
+     */
+    fun checkToastWithTextIsVisible(activity: Activity?, @StringRes stringResourceId: Int, objectName: String) {
+        val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
+        println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is visible and contains text: " + getStringResource(stringResourceId))
+        Espresso.onView(ViewMatchers.withText(stringResourceId))
+            .inRoot(RootMatchers.withDecorView(CoreMatchers.not(activity?.window?.decorView)))
+            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 

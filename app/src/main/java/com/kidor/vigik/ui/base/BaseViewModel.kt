@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.base
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,4 +32,28 @@ abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : V
     @Suppress("PropertyName")
     protected open val _viewEvent = MutableLiveData<EventWrapper<VIEW_EVENT>>()
     override val viewEvent: LiveData<EventWrapper<VIEW_EVENT>> get() = _viewEvent
+
+    /**
+     * Forces the view model to emit the given state.
+     *
+     * Only use this method for testing purpose!
+     *
+     * @param viewState The state.
+     */
+    @VisibleForTesting
+    internal fun forceState(viewState: VIEW_STATE) {
+        _viewState.value = viewState
+    }
+
+    /**
+     * Forces the view model to emit the given event.
+     *
+     * Only use this method for testing purpose!
+     *
+     * @param viewEvent The event.
+     */
+    @VisibleForTesting
+    internal fun forceEvent(viewEvent: VIEW_EVENT) {
+        _viewEvent.value = viewEvent.wrap()
+    }
 }

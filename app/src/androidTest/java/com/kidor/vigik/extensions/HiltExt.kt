@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.kidor.vigik.utils
+package com.kidor.vigik.extensions
 
 import android.content.ComponentName
 import android.content.Intent
@@ -39,7 +39,7 @@ import com.kidor.vigik.R
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
     @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
-    crossinline action: Fragment.() -> Unit = {}
+    crossinline action: Fragment.(T) -> Unit = {}
 ) {
     val startActivityIntent = Intent.makeMainActivity(
         ComponentName(
@@ -62,6 +62,6 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
             .add(android.R.id.content, fragment, T::class.java.simpleName)
             .commitNow()
 
-        fragment.action()
+        fragment.action(fragment as T)
     }
 }
