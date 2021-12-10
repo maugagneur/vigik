@@ -1,6 +1,6 @@
 ext {
 
-    gradleBuildVer = '7.0.3'
+    gradleBuildVer = '7.0.4'
 
     sdkVer = [
             'compile': 31,
@@ -13,7 +13,7 @@ ext {
             'constraintlayout': '2.1.2',
             'coreKtx'         : '1.7.0',
             'fragment'        : '1.4.0',
-            'hilt'            : '2.40.1',
+            'hilt'            : '2.40.5',
             'lifecycle'       : '2.4.0',
             'material'        : '1.4.0',
             'navigation'      : '2.3.5',
