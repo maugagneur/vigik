@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_space_xlarge"
         android:drawableEnd="@drawable/ic_baseline_refresh_24"
-        android:text="@string/nfc_not_available"
+        android:text="@string/nfc_state_refresh"
         android:textSize="@dimen/text_size_medium"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/nfc_settings_button"
