@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 /**
  * Base class for [Fragment] associated with given [VIEW_MODEL].
  *
- * - You must define the view model.
+ * - You must define the view model:
  * ```
  *      override val viewModel by viewModels<VIEW_MODEL>()
  * ```
@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
  * - To react to state changes and events from the view model, override methods [stateRender] and [eventRender].
  */
 abstract class BaseFragment<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent, VIEW_MODEL : BaseViewModel<VIEW_STATE, VIEW_EVENT>> :
-    Fragment(), IView<VIEW_STATE, VIEW_EVENT> {
+    Fragment() {
 
     protected abstract val viewModel: VIEW_MODEL
 
@@ -27,6 +27,28 @@ abstract class BaseFragment<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent, VIEW
             // React on events only once
             eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
         }
+    }
+
+    /**
+     * Defines how the UI must be displayed.
+     *
+     * Called each time a new state is emitted by the view model.
+     *
+     * @param viewState The new state of the view.
+     */
+    protected open fun stateRender(viewState: VIEW_STATE) {
+        // Default implementation
+    }
+
+    /**
+     * Defines how the UI must react to en event.
+     *
+     * Called each time a new event is emitted by the view model.
+     *
+     * @param viewEvent The new event.
+     */
+    protected open fun eventRender(viewEvent: VIEW_EVENT) {
+        // Default implementation
     }
 
     /**

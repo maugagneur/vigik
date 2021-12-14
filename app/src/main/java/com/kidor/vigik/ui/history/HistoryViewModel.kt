@@ -1,6 +1,6 @@
 package com.kidor.vigik.ui.history
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.db.TagRepository
@@ -17,7 +17,7 @@ class HistoryViewModel @Inject constructor(
     private val repository: TagRepository
 ) : BaseViewModel<HistoryViewState, Nothing>() {
 
-    override val viewState: LiveData<HistoryViewState> = repository.allTags
+    override val _viewState: MutableLiveData<HistoryViewState> = repository.allTags
         .map { tags ->
             if (tags.isEmpty()) {
                 HistoryViewState.NoTag
@@ -28,7 +28,7 @@ class HistoryViewModel @Inject constructor(
         .onStart {
             emit(HistoryViewState.Initializing)
         }
-        .asLiveData()
+        .asLiveData() as MutableLiveData<HistoryViewState>
 
     fun deleteTag(tag: Tag) {
         viewModelScope.launch {

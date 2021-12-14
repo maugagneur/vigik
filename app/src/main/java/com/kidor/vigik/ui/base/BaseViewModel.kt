@@ -16,22 +16,18 @@ import androidx.lifecycle.ViewModel
  *      _viewEvent.value = VIEW_EVENT.wrap()
  * ```
  */
-abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel(),
-    IViewModel<VIEW_STATE, VIEW_EVENT> {
+abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel() {
 
     /**
      * Internal state holder that can be modify by the view model.
      */
     @Suppress("PropertyName")
     protected open val _viewState = MutableLiveData<VIEW_STATE>()
-    override val viewState: LiveData<VIEW_STATE> get() = _viewState
 
     /**
-     * Internal event holder that can be modify by the view model.
+     * Observe this to be notify of every view state's changes.
      */
-    @Suppress("PropertyName")
-    protected open val _viewEvent = MutableLiveData<EventWrapper<VIEW_EVENT>>()
-    override val viewEvent: LiveData<EventWrapper<VIEW_EVENT>> get() = _viewEvent
+    val viewState: LiveData<VIEW_STATE> get() = _viewState
 
     /**
      * Forces the view model to emit the given state.
@@ -44,6 +40,17 @@ abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : V
     internal fun forceState(viewState: VIEW_STATE) {
         _viewState.value = viewState
     }
+
+    /**
+     * Internal event holder that can be modify by the view model.
+     */
+    @Suppress("PropertyName")
+    protected open val _viewEvent = MutableLiveData<EventWrapper<VIEW_EVENT>>()
+
+    /**
+     * Observe this to be notify of every view event.
+     */
+    val viewEvent: LiveData<EventWrapper<VIEW_EVENT>> get() = _viewEvent
 
     /**
      * Forces the view model to emit the given event.
