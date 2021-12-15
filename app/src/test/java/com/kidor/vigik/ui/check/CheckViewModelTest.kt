@@ -8,6 +8,7 @@ import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,6 +51,18 @@ class CheckViewModelTest {
 
     @ExperimentalCoroutinesApi
     @Test
+    fun checkViewStateAtStart() {
+        logTestName()
+
+        // Then
+        mainCoroutineRule.testDispatcher.runBlockingTest {
+            val state = viewModel.viewState.value
+            assertEquals(CheckViewState.Loading, state, "View state")
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
     fun goToNextScreenWhenNfcEnableOnStart() {
         logTestName()
 
@@ -78,8 +91,8 @@ class CheckViewModelTest {
         mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
-        val event = viewModel.viewState.value
-        assertEquals(CheckViewState.NfcIsDisable, event, "View state")
+        val state = viewModel.viewState.value
+        assertEquals(CheckViewState.NfcIsDisable, state, "View state")
     }
 
     @ExperimentalCoroutinesApi
@@ -112,8 +125,8 @@ class CheckViewModelTest {
         mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
-        val event = viewModel.viewState.value
-        assertEquals(CheckViewState.NfcIsDisable, event, "View state")
+        val state = viewModel.viewState.value
+        assertEquals(CheckViewState.NfcIsDisable, state, "View state")
     }
 
     @ExperimentalCoroutinesApi
