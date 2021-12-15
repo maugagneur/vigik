@@ -33,6 +33,8 @@ ext {
             'espresso'     : '3.4.0',
             'junit'        : '4.13.2',
             'mockitoKotlin': '4.0.0',
-            'testExt'      : '1.1.3'
+            'mockK'        : '1.12.1',
+            'testExt'      : '1.1.3',
+            'turbine'      : '0.7.0'
     ]
 }
