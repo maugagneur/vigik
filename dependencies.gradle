@@ -5,7 +5,7 @@ ext {
     sdkVer = [
             'compile': 31,
             'min'    : 23,
-            'target' : 31
+            'target' : 32
     ]
 
     androidxVer = [
