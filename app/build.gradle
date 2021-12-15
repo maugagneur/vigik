@@ -17,7 +17,7 @@ android {
         versionCode 1
         versionName "1.0.0-alpha.1"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.kidor.vigik.utils.HiltTestRunner"
 
         kapt {
             arguments {
@@ -123,6 +123,8 @@ dependencies {
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:${androidxVer.hilt}"
     kapt "com.google.dagger:hilt-compiler:${androidxVer.hilt}"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:${androidxVer.hilt}"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:${androidxVer.hilt}"
 
     // Log
     implementation "com.jakewharton.timber:timber:$timberVer"

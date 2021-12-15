@@ -3,8 +3,7 @@ package com.kidor.vigik.di
 import android.content.Context
 import android.nfc.NfcAdapter
 import androidx.room.Room
-import com.kidor.vigik.db.AppDataBase
-import com.kidor.vigik.db.DATABASE_NAME
+import com.kidor.vigik.db.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,4 +38,16 @@ object AppModule {
     @Provides
     fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter =
         NfcAdapter.getDefaultAdapter(context)
+}
+
+/**
+ * The binding for tag repository is on its own module so that we can replace it easily in tests.
+ */
+@Module
+@InstallIn(SingletonComponent::class)
+object TagRepositoryModule {
+
+    @Singleton
+    @Provides
+    fun provideTagRepository(tagDao: TagDao): TagRepository = TagRepositoryImp(tagDao)
 }

@@ -9,14 +9,21 @@ import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
 import com.kidor.vigik.extensions.launchFragmentInHiltContainer
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
  * Integration tests for [ScanFragment].
  */
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ScanViewTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
 
     @Test
     fun checkUiElementsAtStart() {
