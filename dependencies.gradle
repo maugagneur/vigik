@@ -27,6 +27,7 @@ ext {
     ]
 
     timberVer = '5.0.1'
+    jacocoVer = '0.8.7'
 
     testVer = [
             'coreTesting'  : '2.1.0',
