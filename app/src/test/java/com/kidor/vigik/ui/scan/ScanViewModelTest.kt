@@ -104,7 +104,7 @@ class ScanViewModelTest {
         logTestName()
 
         // When
-        viewModel.saveTag()
+        viewModel.handleAction(ScanViewAction.SaveTag)
 
         // Then
         val event = viewModel.viewEvent.value
@@ -121,7 +121,7 @@ class ScanViewModelTest {
 
             // When
             viewModel.onNfcTagRead(tag)
-            viewModel.saveTag()
+            viewModel.handleAction(ScanViewAction.SaveTag)
 
             // Then
             val event = viewModel.viewEvent.value
@@ -139,7 +139,7 @@ class ScanViewModelTest {
 
             // When
             viewModel.onNfcTagRead(tag)
-            viewModel.saveTag()
+            viewModel.handleAction(ScanViewAction.SaveTag)
 
             // Then
             val event = viewModel.viewEvent.value

@@ -23,7 +23,7 @@ private val TAG_ID = byteArrayOf(0x4E.toByte(), 0x57, 0x86.toByte(), 0xAC.toByte
 @HiltViewModel
 class EmulateViewModel @Inject constructor(
     private val hostApduManager: HostApduManager
-) : BaseViewModel<EmulateViewState, Nothing>(), HostApduListener {
+) : BaseViewModel<Nothing, EmulateViewState, Nothing>(), HostApduListener {
 
     init {
         _viewState.value = EmulateViewState.DisplayLogLine("Start -> Register to host APDU manager")

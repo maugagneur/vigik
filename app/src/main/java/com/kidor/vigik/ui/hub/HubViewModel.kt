@@ -2,17 +2,13 @@ package com.kidor.vigik.ui.hub
 
 import com.kidor.vigik.ui.base.BaseViewModel
 
-class HubViewModel : BaseViewModel<Nothing, HubViewEvent>() {
+class HubViewModel : BaseViewModel<HubViewAction, Nothing, HubViewEvent>() {
 
-    fun onActionEmulateTag() {
-        _viewEvent.value = HubViewEvent.NavigateToEmulateView.wrap()
-    }
-
-    fun onActionReadTag() {
-        _viewEvent.value = HubViewEvent.NavigateToScanView.wrap()
-    }
-
-    fun onActionTagHistory() {
-        _viewEvent.value = HubViewEvent.NavigateToHistoryView.wrap()
+    override fun handleAction(viewAction: HubViewAction) {
+        _viewEvent.value = when (viewAction) {
+            HubViewAction.DisplayEmulateTagView -> HubViewEvent.NavigateToEmulateView.wrap()
+            HubViewAction.DisplayScanTagView -> HubViewEvent.NavigateToScanView.wrap()
+            HubViewAction.DisplayTagHistoryView -> HubViewEvent.NavigateToHistoryView.wrap()
+        }
     }
 }

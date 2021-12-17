@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModel
  *      _viewEvent.value = VIEW_EVENT.wrap()
  * ```
  */
-abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel() {
+abstract class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel() {
 
     /**
      * Internal state holder that can be modify by the view model.
@@ -62,5 +62,16 @@ abstract class BaseViewModel<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : V
     @VisibleForTesting
     internal fun forceEvent(viewEvent: VIEW_EVENT) {
         _viewEvent.value = viewEvent.wrap()
+    }
+
+    /**
+     * Defines how the ViewModel should react to en action from the view.
+     *
+     * Called each time a new action is emitted from the view.
+     *
+     * @param viewAction The action to handle.
+     */
+    open fun handleAction(viewAction: VIEW_ACTION) {
+        // Default implementation
     }
 }

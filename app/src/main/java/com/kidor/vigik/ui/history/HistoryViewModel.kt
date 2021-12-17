@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.db.TagRepository
-import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
@@ -15,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val repository: TagRepository
-) : BaseViewModel<HistoryViewState, Nothing>() {
+) : BaseViewModel<HistoryViewAction, HistoryViewState, Nothing>() {
 
     override val _viewState: MutableLiveData<HistoryViewState> = repository.allTags
         .map { tags ->
@@ -30,9 +29,13 @@ class HistoryViewModel @Inject constructor(
         }
         .asLiveData() as MutableLiveData<HistoryViewState>
 
-    fun deleteTag(tag: Tag) {
-        viewModelScope.launch {
-            repository.delete(tag)
+    override fun handleAction(viewAction: HistoryViewAction) {
+        when (viewAction) {
+            is HistoryViewAction.DeleteTag -> {
+                viewModelScope.launch {
+                    repository.delete(viewAction.tag)
+                }
+            }
         }
     }
 }

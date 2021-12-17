@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment
  * - If you do not need state or event implementation, use [Nothing] instead.
  * - To react to state changes and events from the view model, override methods [stateRender] and [eventRender].
  */
-abstract class BaseFragment<VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent, VIEW_MODEL : BaseViewModel<VIEW_STATE, VIEW_EVENT>> :
-    Fragment() {
+abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent,
+        VIEW_MODEL : BaseViewModel<VIEW_ACTION, VIEW_STATE, VIEW_EVENT>> : Fragment() {
 
     protected abstract val viewModel: VIEW_MODEL
 

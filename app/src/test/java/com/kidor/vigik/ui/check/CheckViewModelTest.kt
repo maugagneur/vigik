@@ -70,7 +70,7 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(true)
 
         // When
-        viewModel.onActionRefresh()
+        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
         mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
@@ -87,7 +87,7 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(false)
 
         // When
-        viewModel.onActionRefresh()
+        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
         mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
@@ -104,7 +104,7 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(true)
 
         // When
-        viewModel.onActionRefresh()
+        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
         mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
@@ -121,7 +121,7 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(false)
 
         // When
-        viewModel.onActionRefresh()
+        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
         mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
 
         // Then
@@ -135,7 +135,7 @@ class CheckViewModelTest {
         logTestName()
 
         // When
-        viewModel.onActionSettings()
+        viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
         mainCoroutineRule.testDispatcher.advanceUntilIdle()
 
         // Then

@@ -11,14 +11,14 @@ import com.kidor.vigik.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ScanFragment : BaseFragment<ScanViewState, ScanViewEvent, ScanViewModel>() {
+class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, ScanViewModel>() {
 
     private lateinit var binding: FragmentScanNfcBinding
     override val viewModel by viewModels<ScanViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentScanNfcBinding.inflate(inflater, container, false).also {
-            it.saveFab.setOnClickListener { viewModel.saveTag() }
+            it.saveFab.setOnClickListener { viewModel.handleAction(ScanViewAction.SaveTag) }
         }
         setHasOptionsMenu(true)
         return binding.root

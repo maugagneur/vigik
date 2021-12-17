@@ -16,7 +16,7 @@ import javax.inject.Inject
 class ScanViewModel @Inject constructor(
     private val nfcApi: NfcApi,
     private val tagRepository: TagRepository
-) : BaseViewModel<ScanViewState, ScanViewEvent>(), NfcApiListener {
+) : BaseViewModel<ScanViewAction, ScanViewState, ScanViewEvent>(), NfcApiListener {
 
     private var lastTagScanned: Tag? = null
 
@@ -36,13 +36,17 @@ class ScanViewModel @Inject constructor(
         _viewState.value = ScanViewState.DisplayTag(tag, tag.uid != null)
     }
 
-    fun saveTag() {
-        lastTagScanned.let { tag ->
-            if (tag == null) {
-                Timber.w("Trying to save invalid tag into database")
-                _viewEvent.value = ScanViewEvent.SaveTagFailure.wrap()
-            } else {
-                insertTagInTheDatabase(tag)
+    override fun handleAction(viewAction: ScanViewAction) {
+        when (viewAction) {
+            is ScanViewAction.SaveTag -> {
+                lastTagScanned.let { tag ->
+                    if (tag == null) {
+                        Timber.w("Trying to save invalid tag into database")
+                        _viewEvent.value = ScanViewEvent.SaveTagFailure.wrap()
+                    } else {
+                        insertTagInTheDatabase(tag)
+                    }
+                }
             }
         }
     }

@@ -10,15 +10,15 @@ import androidx.navigation.Navigation
 import com.kidor.vigik.databinding.FragmentHubBinding
 import com.kidor.vigik.ui.base.BaseFragment
 
-class HubFragment : BaseFragment<Nothing, HubViewEvent, HubViewModel>() {
+class HubFragment : BaseFragment<HubViewAction, Nothing, HubViewEvent, HubViewModel>() {
 
     override val viewModel by viewModels<HubViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val binding = FragmentHubBinding.inflate(inflater, container, false).also {
-            it.scanButton.setOnClickListener { viewModel.onActionReadTag() }
-            it.historyButton.setOnClickListener { viewModel.onActionTagHistory() }
-            it.emulateButton.setOnClickListener { viewModel.onActionEmulateTag() }
+            it.scanButton.setOnClickListener { viewModel.handleAction(HubViewAction.DisplayScanTagView) }
+            it.historyButton.setOnClickListener { viewModel.handleAction(HubViewAction.DisplayTagHistoryView) }
+            it.emulateButton.setOnClickListener { viewModel.handleAction(HubViewAction.DisplayEmulateTagView) }
         }
         return binding.root
     }

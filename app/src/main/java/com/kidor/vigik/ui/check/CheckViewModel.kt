@@ -15,18 +15,17 @@ internal const val TIME_BEFORE_NFC_CHECK = 1000L
 @HiltViewModel
 class CheckViewModel @Inject constructor(
     private val nfcApi: NfcApi
-) : BaseViewModel<CheckViewState, CheckViewEvent>() {
+) : BaseViewModel<CheckViewAction, CheckViewState, CheckViewEvent>() {
 
     init {
         performNfcCheck()
     }
 
-    fun onActionRefresh() {
-        performNfcCheck()
-    }
-
-    fun onActionSettings() {
-        _viewEvent.value = CheckViewEvent.NavigateToSettings.wrap()
+    override fun handleAction(viewAction: CheckViewAction) {
+        when (viewAction) {
+            CheckViewAction.DisplayNfcSettings -> _viewEvent.value = CheckViewEvent.NavigateToSettings.wrap()
+            CheckViewAction.RefreshNfcStatus -> performNfcCheck()
+        }
     }
 
     private fun performNfcCheck() {

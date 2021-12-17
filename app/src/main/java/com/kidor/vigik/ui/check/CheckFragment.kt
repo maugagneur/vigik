@@ -13,15 +13,15 @@ import com.kidor.vigik.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CheckFragment : BaseFragment<CheckViewState, CheckViewEvent, CheckViewModel>() {
+class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEvent, CheckViewModel>() {
 
     private lateinit var binding: FragmentCheckNfcBinding
     override val viewModel by viewModels<CheckViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentCheckNfcBinding.inflate(inflater, container, false).also {
-            it.nfcRefreshButton.setOnClickListener { viewModel.onActionRefresh() }
-            it.nfcSettingsButton.setOnClickListener { viewModel.onActionSettings() }
+            it.nfcRefreshButton.setOnClickListener { viewModel.handleAction(CheckViewAction.RefreshNfcStatus) }
+            it.nfcSettingsButton.setOnClickListener { viewModel.handleAction(CheckViewAction.DisplayNfcSettings) }
         }
         return binding.root
     }
@@ -29,7 +29,7 @@ class CheckFragment : BaseFragment<CheckViewState, CheckViewEvent, CheckViewMode
     override fun onResume() {
         super.onResume()
 
-        viewModel.onActionRefresh()
+        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
     }
 
     override fun stateRender(viewState: CheckViewState) {

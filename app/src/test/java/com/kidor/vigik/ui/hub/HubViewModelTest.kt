@@ -35,7 +35,7 @@ class HubViewModelTest {
         logTestName()
 
         // When
-        viewModel.onActionReadTag()
+        viewModel.handleAction(HubViewAction.DisplayScanTagView)
 
         // Then
         val event = viewModel.viewEvent.value
@@ -47,7 +47,7 @@ class HubViewModelTest {
         logTestName()
 
         // When
-        viewModel.onActionTagHistory()
+        viewModel.handleAction(HubViewAction.DisplayTagHistoryView)
 
         // Then
         val event = viewModel.viewEvent.value
@@ -59,7 +59,7 @@ class HubViewModelTest {
         logTestName()
 
         // When
-        viewModel.onActionEmulateTag()
+        viewModel.handleAction(HubViewAction.DisplayEmulateTagView)
 
         // Then
         val event = viewModel.viewEvent.value
