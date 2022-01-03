@@ -22,8 +22,8 @@ ext {
     ]
 
     kotlinVer = [
-            'plugin'    : '1.6.10',
-            'coroutines': '1.5.2'
+            'coroutines': '1.6.0',
+            'plugin'    : '1.6.10'
     ]
 
     timberVer = '5.0.1'

@@ -8,7 +8,9 @@ import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -55,7 +57,7 @@ class CheckViewModelTest {
         logTestName()
 
         // Then
-        mainCoroutineRule.testDispatcher.runBlockingTest {
+        runTest {
             val state = viewModel.viewState.value
             assertEquals(CheckViewState.Loading, state, "View state")
         }
@@ -70,8 +72,10 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(true)
 
         // When
-        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        runTest {
+            viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
+            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        }
 
         // Then
         val event = viewModel.viewEvent.value
@@ -87,8 +91,10 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(false)
 
         // When
-        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        runTest {
+            viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
+            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        }
 
         // Then
         val state = viewModel.viewState.value
@@ -104,8 +110,10 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(true)
 
         // When
-        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        runTest {
+            viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
+            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        }
 
         // Then
         val event = viewModel.viewEvent.value
@@ -121,8 +129,10 @@ class CheckViewModelTest {
         `when`(nfcApi.isNfcEnable()).thenReturn(false)
 
         // When
-        viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-        mainCoroutineRule.testDispatcher.advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        runTest {
+            viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
+            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
+        }
 
         // Then
         val state = viewModel.viewState.value
@@ -135,8 +145,10 @@ class CheckViewModelTest {
         logTestName()
 
         // When
-        viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
-        mainCoroutineRule.testDispatcher.advanceUntilIdle()
+        runTest {
+            viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
+            advanceUntilIdle()
+        }
 
         // Then
         val event = viewModel.viewEvent.value

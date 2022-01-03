@@ -2,13 +2,15 @@ package com.kidor.vigik.ui.scan
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -25,6 +27,10 @@ import org.mockito.kotlin.doSuspendableAnswer
  */
 @RunWith(MockitoJUnitRunner::class)
 class ScanViewModelTest {
+
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -100,7 +106,7 @@ class ScanViewModelTest {
     }
 
     @Test
-    fun promptErrorWhenTryingToSaveTagBeforeAnyResult() = runBlocking {
+    fun promptErrorWhenTryingToSaveTagBeforeAnyResult() {
         logTestName()
 
         // When
@@ -111,10 +117,11 @@ class ScanViewModelTest {
         assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun promptSuccessWhenTagIsSaved() {
         logTestName()
-        runBlocking {
+        runTest {
             // Given
             val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
             `when`(tagRepository.insert(tag)).doSuspendableAnswer { 1L }
@@ -129,10 +136,11 @@ class ScanViewModelTest {
         }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun promptErrorWhenTagIsNotSaved() {
         logTestName()
-        runBlocking {
+        runTest {
             // Given
             val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
             `when`(tagRepository.insert(tag)).doSuspendableAnswer { -1L }

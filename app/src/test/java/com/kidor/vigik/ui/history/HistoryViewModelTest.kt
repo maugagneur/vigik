@@ -18,7 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,7 +67,7 @@ class HistoryViewModelTest {
             emit(emptyList())
         }
 
-        mainCoroutineRule.testDispatcher.runBlockingTest {
+        runTest {
             // When
             viewModel = HistoryViewModel(repository)
             viewModel.viewState.asFlow().test {
@@ -87,7 +87,7 @@ class HistoryViewModelTest {
         // Given
         coEvery { repository.allTags } returns flowOf(emptyList())
 
-        mainCoroutineRule.testDispatcher.runBlockingTest {
+        runTest {
             // When
             viewModel = HistoryViewModel(repository)
             viewModel.viewState.asFlow().test {
@@ -107,7 +107,7 @@ class HistoryViewModelTest {
         val tags = listOf(Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42)))
         coEvery { repository.allTags } returns flowOf(tags)
 
-        mainCoroutineRule.testDispatcher.runBlockingTest {
+        runTest {
             // When
             viewModel = HistoryViewModel(repository)
             viewModel.viewState.asFlow().test {
