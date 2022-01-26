@@ -6,10 +6,11 @@ import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
-import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.ui.base.EventWrapper
+import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -129,6 +130,7 @@ class ScanViewModelTest {
             // When
             viewModel.onNfcTagRead(tag)
             viewModel.handleAction(ScanViewAction.SaveTag)
+            advanceUntilIdle()
 
             // Then
             val event = viewModel.viewEvent.value
@@ -148,6 +150,7 @@ class ScanViewModelTest {
             // When
             viewModel.onNfcTagRead(tag)
             viewModel.handleAction(ScanViewAction.SaveTag)
+            advanceUntilIdle()
 
             // Then
             val event = viewModel.viewEvent.value

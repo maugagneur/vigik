@@ -38,7 +38,6 @@ class HistoryViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    //@InjectMockKs
     private lateinit var viewModel: HistoryViewModel
 
     @MockK
@@ -92,6 +91,7 @@ class HistoryViewModelTest {
             viewModel = HistoryViewModel(repository)
             viewModel.viewState.asFlow().test {
                 // Then
+                assertEquals(HistoryViewState.Initializing, awaitItem(), "View state")
                 assertEquals(HistoryViewState.NoTag, awaitItem(), "View state")
                 cancelAndIgnoreRemainingEvents()
             }
@@ -112,6 +112,7 @@ class HistoryViewModelTest {
             viewModel = HistoryViewModel(repository)
             viewModel.viewState.asFlow().test {
                 // Then
+                assertEquals(HistoryViewState.Initializing, awaitItem(), "View state")
                 assertEquals(HistoryViewState.DisplayTags(tags), awaitItem(), "View state")
                 cancelAndIgnoreRemainingEvents()
             }
