@@ -28,6 +28,8 @@ ext {
 
     timberVer = '5.0.1'
     jacocoVer = '0.8.7'
+    detektVer = '1.19.0'
+    diktatVer = '1.0.2'
 
     testVer = [
             'coreTesting'  : '2.1.0',

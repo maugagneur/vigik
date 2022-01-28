@@ -5,6 +5,8 @@ plugins {
     id 'jacoco'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'io.gitlab.arturbosch.detekt'
+    id 'org.cqfn.diktat.diktat-gradle-plugin'
 }
 
 android {
@@ -76,6 +78,19 @@ jacoco {
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
     jacoco.excludes = ['jdk.internal.*']
+}
+
+detekt {
+    toolVersion = detektVer
+    buildUponDefaultConfig = true // preconfigure defaults
+    allRules = true // activate all available (even unstable) rules.
+    //config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    //baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+}
+
+diktat {
+    reporterType = "html" // "html", "json", "plain" (default), "sarif"
+    output = "$project.projectDir/build/reports/diktat/diktat.html"
 }
 
 // Custom task to merge code coverage reports from unit and instrumentation tests
