@@ -7,10 +7,10 @@ sealed class ScanViewEvent : ViewEvent() {
     /**
      * Event when a tag is successfully saved into local database.
      */
-    object SaveTagSuccess: ScanViewEvent()
+    object SaveTagSuccess : ScanViewEvent()
 
     /**
      * Event when we fail to save a tag into local database.
      */
-    object SaveTagFailure: ScanViewEvent()
+    object SaveTagFailure : ScanViewEvent()
 }

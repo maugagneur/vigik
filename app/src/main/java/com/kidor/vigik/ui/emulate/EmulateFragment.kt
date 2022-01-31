@@ -10,7 +10,7 @@ import com.kidor.vigik.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class EmulateFragment : BaseFragment<Nothing, EmulateViewState, Nothing,  EmulateViewModel>() {
+class EmulateFragment : BaseFragment<Nothing, EmulateViewState, Nothing, EmulateViewModel>() {
 
     private lateinit var binding: FragmentEmulateTagBinding
     override val viewModel by viewModels<EmulateViewModel>()

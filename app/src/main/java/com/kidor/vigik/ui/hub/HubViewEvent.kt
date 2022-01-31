@@ -7,15 +7,15 @@ sealed class HubViewEvent : ViewEvent() {
     /**
      * Event when we have to navigate to Scan view.
      */
-    object NavigateToScanView: HubViewEvent()
+    object NavigateToScanView : HubViewEvent()
 
     /**
      * Event when we have to navigate to History view.
      */
-    object NavigateToHistoryView: HubViewEvent()
+    object NavigateToHistoryView : HubViewEvent()
 
     /**
      * Event when we have to navigate to Emulate view.
      */
-    object NavigateToEmulateView: HubViewEvent()
+    object NavigateToEmulateView : HubViewEvent()
 }

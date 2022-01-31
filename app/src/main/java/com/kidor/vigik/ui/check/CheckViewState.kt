@@ -10,10 +10,10 @@ sealed class CheckViewState : ViewState() {
     /**
      * State when the NFC state is checked.
      */
-    object Loading: CheckViewState()
+    object Loading : CheckViewState()
 
     /**
      * State when the NFC reader is seen as disabled.
      */
-    object NfcIsDisable: CheckViewState()
+    object NfcIsDisable : CheckViewState()
 }

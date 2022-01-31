@@ -7,10 +7,10 @@ sealed class CheckViewEvent : ViewEvent() {
     /**
      * Event when we have to navigate to phone's Settings.
      */
-    object NavigateToSettings: CheckViewEvent()
+    object NavigateToSettings : CheckViewEvent()
 
     /**
      * Event when we have to navigate to Hub view.
      */
-    object NavigateToHub: CheckViewEvent()
+    object NavigateToHub : CheckViewEvent()
 }
