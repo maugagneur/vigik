@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import com.kidor.vigik.HiltTestActivity
-import com.kidor.vigik.R
 
 /**
  * launchFragmentInContainer from the androidx.fragment:fragment-testing library
@@ -38,7 +37,7 @@ import com.kidor.vigik.R
  */
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
-    @StyleRes themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
+    @StyleRes themeResId: Int = androidx.fragment.testing.R.style.FragmentScenarioEmptyFragmentActivityTheme,
     crossinline action: Fragment.(T) -> Unit = {}
 ) {
     val startActivityIntent = Intent.makeMainActivity(
