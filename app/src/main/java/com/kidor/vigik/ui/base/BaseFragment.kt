@@ -22,8 +22,8 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.viewState.observe(this) { stateRender(it) }
-        viewModel.viewEvent.observe(this) { eventWrapper ->
+        viewModel.viewState.observe(viewLifecycleOwner) { stateRender(it) }
+        viewModel.viewEvent.observe(viewLifecycleOwner) { eventWrapper ->
             // React on events only once
             eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
         }
