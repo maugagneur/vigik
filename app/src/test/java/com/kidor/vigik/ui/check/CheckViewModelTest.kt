@@ -9,7 +9,6 @@ import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -51,16 +50,12 @@ class CheckViewModelTest {
         viewModel.viewEvent.observeForever(eventObserver)
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun checkViewStateAtStart() {
         logTestName()
 
-        // Then
-        runTest {
-            val state = viewModel.viewState.value
-            assertEquals(CheckViewState.Loading, state, "View state")
-        }
+        val state = viewModel.viewState.value
+        assertEquals(CheckViewState.Loading, state, "View state")
     }
 
     @ExperimentalCoroutinesApi
@@ -139,16 +134,12 @@ class CheckViewModelTest {
         assertEquals(CheckViewState.NfcIsDisable, state, "View state")
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun openNfcSettingsWhenActionOnSettingsButton() {
         logTestName()
 
         // When
-        runTest {
-            viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
-            advanceUntilIdle()
-        }
+        viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
 
         // Then
         val event = viewModel.viewEvent.value
