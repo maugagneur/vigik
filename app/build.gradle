@@ -72,7 +72,7 @@ android {
 
 jacoco {
     toolVersion = jacocoVer
-    reportsDirectory = layout.buildDirectory.dir('"$buildDir/reports/')
+    getReportsDirectory().set(file("$buildDir/customJacocoReportDir"))
 }
 
 tasks.withType(Test) {
