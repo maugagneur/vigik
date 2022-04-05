@@ -3,12 +3,12 @@ package com.kidor.vigik.ui.scan
 import androidx.fragment.app.FragmentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
+import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.EspressoUtils.checkToastWithTextIsVisible
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -49,7 +49,7 @@ class ScanViewTest {
         // Load fragment in empty fragment activity and force state `DisplayTag`
         launchFragmentInHiltContainer<ScanFragment> { fragment ->
             val tag = Tag()
-            fragment.forceState(ScanViewState.DisplayTag(tag, true))
+            fragment.stateRender(ScanViewState.DisplayTag(tag, true))
         }
 
         // Check that loader is visible
@@ -69,7 +69,7 @@ class ScanViewTest {
         // Load fragment in empty fragment activity and force state `DisplayTag`
         launchFragmentInHiltContainer<ScanFragment> { fragment ->
             val tag = Tag()
-            fragment.forceState(ScanViewState.DisplayTag(tag, false))
+            fragment.stateRender(ScanViewState.DisplayTag(tag, false))
         }
 
         // Check that loader is visible
@@ -90,7 +90,7 @@ class ScanViewTest {
 
         // Load fragment in empty fragment activity and force state `DisplayTag`
         launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            fragment.forceEvent(ScanViewEvent.SaveTagSuccess)
+            fragment.eventRender(ScanViewEvent.SaveTagSuccess)
             parentActivity = activity
         }
 
@@ -106,7 +106,7 @@ class ScanViewTest {
 
         // Load fragment in empty fragment activity and force state `DisplayTag`
         launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            fragment.forceEvent(ScanViewEvent.SaveTagFailure)
+            fragment.eventRender(ScanViewEvent.SaveTagFailure)
             parentActivity = activity
         }
 

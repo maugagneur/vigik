@@ -41,7 +41,7 @@ class HistoryViewTest {
 
         // Load fragment in empty fragment activity and force state `Initializing`
         launchFragmentInHiltContainer<HistoryFragment> { fragment ->
-            fragment.forceState(HistoryViewState.Initializing)
+            fragment.stateRender(HistoryViewState.Initializing)
         }
 
         // Check that the recyclerview of tags is hidden

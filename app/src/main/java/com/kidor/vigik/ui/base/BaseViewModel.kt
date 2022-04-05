@@ -1,6 +1,5 @@
 package com.kidor.vigik.ui.base
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,18 +29,6 @@ abstract class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, V
     val viewState: LiveData<VIEW_STATE> get() = _viewState
 
     /**
-     * Forces the view model to emit the given state.
-     *
-     * Only use this method for testing purpose!
-     *
-     * @param viewState The state.
-     */
-    @VisibleForTesting
-    internal fun forceState(viewState: VIEW_STATE) {
-        _viewState.value = viewState
-    }
-
-    /**
      * Internal event holder that can be modify by the view model.
      */
     @Suppress("PropertyName")
@@ -51,18 +38,6 @@ abstract class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, V
      * Observe this to be notify of every view event.
      */
     val viewEvent: LiveData<EventWrapper<VIEW_EVENT>> get() = _viewEvent
-
-    /**
-     * Forces the view model to emit the given event.
-     *
-     * Only use this method for testing purpose!
-     *
-     * @param viewEvent The event.
-     */
-    @VisibleForTesting
-    internal fun forceEvent(viewEvent: VIEW_EVENT) {
-        _viewEvent.value = viewEvent.wrap()
-    }
 
     /**
      * Defines how the ViewModel should react to en action from the view.

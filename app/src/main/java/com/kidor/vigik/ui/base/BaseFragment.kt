@@ -2,7 +2,6 @@ package com.kidor.vigik.ui.base
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 
 /**
@@ -36,7 +35,7 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
      *
      * @param viewState The new state of the view.
      */
-    protected open fun stateRender(viewState: VIEW_STATE) {
+    open fun stateRender(viewState: VIEW_STATE) {
         // Default implementation
     }
 
@@ -47,31 +46,7 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
      *
      * @param viewEvent The new event.
      */
-    protected open fun eventRender(viewEvent: VIEW_EVENT) {
+    open fun eventRender(viewEvent: VIEW_EVENT) {
         // Default implementation
-    }
-
-    /**
-     * Forces the view to go to the given state.
-     *
-     * Only use this method for testing purpose!
-     *
-     * @param viewState The state.
-     */
-    @VisibleForTesting
-    internal fun forceState(viewState: VIEW_STATE) {
-        viewModel.forceState(viewState)
-    }
-
-    /**
-     * Forces the view to react to the given event.
-     *
-     * Only use this method for testing purpose!
-     *
-     * @param viewEvent The event.
-     */
-    @VisibleForTesting
-    internal fun forceEvent(viewEvent: VIEW_EVENT) {
-        viewModel.forceEvent(viewEvent)
     }
 }

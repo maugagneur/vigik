@@ -2,11 +2,10 @@ package com.kidor.vigik.ui.check
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
+import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
 import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import com.kidor.vigik.extensions.launchFragmentInHiltContainer
-import com.kidor.vigik.utils.AssertUtils.assertEquals
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -46,7 +45,7 @@ class CheckViewTest {
 
         // Load fragment in empty fragment activity and force state `NfcIsDisable`
         launchFragmentInHiltContainer<CheckFragment> { fragment ->
-            fragment.forceState(CheckViewState.NfcIsDisable)
+            fragment.stateRender(CheckViewState.NfcIsDisable)
         }
 
         // Check that loader is hidden
