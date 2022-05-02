@@ -33,11 +33,7 @@ android {
     }
     buildTypes {
         debug {
-            // Set to false because JaCoCo 0.8.7 fails to work with dagger/hilt due to an error from
-            // the D8 compiler : it needs support for class file version 60 that was released in D8/R8
-            // version 3.1.16-dev included in Android Gradle Plugin 7.1.0 (and upper) which requires
-            // an Android Studio version 2021.1.1 at least to work... (╯°□°）╯︵ ┻━┻
-            testCoverageEnabled false
+            testCoverageEnabled true
         }
         release {
             minifyEnabled false
@@ -72,7 +68,7 @@ android {
 
 jacoco {
     toolVersion = jacocoVer
-    getReportsDirectory().set(file("$buildDir/customJacocoReportDir"))
+    getReportsDirectory().set(file("$buildDir/reports/customJacocoReport"))
 }
 
 tasks.withType(Test) {
@@ -117,7 +113,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     getClassDirectories().setFrom(files([debugTree]))
     getExecutionData().setFrom(
             fileTree(dir: project.buildDir, includes: [
-                    'jacoco/testDebugUnitTest.exec',
+                    'outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec',
                     'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'
             ])
     )

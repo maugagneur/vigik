@@ -27,7 +27,7 @@ ext {
     ]
 
     timberVer = '5.0.1'
-    jacocoVer = '0.8.7'
+    jacocoVer = '0.8.8'
     detektVer = '1.20.0'
     diktatVer = '1.0.2'
 
