@@ -1,6 +1,5 @@
 package com.kidor.vigik.ui.check
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.ui.base.BaseViewModel
@@ -9,8 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@VisibleForTesting
-internal const val TIME_BEFORE_NFC_CHECK = 1000L
+private const val TIME_BEFORE_NFC_CHECK = 1000L
 
 @HiltViewModel
 class CheckViewModel @Inject constructor(

@@ -18,6 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -84,7 +85,11 @@ class HistoryViewModelTest {
         logTestName()
 
         // Given
-        coEvery { repository.allTags } returns flowOf(emptyList())
+        coEvery { repository.allTags } returns flowOf<List<Tag>>(emptyList())
+            .map {
+                delay(100)
+                it
+            }
 
         runTest {
             // When
@@ -106,6 +111,10 @@ class HistoryViewModelTest {
         // Given
         val tags = listOf(Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42)))
         coEvery { repository.allTags } returns flowOf(tags)
+            .map {
+                delay(100)
+                it
+            }
 
         runTest {
             // When

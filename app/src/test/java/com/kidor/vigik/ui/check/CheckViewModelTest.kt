@@ -8,7 +8,6 @@ import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -69,7 +68,6 @@ class CheckViewModelTest {
         // When
         runTest {
             viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
         }
 
         // Then
@@ -88,7 +86,6 @@ class CheckViewModelTest {
         // When
         runTest {
             viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
         }
 
         // Then
@@ -107,7 +104,6 @@ class CheckViewModelTest {
         // When
         runTest {
             viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
         }
 
         // Then
@@ -126,7 +122,6 @@ class CheckViewModelTest {
         // When
         runTest {
             viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-            advanceTimeBy(TIME_BEFORE_NFC_CHECK)
         }
 
         // Then
