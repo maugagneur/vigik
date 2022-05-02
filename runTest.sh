@@ -25,12 +25,17 @@ logPid=$!
 kill -9 $logPid
 
 # Move the log file with the JaCoCo test report
-mv .androidTestLog.raw app/build/reports/jacocoTestReport/html/
+mv .androidTestLog.raw app/build/reports/customJacocoReport/jacocoTestReport/html/
 
 # Filter the logs to keep only the interestiong ones
-grep -E 'TEST_REPORT|TestRunner' app/build/reports/jacocoTestReport/html/.androidTestLog.raw > app/build/reports/jacocoTestReport/html/androidTestLog
+grep -E 'TEST_REPORT|TestRunner' app/build/reports/customJacocoReport/jacocoTestReport/html/.androidTestLog.raw > app/build/reports/customJacocoReport/jacocoTestReport/html/androidTestLog
+
+# Run Kotlin static code analysers
+./gradlew detekt
+# TODO: Run diktat
 
 echo
 echo "Unit tests report is available in app/build/reports/tests"
 echo "Instrumentation tests report is available in app/build/reports/androidTests/connected"
 echo "Code coverage report is available in app/build/reports/jacocoTestReport/html"
+echo "Detekt analysis report is available in app/build/reports/detekt"

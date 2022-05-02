@@ -1,6 +1,11 @@
 package com.kidor.vigik.nfc.hostapdu
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.os.Message
@@ -18,7 +23,7 @@ import javax.inject.Singleton
 class HostApduManager @Inject constructor(@ApplicationContext context: Context) {
 
     private var messenger: Messenger? = null
-    private var localBroadcastManager: LocalBroadcastManager = LocalBroadcastManager.getInstance(context)
+    private val localBroadcastManager: LocalBroadcastManager = LocalBroadcastManager.getInstance(context)
     private val listeners = mutableListOf<HostApduListener>()
 
     private val serviceConnection = object : ServiceConnection {

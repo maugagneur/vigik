@@ -52,8 +52,11 @@ class EmulateViewModel @Inject constructor(
 
     override fun onConnectionLost(reason: Int) {
         when (reason) {
-            HostApduService.DEACTIVATION_DESELECTED -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: An other AID has been selected")
-            HostApduService.DEACTIVATION_LINK_LOSS -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: NFC link lost")
+            HostApduService.DEACTIVATION_DESELECTED ->
+                _viewState.value =
+                    EmulateViewState.DisplayLogLine("Deactivation's reason: An other AID has been selected")
+            HostApduService.DEACTIVATION_LINK_LOSS ->
+                _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: NFC link lost")
             else -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: Unknown")
         }
     }

@@ -15,12 +15,12 @@ import androidx.lifecycle.ViewModel
  *      _viewEvent.value = VIEW_EVENT.wrap()
  * ```
  */
-abstract class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel() {
+open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel() {
 
     /**
      * Internal state holder that can be modify by the view model.
      */
-    @Suppress("PropertyName")
+    @Suppress("PropertyName", "VariableNaming")
     protected open val _viewState = MutableLiveData<VIEW_STATE>()
 
     /**
@@ -31,7 +31,7 @@ abstract class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, V
     /**
      * Internal event holder that can be modify by the view model.
      */
-    @Suppress("PropertyName")
+    @Suppress("PropertyName", "VariableNaming")
     protected open val _viewEvent = MutableLiveData<EventWrapper<VIEW_EVENT>>()
 
     /**

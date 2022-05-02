@@ -2,8 +2,8 @@ package com.kidor.vigik.ui.hub
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.ui.base.EventWrapper
+import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Before
 import org.junit.Rule

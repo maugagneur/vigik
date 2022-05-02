@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.base
 /**
  * Generic view event.
  */
-abstract class ViewEvent {
+open class ViewEvent {
 
     /**
      * Wraps this [ViewEvent] into [EventWrapper].

@@ -3,7 +3,11 @@ package com.kidor.vigik.di
 import android.content.Context
 import android.nfc.NfcAdapter
 import androidx.room.Room
-import com.kidor.vigik.db.*
+import com.kidor.vigik.db.AppDataBase
+import com.kidor.vigik.db.DATABASE_NAME
+import com.kidor.vigik.db.TagDao
+import com.kidor.vigik.db.TagRepository
+import com.kidor.vigik.db.TagRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

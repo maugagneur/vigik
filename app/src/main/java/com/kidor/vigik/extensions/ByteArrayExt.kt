@@ -6,6 +6,7 @@ package com.kidor.vigik.extensions
  * @param prefix The prefix bytes to test for
  * @return `true` if the array starts with the bytes from the prefix, otherwise `false`.
  */
+@Suppress("ReturnCount")
 fun ByteArray.startWith(prefix: ByteArray?): Boolean {
     if (this.contentEquals(prefix)) {
         return true

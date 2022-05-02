@@ -14,7 +14,8 @@ import com.kidor.vigik.ui.history.list.OnDeleteTagClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HistoryFragment : BaseFragment<HistoryViewAction, HistoryViewState, Nothing, HistoryViewModel>(), OnDeleteTagClickListener {
+class HistoryFragment : BaseFragment<HistoryViewAction, HistoryViewState, Nothing, HistoryViewModel>(),
+    OnDeleteTagClickListener {
 
     private lateinit var binding: FragmentHistoryBinding
     override val viewModel by viewModels<HistoryViewModel>()

@@ -79,9 +79,10 @@ tasks.withType(Test) {
 detekt {
     toolVersion = detektVer
     buildUponDefaultConfig = true // preconfigure defaults
-    allRules = true // activate all available (even unstable) rules.
-    //config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    allRules = false // activate all available (even unstable) rules.
+    config = files("$projectDir/config/detekt/config.yml") // point to your custom config defining rules to run, overwriting default behavior
     //baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+    ignoreFailures = true // If set to `true` the build does not fail when the maxIssues count was reached.
 }
 
 diktat {
