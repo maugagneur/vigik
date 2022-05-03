@@ -2,6 +2,15 @@ package com.kidor.vigik.nfc.model
 
 import com.kidor.vigik.extensions.toHex
 
+/**
+ * Object model for tag in the application.
+ *
+ * @param timestamp The timestamp when the tag was read.
+ * @param uid       The UID of the tag.
+ * @param techList  The technologies available in this tag, as fully qualified class names.
+ * @param data      The human-readable description of the tag.
+ * @param id        The low level ID of the tag.
+ */
 data class Tag(
     val timestamp: Long = 0L,
     val uid: ByteArray? = null,

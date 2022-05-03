@@ -23,7 +23,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.doSuspendableAnswer
 
 /**
- * Unit test for [ScanViewModel]
+ * Unit test for [ScanViewModel].
  */
 @RunWith(MockitoJUnitRunner::class)
 class ScanViewModelTest {

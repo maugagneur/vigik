@@ -15,11 +15,15 @@ import com.kidor.vigik.databinding.FragmentScanNfcBinding
 import com.kidor.vigik.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * View that scan for a NFC tag.
+ */
 @AndroidEntryPoint
 class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, ScanViewModel>() {
 
-    private lateinit var binding: FragmentScanNfcBinding
     override val viewModel by viewModels<ScanViewModel>()
+
+    private lateinit var binding: FragmentScanNfcBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentScanNfcBinding.inflate(inflater, container, false).also {

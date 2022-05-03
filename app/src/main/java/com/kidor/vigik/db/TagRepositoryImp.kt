@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Implementation of [TagRepository].
+ */
 class TagRepositoryImp @Inject constructor(private val tagDao: TagDao) : TagRepository {
 
     override val allTags: Flow<List<Tag>> = tagDao.getAll().map { it.toTagList() }

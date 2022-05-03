@@ -12,10 +12,14 @@ import com.kidor.vigik.databinding.FragmentCheckNfcBinding
 import com.kidor.vigik.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * View that check if all prerequisite to use NFC are met.
+ */
 @AndroidEntryPoint
 class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEvent, CheckViewModel>() {
 
     private lateinit var binding: FragmentCheckNfcBinding
+
     override val viewModel by viewModels<CheckViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

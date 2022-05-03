@@ -3,6 +3,15 @@ package com.kidor.vigik.db.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+/**
+ * Object model for tag in database.
+ *
+ * @param timestamp The timestamp when the tag was read.
+ * @param uid       The UID of the tag.
+ * @param techList  The technologies available in this tag, as fully qualified class names.
+ * @param data      The human-readable description of the tag.
+ * @param id        The low level ID of the tag.
+ */
 @Entity(tableName = "tag")
 data class RoomTag(
     @PrimaryKey val timestamp: Long = 0,

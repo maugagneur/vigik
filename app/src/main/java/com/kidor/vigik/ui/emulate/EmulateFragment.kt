@@ -9,10 +9,14 @@ import com.kidor.vigik.databinding.FragmentEmulateTagBinding
 import com.kidor.vigik.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * View that emulate a NFC tag.
+ */
 @AndroidEntryPoint
 class EmulateFragment : BaseFragment<Nothing, EmulateViewState, Nothing, EmulateViewModel>() {
 
     private lateinit var binding: FragmentEmulateTagBinding
+
     override val viewModel by viewModels<EmulateViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

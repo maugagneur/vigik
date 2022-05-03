@@ -3,6 +3,9 @@ package com.kidor.vigik.db
 import com.kidor.vigik.nfc.model.Tag
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface of a tag repository.
+ */
 interface TagRepository {
 
     /**

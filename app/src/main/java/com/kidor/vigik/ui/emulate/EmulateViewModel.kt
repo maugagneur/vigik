@@ -20,6 +20,9 @@ private val SELECT_FILE_HEADER = byteArrayOf(0x00, 0xA4.toByte(), 0x04, 0x00)
 // ID wrote on tag: 0xAC86574E
 private val TAG_ID = byteArrayOf(0x4E.toByte(), 0x57, 0x86.toByte(), 0xAC.toByte())
 
+/**
+ * Business logic for emulating a NFC tag.
+ */
 @HiltViewModel
 class EmulateViewModel @Inject constructor(
     private val hostApduManager: HostApduManager

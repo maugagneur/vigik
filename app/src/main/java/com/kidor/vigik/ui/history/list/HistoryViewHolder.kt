@@ -12,6 +12,9 @@ import com.kidor.vigik.nfc.model.Tag
 import java.text.SimpleDateFormat
 import java.util.*
 
+/**
+ * Base view to display tag's data.
+ */
 class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.US)
@@ -19,13 +22,25 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val uidTextView: TextView = itemView.findViewById(R.id.uid)
     private val deleteImageView: ImageView = itemView.findViewById(R.id.delete)
 
-    fun bind(tag: Tag, onDeleteTagClickListener: OnDeleteTagClickListener) {
+    /**
+     * Binds a tag history view with its data.
+     *
+     * @param tag                Tag bound to this view.
+     * @param tagHistoryListener View's listener.
+     */
+    fun bind(tag: Tag, tagHistoryListener: TagHistoryListener) {
         dateTextView.text = dateFormat.format(Date(tag.timestamp))
         uidTextView.text = tag.uid?.toHex()
-        deleteImageView.setOnClickListener { onDeleteTagClickListener.onDeleteTagClick(tag) }
+        deleteImageView.setOnClickListener { tagHistoryListener.onDeleteTagClick(tag) }
     }
 
     companion object {
+
+        /**
+         * Creates an instance of [HistoryViewHolder].
+         *
+         * @param parent View to be the parent of the generated hierarchy
+         */
         fun create(parent: ViewGroup): HistoryViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_history_item, parent, false)
             return HistoryViewHolder(view)

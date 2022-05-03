@@ -1,7 +1,9 @@
 package com.kidor.vigik.nfc.hostapdu
 
 /**
- * Pairs of status bytes returned to return after a command according to ISO 7816-4.
+ * Pairs of status bytes returned after a command according to ISO 7816-4.
+ *
+ * @param value The value of the 2 status bytes.
  */
 enum class ApduStatusBytes(val value: ByteArray) {
     /** 0x0000 **/

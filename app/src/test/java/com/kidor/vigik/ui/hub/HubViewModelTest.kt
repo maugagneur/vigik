@@ -12,6 +12,9 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+/**
+ * Unit test for [HubViewModel].
+ */
 @RunWith(MockitoJUnitRunner::class)
 class HubViewModelTest {
 

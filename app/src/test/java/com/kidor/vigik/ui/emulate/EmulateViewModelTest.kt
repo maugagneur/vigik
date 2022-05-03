@@ -19,6 +19,9 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 
+/**
+ * Unit tests for [EmulateViewModel].
+ */
 @RunWith(MockitoJUnitRunner::class)
 class EmulateViewModelTest {
 

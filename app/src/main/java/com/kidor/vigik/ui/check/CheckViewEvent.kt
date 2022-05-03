@@ -2,6 +2,9 @@ package com.kidor.vigik.ui.check
 
 import com.kidor.vigik.ui.base.ViewEvent
 
+/**
+ * Events that can be sent to [CheckFragment] from [CheckViewModel].
+ */
 sealed class CheckViewEvent : ViewEvent() {
 
     /**

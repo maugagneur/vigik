@@ -10,6 +10,9 @@ import androidx.navigation.Navigation
 import com.kidor.vigik.databinding.FragmentHubBinding
 import com.kidor.vigik.ui.base.BaseFragment
 
+/**
+ * View that display all sections of the application.
+ */
 class HubFragment : BaseFragment<HubViewAction, Nothing, HubViewEvent, HubViewModel>() {
 
     override val viewModel by viewModels<HubViewModel>()

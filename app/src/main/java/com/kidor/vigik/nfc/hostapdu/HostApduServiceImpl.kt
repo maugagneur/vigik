@@ -5,6 +5,9 @@ import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
+/**
+ * Implementation of [HostApduService].
+ */
 class HostApduServiceImpl : HostApduService() {
 
     private lateinit var localBroadcastManager: LocalBroadcastManager
@@ -32,15 +35,22 @@ class HostApduServiceImpl : HostApduService() {
     }
 
     companion object {
+        /** The intent action for new message. **/
         const val APDU_SERVICE_ACTION_NEW_MESSAGE = "com.kidor.vigik.actions.NEW_MESSAGE"
+        /** The key for message extra data. **/
         const val KEY_MESSAGE_TYPE = "message_type"
+        /** The value of message when process APDU command. **/
         const val TYPE_APDU_COMMAND = "type_apdu_command"
+        /** The value of message when deactivated. **/
         const val TYPE_DEACTIVATED = "type_deactivated"
+        /** The key for APDU command extra data. **/
         const val KEY_APDU_COMMAND = "apdu_command"
+        /** The key for deactivated reason extra data. **/
         const val KEY_DEACTIVATED_REASON = "deactivated_reason"
 
-        // Abstract super class constant overrides
+        /** The ID of the message. **/
         const val MSG_RESPONSE_APDU = 1
+        /** The key of the extra data. **/
         const val KEY_DATA = "data"
     }
 }

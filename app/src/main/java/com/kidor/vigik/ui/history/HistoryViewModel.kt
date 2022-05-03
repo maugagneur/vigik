@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Business logic of displaying all tags saved in the database.
+ */
 @HiltViewModel
 class HistoryViewModel @Inject constructor(
     private val repository: TagRepository

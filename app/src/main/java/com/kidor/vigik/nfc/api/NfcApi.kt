@@ -27,8 +27,22 @@ class NfcApi @Inject constructor(
 
     private val listeners: MutableList<NfcApiListener> = mutableListOf()
 
+    /**
+     * Return true if this NFC Adapter has any features enabled.
+     *
+     * @see [NfcAdapter.isEnabled]
+     */
     fun isNfcEnable() = nfcAdapter.isEnabled
 
+    /**
+     * Enable foreground dispatch to the given Activity.
+     *
+     * This will give priority to the foreground activity when dispatching a discovered tag.
+     *
+     * @param activity  The Activity to dispatch to.
+     * @param javaClass The Java class of the component from which the intent will be created.
+     * @see [NfcAdapter.enableForegroundDispatch]
+     */
     fun <T : Any> enableNfcForegroundDispatch(activity: Activity, javaClass: Class<T>) {
         val intent = Intent(activity, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         val nfcPendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -39,6 +53,12 @@ class NfcApi @Inject constructor(
         }
     }
 
+    /**
+     * Disable foreground dispatch to the given activity.
+     *
+     * @param activity The activity to disable dispatch to.
+     * @see [NfcAdapter.disableForegroundDispatch]
+     */
     fun disableNfcForegroundDispatch(activity: Activity) {
         try {
             nfcAdapter.disableForegroundDispatch(activity)
@@ -47,6 +67,11 @@ class NfcApi @Inject constructor(
         }
     }
 
+    /**
+     * Call this method when receiving a NFC intent.
+     *
+     * @param intent The intent received.
+     */
     fun onNfcIntentReceived(intent: Intent) {
         if (intent.action != NfcAdapter.ACTION_TAG_DISCOVERED) {
             Timber.d("Not a NFC intent received")
@@ -68,6 +93,11 @@ class NfcApi @Inject constructor(
         }
     }
 
+    /**
+     * Register to notification related to NFC.
+     *
+     * @param listener The listener to register.
+     */
     fun register(listener: NfcApiListener) {
         listeners.let {
             // Prevent duplicated listeners
@@ -77,6 +107,11 @@ class NfcApi @Inject constructor(
         }
     }
 
+    /**
+     * Unregister to notifications related to NFC.
+     *
+     * @param listener The listener to unregister.
+     */
     fun unregister(listener: NfcApiListener) {
         listeners.remove(listener)
     }

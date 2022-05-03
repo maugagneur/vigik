@@ -14,12 +14,15 @@ import com.kidor.vigik.nfc.api.NfcApi
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+/**
+ * Main activity of the application.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration: AppBarConfiguration
-    @Inject lateinit var nfcApi: NfcApi
+    @Inject internal lateinit var nfcApi: NfcApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

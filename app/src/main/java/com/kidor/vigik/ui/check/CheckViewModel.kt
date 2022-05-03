@@ -10,6 +10,9 @@ import javax.inject.Inject
 
 private const val TIME_BEFORE_NFC_CHECK = 1000L
 
+/**
+ * Business logic for checking if all prerequisite to use NFC are met.
+ */
 @HiltViewModel
 class CheckViewModel @Inject constructor(
     private val nfcApi: NfcApi

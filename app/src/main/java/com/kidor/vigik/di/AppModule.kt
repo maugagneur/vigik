@@ -25,6 +25,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    /**
+     * Provides instance of [AppDataBase].
+     *
+     * @param context The application context.
+     */
     @Singleton
     @Provides
     fun provideDatabase(@ApplicationContext context: Context): AppDataBase =
@@ -34,10 +39,20 @@ object AppModule {
             DATABASE_NAME
         ).build()
 
+    /**
+     * Provides instance of [TagDao].
+     *
+     * @param dataBase The application database.
+     */
     @Singleton
     @Provides
     fun provideTagDao(dataBase: AppDataBase) = dataBase.tagDao()
 
+    /**
+     * Provides instance of [NfcAdapter].
+     *
+     * @param context The application context.
+     */
     @Singleton
     @Provides
     fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter =
@@ -51,6 +66,11 @@ object AppModule {
 @InstallIn(SingletonComponent::class)
 object TagRepositoryModule {
 
+    /**
+     * Provides instance of [TagRepository].
+     *
+     * @param tagDao The tag DAO.
+     */
     @Singleton
     @Provides
     fun provideTagRepository(tagDao: TagDao): TagRepository = TagRepositoryImp(tagDao)

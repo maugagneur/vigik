@@ -4,8 +4,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.kidor.vigik.nfc.model.Tag
 
+/**
+ * Custom [ListAdapter] to display a list of tag history.
+ */
 class HistoryAdapter(
-    private val onDeleteTagClickListener: OnDeleteTagClickListener
+    private val tagHistoryListener: TagHistoryListener
 ) : ListAdapter<Tag, HistoryViewHolder>(TagComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -14,6 +17,6 @@ class HistoryAdapter(
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind(current, onDeleteTagClickListener)
+        holder.bind(current, tagHistoryListener)
     }
 }

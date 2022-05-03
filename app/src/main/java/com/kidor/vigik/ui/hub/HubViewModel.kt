@@ -2,6 +2,9 @@ package com.kidor.vigik.ui.hub
 
 import com.kidor.vigik.ui.base.BaseViewModel
 
+/**
+ * Business logic of displaying all sections of the application.
+ */
 class HubViewModel : BaseViewModel<HubViewAction, Nothing, HubViewEvent>() {
 
     override fun handleAction(viewAction: HubViewAction) {

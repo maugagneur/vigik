@@ -4,6 +4,9 @@ import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+/**
+ * Implementation of [Application].
+ */
 @HiltAndroidApp
 class VigikApplication : Application() {
 

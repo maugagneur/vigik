@@ -12,6 +12,9 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+/**
+ * Business logic for scanning for a NFC tag.
+ */
 @HiltViewModel
 class ScanViewModel @Inject constructor(
     private val nfcApi: NfcApi,

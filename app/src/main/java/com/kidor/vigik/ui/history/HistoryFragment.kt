@@ -10,15 +10,19 @@ import com.kidor.vigik.databinding.FragmentHistoryBinding
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.ui.base.BaseFragment
 import com.kidor.vigik.ui.history.list.HistoryAdapter
-import com.kidor.vigik.ui.history.list.OnDeleteTagClickListener
+import com.kidor.vigik.ui.history.list.TagHistoryListener
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * View that display all tags saved in the database.
+ */
 @AndroidEntryPoint
 class HistoryFragment : BaseFragment<HistoryViewAction, HistoryViewState, Nothing, HistoryViewModel>(),
-    OnDeleteTagClickListener {
+    TagHistoryListener {
+
+    override val viewModel by viewModels<HistoryViewModel>()
 
     private lateinit var binding: FragmentHistoryBinding
-    override val viewModel by viewModels<HistoryViewModel>()
     private lateinit var historyAdapter: HistoryAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -34,7 +38,7 @@ class HistoryFragment : BaseFragment<HistoryViewAction, HistoryViewState, Nothin
 
     override fun stateRender(viewState: HistoryViewState) {
         when (viewState) {
-            is HistoryViewState.Initializing -> {
+            HistoryViewState.Initializing -> {
                 binding.tagHistoryRecyclerview.visibility = View.GONE
                 binding.noDataTextview.visibility = View.GONE
                 historyAdapter.submitList(emptyList())
