@@ -32,10 +32,11 @@ grep -E 'TEST_REPORT|TestRunner' app/build/reports/customJacocoReport/jacocoTest
 
 # Run Kotlin static code analysers
 ./gradlew detekt
-# TODO: Run diktat
+./gradlew diktatCheck
 
 echo
 echo "Unit tests report is available in app/build/reports/tests"
 echo "Instrumentation tests report is available in app/build/reports/androidTests/connected"
 echo "Code coverage report is available in app/build/reports/jacocoTestReport/html"
 echo "Detekt analysis report is available in app/build/reports/detekt"
+echo "Diktat analysis report is available in app/build/reports/diktat"

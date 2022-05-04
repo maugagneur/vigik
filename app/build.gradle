@@ -86,8 +86,9 @@ detekt {
 }
 
 diktat {
-    reporterType = "html" // "html", "json", "plain" (default), "sarif"
+    reporter = "html" // "html", "json", "plain" (default), "sarif"
     output = "$project.projectDir/build/reports/diktat/diktat.html"
+    ignoreFailures = true
 }
 
 // Custom task to merge code coverage reports from unit and instrumentation tests
