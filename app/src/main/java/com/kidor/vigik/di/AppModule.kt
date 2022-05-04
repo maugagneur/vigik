@@ -49,13 +49,13 @@ object AppModule {
     fun provideTagDao(dataBase: AppDataBase) = dataBase.tagDao()
 
     /**
-     * Provides instance of [NfcAdapter].
+     * Provides instance of [NfcAdapter] if available.
      *
      * @param context The application context.
      */
     @Singleton
     @Provides
-    fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter =
+    fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter? =
         NfcAdapter.getDefaultAdapter(context)
 }
 

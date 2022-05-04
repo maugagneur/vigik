@@ -21,7 +21,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class NfcApi @Inject constructor(
-    private val nfcAdapter: NfcAdapter,
+    private val nfcAdapter: NfcAdapter?,
     private val systemWrapper: SystemWrapper
 ) {
 
@@ -32,7 +32,7 @@ class NfcApi @Inject constructor(
      *
      * @see [NfcAdapter.isEnabled]
      */
-    fun isNfcEnable() = nfcAdapter.isEnabled
+    fun isNfcEnable() = nfcAdapter?.isEnabled ?: false
 
     /**
      * Enable foreground dispatch to the given Activity.
@@ -45,9 +45,14 @@ class NfcApi @Inject constructor(
      */
     fun <T : Any> enableNfcForegroundDispatch(activity: Activity, javaClass: Class<T>) {
         val intent = Intent(activity, javaClass).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        val nfcPendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val nfcPendingIntent = PendingIntent.getActivity(
+            activity,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         try {
-            nfcAdapter.enableForegroundDispatch(activity, nfcPendingIntent, null, null)
+            nfcAdapter?.enableForegroundDispatch(activity, nfcPendingIntent, null, null)
         } catch (exception: IllegalStateException) {
             Timber.e(exception, "Error enabling NFC foreground dispatch")
         }
@@ -61,7 +66,7 @@ class NfcApi @Inject constructor(
      */
     fun disableNfcForegroundDispatch(activity: Activity) {
         try {
-            nfcAdapter.disableForegroundDispatch(activity)
+            nfcAdapter?.disableForegroundDispatch(activity)
         } catch (exception: IllegalStateException) {
             Timber.e(exception, "Error disabling NFC foreground dispatch")
         }
