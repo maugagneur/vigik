@@ -36,6 +36,6 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_save" />
+        app:srcCompat="@drawable/ic_baseline_save_alt_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
