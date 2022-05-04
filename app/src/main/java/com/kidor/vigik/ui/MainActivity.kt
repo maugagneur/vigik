@@ -4,6 +4,7 @@ import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -25,6 +26,9 @@ class MainActivity : AppCompatActivity() {
     @Inject internal lateinit var nfcApi: NfcApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Handle the splash screen transition
+        installSplashScreen()
+
         super.onCreate(savedInstanceState)
         ActivityMainBinding.inflate(layoutInflater).let {
             setContentView(it.root)

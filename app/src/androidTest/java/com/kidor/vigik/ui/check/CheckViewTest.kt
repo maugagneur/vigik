@@ -30,13 +30,13 @@ class CheckViewTest {
         launchFragmentInHiltContainer<CheckFragment>()
 
         // Check that loader is visible
-        checkViewIsVisible(R.id.progress_bar, "Loader")
+        checkViewIsNotVisible(R.id.progress_bar, "Loader")
 
         // Check that refresh button is hidden
-        checkViewIsNotVisible(R.id.nfc_refresh_button, "Refresh button")
+        checkViewIsVisible(R.id.nfc_refresh_button, "Refresh button")
 
         // Check that settings button is hidden
-        checkViewIsNotVisible(R.id.nfc_settings_button, "Settings button")
+        checkViewIsVisible(R.id.nfc_settings_button, "Settings button")
     }
 
     @Test

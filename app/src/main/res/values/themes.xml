@@ -1,5 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+    <!-- Splashscreen theme -->
+    <style name="Theme.Vigik.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/primary_light</item>
+        <!-- Use windowSplashScreenAnimatedIcon to add either a drawable or an animated drawable. -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <!-- Set the theme of the Activity that directly follows your splash screen. -->
+        <item name="postSplashScreenTheme">@style/Theme.Vigik</item>
+    </style>
+
+    <!-- Base application theme -->
     <style name="Theme.Vigik" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
@@ -12,5 +22,6 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/primary_light</item>
     </style>
 </resources>

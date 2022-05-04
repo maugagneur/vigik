@@ -18,8 +18,14 @@ class CheckViewModel @Inject constructor(
     private val nfcApi: NfcApi
 ) : BaseViewModel<CheckViewAction, CheckViewState, CheckViewEvent>() {
 
+    /**
+     * Indicates if the application is ready to dismiss the splashscreen and to display data.
+     */
+    var isReady: Boolean = false
+        private set
+
     init {
-        performNfcCheck()
+        _viewState.value = CheckViewState.Loading
     }
 
     override fun handleAction(viewAction: CheckViewAction) {
@@ -30,9 +36,14 @@ class CheckViewModel @Inject constructor(
     }
 
     private fun performNfcCheck() {
-        _viewState.value = CheckViewState.Loading
-        viewModelScope.launch {
-            delay(TIME_BEFORE_NFC_CHECK)
+        if (isReady) {
+            _viewState.value = CheckViewState.Loading
+            viewModelScope.launch {
+                // Add a delay for all no-first refresh request to force the UI the reflect this transition state
+                delay(TIME_BEFORE_NFC_CHECK)
+                checkIfNfcIsAvailable()
+            }
+        } else {
             checkIfNfcIsAvailable()
         }
     }
@@ -43,5 +54,6 @@ class CheckViewModel @Inject constructor(
         } else {
             _viewState.value = CheckViewState.NfcIsDisable
         }
+        isReady = true
     }
 }

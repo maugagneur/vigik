@@ -6,6 +6,7 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.kidor.vigik.databinding.FragmentCheckNfcBinding
@@ -27,7 +28,19 @@ class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEve
             it.nfcRefreshButton.setOnClickListener { viewModel.handleAction(CheckViewAction.RefreshNfcStatus) }
             it.nfcSettingsButton.setOnClickListener { viewModel.handleAction(CheckViewAction.DisplayNfcSettings) }
         }
-        return binding.root
+        return binding.root.also {
+            it.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+                override fun onPreDraw(): Boolean {
+                    // Wait until the view model is ready to dismiss the splashscreen
+                    return if (viewModel.isReady) {
+                        it.viewTreeObserver.removeOnPreDrawListener(this)
+                        true
+                    } else {
+                        false
+                    }
+                }
+            })
+        }
     }
 
     override fun onResume() {
