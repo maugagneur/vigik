@@ -3,13 +3,21 @@ package com.kidor.vigik.utils
 import android.app.Activity
 import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.Espresso.pressBackUnconditionally
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withParent
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
-import org.hamcrest.CoreMatchers
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.instanceOf
+import org.hamcrest.CoreMatchers.not
 import java.text.DateFormat
 import java.util.Date
 
@@ -32,8 +40,8 @@ object EspressoUtils {
     fun checkViewIsVisible(viewId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is visible")
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(viewId))
+            .check(matches(isDisplayed()))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -43,8 +51,8 @@ object EspressoUtils {
     fun checkViewIsNotVisible(viewId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is not visible")
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .check(ViewAssertions.matches(CoreMatchers.not(ViewMatchers.isDisplayed())))
+        onView(withId(viewId))
+            .check(matches(not(isDisplayed())))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -54,9 +62,9 @@ object EspressoUtils {
     fun checkViewIsVisibleWithText(viewId: Int, expected: String, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is visible and contains text: '$expected'")
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-            .check(ViewAssertions.matches(ViewMatchers.withText(expected)))
+        onView(withId(viewId))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(expected)))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -66,28 +74,21 @@ object EspressoUtils {
     fun checkViewIsVisibleWithText(viewId: Int, @StringRes stringResourceId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is visible and contains text: " + getStringResource(stringResourceId))
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-            .check(ViewAssertions.matches(ViewMatchers.withText(stringResourceId)))
+        onView(withId(viewId))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(stringResourceId)))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
     /**
-     * Checks that a visible TextView displaying the text associated with given resource ID
-     * exist in given parent view.
+     * Checks that a visible TextView displaying the text associated with given resource ID exist in given parent view.
      */
     fun checkTextViewInParentIsVisibleWithText(parentId: Int, resourceId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is instance of TextView and has parent matching with ID $parentId, is visible and contains text: " + getStringResource(resourceId))
-        Espresso.onView(
-            CoreMatchers.allOf(
-                CoreMatchers.instanceOf(
-                    TextView::class.java
-                ), ViewMatchers.withParent(ViewMatchers.withId(parentId))
-            )
-        )
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-            .check(ViewAssertions.matches(ViewMatchers.withText(resourceId)))
+        onView(allOf(instanceOf(TextView::class.java), withParent(withId(parentId))))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(resourceId)))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -97,8 +98,8 @@ object EspressoUtils {
     fun checkViewIsChecked(viewId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is checked")
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .check(ViewAssertions.matches(ViewMatchers.isChecked()))
+        onView(withId(viewId))
+            .check(matches(ViewMatchers.isChecked()))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -108,8 +109,8 @@ object EspressoUtils {
     fun checkViewIsNotChecked(viewId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is not checked")
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .check(ViewAssertions.matches(ViewMatchers.isNotChecked()))
+        onView(withId(viewId))
+            .check(matches(ViewMatchers.isNotChecked()))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -119,9 +120,9 @@ object EspressoUtils {
     fun checkToastWithTextIsVisible(activity: Activity?, @StringRes stringResourceId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected '$objectName' is visible and contains text: " + getStringResource(stringResourceId))
-        Espresso.onView(ViewMatchers.withText(stringResourceId))
-            .inRoot(RootMatchers.withDecorView(CoreMatchers.not(activity?.window?.decorView)))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(stringResourceId))
+            .inRoot(withDecorView(not(activity?.window?.decorView)))
+            .check(matches(isDisplayed()))
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 
@@ -134,19 +135,17 @@ object EspressoUtils {
 
     /**
      * Performs a press on the back button.
-     * <pre>
-     * Set the parameter `fromRootActivity` to `true` when navigate outside of the application or
-     * process under test otherwise it will throw an exception.
-     * </pre> *
+     *
+     * Set the parameter `fromRootActivity` to `true` when navigate outside of the application or process under test
+     * otherwise it will throw an exception.
      */
-    @JvmOverloads
     fun performBackPress(fromRootActivity: Boolean = false) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Perform back press (fromRootActivity = $fromRootActivity)")
         if (fromRootActivity) {
-            Espresso.pressBackUnconditionally()
+            pressBackUnconditionally()
         } else {
-            Espresso.pressBack()
+            pressBack()
         }
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
@@ -157,8 +156,8 @@ object EspressoUtils {
     fun performClickOnView(viewId: Int, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Perform click on '$objectName'")
-        Espresso.onView(ViewMatchers.withId(viewId))
-            .perform(ViewActions.click())
+        onView(withId(viewId))
+            .perform(click())
         println("$TEST_REPORT_TAG$currentDateTimeString, Result -> OK")
     }
 }

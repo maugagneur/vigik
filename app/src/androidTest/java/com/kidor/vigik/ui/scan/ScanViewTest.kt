@@ -11,6 +11,7 @@ import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -82,6 +83,7 @@ class ScanViewTest {
         checkViewIsNotVisible(R.id.save_fab, "Save FAB")
     }
 
+    @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
     @Test
     fun checkUiElementsWhenTagSavedSuccessfully() {
         logTestName()
@@ -98,6 +100,7 @@ class ScanViewTest {
         checkToastWithTextIsVisible(parentActivity, R.string.save_tag_success, "Toast of tag saving result")
     }
 
+    @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
     @Test
     fun checkUiElementsWhenTagSavingFailed() {
         logTestName()
