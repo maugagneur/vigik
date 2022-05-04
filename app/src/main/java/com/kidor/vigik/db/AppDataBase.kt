@@ -12,7 +12,7 @@ const val DATABASE_VERSION = 1
 /**
  * Representation of the database used by the application.
  */
-@Database(entities = [RoomTag::class], version = DATABASE_VERSION)
+@Database(entities = [RoomTag::class], version = DATABASE_VERSION, exportSchema = true)
 abstract class AppDataBase : RoomDatabase() {
 
     /**

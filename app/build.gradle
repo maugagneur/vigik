@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
     id 'androidx.navigation.safeargs'
-    id 'jacoco'
-    id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp' version "$kspVer"
+    id 'jacoco'
     id 'io.gitlab.arturbosch.detekt'
     id 'org.cqfn.diktat.diktat-gradle-plugin'
 }
@@ -21,10 +22,10 @@ android {
 
         testInstrumentationRunner "com.kidor.vigik.utils.HiltTestRunner"
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
+        ksp {
+            arg('room.schemaLocation', "$projectDir/schemas")
+            arg('room.incremental', "true")
+            arg('room.expandProjection', "true")
         }
     }
 
@@ -122,6 +123,9 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 }
 
 dependencies {
+    // Google
+    implementation "com.google.devtools.ksp:symbol-processing-api:${kspVer}"
+
     // Android X
     implementation "androidx.appcompat:appcompat:${androidxVer.appCompat}"
     implementation "androidx.constraintlayout:constraintlayout:${androidxVer.constraintlayout}"
@@ -136,7 +140,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:${androidxVer.recyclerview}"
     implementation "androidx.room:room-runtime:${androidxVer.room}"
     implementation "androidx.room:room-ktx:${androidxVer.room}"
-    kapt "androidx.room:room-compiler:${androidxVer.room}"
+    ksp "androidx.room:room-compiler:${androidxVer.room}"
 
     // Kotlin
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinVer.coroutines}"

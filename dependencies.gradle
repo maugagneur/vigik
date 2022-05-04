@@ -21,6 +21,7 @@ ext {
             'room'            : '2.4.2'
     ]
 
+    kspVer = '1.6.21-1.0.5'
     kotlinVer = [
             'coroutines': '1.6.1',
             'plugin'    : '1.6.21'
