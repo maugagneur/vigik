@@ -65,11 +65,6 @@ android {
                 "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
         ]
     }
-    sourceSets {
-        final String SHARED_TEST_DIR = 'src/sharedTest/java'
-        test.java.srcDirs += SHARED_TEST_DIR
-        androidTest.java.srcDirs += SHARED_TEST_DIR
-    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
@@ -180,11 +175,13 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:${testVer.coreTesting}"
     testImplementation "io.mockk:mockk:${testVer.mockK}"
     testImplementation "app.cash.turbine:turbine:${testVer.turbine}"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:${androidxVer.compose}"
     androidTestImplementation "androidx.test.ext:junit:${testVer.testExt}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${testVer.espresso}"
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.
+    debugImplementation "androidx.compose.ui:ui-test-manifest:${androidxVer.compose}"
     debugImplementation "androidx.fragment:fragment-testing:${androidxVer.fragment}"
     androidTestImplementation "androidx.navigation:navigation-testing:${androidxVer.navigation}"
 }
