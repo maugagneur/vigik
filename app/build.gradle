@@ -30,6 +30,7 @@ android {
     }
 
     buildFeatures {
+        compose true
         viewBinding true
     }
     buildTypes {
@@ -54,8 +55,15 @@ android {
             }
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion androidxVer.composeCompiler
+    }
     kotlinOptions {
         jvmTarget = '11'
+        freeCompilerArgs += [
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
+        ]
     }
     sourceSets {
         final String SHARED_TEST_DIR = 'src/sharedTest/java'
@@ -128,6 +136,12 @@ dependencies {
 
     // Android X
     implementation "androidx.appcompat:appcompat:${androidxVer.appCompat}"
+    implementation "androidx.compose.compiler:compiler:${androidxVer.compose}"
+    implementation "androidx.compose.foundation:foundation:${androidxVer.compose}"
+    implementation "androidx.compose.material:material:${androidxVer.compose}"
+    implementation "androidx.compose.runtime:runtime:${androidxVer.compose}"
+    implementation "androidx.compose.ui:ui:${androidxVer.compose}"
+    implementation "androidx.compose.ui:ui-tooling:${androidxVer.compose}"
     implementation "androidx.constraintlayout:constraintlayout:${androidxVer.constraintlayout}"
     implementation "androidx.core:core-ktx:${androidxVer.coreKtx}"
     implementation "androidx.core:core-splashscreen:${androidxVer.splashscreen}"
