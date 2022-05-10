@@ -20,8 +20,7 @@
     <fragment
         android:id="@+id/hubFragment"
         android:name="com.kidor.vigik.ui.hub.HubFragment"
-        android:label="@string/hub_title"
-        tools:layout="@layout/fragment_hub">
+        android:label="@string/hub_title">
 
         <action
             android:id="@+id/go_to_scan_nfc"

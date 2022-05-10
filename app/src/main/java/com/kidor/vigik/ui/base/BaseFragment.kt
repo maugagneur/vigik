@@ -1,8 +1,14 @@
 package com.kidor.vigik.ui.base
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
+import com.kidor.vigik.ui.compose.AppTheme
 
 /**
  * Base class for [Fragment] associated with given [VIEW_MODEL].
@@ -19,6 +25,18 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
 
     protected abstract val viewModel: VIEW_MODEL
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return ComposeView(requireContext()).apply {
+            // Dispose of the Composition when the view's LifecycleOwner is destroyed
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                AppTheme {
+                    ComposableView()
+                }
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.viewState.observe(viewLifecycleOwner) { stateRender(it) }
@@ -26,6 +44,10 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
             // React on events only once
             eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
         }
+    }
+
+    @Composable
+    open fun ComposableView() {
     }
 
     /**
