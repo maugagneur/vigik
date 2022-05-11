@@ -22,6 +22,8 @@ class HistoryFragment : BaseFragment<HistoryViewAction, HistoryViewState, Nothin
 
     override val viewModel by viewModels<HistoryViewModel>()
 
+    override val isComposeView: Boolean = false
+
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var historyAdapter: HistoryAdapter
 

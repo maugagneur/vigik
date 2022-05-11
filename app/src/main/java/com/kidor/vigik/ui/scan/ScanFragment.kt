@@ -23,6 +23,8 @@ class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, 
 
     override val viewModel by viewModels<ScanViewModel>()
 
+    override val isComposeView: Boolean = false
+
     private lateinit var binding: FragmentScanNfcBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

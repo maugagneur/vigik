@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -25,6 +26,8 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
 
     protected abstract val viewModel: VIEW_MODEL
 
+    protected abstract val isComposeView: Boolean
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(requireContext()).apply {
             // Dispose of the Composition when the view's LifecycleOwner is destroyed
@@ -39,15 +42,26 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.viewState.observe(viewLifecycleOwner) { stateRender(it) }
-        viewModel.viewEvent.observe(viewLifecycleOwner) { eventWrapper ->
-            // React on events only once
-            eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
+        if (!isComposeView) {
+            viewModel.viewState.observe(viewLifecycleOwner) { stateRender(it) }
+            viewModel.viewEvent.observe(viewLifecycleOwner) { eventWrapper ->
+                // React on events only once
+                eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
+            }
         }
     }
 
     @Composable
     open fun ComposableView() {
+        viewModel.viewState.observeAsState().let {
+            it.value?.let { state -> StateRender(state) }
+        }
+        viewModel.viewEvent.observeAsState().let {
+            it.value?.let { eventWrapper ->
+                // React on events only once
+                eventWrapper.getEventIfNotHandled()?.let { event -> EventRender(event) }
+            }
+        }
     }
 
     /**
@@ -57,6 +71,7 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
      *
      * @param viewState The new state of the view.
      */
+    @Deprecated("View hierarchy state renderer")
     open fun stateRender(viewState: VIEW_STATE) {
         // Default implementation
     }
@@ -68,7 +83,32 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
      *
      * @param viewEvent The new event.
      */
+    @Deprecated("View hierarchy state renderer")
     open fun eventRender(viewEvent: VIEW_EVENT) {
+        // Default implementation
+    }
+
+    /**
+     * Defines how the UI must be displayed.
+     *
+     * Called each time a new state is emitted by the view model.
+     *
+     * @param viewState The new state of the view.
+     */
+    @Composable
+    open fun StateRender(viewState: VIEW_STATE) {
+        // Default implementation
+    }
+
+    /**
+     * Defines how the UI must react to en event.
+     *
+     * Called each time a new event is emitted by the view model.
+     *
+     * @param viewEvent The new event.
+     */
+    @Composable
+    open fun EventRender(viewEvent: VIEW_EVENT) {
         // Default implementation
     }
 }

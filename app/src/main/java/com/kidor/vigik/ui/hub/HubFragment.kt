@@ -25,6 +25,8 @@ class HubFragment : BaseFragment<HubViewAction, Nothing, HubViewEvent, HubViewMo
 
     override val viewModel by viewModels<HubViewModel>()
 
+    override val isComposeView: Boolean = true
+
     @Composable
     @Preview(widthDp = 400, heightDp = 700)
     override fun ComposableView() {

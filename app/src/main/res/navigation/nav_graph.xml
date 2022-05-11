@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/checkFragment"
         android:name="com.kidor.vigik.ui.check.CheckFragment"
-        android:label="@string/check_nfc_title"
-        tools:layout="@layout/fragment_check_nfc">
+        android:label="@string/check_nfc_title">
 
         <action
             android:id="@+id/go_to_hub"

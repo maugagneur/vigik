@@ -19,6 +19,8 @@ class EmulateFragment : BaseFragment<Nothing, EmulateViewState, Nothing, Emulate
 
     override val viewModel by viewModels<EmulateViewModel>()
 
+    override val isComposeView: Boolean = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentEmulateTagBinding.inflate(inflater, container, false)
         return binding.root
