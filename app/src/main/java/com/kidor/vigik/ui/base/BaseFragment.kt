@@ -52,7 +52,7 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
     }
 
     @Composable
-    open fun ComposableView() {
+    private fun ComposableView() {
         viewModel.viewState.observeAsState().let {
             it.value?.let { state -> StateRender(state) }
         }

@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.BaseFragment
 import com.kidor.vigik.ui.compose.AppTheme
@@ -21,15 +21,22 @@ import com.kidor.vigik.ui.compose.AppTheme
 /**
  * View that display all sections of the application.
  */
-class HubFragment : BaseFragment<HubViewAction, Nothing, HubViewEvent, HubViewModel>() {
+class HubFragment : BaseFragment<HubViewAction, HubViewState, HubViewEvent, HubViewModel>() {
 
     override val viewModel by viewModels<HubViewModel>()
 
     override val isComposeView: Boolean = true
 
     @Composable
+    override fun StateRender(viewState: HubViewState) {
+        if (viewState is HubViewState.Default) {
+            DefaultState()
+        }
+    }
+
+    @Composable
     @Preview(widthDp = 400, heightDp = 700)
-    override fun ComposableView() {
+    private fun DefaultState() {
         Column(
             modifier = Modifier.padding(
                 start = AppTheme.dimensions.commonSpaceXLarge,
@@ -68,7 +75,8 @@ class HubFragment : BaseFragment<HubViewAction, Nothing, HubViewEvent, HubViewMo
         }
     }
 
-    override fun eventRender(viewEvent: HubViewEvent) {
+    @Composable
+    override fun EventRender(viewEvent: HubViewEvent) {
         when (viewEvent) {
             HubViewEvent.NavigateToEmulateView -> navigateTo(HubFragmentDirections.goToEmulateTag())
             HubViewEvent.NavigateToHistoryView -> navigateTo(HubFragmentDirections.goToTagHistory())
@@ -77,6 +85,6 @@ class HubFragment : BaseFragment<HubViewAction, Nothing, HubViewEvent, HubViewMo
     }
 
     private fun navigateTo(direction: NavDirections) {
-        Navigation.findNavController(requireView()).navigate(direction)
+        findNavController().navigate(direction)
     }
 }
