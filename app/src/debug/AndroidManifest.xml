@@ -12,7 +12,8 @@
 
         <activity
             android:name=".HiltTestActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Vigik" />
 
     </application>
 
