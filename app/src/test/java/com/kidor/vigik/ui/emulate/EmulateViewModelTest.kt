@@ -70,7 +70,7 @@ class EmulateViewModelTest {
 
         // Then
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
@@ -82,7 +82,7 @@ class EmulateViewModelTest {
 
         // Then
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
@@ -94,7 +94,7 @@ class EmulateViewModelTest {
 
         // Then
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
@@ -110,7 +110,7 @@ class EmulateViewModelTest {
         // Then
         verify(hostApduManager).sendApduResponse(any())
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
@@ -126,7 +126,7 @@ class EmulateViewModelTest {
         // Then
         verify(hostApduManager).sendApduResponse(any())
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 
     @Test
@@ -143,6 +143,6 @@ class EmulateViewModelTest {
         // Then
         verify(hostApduManager).sendApduResponse(any())
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLine::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
     }
 }

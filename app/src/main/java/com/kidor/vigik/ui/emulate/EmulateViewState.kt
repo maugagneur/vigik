@@ -10,7 +10,7 @@ sealed class EmulateViewState : ViewState() {
     /**
      * State when the view have to display logs.
      *
-     * @param newLine The new log line to add.
+     * @param logLines The log lines to add.
      */
-    data class DisplayLogLine(val newLine: String) : EmulateViewState()
+    data class DisplayLogLines(val logLines: String) : EmulateViewState()
 }

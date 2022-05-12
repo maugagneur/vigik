@@ -1,13 +1,11 @@
 package com.kidor.vigik.ui.emulate
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.kidor.vigik.R
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import com.kidor.vigik.extensions.launchFragmentInHiltContainer
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,19 +18,24 @@ import org.junit.runner.RunWith
 class EmulateViewTest {
 
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
-
-    @Before
-    fun setUp() {
-        // Load fragment in empty fragment activity
-        launchFragmentInHiltContainer<EmulateFragment>()
-    }
+    val composeTestRule = createComposeRule()
 
     @Test
     fun checkUiElements() {
         logTestName()
 
-        // Check that the log textview is visible
-        checkViewIsVisible(R.id.log_textview, "Log TextView")
+        val testLog = "Roses are red\n" +
+                "Violets are blue\n" +
+                "This integration test\n" +
+                "Sure must go through"
+
+        composeTestRule.setContent {
+            DisplayLogLineState(testLog)
+        }
+
+        // Check that the log text is visible
+        composeTestRule
+            .onNodeWithText(testLog)
+            .assertIsDisplayed()
     }
 }

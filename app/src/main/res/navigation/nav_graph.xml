@@ -50,7 +50,6 @@
     <fragment
         android:id="@+id/emulateFragment"
         android:name="com.kidor.vigik.ui.emulate.EmulateFragment"
-        android:label="@string/emulate_tag_title"
-        tools:layout="@layout/fragment_emulate_tag" />
+        android:label="@string/emulate_tag_title" />
 
 </navigation>
