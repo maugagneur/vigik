@@ -179,6 +179,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:${androidxVer.compose}"
     androidTestImplementation "androidx.test.ext:junit:${testVer.testExt}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${testVer.espresso}"
+    androidTestImplementation "org.mockito:mockito-android:${testVer.mockitoAndroid}"
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.

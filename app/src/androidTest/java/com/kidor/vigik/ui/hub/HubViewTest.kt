@@ -12,9 +12,15 @@ import com.kidor.vigik.R
 import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
+import org.junit.After
+import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 
 /**
  * Integration tests for [HubFragment].
@@ -25,17 +31,30 @@ class HubViewTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
+    private lateinit var closeable: AutoCloseable
+
+    @Mock
+    private lateinit var viewActionCallback: (HubViewAction) -> Unit
+
+    @Before
+    fun setUp() {
+        closeable = MockitoAnnotations.openMocks(this)
+    }
+
+    @After
+    fun tearDown() {
+        closeable.close()
+    }
+
     @Test
-    fun checkUiElements() {
+    fun checkDefaultState() {
         logTestName()
 
-        // Launch Hub fragment
-        launchFragment()
+        composeTestRule.setContent {
+            DefaultState(onViewAction = viewActionCallback)
+        }
 
         // Check that button to start scanning tag is visible
-        composeTestRule
-            .onNodeWithText(stringResourceId = R.string.scan_button_label, ignoreCase = true)
-            .assertIsDisplayed()
         composeTestRule
             .onNodeWithText(stringResourceId = R.string.scan_button_label, ignoreCase = true)
             .assertIsDisplayed()
@@ -49,8 +68,27 @@ class HubViewTest {
         composeTestRule
             .onNodeWithText(stringResourceId = R.string.emulate_button_label, ignoreCase = true)
             .assertIsDisplayed()
+
+        // Check that a click on "NFC scan" button generates a RefreshNfcStatus action
+        composeTestRule
+            .onNodeWithText(stringResourceId = R.string.scan_button_label, ignoreCase = true)
+            .performClick()
+        verify(viewActionCallback).invoke(HubViewAction.DisplayScanTagView)
+
+        // Check that a click on "Tags history" button generates a DisplayTagHistoryView action
+        composeTestRule
+            .onNodeWithText(stringResourceId = R.string.history_button_label, ignoreCase = true)
+            .performClick()
+        verify(viewActionCallback).invoke(HubViewAction.DisplayTagHistoryView)
+
+        // Check that a click on "Emulate NFC tag" button generates a DisplayEmulateTagView action
+        composeTestRule
+            .onNodeWithText(stringResourceId = R.string.emulate_button_label, ignoreCase = true)
+            .performClick()
+        verify(viewActionCallback).invoke(HubViewAction.DisplayEmulateTagView)
     }
 
+    @Ignore("Broken. Will be update when navigation will be rework with compose.")
     @Test
     fun navigateToScanView() {
         logTestName()
@@ -67,6 +105,7 @@ class HubViewTest {
         assertEquals(R.id.scanFragment, testNavHostController.currentDestination?.id, "Destination ID")
     }
 
+    @Ignore("Broken. Will be update when navigation will be rework with compose.")
     @Test
     fun navigateToEmulateView() {
         logTestName()

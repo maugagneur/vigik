@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.view.ViewTreeObserver
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +34,8 @@ import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.BaseFragment
 import com.kidor.vigik.ui.compose.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
+
+internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
 
 /**
  * View that check if all prerequisite to use NFC are met.
@@ -69,65 +73,7 @@ class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEve
     override fun StateRender(viewState: CheckViewState) {
         when (viewState) {
             CheckViewState.Loading -> LoadingState()
-            CheckViewState.NfcIsDisable -> NfcIsDisableState()
-        }
-    }
-
-    @Composable
-    @Preview(widthDp = 400, heightDp = 700)
-    private fun LoadingState() {
-        Box(
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                color = AppTheme.colors.secondary
-            )
-        }
-    }
-
-    @Composable
-    @Preview(widthDp = 400, heightDp = 700)
-    private fun NfcIsDisableState() {
-        Column(
-            modifier = Modifier.padding(
-                start = AppTheme.dimensions.commonSpaceXLarge,
-                end = AppTheme.dimensions.commonSpaceXLarge
-            ),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = { viewModel.handleAction(CheckViewAction.RefreshNfcStatus) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.nfc_state_refresh).uppercase(),
-                    modifier = Modifier.weight(1f),
-                    fontSize = AppTheme.dimensions.textSizeMedium,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSize))
-                Icon(
-                    Icons.Default.Refresh,
-                    contentDescription = "Refresh"
-                )
-            }
-            Button(
-                onClick = { viewModel.handleAction(CheckViewAction.DisplayNfcSettings) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.nfc_settings).uppercase(),
-                    modifier = Modifier.weight(1f),
-                    fontSize = AppTheme.dimensions.textSizeMedium,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSize))
-                Icon(
-                    Icons.Default.Settings,
-                    contentDescription = "Refresh"
-                )
-            }
+            CheckViewState.NfcIsDisable -> NfcIsDisableState { action -> viewModel.handleAction(action) }
         }
     }
 
@@ -136,6 +82,66 @@ class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEve
         when (viewEvent) {
             CheckViewEvent.NavigateToHub -> findNavController().navigate(CheckFragmentDirections.goToHub())
             CheckViewEvent.NavigateToSettings -> startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+        }
+    }
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 700)
+@VisibleForTesting
+internal fun LoadingState() {
+    Box(
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.testTag(PROGRESS_BAR_TEST_TAG),
+            color = AppTheme.colors.secondary
+        )
+    }
+}
+
+@Composable
+@VisibleForTesting
+internal fun NfcIsDisableState(onViewAction: (CheckViewAction) -> Unit) {
+    Column(
+        modifier = Modifier.padding(
+            start = AppTheme.dimensions.commonSpaceXLarge,
+            end = AppTheme.dimensions.commonSpaceXLarge
+        ),
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            onClick = { onViewAction(CheckViewAction.RefreshNfcStatus) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.nfc_state_refresh).uppercase(),
+                modifier = Modifier.weight(1f),
+                fontSize = AppTheme.dimensions.textSizeMedium,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSize))
+            Icon(
+                Icons.Default.Refresh,
+                contentDescription = "Refresh"
+            )
+        }
+        Button(
+            onClick = { onViewAction(CheckViewAction.DisplayNfcSettings) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.nfc_settings).uppercase(),
+                modifier = Modifier.weight(1f),
+                fontSize = AppTheme.dimensions.textSizeMedium,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.size(ButtonDefaults.IconSize))
+            Icon(
+                Icons.Default.Settings,
+                contentDescription = "Refresh"
+            )
         }
     }
 }

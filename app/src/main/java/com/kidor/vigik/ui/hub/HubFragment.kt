@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.hub
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -30,48 +30,7 @@ class HubFragment : BaseFragment<HubViewAction, HubViewState, HubViewEvent, HubV
     @Composable
     override fun StateRender(viewState: HubViewState) {
         if (viewState is HubViewState.Default) {
-            DefaultState()
-        }
-    }
-
-    @Composable
-    @Preview(widthDp = 400, heightDp = 700)
-    private fun DefaultState() {
-        Column(
-            modifier = Modifier.padding(
-                start = AppTheme.dimensions.commonSpaceXLarge,
-                end = AppTheme.dimensions.commonSpaceXLarge
-            ),
-            verticalArrangement = Arrangement.SpaceEvenly,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(
-                onClick = { viewModel.handleAction(HubViewAction.DisplayScanTagView) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.scan_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeMedium
-                )
-            }
-            Button(
-                onClick = { viewModel.handleAction(HubViewAction.DisplayTagHistoryView) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.history_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeMedium
-                )
-            }
-            Button(
-                onClick = { viewModel.handleAction(HubViewAction.DisplayEmulateTagView) },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(
-                    text = stringResource(id = R.string.emulate_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeMedium
-                )
-            }
+            DefaultState { action -> viewModel.handleAction(action) }
         }
     }
 
@@ -86,5 +45,46 @@ class HubFragment : BaseFragment<HubViewAction, HubViewState, HubViewEvent, HubV
 
     private fun navigateTo(direction: NavDirections) {
         findNavController().navigate(direction)
+    }
+}
+
+@Composable
+@VisibleForTesting
+internal fun DefaultState(onViewAction: (HubViewAction) -> Unit) {
+    Column(
+        modifier = Modifier.padding(
+            start = AppTheme.dimensions.commonSpaceXLarge,
+            end = AppTheme.dimensions.commonSpaceXLarge
+        ),
+        verticalArrangement = Arrangement.SpaceEvenly,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Button(
+            onClick = { onViewAction(HubViewAction.DisplayScanTagView) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.scan_button_label).uppercase(),
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
+        Button(
+            onClick = { onViewAction(HubViewAction.DisplayTagHistoryView) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.history_button_label).uppercase(),
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
+        Button(
+            onClick = { onViewAction(HubViewAction.DisplayEmulateTagView) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.emulate_button_label).uppercase(),
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
     }
 }
