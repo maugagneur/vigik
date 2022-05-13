@@ -6,6 +6,7 @@ import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import android.os.Build
 import com.kidor.vigik.utils.SystemWrapper
 import timber.log.Timber
 import javax.inject.Inject
@@ -49,7 +50,11 @@ class NfcApi @Inject constructor(
             activity,
             0,
             intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            } else {
+                PendingIntent.FLAG_UPDATE_CURRENT
+            }
         )
         try {
             nfcAdapter?.enableForegroundDispatch(activity, nfcPendingIntent, null, null)
