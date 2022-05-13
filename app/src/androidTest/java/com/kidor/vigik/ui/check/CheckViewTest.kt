@@ -75,7 +75,7 @@ class CheckViewTest {
         logTestName()
 
         composeTestRule.setContent {
-            NfcIsDisableState(onViewAction = viewActionCallback)
+            NfcIsDisableState(NfcIsDisableStateData(viewActionCallback))
         }
 
         // Check that loader is not visible

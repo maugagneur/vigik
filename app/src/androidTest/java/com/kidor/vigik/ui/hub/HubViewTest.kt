@@ -51,7 +51,7 @@ class HubViewTest {
         logTestName()
 
         composeTestRule.setContent {
-            DefaultState(onViewAction = viewActionCallback)
+            DefaultState(DefaultStateData(viewActionCallback))
         }
 
         // Check that button to start scanning tag is visible

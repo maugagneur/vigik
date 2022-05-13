@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.kidor.vigik.R
@@ -73,7 +74,8 @@ class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEve
     override fun StateRender(viewState: CheckViewState) {
         when (viewState) {
             CheckViewState.Loading -> LoadingState()
-            CheckViewState.NfcIsDisable -> NfcIsDisableState { action -> viewModel.handleAction(action) }
+            CheckViewState.NfcIsDisable ->
+                NfcIsDisableState(NfcIsDisableStateData { action -> viewModel.handleAction(action) })
         }
     }
 
@@ -101,8 +103,9 @@ internal fun LoadingState() {
 }
 
 @Composable
+@Preview(widthDp = 400, heightDp = 700)
 @VisibleForTesting
-internal fun NfcIsDisableState(onViewAction: (CheckViewAction) -> Unit) {
+internal fun NfcIsDisableState(@PreviewParameter(NfcIsDisableStateProvider::class) nfcIsDisableStateData: NfcIsDisableStateData) {
     Column(
         modifier = Modifier.padding(
             start = AppTheme.dimensions.commonSpaceXLarge,
@@ -112,7 +115,7 @@ internal fun NfcIsDisableState(onViewAction: (CheckViewAction) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { onViewAction(CheckViewAction.RefreshNfcStatus) },
+            onClick = { nfcIsDisableStateData.onViewAction(CheckViewAction.RefreshNfcStatus) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -128,7 +131,7 @@ internal fun NfcIsDisableState(onViewAction: (CheckViewAction) -> Unit) {
             )
         }
         Button(
-            onClick = { onViewAction(CheckViewAction.DisplayNfcSettings) },
+            onClick = { nfcIsDisableStateData.onViewAction(CheckViewAction.DisplayNfcSettings) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

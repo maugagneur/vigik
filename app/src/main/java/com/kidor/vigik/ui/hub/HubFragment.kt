@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -30,7 +32,7 @@ class HubFragment : BaseFragment<HubViewAction, HubViewState, HubViewEvent, HubV
     @Composable
     override fun StateRender(viewState: HubViewState) {
         if (viewState is HubViewState.Default) {
-            DefaultState { action -> viewModel.handleAction(action) }
+            DefaultState(DefaultStateData { action -> viewModel.handleAction(action) })
         }
     }
 
@@ -49,8 +51,9 @@ class HubFragment : BaseFragment<HubViewAction, HubViewState, HubViewEvent, HubV
 }
 
 @Composable
+@Preview(widthDp = 400, heightDp = 700)
 @VisibleForTesting
-internal fun DefaultState(onViewAction: (HubViewAction) -> Unit) {
+internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) defaultStateData: DefaultStateData) {
     Column(
         modifier = Modifier.padding(
             start = AppTheme.dimensions.commonSpaceXLarge,
@@ -60,7 +63,7 @@ internal fun DefaultState(onViewAction: (HubViewAction) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { onViewAction(HubViewAction.DisplayScanTagView) },
+            onClick = { defaultStateData.onViewAction(HubViewAction.DisplayScanTagView) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -69,7 +72,7 @@ internal fun DefaultState(onViewAction: (HubViewAction) -> Unit) {
             )
         }
         Button(
-            onClick = { onViewAction(HubViewAction.DisplayTagHistoryView) },
+            onClick = { defaultStateData.onViewAction(HubViewAction.DisplayTagHistoryView) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -78,7 +81,7 @@ internal fun DefaultState(onViewAction: (HubViewAction) -> Unit) {
             )
         }
         Button(
-            onClick = { onViewAction(HubViewAction.DisplayEmulateTagView) },
+            onClick = { defaultStateData.onViewAction(HubViewAction.DisplayEmulateTagView) },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
