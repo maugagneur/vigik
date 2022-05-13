@@ -1,15 +1,18 @@
 package com.kidor.vigik.ui.scan
 
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertRangeInfoEquals
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.fragment.app.FragmentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.EspressoUtils.checkToastWithTextIsVisible
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Ignore
 import org.junit.Rule
@@ -24,63 +27,83 @@ import org.junit.runner.RunWith
 class ScanViewTest {
 
     @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    val composeTestRule = createComposeRule()
 
     @Test
-    fun checkUiElementsAtStart() {
+    fun checkLoadingState() {
         logTestName()
 
-        // Load fragment in empty fragment activity
-        launchFragmentInHiltContainer<ScanFragment>()
-
-        // Check that loader is visible
-        checkViewIsVisible(R.id.progress_bar, "Loader")
-
-        // Check that the textview for tag's data is hidden
-        checkViewIsNotVisible(R.id.tag_information_textview, "Tag information")
-
-        // Check that the floating action button for saving tag is hidden
-        checkViewIsNotVisible(R.id.save_fab, "Save FAB")
-    }
-
-    @Test
-    fun checkUiElementsWhenDisplayingValidTag() {
-        logTestName()
-
-        // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            val tag = Tag()
-            fragment.stateRender(ScanViewState.DisplayTag(tag, true))
+        composeTestRule.setContent {
+            LoadingState()
         }
 
         // Check that loader is visible
-        checkViewIsNotVisible(R.id.progress_bar, "Loader")
+        composeTestRule
+            .onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+            .assertIsDisplayed()
+            .assertRangeInfoEquals(ProgressBarRangeInfo.Indeterminate)
 
         // Check that the textview for tag's data is hidden
-        checkViewIsVisible(R.id.tag_information_textview, "Tag information")
+        composeTestRule
+            .onNodeWithTag(TAG_DATA_TEXT_TEST_TAG)
+            .assertDoesNotExist()
 
         // Check that the floating action button for saving tag is hidden
-        checkViewIsVisible(R.id.save_fab, "Save FAB")
+        composeTestRule
+            .onNodeWithTag(FLOATING_ACTION_BUTTON_TEST_TAG)
+            .assertDoesNotExist()
     }
 
     @Test
-    fun checkUiElementsWhenDisplayingInvalidTag() {
+    fun checkDisplayTagStateWithValidTag() {
         logTestName()
 
-        // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            val tag = Tag()
-            fragment.stateRender(ScanViewState.DisplayTag(tag, false))
+        val tag = Tag()
+
+        composeTestRule.setContent {
+            DisplayTagState(DisplayTagStateData(ScanViewState.DisplayTag(tag, true)))
         }
 
-        // Check that loader is visible
-        checkViewIsNotVisible(R.id.progress_bar, "Loader")
+        // Check that loader is not visible
+        composeTestRule
+            .onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+            .assertDoesNotExist()
 
-        // Check that the textview for tag's data is hidden
-        checkViewIsVisible(R.id.tag_information_textview, "Tag information")
+        // Check that the textview for tag's data is visible
+        composeTestRule
+            .onNodeWithText(tag.toString())
+            .assertIsDisplayed()
+
+        // Check that the floating action button for saving tag is visible
+        composeTestRule
+            .onNodeWithTag(FLOATING_ACTION_BUTTON_TEST_TAG)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun checkDisplayTagStateWithInvalidTag() {
+        logTestName()
+
+        val tag = Tag()
+
+        composeTestRule.setContent {
+            DisplayTagState(DisplayTagStateData(ScanViewState.DisplayTag(tag, false)))
+        }
+
+        // Check that loader is not visible
+        composeTestRule
+            .onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+            .assertDoesNotExist()
+
+        // Check that the textview for tag's data is visible
+        composeTestRule
+            .onNodeWithText(tag.toString())
+            .assertIsDisplayed()
 
         // Check that the floating action button for saving tag is hidden
-        checkViewIsNotVisible(R.id.save_fab, "Save FAB")
+        composeTestRule
+            .onNodeWithTag(FLOATING_ACTION_BUTTON_TEST_TAG)
+            .assertDoesNotExist()
     }
 
     @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")

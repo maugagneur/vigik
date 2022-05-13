@@ -38,8 +38,7 @@
     <fragment
         android:id="@+id/scanFragment"
         android:name="com.kidor.vigik.ui.scan.ScanFragment"
-        android:label="@string/scan_nfc_title"
-        tools:layout="@layout/fragment_scan_nfc" />
+        android:label="@string/scan_nfc_title" />
 
     <fragment
         android:id="@+id/historyFragment"
