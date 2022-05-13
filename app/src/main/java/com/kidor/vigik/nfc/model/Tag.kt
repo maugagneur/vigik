@@ -1,6 +1,7 @@
 package com.kidor.vigik.nfc.model
 
 import com.kidor.vigik.extensions.toHex
+import com.kidor.vigik.ui.usecases.FormatDateUseCase
 
 /**
  * Object model for tag in the application.
@@ -12,7 +13,7 @@ import com.kidor.vigik.extensions.toHex
  * @param id        The low level ID of the tag.
  */
 data class Tag(
-    val timestamp: Long = 0L,
+    val timestamp: Long? = null,
     val uid: ByteArray? = null,
     val techList: String? = null,
     val data: String? = null,
@@ -42,15 +43,15 @@ data class Tag(
 
     override fun hashCode(): Int {
         var result = timestamp.hashCode()
-        result = 13 * result + (uid?.contentHashCode() ?: 0)
-        result = 17 * result + (techList?.hashCode() ?: 0)
-        result = 23 * result + (data?.hashCode() ?: 0)
-        result = 31 * result + (id?.contentHashCode() ?: 0)
+        result = 13 * result + uid.hashCode()
+        result = 17 * result + techList.hashCode()
+        result = 23 * result + data.hashCode()
+        result = 31 * result + id.contentHashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Timestamp -> $timestamp" +
+        return "Timestamp -> ${timestamp?.let { FormatDateUseCase().invoke(it) }}" +
                 "\nTag UID -> ${uid?.toHex()}" +
                 "\nTag tech list -> $techList" +
                 "\nTag data -> $data" +

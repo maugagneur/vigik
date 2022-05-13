@@ -9,15 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.toHex
 import com.kidor.vigik.nfc.model.Tag
-import java.text.SimpleDateFormat
-import java.util.*
+import com.kidor.vigik.ui.usecases.FormatDateUseCase
 
 /**
  * Base view to display tag's data.
  */
-class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class HistoryViewHolder(itemView: View, private val formatDateUseCase: FormatDateUseCase) : RecyclerView.ViewHolder(itemView) {
 
-    private val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.US)
     private val dateTextView: TextView = itemView.findViewById(R.id.date)
     private val uidTextView: TextView = itemView.findViewById(R.id.uid)
     private val deleteImageView: ImageView = itemView.findViewById(R.id.delete)
@@ -29,7 +27,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
      * @param tagHistoryListener View's listener.
      */
     fun bind(tag: Tag, tagHistoryListener: TagHistoryListener) {
-        dateTextView.text = dateFormat.format(Date(tag.timestamp))
+        dateTextView.text = formatDateUseCase(tag.timestamp)
         uidTextView.text = tag.uid?.toHex()
         deleteImageView.setOnClickListener { tagHistoryListener.onDeleteTagClick(tag) }
     }
@@ -43,7 +41,7 @@ class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
          */
         fun create(parent: ViewGroup): HistoryViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_history_item, parent, false)
-            return HistoryViewHolder(view)
+            return HistoryViewHolder(view, FormatDateUseCase())
         }
     }
 }
