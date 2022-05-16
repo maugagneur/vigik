@@ -43,8 +43,6 @@ class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, 
 
     override val viewModel by viewModels<ScanViewModel>()
 
-    override val isComposeView: Boolean = true
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)

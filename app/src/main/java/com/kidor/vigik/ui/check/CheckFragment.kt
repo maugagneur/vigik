@@ -46,8 +46,6 @@ class CheckFragment : BaseFragment<CheckViewAction, CheckViewState, CheckViewEve
 
     override val viewModel by viewModels<CheckViewModel>()
 
-    override val isComposeView: Boolean = true
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

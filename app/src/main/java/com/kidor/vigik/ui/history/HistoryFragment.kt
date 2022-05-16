@@ -42,8 +42,6 @@ class HistoryFragment : BaseFragment<HistoryViewAction, HistoryViewState, Nothin
 
     override val viewModel by viewModels<HistoryViewModel>()
 
-    override val isComposeView: Boolean = true
-
     @Composable
     override fun StateRender(viewState: HistoryViewState) {
         when (viewState) {

@@ -23,8 +23,6 @@ class EmulateFragment : BaseFragment<Nothing, EmulateViewState, Nothing, Emulate
 
     override val viewModel by viewModels<EmulateViewModel>()
 
-    override val isComposeView: Boolean = true
-
     @Composable
     override fun StateRender(viewState: EmulateViewState) {
         if (viewState is EmulateViewState.DisplayLogLines) {

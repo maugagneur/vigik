@@ -19,14 +19,12 @@ import com.kidor.vigik.ui.compose.AppTheme
  *      override val viewModel by viewModels<VIEW_MODEL>()
  * ```
  * - If you do not need state or event implementation, use [Nothing] instead.
- * - To react to state changes and events from the view model, override methods [stateRender] and [eventRender].
+ * - To react to state changes and events from the view model, override methods [StateRender] and [EventRender].
  */
 abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent,
         VIEW_MODEL : BaseViewModel<VIEW_ACTION, VIEW_STATE, VIEW_EVENT>> : Fragment() {
 
     protected abstract val viewModel: VIEW_MODEL
-
-    protected abstract val isComposeView: Boolean
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return ComposeView(requireContext()).apply {
@@ -36,17 +34,6 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
                 AppTheme {
                     ComposableView()
                 }
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (!isComposeView) {
-            viewModel.viewState.observe(viewLifecycleOwner) { stateRender(it) }
-            viewModel.viewEvent.observe(viewLifecycleOwner) { eventWrapper ->
-                // React on events only once
-                eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
             }
         }
     }
@@ -62,30 +49,6 @@ abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VI
                 eventWrapper.getEventIfNotHandled()?.let { event -> EventRender(event) }
             }
         }
-    }
-
-    /**
-     * Defines how the UI must be displayed.
-     *
-     * Called each time a new state is emitted by the view model.
-     *
-     * @param viewState The new state of the view.
-     */
-    @Deprecated("View hierarchy state renderer")
-    open fun stateRender(viewState: VIEW_STATE) {
-        // Default implementation
-    }
-
-    /**
-     * Defines how the UI must react to en event.
-     *
-     * Called each time a new event is emitted by the view model.
-     *
-     * @param viewEvent The new event.
-     */
-    @Deprecated("View hierarchy state renderer")
-    open fun eventRender(viewEvent: VIEW_EVENT) {
-        // Default implementation
     }
 
     /**

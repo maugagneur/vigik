@@ -115,7 +115,7 @@ class ScanViewTest {
 
         // Load fragment in empty fragment activity and force state `DisplayTag`
         launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            fragment.eventRender(ScanViewEvent.SaveTagSuccess)
+            //fragment.eventRender(ScanViewEvent.SaveTagSuccess)
             parentActivity = activity
         }
 
@@ -132,7 +132,7 @@ class ScanViewTest {
 
         // Load fragment in empty fragment activity and force state `DisplayTag`
         launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            fragment.eventRender(ScanViewEvent.SaveTagFailure)
+            //fragment.eventRender(ScanViewEvent.SaveTagFailure)
             parentActivity = activity
         }
 

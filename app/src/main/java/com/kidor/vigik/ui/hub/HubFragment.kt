@@ -27,8 +27,6 @@ class HubFragment : BaseFragment<HubViewAction, HubViewState, HubViewEvent, HubV
 
     override val viewModel by viewModels<HubViewModel>()
 
-    override val isComposeView: Boolean = true
-
     @Composable
     override fun StateRender(viewState: HubViewState) {
         if (viewState is HubViewState.Default) {
