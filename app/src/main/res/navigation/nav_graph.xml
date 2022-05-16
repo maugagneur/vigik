@@ -43,8 +43,7 @@
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.kidor.vigik.ui.history.HistoryFragment"
-        android:label="@string/tag_history_fragment"
-        tools:layout="@layout/fragment_history" />
+        android:label="@string/tag_history_fragment" />
 
     <fragment
         android:id="@+id/emulateFragment"

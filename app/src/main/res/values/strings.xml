@@ -17,7 +17,6 @@
     <string name="save_tag_fail">Fail to save tag</string>
 
     <string name="tag_history_fragment">History</string>
-    <string name="recyclerview_content_description">Saved tags</string>
     <string name="no_data_label">No data available</string>
 
     <string name="emulate_tag_title">Emulate tag</string>
