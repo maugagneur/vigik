@@ -11,7 +11,11 @@ import androidx.compose.runtime.ReadOnlyComposable
  * Contains the current theme's set of colors (depends if it is light or dark) and dimensions.
  */
 object AppTheme {
-    var isDarkTheme: Boolean = false
+    private var isDarkTheme: Boolean = false
+
+    fun invertTheme() {
+        isDarkTheme = !isDarkTheme
+    }
 
     val colors: Colors
         @Composable
