@@ -1,12 +1,12 @@
 package com.kidor.vigik.ui.emulate
 
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.runComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -17,10 +17,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class EmulateViewTest {
 
-    @get:Rule
-    val composeTestRule = createComposeRule()
-
     @Test
+    @OptIn(ExperimentalTestApi::class)
     fun checkUiElements() {
         logTestName()
 
@@ -29,13 +27,14 @@ class EmulateViewTest {
                 "This integration test\n" +
                 "Sure must go through"
 
-        composeTestRule.setContent {
-            DisplayLogLineState(testLog)
-        }
+        runComposeUiTest {
+            setContent {
+                DisplayLogLineState(testLog)
+            }
 
-        // Check that the log text is visible
-        composeTestRule
-            .onNodeWithText(testLog)
-            .assertIsDisplayed()
+            // Check that the log text is visible
+            onNodeWithText(testLog)
+                .assertIsDisplayed()
+        }
     }
 }
