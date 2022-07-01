@@ -127,7 +127,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 }
 
 dependencies {
-    // Google
+    // Annotation processor
     implementation "com.google.devtools.ksp:symbol-processing-api:${kspVer}"
 
     // Android X
@@ -145,7 +145,6 @@ dependencies {
 
     // Compose
     implementation "androidx.appcompat:appcompat:${androidxVer.appCompat}"
-    implementation "androidx.compose.compiler:compiler:${androidxVer.compose}"
     implementation "androidx.compose.foundation:foundation:${androidxVer.compose}"
     implementation "androidx.compose.material:material:${androidxVer.compose}"
     implementation "androidx.compose.material:material-icons-extended:${androidxVer.compose}"
@@ -154,6 +153,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:${androidxVer.compose}"
     implementation "androidx.compose.ui:ui:${androidxVer.compose}"
     implementation "androidx.compose.ui:ui-tooling:${androidxVer.compose}"
+    implementation "androidx.compose.ui:ui-tooling-preview:${androidxVer.compose}"
 
     // Database
     implementation "androidx.room:room-runtime:${androidxVer.room}"
