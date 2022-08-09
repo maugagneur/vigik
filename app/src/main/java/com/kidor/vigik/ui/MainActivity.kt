@@ -3,20 +3,30 @@ package com.kidor.vigik.ui
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.InvertColors
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SmallTopAppBar
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.MenuProvider
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
-import com.kidor.vigik.R
-import com.kidor.vigik.databinding.ActivityMainBinding
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.ui.compose.AppNavHost
+import com.kidor.vigik.ui.compose.AppNavigation
 import com.kidor.vigik.ui.compose.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -25,47 +35,26 @@ import javax.inject.Inject
  * Main activity of the application.
  */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
-    private lateinit var navController: NavController
-    private lateinit var appBarConfiguration: AppBarConfiguration
-    @Inject internal lateinit var nfcApi: NfcApi
+    @Inject
+    internal lateinit var nfcApi: NfcApi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Handle the splash screen transition
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-        ActivityMainBinding.inflate(layoutInflater).let {
-            setContentView(it.root)
-            setSupportActionBar(it.toolbar)
+
+        setContent {
+            AppTheme {
+                MainComposable()
+            }
         }
-
-        navController = (supportFragmentManager.findFragmentById(R.id.navFragmentContainerView) as NavHostFragment)
-            .navController.also {
-                appBarConfiguration = AppBarConfiguration.Builder(it.graph).build()
-                NavigationUI.setupActionBarWithNavController(this, it)
-            }
-
-        addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return if (menuItem.itemId == R.id.action_stop_invert_color) {
-                    AppTheme.invertTheme()
-                    Toast.makeText(applicationContext, "Not implemented yet", Toast.LENGTH_SHORT).show()
-                    true
-                } else {
-                    false
-                }
-            }
-        })
     }
 
     override fun onResume() {
-       super.onResume()
+        super.onResume()
         nfcApi.enableNfcForegroundDispatch(this, javaClass)
     }
 
@@ -74,13 +63,63 @@ class MainActivity : AppCompatActivity() {
         nfcApi.disableNfcForegroundDispatch(this)
     }
 
-    override fun onSupportNavigateUp() =
-        NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp()
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         if (intent?.action == NfcAdapter.ACTION_TAG_DISCOVERED) {
             nfcApi.onNfcIntentReceived(intent)
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(widthDp = 400, heightDp = 700)
+internal fun MainComposable() {
+    val navController = rememberNavController()
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStack?.destination
+    val currentScreen = AppNavigation.getScreen(currentDestination?.route)
+
+    Scaffold(
+        topBar = {
+            SmallTopAppBar(
+                title = {
+                    Text(
+                        text = currentScreen?.name ?: "",
+                        fontSize = AppTheme.dimensions.textSizeXLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
+                navigationIcon = {
+                    if (navController.currentBackStackEntry != null) {
+                        IconButton(onClick = { navController.navigateUp() }) {
+                            Icon(
+                                Icons.Default.ArrowBack,
+                                contentDescription = "Return",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { AppTheme.invertTheme() }) {
+                        Icon(
+                            Icons.Default.InvertColors,
+                            contentDescription = "Invert colors",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.smallTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            )
+        },
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    ) { innerPadding ->
+        AppNavHost(
+            navController = navController,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }

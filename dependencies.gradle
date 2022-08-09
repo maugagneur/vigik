@@ -9,6 +9,7 @@ ext {
     ]
 
     androidxVer = [
+            'activity'        : '1.5.1',
             'appCompat'       : '1.5.0',
             'compose'         : '1.2.1',
             'composeCompiler' : '1.3.0',
