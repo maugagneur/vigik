@@ -19,7 +19,7 @@ import com.kidor.vigik.ui.compose.AppTheme
  *      override val viewModel by viewModels<VIEW_MODEL>()
  * ```
  * - If you do not need state or event implementation, use [Nothing] instead.
- * - To react to state changes and events from the view model, override methods [StateRender] and [EventRender].
+ * - To react to state changes and events from the view model, override [StateRender] and [EventRender] methods.
  */
 abstract class BaseFragment<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent,
         VIEW_MODEL : BaseViewModel<VIEW_ACTION, VIEW_STATE, VIEW_EVENT>> : Fragment() {

@@ -39,7 +39,7 @@ class CheckViewModel @Inject constructor(
         if (isReady) {
             _viewState.value = CheckViewState.Loading
             viewModelScope.launch {
-                // Add a delay for all no-first refresh request to force the UI the reflect this transition state
+                // Add a delay for all no-first refresh request to force the UI to reflect this transition state
                 delay(TIME_BEFORE_NFC_CHECK)
                 checkIfNfcIsAvailable()
             }
