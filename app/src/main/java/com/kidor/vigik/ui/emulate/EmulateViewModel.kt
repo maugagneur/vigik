@@ -28,20 +28,22 @@ class EmulateViewModel @Inject constructor(
     private val hostApduManager: HostApduManager
 ) : BaseViewModel<Nothing, EmulateViewState, Nothing>(), HostApduListener {
 
+    private var logLines: String = ""
+
     init {
-        _viewState.value = EmulateViewState.DisplayLogLine("Start -> Register to host APDU manager")
+        _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Start -> Register to host APDU manager"))
         hostApduManager.register(this)
     }
 
     @RestrictTo(RestrictTo.Scope.TESTS)
     public override fun onCleared() {
         super.onCleared()
-        _viewState.value = EmulateViewState.DisplayLogLine("Stop -> Unregister to host APDU manager")
+        _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Stop -> Unregister to host APDU manager"))
         hostApduManager.unregister(this)
     }
 
     override fun onApduCommandReceived(apduCommand: ByteArray?) {
-        _viewState.value = EmulateViewState.DisplayLogLine("APDU command received: " + apduCommand?.toHex() + ")")
+        _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("APDU command received: " + apduCommand?.toHex() + ")"))
 
         val apduResponse = when {
             apduCommand == null -> ApduStatusBytes.UNKNOWN_COMMAND.value
@@ -49,7 +51,7 @@ class EmulateViewModel @Inject constructor(
             else -> ApduStatusBytes.INSTRUCTION_NOT_SUPPORTED.value
         }
 
-        _viewState.value = EmulateViewState.DisplayLogLine("Sending APDU response: " + apduResponse.toHex())
+        _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Sending APDU response: " + apduResponse.toHex()))
         sendCommandApdu(apduResponse)
     }
 
@@ -57,11 +59,19 @@ class EmulateViewModel @Inject constructor(
         when (reason) {
             HostApduService.DEACTIVATION_DESELECTED ->
                 _viewState.value =
-                    EmulateViewState.DisplayLogLine("Deactivation's reason: An other AID has been selected")
+                    EmulateViewState.DisplayLogLines(addLogLine("Deactivation's reason: An other AID has been selected"))
             HostApduService.DEACTIVATION_LINK_LOSS ->
-                _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: NFC link lost")
-            else -> _viewState.value = EmulateViewState.DisplayLogLine("Deactivation's reason: Unknown")
+                _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Deactivation's reason: NFC link lost"))
+            else -> _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Deactivation's reason: Unknown"))
         }
+    }
+
+    /**
+     * Add a line of text to the current log lines.
+     */
+    private fun addLogLine(newLine: String): String {
+        logLines = logLines + '\n' + newLine
+        return logLines
     }
 
     /**
@@ -79,7 +89,7 @@ class EmulateViewModel @Inject constructor(
         try {
             hostApduManager.sendApduResponse(commandApdu)
         } catch (exception: RemoteException) {
-            _viewState.value = EmulateViewState.DisplayLogLine("Error when sending message to service")
+            _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Error when sending message to service"))
             Timber.e(exception, "Error when sending message to service")
         }
     }

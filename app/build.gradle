@@ -30,6 +30,7 @@ android {
     }
 
     buildFeatures {
+        compose true
         viewBinding true
     }
     buildTypes {
@@ -54,13 +55,16 @@ android {
             }
         }
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion androidxVer.composeCompiler
+    }
     kotlinOptions {
         jvmTarget = '11'
-    }
-    sourceSets {
-        final String SHARED_TEST_DIR = 'src/sharedTest/java'
-        test.java.srcDirs += SHARED_TEST_DIR
-        androidTest.java.srcDirs += SHARED_TEST_DIR
+        freeCompilerArgs += [
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
+                "-opt-in=kotlin.RequiresOptIn"
+        ]
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -123,11 +127,10 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 }
 
 dependencies {
-    // Google
+    // Annotation processor
     implementation "com.google.devtools.ksp:symbol-processing-api:${kspVer}"
 
     // Android X
-    implementation "androidx.appcompat:appcompat:${androidxVer.appCompat}"
     implementation "androidx.constraintlayout:constraintlayout:${androidxVer.constraintlayout}"
     implementation "androidx.core:core-ktx:${androidxVer.coreKtx}"
     implementation "androidx.core:core-splashscreen:${androidxVer.splashscreen}"
@@ -139,6 +142,20 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:${androidxVer.navigation}"
     implementation "androidx.navigation:navigation-dynamic-features-fragment:${androidxVer.navigation}"
     implementation "androidx.recyclerview:recyclerview:${androidxVer.recyclerview}"
+
+    // Compose
+    implementation "androidx.appcompat:appcompat:${androidxVer.appCompat}"
+    implementation "androidx.compose.foundation:foundation:${androidxVer.compose}"
+    implementation "androidx.compose.material:material:${androidxVer.compose}"
+    implementation "androidx.compose.material:material-icons-extended:${androidxVer.compose}"
+    implementation "androidx.compose.material3:material3:${androidxVer.material3}"
+    implementation "androidx.compose.runtime:runtime:${androidxVer.compose}"
+    implementation "androidx.compose.runtime:runtime-livedata:${androidxVer.compose}"
+    implementation "androidx.compose.ui:ui:${androidxVer.compose}"
+    implementation "androidx.compose.ui:ui-tooling:${androidxVer.compose}"
+    implementation "androidx.compose.ui:ui-tooling-preview:${androidxVer.compose}"
+
+    // Database
     implementation "androidx.room:room-runtime:${androidxVer.room}"
     implementation "androidx.room:room-ktx:${androidxVer.room}"
     ksp "androidx.room:room-compiler:${androidxVer.room}"
@@ -166,11 +183,14 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:${testVer.coreTesting}"
     testImplementation "io.mockk:mockk:${testVer.mockK}"
     testImplementation "app.cash.turbine:turbine:${testVer.turbine}"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:${androidxVer.compose}"
     androidTestImplementation "androidx.test.ext:junit:${testVer.testExt}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${testVer.espresso}"
+    androidTestImplementation "org.mockito:mockito-android:${testVer.mockitoAndroid}"
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.
+    debugImplementation "androidx.compose.ui:ui-test-manifest:${androidxVer.compose}"
     debugImplementation "androidx.fragment:fragment-testing:${androidxVer.fragment}"
     androidTestImplementation "androidx.navigation:navigation-testing:${androidxVer.navigation}"
 }

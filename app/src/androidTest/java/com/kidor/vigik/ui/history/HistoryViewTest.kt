@@ -1,21 +1,30 @@
 package com.kidor.vigik.ui.history
 
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertRangeInfoEquals
+import androidx.compose.ui.test.filter
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.runComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.db.TagRepository
-import com.kidor.vigik.extensions.launchFragmentInHiltContainer
+import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.nfc.model.Tag
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import javax.inject.Inject
+import org.mockito.Mock
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
+import java.util.Calendar
 
 /**
  * Integration tests for [HistoryFragment].
@@ -24,63 +33,116 @@ import javax.inject.Inject
 @RunWith(AndroidJUnit4::class)
 class HistoryViewTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    private lateinit var closeable: AutoCloseable
 
-    @Inject
-    lateinit var repository: TagRepository
+    @Mock
+    private lateinit var viewActionCallback: (HistoryViewAction) -> Unit
 
     @Before
     fun setUp() {
-        hiltRule.inject()
+        closeable = MockitoAnnotations.openMocks(this)
+    }
+
+    @After
+    fun tearDown() {
+        closeable.close()
     }
 
     @Test
-    fun checkUiElementsWhenInitializing() {
+    @OptIn(ExperimentalTestApi::class)
+    fun checkLoadingState() {
         logTestName()
 
-        // Load fragment in empty fragment activity and force state `Initializing`
-        launchFragmentInHiltContainer<HistoryFragment> { fragment ->
-            fragment.stateRender(HistoryViewState.Initializing)
+        runComposeUiTest {
+            setContent {
+                LoadingState()
+            }
+
+            // Check that loader is visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertIsDisplayed()
+                .assertRangeInfoEquals(ProgressBarRangeInfo.Indeterminate)
+
+            // Check that the list of tags is hidden
+            onNodeWithTag(TAGS_LIST_TEST_TAG)
+                .assertDoesNotExist()
+
+            // Check that the text for `no-data` is hidden
+            onNodeWithText(stringResourceId = R.string.no_data_label)
+                .assertDoesNotExist()
         }
-
-        // Check that the recyclerview of tags is hidden
-        checkViewIsNotVisible(R.id.tag_history_recyclerview, "History RecyclerView")
-
-        // Check that the textview for `no-data` is hidden
-        checkViewIsNotVisible(R.id.no_data_textview, "No-data TextView")
     }
 
     @Test
-    fun checkUiElementsAtStartWhenThereIsNoTagFromDatabase() {
+    @OptIn(ExperimentalTestApi::class)
+    fun checkUiElementsWhenThereIsNoTag() {
         logTestName()
 
-        // Load fragment in empty fragment activity
-        launchFragmentInHiltContainer<HistoryFragment>()
+        runComposeUiTest {
+            setContent {
+                DisplayTags(DisplayTagsStateData(emptyList()))
+            }
 
-        // Check that the recyclerview of tags is hidden
-        checkViewIsNotVisible(R.id.tag_history_recyclerview, "History RecyclerView")
+            // Check that loader is not visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertDoesNotExist()
 
-        // Check that the textview for `no-data` is hidden
-        checkViewIsVisible(R.id.no_data_textview, "No-data TextView")
-    }
+            // Check that the list of tags is hidden
+            onNodeWithTag(TAGS_LIST_TEST_TAG)
+                .assertDoesNotExist()
 
-    @Test
-    fun checkUiElementsAtStartWhenThereIsTagsFromDatabase() {
-        logTestName()
-
-        // Insert empty tag in database before launching screen
-        runBlocking {
-            repository.insert(Tag())
+            // Check that the textview for `no-data` is visible
+            onNodeWithText(stringResourceId = R.string.no_data_label)
+                .assertIsDisplayed()
         }
+    }
 
-        // Load fragment in empty fragment activity
-        launchFragmentInHiltContainer<HistoryFragment>()
+    @Test
+    @OptIn(ExperimentalTestApi::class)
+    fun checkUiElementsWhenThereIsTags() {
+        logTestName()
 
-        // Check that the recyclerview of tags is hidden
-        checkViewIsVisible(R.id.tag_history_recyclerview, "History RecyclerView")
+        val firstTag = Tag()
+        val secondTag = Tag(timestamp = 42)
+        val now = Calendar.getInstance().timeInMillis
+        val thirdTag = Tag(timestamp = now)
+        val tagList = listOf(firstTag, secondTag, thirdTag)
 
-        // Check that the textview for `no-data` is hidden
-        checkViewIsNotVisible(R.id.no_data_textview, "No-data TextView")
+        runComposeUiTest {
+            setContent {
+                DisplayTags(
+                    DisplayTagsStateData(
+                        tagList,
+                        viewActionCallback
+                    )
+                )
+            }
+
+            // Check that loader is not visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertDoesNotExist()
+
+            // Check that the list of tags is visible with all elements
+            onNodeWithTag(TAGS_LIST_TEST_TAG)
+                .assertIsDisplayed()
+                .onChildren()
+                .filter(hasTestTag(TAGS_LIST_ROW_TEST_TAG))
+                .assertCountEquals(tagList.size)
+
+            // Check that the textview for `no-data` is visible
+            onNodeWithText(stringResourceId = R.string.no_data_label)
+                .assertDoesNotExist()
+
+            // Check that a click on delete button generates a DeleteTag action with right value
+            onNodeWithTag(DELETE_ICON_TEST_TAG_PREFIX + 0)
+                .performClick()
+            verify(viewActionCallback).invoke(HistoryViewAction.DeleteTag(firstTag))
+            onNodeWithTag(DELETE_ICON_TEST_TAG_PREFIX + 42)
+                .performClick()
+            verify(viewActionCallback).invoke(HistoryViewAction.DeleteTag(secondTag))
+            onNodeWithTag(DELETE_ICON_TEST_TAG_PREFIX + now)
+                .performClick()
+            verify(viewActionCallback).invoke(HistoryViewAction.DeleteTag(thirdTag))
+        }
     }
 }

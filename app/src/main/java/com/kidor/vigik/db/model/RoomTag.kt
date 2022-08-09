@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
  */
 @Entity(tableName = "tag")
 data class RoomTag(
-    @PrimaryKey val timestamp: Long = 0,
+    @PrimaryKey val timestamp: Long? = null,
     val uid: ByteArray? = null,
     val techList: String? = null,
     val data: String? = null,

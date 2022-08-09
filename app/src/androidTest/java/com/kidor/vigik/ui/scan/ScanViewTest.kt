@@ -1,18 +1,21 @@
 package com.kidor.vigik.ui.scan
 
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertRangeInfoEquals
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.runComposeUiTest
 import androidx.fragment.app.FragmentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.launchFragmentInHiltContainer
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.EspressoUtils.checkToastWithTextIsVisible
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Ignore
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -23,64 +26,81 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScanViewTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
-
     @Test
-    fun checkUiElementsAtStart() {
+    @OptIn(ExperimentalTestApi::class)
+    fun checkLoadingState() {
         logTestName()
 
-        // Load fragment in empty fragment activity
-        launchFragmentInHiltContainer<ScanFragment>()
+        runComposeUiTest {
+            setContent {
+                LoadingState()
+            }
 
-        // Check that loader is visible
-        checkViewIsVisible(R.id.progress_bar, "Loader")
+            // Check that loader is visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertIsDisplayed()
+                .assertRangeInfoEquals(ProgressBarRangeInfo.Indeterminate)
 
-        // Check that the textview for tag's data is hidden
-        checkViewIsNotVisible(R.id.tag_information_textview, "Tag information")
+            // Check that the textview for tag's data is hidden
+            onNodeWithTag(TAG_DATA_TEXT_TEST_TAG)
+                .assertDoesNotExist()
 
-        // Check that the floating action button for saving tag is hidden
-        checkViewIsNotVisible(R.id.save_fab, "Save FAB")
+            // Check that the floating action button for saving tag is hidden
+            onNodeWithTag(FLOATING_ACTION_BUTTON_TEST_TAG)
+                .assertDoesNotExist()
+        }
     }
 
     @Test
-    fun checkUiElementsWhenDisplayingValidTag() {
+    @OptIn(ExperimentalTestApi::class)
+    fun checkDisplayTagStateWithValidTag() {
         logTestName()
 
-        // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            val tag = Tag()
-            fragment.stateRender(ScanViewState.DisplayTag(tag, true))
+        val tag = Tag()
+
+        runComposeUiTest {
+            setContent {
+                DisplayTagState(DisplayTagStateData(ScanViewState.DisplayTag(tag, true)))
+            }
+
+            // Check that loader is not visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertDoesNotExist()
+
+            // Check that the textview for tag's data is visible
+            onNodeWithText(tag.toString())
+                .assertIsDisplayed()
+
+            // Check that the floating action button for saving tag is visible
+            onNodeWithTag(FLOATING_ACTION_BUTTON_TEST_TAG)
+                .assertIsDisplayed()
         }
-
-        // Check that loader is visible
-        checkViewIsNotVisible(R.id.progress_bar, "Loader")
-
-        // Check that the textview for tag's data is hidden
-        checkViewIsVisible(R.id.tag_information_textview, "Tag information")
-
-        // Check that the floating action button for saving tag is hidden
-        checkViewIsVisible(R.id.save_fab, "Save FAB")
     }
 
     @Test
-    fun checkUiElementsWhenDisplayingInvalidTag() {
+    @OptIn(ExperimentalTestApi::class)
+    fun checkDisplayTagStateWithInvalidTag() {
         logTestName()
 
-        // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            val tag = Tag()
-            fragment.stateRender(ScanViewState.DisplayTag(tag, false))
+        val tag = Tag()
+
+        runComposeUiTest {
+            setContent {
+                DisplayTagState(DisplayTagStateData(ScanViewState.DisplayTag(tag, false)))
+            }
+
+            // Check that loader is not visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertDoesNotExist()
+
+            // Check that the textview for tag's data is visible
+            onNodeWithText(tag.toString())
+                .assertIsDisplayed()
+
+            // Check that the floating action button for saving tag is hidden
+            onNodeWithTag(FLOATING_ACTION_BUTTON_TEST_TAG)
+                .assertDoesNotExist()
         }
-
-        // Check that loader is visible
-        checkViewIsNotVisible(R.id.progress_bar, "Loader")
-
-        // Check that the textview for tag's data is hidden
-        checkViewIsVisible(R.id.tag_information_textview, "Tag information")
-
-        // Check that the floating action button for saving tag is hidden
-        checkViewIsNotVisible(R.id.save_fab, "Save FAB")
     }
 
     @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
@@ -91,8 +111,8 @@ class ScanViewTest {
         var parentActivity: FragmentActivity? = null
 
         // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            fragment.eventRender(ScanViewEvent.SaveTagSuccess)
+        launchFragmentInHiltContainer<ScanFragment> {
+            //fragment.eventRender(ScanViewEvent.SaveTagSuccess)
             parentActivity = activity
         }
 
@@ -108,8 +128,8 @@ class ScanViewTest {
         var parentActivity: FragmentActivity? = null
 
         // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> { fragment ->
-            fragment.eventRender(ScanViewEvent.SaveTagFailure)
+        launchFragmentInHiltContainer<ScanFragment> {
+            //fragment.eventRender(ScanViewEvent.SaveTagFailure)
             parentActivity = activity
         }
 

@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/checkFragment"
         android:name="com.kidor.vigik.ui.check.CheckFragment"
-        android:label="@string/check_nfc_title"
-        tools:layout="@layout/fragment_check_nfc">
+        android:label="@string/check_nfc_title">
 
         <action
             android:id="@+id/go_to_hub"
@@ -20,8 +19,7 @@
     <fragment
         android:id="@+id/hubFragment"
         android:name="com.kidor.vigik.ui.hub.HubFragment"
-        android:label="@string/hub_title"
-        tools:layout="@layout/fragment_hub">
+        android:label="@string/hub_title">
 
         <action
             android:id="@+id/go_to_scan_nfc"
@@ -40,19 +38,16 @@
     <fragment
         android:id="@+id/scanFragment"
         android:name="com.kidor.vigik.ui.scan.ScanFragment"
-        android:label="@string/scan_nfc_title"
-        tools:layout="@layout/fragment_scan_nfc" />
+        android:label="@string/scan_nfc_title" />
 
     <fragment
         android:id="@+id/historyFragment"
         android:name="com.kidor.vigik.ui.history.HistoryFragment"
-        android:label="@string/tag_history_fragment"
-        tools:layout="@layout/fragment_history" />
+        android:label="@string/tag_history_fragment" />
 
     <fragment
         android:id="@+id/emulateFragment"
         android:name="com.kidor.vigik.ui.emulate.EmulateFragment"
-        android:label="@string/emulate_tag_title"
-        tools:layout="@layout/fragment_emulate_tag" />
+        android:label="@string/emulate_tag_title" />
 
 </navigation>

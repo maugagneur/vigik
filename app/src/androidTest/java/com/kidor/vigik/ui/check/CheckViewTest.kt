@@ -1,16 +1,24 @@
 package com.kidor.vigik.ui.check
 
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertRangeInfoEquals
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.runComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.extensions.launchFragmentInHiltContainer
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsNotVisible
-import com.kidor.vigik.utils.EspressoUtils.checkViewIsVisible
+import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.utils.TestUtils.logTestName
-import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import org.junit.Rule
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
 
 /**
  * Integration tests for [CheckFragment].
@@ -19,42 +27,77 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CheckViewTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+    private lateinit var closeable: AutoCloseable
 
-    @Test
-    fun checkUiElementsAtStart() {
-        logTestName()
+    @Mock
+    private lateinit var viewActionCallback: (CheckViewAction) -> Unit
 
-        // Load fragment in empty fragment activity
-        launchFragmentInHiltContainer<CheckFragment>()
+    @Before
+    fun setUp() {
+        closeable = MockitoAnnotations.openMocks(this)
+    }
 
-        // Check that loader is visible
-        checkViewIsNotVisible(R.id.progress_bar, "Loader")
-
-        // Check that refresh button is hidden
-        checkViewIsVisible(R.id.nfc_refresh_button, "Refresh button")
-
-        // Check that settings button is hidden
-        checkViewIsVisible(R.id.nfc_settings_button, "Settings button")
+    @After
+    fun tearDown() {
+        closeable.close()
     }
 
     @Test
-    fun displayButtonsWhenNfcDisable() {
+    @OptIn(ExperimentalTestApi::class)
+    fun checkLoadingState() {
         logTestName()
 
-        // Load fragment in empty fragment activity and force state `NfcIsDisable`
-        launchFragmentInHiltContainer<CheckFragment> { fragment ->
-            fragment.stateRender(CheckViewState.NfcIsDisable)
+        runComposeUiTest {
+            setContent {
+                LoadingState()
+            }
+
+            // Check that loader is visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertIsDisplayed()
+                .assertRangeInfoEquals(ProgressBarRangeInfo.Indeterminate)
+
+            // Check that refresh button is hidden
+            onNodeWithText(stringResourceId = R.string.nfc_state_refresh)
+                .assertDoesNotExist()
+
+            // Check that settings button is hidden
+            onNodeWithText(stringResourceId = R.string.nfc_settings)
+                .assertDoesNotExist()
         }
+    }
 
-        // Check that loader is hidden
-        checkViewIsNotVisible(R.id.progress_bar, "Loader")
+    @Test
+    @OptIn(ExperimentalTestApi::class)
+    fun checkNfcDisableState() {
+        logTestName()
 
-        // Check that refresh button is visible
-        checkViewIsVisible(R.id.nfc_refresh_button, "Refresh button")
+        runComposeUiTest {
+            setContent {
+                NfcIsDisableState(NfcIsDisableStateData(viewActionCallback))
+            }
 
-        // Check that settings button is visible
-        checkViewIsVisible(R.id.nfc_settings_button, "Settings button")
+            // Check that loader is not visible
+            onNodeWithTag(PROGRESS_BAR_TEST_TAG)
+                .assertDoesNotExist()
+
+            // Check that refresh button is visible
+            onNodeWithText(stringResourceId = R.string.nfc_state_refresh, ignoreCase = true)
+                .assertIsDisplayed()
+
+            // Check that settings button is visible
+            onNodeWithText(stringResourceId = R.string.nfc_settings, ignoreCase = true)
+                .assertIsDisplayed()
+
+            // Check that a click on refresh button generates a RefreshNfcStatus action
+            onNodeWithText(stringResourceId = R.string.nfc_state_refresh, ignoreCase = true)
+                .performClick()
+            verify(viewActionCallback).invoke(CheckViewAction.RefreshNfcStatus)
+
+            // Check that a click on refresh button generates a DisplayNfcSettings action
+            onNodeWithText(stringResourceId = R.string.nfc_settings, ignoreCase = true)
+                .performClick()
+            verify(viewActionCallback).invoke(CheckViewAction.DisplayNfcSettings)
+        }
     }
 }

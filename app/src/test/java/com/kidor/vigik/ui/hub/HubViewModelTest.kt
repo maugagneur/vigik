@@ -24,13 +24,25 @@ class HubViewModelTest {
     private lateinit var viewModel: HubViewModel
 
     @Mock
+    private lateinit var stateObserver: Observer<HubViewState>
+
+    @Mock
     private lateinit var observer: Observer<EventWrapper<HubViewEvent>>
 
     @Before
     fun setUp() {
         viewModel = HubViewModel()
 
+        viewModel.viewState.observeForever(stateObserver)
         viewModel.viewEvent.observeForever(observer)
+    }
+
+    @Test
+    fun checkViewStateAtStart() {
+        logTestName()
+
+        val state = viewModel.viewState.value
+        assertEquals(HubViewState.Default, state, "View state")
     }
 
     @Test
