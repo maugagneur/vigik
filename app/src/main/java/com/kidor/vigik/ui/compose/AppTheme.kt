@@ -1,14 +1,14 @@
 package com.kidor.vigik.ui.compose
 
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 
 /**
- * Theme of the application.
+ * Utility class used to access to common app's dimensions.
  *
- * Contains the current theme's set of colors (depends if it is light or dark) and dimensions.
+ * WIP: Should be able to switch the light/dark theme on the fly.
  */
 object AppTheme {
     private var isDarkTheme: Boolean = false
@@ -17,23 +17,22 @@ object AppTheme {
         isDarkTheme = !isDarkTheme
     }
 
-    val colors: Colors
-        @Composable
-        @ReadOnlyComposable
-        get() = if (isDarkTheme) LocalDarkColors.current else LocalLightColors.current
-
     val dimensions: AppDimensions
         @Composable
         @ReadOnlyComposable
         get() = LocalDimensions.current
 }
 
+/**
+ * Theme of the application based on [MaterialTheme].
+ */
 @Composable
 fun AppTheme(
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     MaterialTheme(
-        colors = AppTheme.colors,
+        colorScheme = if (isDarkTheme) LocalDarkColors.current else LocalLightColors.current,
         content = content
     )
 }

@@ -11,14 +11,16 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -91,6 +93,7 @@ class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, 
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(widthDp = 400, heightDp = 700)
 @VisibleForTesting
 internal fun DisplayTagState(@PreviewParameter(DisplayTagStateDataProvider::class) displayTagStateData: DisplayTagStateData) {
@@ -132,7 +135,7 @@ internal fun LoadingState() {
     ) {
         CircularProgressIndicator(
             modifier = Modifier.testTag(PROGRESS_BAR_TEST_TAG),
-            color = AppTheme.colors.secondary
+            color = MaterialTheme.colorScheme.secondary
         )
     }
 }
