@@ -5,6 +5,7 @@
     <item
         android:id="@+id/action_stop_scan"
         android:icon="@drawable/ic_baseline_stop_24"
+        android:orderInCategory="10"
         android:title="@string/menu_action_stop_scan"
         app:showAsAction="always" />
 

@@ -25,7 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.BaseFragment
 import com.kidor.vigik.ui.compose.AppTheme
@@ -45,21 +47,25 @@ class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true)
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_scan, menu)
-    }
+        requireActivity().addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.menu_scan, menu)
+                }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_stop_scan -> {
-                activity?.onBackPressed()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return if (menuItem.itemId == R.id.action_stop_scan) {
+                        activity?.onBackPressed()
+                        true
+                    } else {
+                        false
+                    }
+                }
+            },
+            viewLifecycleOwner,     // Tie the MenuProvider to the parent activity
+            Lifecycle.State.RESUMED // Indicate that the menu should be add/visible on the RESUME Lifecycle.State
+        )
     }
 
     @Composable
