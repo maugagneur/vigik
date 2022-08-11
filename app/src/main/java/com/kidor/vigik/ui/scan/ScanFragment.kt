@@ -58,7 +58,7 @@ class ScanFragment : BaseFragment<ScanViewAction, ScanViewState, ScanViewEvent, 
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                     return if (menuItem.itemId == R.id.action_stop_scan) {
-                        activity?.onBackPressed()
+                        activity?.onBackPressedDispatcher?.onBackPressed()
                         true
                     } else {
                         false

@@ -3,7 +3,7 @@ ext {
     gradleBuildVer = '7.2.2'
 
     sdkVer = [
-            'compile': 32,
+            'compile': 33,
             'min'    : 23,
             'target' : 32
     ]

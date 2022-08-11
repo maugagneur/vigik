@@ -126,11 +126,25 @@ class NfcApi @Inject constructor(
         listeners.remove(listener)
     }
 
-    private fun getTag(intent: Intent): Tag? = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+    @SuppressWarnings("kotlin:S1874") // Ignore deprecated code warning in this method
+    private fun getTag(intent: Intent): Tag? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
+        }
+    }
 
     private fun extractData(intent: Intent): String {
-        val rawMessages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
-            ?: return "No NDEF messages"
+        @SuppressWarnings("kotlin:S1874") // Ignore deprecated code warning for this variable assignment
+        val rawMessages = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES, NdefMessage::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
+        }
+        rawMessages ?: return "No NDEF messages"
         val messages = rawMessages.map { it as NdefMessage }
         val records = messages[0].records
         var recordData = ""
