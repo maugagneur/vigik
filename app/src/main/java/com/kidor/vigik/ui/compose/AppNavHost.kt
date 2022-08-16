@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.check.CheckScreen
+import com.kidor.vigik.ui.emulate.EmulateScreen
 import com.kidor.vigik.ui.history.HistoryScreen
 import com.kidor.vigik.ui.hub.HubScreen
 
@@ -46,7 +47,7 @@ fun AppNavHost(
             HistoryScreen()
         }
         composable(route = AppNavigation.EmulateScreen.route) {
-            Text(text = "DEBUG: EMULATE")
+            EmulateScreen()
         }
     }
 }
