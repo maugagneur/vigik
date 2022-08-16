@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.InvertColors
+import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -95,7 +96,7 @@ internal fun MainComposable() {
                 },
                 navigationIcon = {
                     if (navController.previousBackStackEntry != null) {
-                        IconButton(onClick = { navController.navigateUp() }) {
+                        IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 Icons.Default.ArrowBack,
                                 contentDescription = stringResource(id = R.string.menu_action_back),
@@ -105,6 +106,15 @@ internal fun MainComposable() {
                     }
                 },
                 actions = {
+                    if (currentScreen == AppNavigation.ScanScreen) {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                Icons.Default.Stop,
+                                contentDescription = stringResource(id = R.string.menu_action_stop_scan),
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                    }
                     IconButton(onClick = { AppTheme.invertTheme() }) {
                         Icon(
                             Icons.Default.InvertColors,

@@ -3,7 +3,6 @@ package com.kidor.vigik.ui.compose
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -15,6 +14,7 @@ import com.kidor.vigik.ui.check.CheckScreen
 import com.kidor.vigik.ui.emulate.EmulateScreen
 import com.kidor.vigik.ui.history.HistoryScreen
 import com.kidor.vigik.ui.hub.HubScreen
+import com.kidor.vigik.ui.scan.ScanScreen
 
 @Composable
 fun AppNavHost(
@@ -41,7 +41,7 @@ fun AppNavHost(
             )
         }
         composable(route = AppNavigation.ScanScreen.route) {
-            Text(text = "DEBUG: SCAN")
+            ScanScreen()
         }
         composable(route = AppNavigation.HistoryScreen.route) {
             HistoryScreen()
