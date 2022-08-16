@@ -20,10 +20,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kidor.vigik.R
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
 import com.kidor.vigik.ui.compose.AppNavigation
@@ -91,11 +94,11 @@ internal fun MainComposable() {
                     )
                 },
                 navigationIcon = {
-                    if (navController.currentBackStackEntry != null) {
+                    if (navController.previousBackStackEntry != null) {
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
                                 Icons.Default.ArrowBack,
-                                contentDescription = "Return",
+                                contentDescription = stringResource(id = R.string.menu_action_back),
                                 tint = MaterialTheme.colorScheme.onPrimary
                             )
                         }
@@ -105,7 +108,7 @@ internal fun MainComposable() {
                     IconButton(onClick = { AppTheme.invertTheme() }) {
                         Icon(
                             Icons.Default.InvertColors,
-                            contentDescription = "Invert colors",
+                            contentDescription = stringResource(id = R.string.menu_action_invert_color),
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
@@ -118,6 +121,7 @@ internal fun MainComposable() {
         contentColor = MaterialTheme.colorScheme.onPrimary
     ) { innerPadding ->
         AppNavHost(
+            context = LocalContext.current,
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )

@@ -1,15 +1,20 @@
 package com.kidor.vigik.ui.compose
 
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kidor.vigik.extensions.navigateSingleTopTo
+import com.kidor.vigik.ui.check.CheckScreen
 
 @Composable
 fun AppNavHost(
+    context: Context,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -19,7 +24,10 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(route = AppNavigation.CheckScreen.route) {
-            Text(text = "DEBUG: CHECK")
+            CheckScreen(
+                navigateToHub = { navController.navigateSingleTopTo(AppNavigation.HubScreen.route) },
+                navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
+            )
         }
         composable(route = AppNavigation.HubScreen.route) {
             Text(text = "DEBUG: HUB")
@@ -35,18 +43,3 @@ fun AppNavHost(
         }
     }
 }
-
-fun NavHostController.navigateSingleTopTo(route: String) =
-    this.navigate(route) {
-        // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back
-        // stack as users select items.
-        popUpTo(
-            this@navigateSingleTopTo.graph.findStartDestination().id
-        ) {
-            saveState = true
-        }
-        // Avoid multiple copies of the same destination when reselecting the same item
-        launchSingleTop = true
-        // Restore state when reselecting a previously selected item
-        restoreState = true
-    }
