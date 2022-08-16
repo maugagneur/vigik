@@ -89,7 +89,7 @@ internal fun MainComposable() {
             SmallTopAppBar(
                 title = {
                     Text(
-                        text = currentScreen?.name ?: "",
+                        text = currentScreen?.name() ?: "",
                         fontSize = AppTheme.dimensions.textSizeXLarge,
                         color = MaterialTheme.colorScheme.onPrimary
                     )

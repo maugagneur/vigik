@@ -1,39 +1,50 @@
 package com.kidor.vigik.ui.compose
 
+import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.res.stringResource
+import com.kidor.vigik.R
+
 /**
- * Metadata of each screen of the application.
+ * Metadata of each destination/screen of the application.
+ *
+ * A destination is defined by its [name] and its [route] in the navigation graph.
  */
-interface AppDestination {
-    val name: String
-    val route: String
+abstract class AppDestination(@StringRes private val nameId: Int, val route: String) {
+    @Composable
+    @ReadOnlyComposable
+    fun name(): String {
+        return stringResource(id = nameId)
+    }
 }
 
 object AppNavigation {
 
-    object CheckScreen : AppDestination {
-        override val name: String = "WIP: Check"
-        override val route: String = "check"
-    }
+    object CheckScreen : AppDestination(
+        nameId = R.string.check_nfc_title,
+        route = "check"
+    )
 
-    object HubScreen : AppDestination {
-        override val name: String = "WIP: Hub"
-        override val route = "hub"
-    }
+    object HubScreen : AppDestination(
+        nameId = R.string.hub_title,
+        route = "hub"
+    )
 
-    object ScanScreen : AppDestination {
-        override val name: String = "WIP: Scan"
-        override val route = "scan"
-    }
+    object ScanScreen : AppDestination(
+        nameId = R.string.scan_nfc_title,
+        route = "scan"
+    )
 
-    object HistoryScreen : AppDestination {
-        override val name: String = "WIP: History"
-        override val route = "history"
-    }
+    object HistoryScreen : AppDestination(
+        nameId = R.string.tag_history_title,
+        route = "history"
+    )
 
-    object EmulateScreen : AppDestination {
-        override val name: String = "WIP: Emulate"
-        override val route = "emulate"
-    }
+    object EmulateScreen : AppDestination(
+        nameId = R.string.emulate_tag_title,
+        route = "emulate"
+    )
 
     private val allScreens = listOf(
         CheckScreen,
