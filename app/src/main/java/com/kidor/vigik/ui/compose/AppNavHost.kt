@@ -9,8 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.check.CheckScreen
+import com.kidor.vigik.ui.hub.HubScreen
 
 @Composable
 fun AppNavHost(
@@ -25,12 +27,16 @@ fun AppNavHost(
     ) {
         composable(route = AppNavigation.CheckScreen.route) {
             CheckScreen(
-                navigateToHub = { navController.navigateSingleTopTo(AppNavigation.HubScreen.route) },
+                navigateToHub = { navController.navigateSingleTopTo(AppNavigation.HubScreen) },
                 navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
             )
         }
         composable(route = AppNavigation.HubScreen.route) {
-            Text(text = "DEBUG: HUB")
+            HubScreen(
+                navigateToScanTag = { navController.navigate(AppNavigation.ScanScreen) },
+                navigateToTagHistory = { navController.navigate(AppNavigation.HistoryScreen) },
+                navigateToEmulateTag = { navController.navigate(AppNavigation.EmulateScreen) }
+            )
         }
         composable(route = AppNavigation.ScanScreen.route) {
             Text(text = "DEBUG: SCAN")
