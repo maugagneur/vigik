@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Integration tests for [ScanFragment].
+ * Integration tests for Scan screen.
  */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

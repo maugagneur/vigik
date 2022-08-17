@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.scan
 import com.kidor.vigik.ui.base.ViewEvent
 
 /**
- * Events that can be sent to [ScanFragment] from [ScanViewModel].
+ * Events that can be sent to the view from [ScanViewModel].
  */
 sealed class ScanViewEvent : ViewEvent() {
 

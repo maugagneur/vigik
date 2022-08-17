@@ -17,7 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -28,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.toHex
+import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 import com.kidor.vigik.ui.usecases.FormatDateUseCase
 
@@ -41,9 +41,7 @@ internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
  */
 @Composable
 fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
-    viewModel.viewState.observeAsState().let {
-        it.value?.let { state -> StateRender(state, viewModel) }
-    }
+    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
 }
 
 @Composable

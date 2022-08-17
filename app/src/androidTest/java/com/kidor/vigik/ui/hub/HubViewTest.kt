@@ -23,7 +23,7 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 /**
- * Integration tests for [HubFragment].
+ * Integration tests for Hub screen.
  */
 @RunWith(AndroidJUnit4::class)
 class HubViewTest {

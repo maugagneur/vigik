@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,6 +16,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
+import com.kidor.vigik.ui.base.ObserveViewEvent
+import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
 /**
@@ -29,16 +30,9 @@ fun HubScreen(
     navigateToTagHistory: () -> Unit = {},
     navigateToEmulateTag: () -> Unit = {}
 ) {
-    viewModel.viewState.observeAsState().let {
-        it.value?.let { state -> StateRender(state, viewModel) }
-    }
-    viewModel.viewEvent.observeAsState().let {
-        it.value?.let { eventWrapper ->
-            // React on event only once
-            eventWrapper.getEventIfNotHandled()?.let { event ->
-                EventRender(event, navigateToScanTag, navigateToTagHistory, navigateToEmulateTag)
-            }
-        }
+    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
+    ObserveViewEvent(viewModel) { event ->
+        EventRender(event, navigateToScanTag, navigateToTagHistory, navigateToEmulateTag)
     }
 }
 
@@ -73,8 +67,7 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
             .padding(
                 start = AppTheme.dimensions.commonSpaceXLarge,
                 end = AppTheme.dimensions.commonSpaceXLarge
-            )
-        ,
+            ),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

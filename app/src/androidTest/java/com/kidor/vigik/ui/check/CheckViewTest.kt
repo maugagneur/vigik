@@ -21,7 +21,7 @@ import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
 /**
- * Integration tests for [CheckFragment].
+ * Integration tests for Check screen.
  */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

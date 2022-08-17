@@ -27,7 +27,7 @@ import org.mockito.MockitoAnnotations
 import java.util.Calendar
 
 /**
- * Integration tests for [HistoryFragment].
+ * Integration tests for History screen.
  */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)

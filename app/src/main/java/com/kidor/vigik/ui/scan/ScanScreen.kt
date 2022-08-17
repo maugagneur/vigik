@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
+import com.kidor.vigik.ui.base.ObserveViewEvent
+import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
 internal const val FLOATING_ACTION_BUTTON_TEST_TAG = "Floating action button"
@@ -40,15 +41,8 @@ internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
  */
 @Composable
 fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
-    viewModel.viewState.observeAsState().let {
-        it.value?.let { state -> StateRender(state, viewModel) }
-    }
-    viewModel.viewEvent.observeAsState().let {
-        it.value?.let { eventWrapper ->
-            // React on events only once
-            eventWrapper.getEventIfNotHandled()?.let { event -> EventRender(event) }
-        }
-    }
+    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
+    ObserveViewEvent(viewModel) { event -> EventRender(event) }
 }
 
 @Composable

@@ -7,12 +7,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
 /**
@@ -20,9 +20,7 @@ import com.kidor.vigik.ui.compose.AppTheme
  */
 @Composable
 fun EmulateScreen(viewModel: EmulateViewModel = hiltViewModel()) {
-    viewModel.viewState.observeAsState().let {
-        it.value?.let { state -> StateRender(state) }
-    }
+    ObserveViewState(viewModel) { state -> StateRender(state) }
 }
 
 @Composable

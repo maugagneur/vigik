@@ -21,7 +21,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -34,7 +33,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.kidor.vigik.R
+import com.kidor.vigik.ui.base.ObserveViewEvent
+import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+
+internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
 
 /**
  * View that check if all prerequisite to use NFC are met.
@@ -45,15 +48,8 @@ fun CheckScreen(
     navigateToHub: () -> Unit = {},
     navigateToSettings: () -> Unit = {}
 ) {
-    viewModel.viewState.observeAsState().let {
-        it.value?.let { state -> StateRender(state, viewModel) }
-    }
-    viewModel.viewEvent.observeAsState().let {
-        it.value?.let { eventWrapper ->
-            // React on events only once
-            eventWrapper.getEventIfNotHandled()?.let { event -> EventRender(event, navigateToHub, navigateToSettings) }
-        }
-    }
+    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
+    ObserveViewEvent(viewModel) { event -> EventRender(event, navigateToHub, navigateToSettings) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -69,8 +65,6 @@ fun CheckScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
-
-    // TODO: need to dismiss splashscreen ?
 }
 
 @Composable

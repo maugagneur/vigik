@@ -11,7 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Integration tests for [EmulateFragment]
+ * Integration tests for Emulate screen.
  */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
