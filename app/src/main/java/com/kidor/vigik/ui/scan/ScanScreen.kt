@@ -55,7 +55,8 @@ private fun StateRender(viewState: ScanViewState, viewModel: ScanViewModel) {
 }
 
 @Composable
-private fun EventRender(viewEvent: ScanViewEvent) {
+@VisibleForTesting
+internal fun EventRender(viewEvent: ScanViewEvent) {
     when (viewEvent) {
         ScanViewEvent.SaveTagFailure -> promptMessage(LocalContext.current, R.string.save_tag_fail)
         ScanViewEvent.SaveTagSuccess -> promptMessage(LocalContext.current, R.string.save_tag_success)

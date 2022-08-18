@@ -16,12 +16,12 @@
 
 package com.kidor.vigik
 
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * Used for UI tests in order to launch and test fragments in empty activities as we use Hilt
+ * Used for UI tests in order to launch/test fragments in empty activities as we use Hilt
  * dependency injection that require activities annotated with @AndroidEntryPoint.
  */
 @AndroidEntryPoint
-class HiltTestActivity : AppCompatActivity()
+class HiltTestActivity : ComponentActivity()

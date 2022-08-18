@@ -7,12 +7,10 @@ import androidx.compose.ui.test.assertRangeInfoEquals
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
-import androidx.fragment.app.FragmentActivity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.extensions.launchFragmentInHiltContainer
+import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.nfc.model.Tag
-import com.kidor.vigik.utils.EspressoUtils.checkToastWithTextIsVisible
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Ignore
@@ -105,35 +103,35 @@ class ScanViewTest {
 
     @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
     @Test
+    @OptIn(ExperimentalTestApi::class)
     fun checkUiElementsWhenTagSavedSuccessfully() {
         logTestName()
 
-        var parentActivity: FragmentActivity? = null
+        runComposeUiTest {
+            setContent {
+                EventRender(ScanViewEvent.SaveTagSuccess)
+            }
 
-        // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> {
-            //fragment.eventRender(ScanViewEvent.SaveTagSuccess)
-            parentActivity = activity
+            // Check that a toast with successful message is displayed
+            onNodeWithText(R.string.save_tag_success, ignoreCase = true, useUnmergedTree = true)
+                .assertIsDisplayed()
         }
-
-        // Check that a toast with successful message is displayed
-        checkToastWithTextIsVisible(parentActivity, R.string.save_tag_success, "Toast of tag saving result")
     }
 
     @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
     @Test
+    @OptIn(ExperimentalTestApi::class)
     fun checkUiElementsWhenTagSavingFailed() {
         logTestName()
 
-        var parentActivity: FragmentActivity? = null
+        runComposeUiTest {
+            setContent {
+                EventRender(ScanViewEvent.SaveTagFailure)
+            }
 
-        // Load fragment in empty fragment activity and force state `DisplayTag`
-        launchFragmentInHiltContainer<ScanFragment> {
-            //fragment.eventRender(ScanViewEvent.SaveTagFailure)
-            parentActivity = activity
+            // Check that a toast with failure message is displayed
+            onNodeWithText(R.string.save_tag_fail, ignoreCase = true, useUnmergedTree = true)
+                .assertIsDisplayed()
         }
-
-        // Check that a toast with failure message is displayed
-        checkToastWithTextIsVisible(parentActivity, R.string.save_tag_fail, "Toast of tag saving result")
     }
 }

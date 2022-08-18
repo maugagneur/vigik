@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -34,6 +35,10 @@ import com.kidor.vigik.ui.compose.AppNavigation
 import com.kidor.vigik.ui.compose.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
+internal const val ACTION_BAR_TEST_TAG = "Action bar"
+internal const val ACTION_MENU_STOP_SCAN = "Action menu - Stop scan"
+internal const val ACTION_MENU_INVERT_COLORS = "Action menu - Invert colors"
 
 /**
  * Main activity of the application.
@@ -94,6 +99,7 @@ internal fun MainComposable() {
                         color = MaterialTheme.colorScheme.onPrimary
                     )
                 },
+                modifier = Modifier.testTag(ACTION_BAR_TEST_TAG),
                 navigationIcon = {
                     if (navController.previousBackStackEntry != null) {
                         IconButton(onClick = { navController.popBackStack() }) {
@@ -107,7 +113,10 @@ internal fun MainComposable() {
                 },
                 actions = {
                     if (currentScreen == AppNavigation.ScanScreen) {
-                        IconButton(onClick = { navController.popBackStack() }) {
+                        IconButton(
+                            onClick = { navController.popBackStack() },
+                            modifier = Modifier.testTag(ACTION_MENU_STOP_SCAN)
+                        ) {
                             Icon(
                                 Icons.Default.Stop,
                                 contentDescription = stringResource(id = R.string.menu_action_stop_scan),
@@ -115,7 +124,10 @@ internal fun MainComposable() {
                             )
                         }
                     }
-                    IconButton(onClick = { AppTheme.invertTheme() }) {
+                    IconButton(
+                        onClick = { AppTheme.invertTheme() },
+                        modifier = Modifier.testTag(ACTION_MENU_INVERT_COLORS)
+                    ) {
                         Icon(
                             Icons.Default.InvertColors,
                             contentDescription = stringResource(id = R.string.menu_action_invert_color),

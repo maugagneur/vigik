@@ -174,8 +174,7 @@ dependencies {
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:${googleVer.hilt}"
     kapt "com.google.dagger:hilt-compiler:${googleVer.hilt}"
-    androidTestImplementation "com.google.dagger:hilt-android-testing:${googleVer.hilt}"
-    kaptAndroidTest "com.google.dagger:hilt-android-compiler:${googleVer.hilt}"
+    kapt "androidx.hilt:hilt-compiler:${androidxVer.hilt}"
 
     // Log
     implementation "com.jakewharton.timber:timber:$timberVer"
@@ -189,7 +188,10 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:${androidxVer.compose}"
     androidTestImplementation "androidx.test.ext:junit:${testVer.testExt}"
     androidTestImplementation "androidx.test.espresso:espresso-core:${testVer.espresso}"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:${googleVer.hilt}"
     androidTestImplementation "org.mockito:mockito-android:${testVer.mockitoAndroid}"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:${googleVer.hilt}"
+    kaptAndroidTest "androidx.hilt:hilt-compiler:${androidxVer.hilt}"
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.
