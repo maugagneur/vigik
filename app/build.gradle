@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'androidx.navigation.safeargs'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-android'
     id 'kotlin-kapt'
@@ -31,7 +30,6 @@ android {
 
     buildFeatures {
         compose true
-        viewBinding true
     }
     buildTypes {
         debug {
@@ -132,8 +130,6 @@ dependencies {
 
     // Android X
     implementation "androidx.activity:activity-ktx:${androidxVer.activity}"
-    implementation "androidx.appcompat:appcompat:${androidxVer.appCompat}"
-    implementation "androidx.constraintlayout:constraintlayout:${androidxVer.constraintlayout}"
     implementation "androidx.core:core-ktx:${androidxVer.coreKtx}"
     implementation "androidx.core:core-splashscreen:${androidxVer.splashscreen}"
     implementation "androidx.hilt:hilt-navigation-compose:${androidxVer.hilt}"
@@ -142,10 +138,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidxVer.lifecycle}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidxVer.lifecycle}"
     implementation "androidx.navigation:navigation-compose:${androidxVer.navigation}"
-    implementation "androidx.navigation:navigation-fragment-ktx:${androidxVer.navigation}"
-    implementation "androidx.navigation:navigation-ui-ktx:${androidxVer.navigation}"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:${androidxVer.navigation}"
-    implementation "androidx.recyclerview:recyclerview:${androidxVer.recyclerview}"
 
     // Compose
     implementation "androidx.compose.foundation:foundation:${androidxVer.compose}"
