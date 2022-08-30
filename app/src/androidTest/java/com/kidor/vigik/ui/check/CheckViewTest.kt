@@ -30,7 +30,9 @@ class CheckViewTest {
     private lateinit var closeable: AutoCloseable
 
     @Mock
-    private lateinit var viewActionCallback: (CheckViewAction) -> Unit
+    private lateinit var refreshCallback: () -> Unit
+    @Mock
+    private lateinit var settingsCallback: () -> Unit
 
     @Before
     fun setUp() {
@@ -74,7 +76,7 @@ class CheckViewTest {
 
         runComposeUiTest {
             setContent {
-                NfcIsDisableState(NfcIsDisableStateData(viewActionCallback))
+                NfcIsDisableState(NfcIsDisableStateData(refreshCallback, settingsCallback))
             }
 
             // Check that loader is not visible
@@ -92,12 +94,12 @@ class CheckViewTest {
             // Check that a click on refresh button generates a RefreshNfcStatus action
             onNodeWithText(stringResourceId = R.string.nfc_state_refresh, ignoreCase = true)
                 .performClick()
-            verify(viewActionCallback).invoke(CheckViewAction.RefreshNfcStatus)
+            verify(refreshCallback).invoke()
 
             // Check that a click on refresh button generates a DisplayNfcSettings action
             onNodeWithText(stringResourceId = R.string.nfc_settings, ignoreCase = true)
                 .performClick()
-            verify(viewActionCallback).invoke(CheckViewAction.DisplayNfcSettings)
+            verify(settingsCallback).invoke()
         }
     }
 }

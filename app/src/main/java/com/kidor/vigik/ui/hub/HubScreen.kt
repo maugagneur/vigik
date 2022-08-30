@@ -32,7 +32,13 @@ fun HubScreen(
 ) {
     ObserveViewState(viewModel) { state ->
         if (state is HubViewState.Default) {
-            DefaultState(DefaultStateData { action -> viewModel.handleAction(action) })
+            DefaultState(
+                DefaultStateData(
+                    onScanClick = { viewModel.handleAction(HubViewAction.DisplayScanTagView) },
+                    onHistoryClick = { viewModel.handleAction(HubViewAction.DisplayTagHistoryView) },
+                    onEmulateClick = { viewModel.handleAction(HubViewAction.DisplayEmulateTagView) }
+                )
+            )
         }
     }
     CollectViewEvent(viewModel) { event ->
@@ -59,7 +65,7 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { defaultStateData.onViewAction(HubViewAction.DisplayScanTagView) },
+            onClick = { defaultStateData.onScanClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -68,7 +74,7 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
             )
         }
         Button(
-            onClick = { defaultStateData.onViewAction(HubViewAction.DisplayTagHistoryView) },
+            onClick = { defaultStateData.onHistoryClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -77,7 +83,7 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
             )
         }
         Button(
-            onClick = { defaultStateData.onViewAction(HubViewAction.DisplayEmulateTagView) },
+            onClick = { defaultStateData.onEmulateClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

@@ -51,7 +51,12 @@ fun CheckScreen(
     ObserveViewState(viewModel) { state ->
         when (state) {
             CheckViewState.Loading -> LoadingState()
-            CheckViewState.NfcIsDisable -> NfcIsDisableState(NfcIsDisableStateData { action -> viewModel.handleAction(action) })
+            CheckViewState.NfcIsDisable -> NfcIsDisableState(
+                NfcIsDisableStateData(
+                    onRefreshClick = { viewModel.handleAction(CheckViewAction.RefreshNfcStatus) },
+                    onSettingsClick = { viewModel.handleAction(CheckViewAction.DisplayNfcSettings) }
+                )
+            )
         }
     }
     CollectViewEvent(viewModel) { event ->
@@ -104,7 +109,7 @@ internal fun NfcIsDisableState(@PreviewParameter(NfcIsDisableStateProvider::clas
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { nfcIsDisableStateData.onViewAction(CheckViewAction.RefreshNfcStatus) },
+            onClick = { nfcIsDisableStateData.onRefreshClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -120,7 +125,7 @@ internal fun NfcIsDisableState(@PreviewParameter(NfcIsDisableStateProvider::clas
             )
         }
         Button(
-            onClick = { nfcIsDisableStateData.onViewAction(CheckViewAction.DisplayNfcSettings) },
+            onClick = { nfcIsDisableStateData.onSettingsClick() },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

@@ -14,6 +14,12 @@ class DefaultStateProvider : PreviewParameterProvider<DefaultStateData> {
 /**
  * Data used for the preview of DefaultState Composable.
  *
- * @param onViewAction The handler for view's actions.
+ * @param onScanClick    The function called on a scan click.
+ * @param onHistoryClick The function called on an history click.
+ * @param onEmulateClick The function called on an emulate click.
  */
-data class DefaultStateData(val onViewAction: (HubViewAction) -> Unit = {})
+data class DefaultStateData(
+    val onScanClick: () -> Unit = {},
+    val onHistoryClick: () -> Unit = {},
+    val onEmulateClick: () -> Unit = {}
+)

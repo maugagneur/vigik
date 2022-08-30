@@ -36,7 +36,7 @@ class HistoryViewTest {
     private lateinit var closeable: AutoCloseable
 
     @Mock
-    private lateinit var viewActionCallback: (HistoryViewAction) -> Unit
+    private lateinit var viewActionCallback: (Tag) -> Unit
 
     @Before
     fun setUp() {
@@ -136,13 +136,13 @@ class HistoryViewTest {
             // Check that a click on delete button generates a DeleteTag action with right value
             onNodeWithTag(DELETE_ICON_TEST_TAG_PREFIX + 0)
                 .performClick()
-            verify(viewActionCallback).invoke(HistoryViewAction.DeleteTag(firstTag))
+            verify(viewActionCallback).invoke(firstTag)
             onNodeWithTag(DELETE_ICON_TEST_TAG_PREFIX + 42)
                 .performClick()
-            verify(viewActionCallback).invoke(HistoryViewAction.DeleteTag(secondTag))
+            verify(viewActionCallback).invoke(secondTag)
             onNodeWithTag(DELETE_ICON_TEST_TAG_PREFIX + now)
                 .performClick()
-            verify(viewActionCallback).invoke(HistoryViewAction.DeleteTag(thirdTag))
+            verify(viewActionCallback).invoke(thirdTag)
         }
     }
 }

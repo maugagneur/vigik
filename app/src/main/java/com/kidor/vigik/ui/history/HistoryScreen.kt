@@ -46,7 +46,7 @@ fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
             is HistoryViewState.DisplayTags -> DisplayTags(
                 DisplayTagsStateData(
                     tags = state.tags,
-                    onViewAction = { action -> viewModel.handleAction(action) }
+                    onDeleteClick = { tag -> viewModel.handleAction(HistoryViewAction.DeleteTag(tag)) }
                 )
             )
             HistoryViewState.NoTag -> DisplayTags(DisplayTagsStateData(emptyList()))
@@ -109,7 +109,7 @@ internal fun DisplayTags(@PreviewParameter(DisplayTagsStateProvider::class) disp
                         textAlign = TextAlign.Center
                     )
                     IconButton(
-                        onClick = { displayTagsStateData.onViewAction(HistoryViewAction.DeleteTag(tag)) },
+                        onClick = { displayTagsStateData.onDeleteClick(tag) },
                         modifier = Modifier
                             .weight(0.2f)
                             .testTag(DELETE_ICON_TEST_TAG_PREFIX + (tag.timestamp ?: 0))

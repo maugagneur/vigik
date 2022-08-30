@@ -14,6 +14,7 @@ class NfcIsDisableStateProvider : PreviewParameterProvider<NfcIsDisableStateData
 /**
  * Data used for the preview of NfcIsDisableState Composable.
  *
- * @param onViewAction The handler for view's actions.
+ * @param onRefreshClick  The function called on a refresh click.
+ * @param onSettingsClick The function called on a settings click.
  */
-data class NfcIsDisableStateData(val onViewAction: (CheckViewAction) -> Unit = {})
+data class NfcIsDisableStateData(val onRefreshClick: () -> Unit = {}, val onSettingsClick: () -> Unit = {})

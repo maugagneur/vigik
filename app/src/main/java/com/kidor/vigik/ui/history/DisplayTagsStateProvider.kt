@@ -26,7 +26,7 @@ class DisplayTagsStateProvider : PreviewParameterProvider<DisplayTagsStateData> 
 /**
  * Data used for the preview of DisplayTagsState Composable.
  *
- * @param tags         The list of tags to display.
- * @param onViewAction The handler for view's actions.
+ * @param tags          The list of tags to display.
+ * @param onDeleteClick The function called on a delete click.
  */
-data class DisplayTagsStateData(val tags: List<Tag>, val onViewAction: (HistoryViewAction) -> Unit = {})
+data class DisplayTagsStateData(val tags: List<Tag>, val onDeleteClick: (Tag) -> Unit = {})

@@ -25,7 +25,11 @@ class HubViewTest {
     private lateinit var closeable: AutoCloseable
 
     @Mock
-    private lateinit var viewActionCallback: (HubViewAction) -> Unit
+    private lateinit var scanCallback: () -> Unit
+    @Mock
+    private lateinit var historyCallback: () -> Unit
+    @Mock
+    private lateinit var emulateCallback: () -> Unit
 
     @Before
     fun setUp() {
@@ -44,7 +48,13 @@ class HubViewTest {
 
         runComposeUiTest {
             setContent {
-                DefaultState(DefaultStateData(viewActionCallback))
+                DefaultState(
+                    DefaultStateData(
+                        onScanClick = scanCallback,
+                        onHistoryClick = historyCallback,
+                        onEmulateClick = emulateCallback
+                    )
+                )
             }
 
             // Check that button to start scanning tag is visible
@@ -62,17 +72,17 @@ class HubViewTest {
             // Check that a click on "NFC scan" button generates a RefreshNfcStatus action
             onNodeWithText(stringResourceId = R.string.scan_button_label, ignoreCase = true)
                 .performClick()
-            verify(viewActionCallback).invoke(HubViewAction.DisplayScanTagView)
+            verify(scanCallback).invoke()
 
             // Check that a click on "Tags history" button generates a DisplayTagHistoryView action
             onNodeWithText(stringResourceId = R.string.history_button_label, ignoreCase = true)
                 .performClick()
-            verify(viewActionCallback).invoke(HubViewAction.DisplayTagHistoryView)
+            verify(historyCallback).invoke()
 
             // Check that a click on "Emulate NFC tag" button generates a DisplayEmulateTagView action
             onNodeWithText(stringResourceId = R.string.emulate_button_label, ignoreCase = true)
                 .performClick()
-            verify(viewActionCallback).invoke(HubViewAction.DisplayEmulateTagView)
+            verify(emulateCallback).invoke()
         }
     }
 }

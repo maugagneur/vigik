@@ -28,7 +28,7 @@ class DisplayTagStateDataProvider : PreviewParameterProvider<DisplayTagStateData
 /**
  * Data used for the preview of DisplayTagState Composable.
  *
- * @param state        The view state to be displayed.
- * @param onViewAction The handler for view's actions.
+ * @param state          The view state to be displayed.
+ * @param onSaveTagClick The function called on a save tag click.
  */
-data class DisplayTagStateData(val state: ScanViewState.DisplayTag, val onViewAction: (ScanViewAction) -> Unit = {})
+data class DisplayTagStateData(val state: ScanViewState.DisplayTag, val onSaveTagClick: () -> Unit = {})

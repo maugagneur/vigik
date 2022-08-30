@@ -45,7 +45,12 @@ fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
     ObserveViewState(viewModel) { state ->
         when (state) {
             is ScanViewState.DisplayTag ->
-                DisplayTagState(DisplayTagStateData(state) { action -> viewModel.handleAction(action) })
+                DisplayTagState(
+                    DisplayTagStateData(
+                        state = state,
+                        onSaveTagClick = { viewModel.handleAction(ScanViewAction.SaveTag) }
+                    )
+                )
             ScanViewState.Loading -> LoadingState()
         }
     }
@@ -70,7 +75,7 @@ internal fun DisplayTagState(@PreviewParameter(DisplayTagStateDataProvider::clas
         floatingActionButton = {
             if (displayTagStateData.state.canBeSaved) {
                 FloatingActionButton(
-                    onClick = { displayTagStateData.onViewAction(ScanViewAction.SaveTag) },
+                    onClick = { displayTagStateData.onSaveTagClick() },
                     modifier = Modifier.testTag(FLOATING_ACTION_BUTTON_TEST_TAG),
                     shape = CircleShape,
                     containerColor = MaterialTheme.colorScheme.secondary,
