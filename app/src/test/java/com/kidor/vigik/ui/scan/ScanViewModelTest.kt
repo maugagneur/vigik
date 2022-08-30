@@ -6,10 +6,12 @@ import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
-import com.kidor.vigik.ui.base.EventWrapper
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -45,13 +47,10 @@ class ScanViewModelTest {
 
     @Mock
     private lateinit var stateObserver: Observer<ScanViewState>
-    @Mock
-    private lateinit var eventObserver: Observer<EventWrapper<ScanViewEvent>>
 
     @Before
     fun setUp() {
         viewModel.viewState.observeForever(stateObserver)
-        viewModel.viewEvent.observeForever(eventObserver)
     }
 
     @Test
@@ -105,16 +104,26 @@ class ScanViewModelTest {
         assertEquals(ScanViewState.DisplayTag(tag, false), state, "View state")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun promptErrorWhenTryingToSaveTagBeforeAnyResult() {
         logTestName()
 
-        // When
-        viewModel.handleAction(ScanViewAction.SaveTag)
+        runTest {
+            // Given
+            var event: ScanViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
 
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
+            // When
+            viewModel.handleAction(ScanViewAction.SaveTag)
+
+            // Then
+            assertEquals(ScanViewEvent.SaveTagFailure, event, "Failure event")
+
+            job.cancel()
+        }
     }
 
     @ExperimentalCoroutinesApi
@@ -125,14 +134,19 @@ class ScanViewModelTest {
             // Given
             val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
             `when`(tagRepository.insert(tag)).doSuspendableAnswer { 1L }
+            var event: ScanViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
 
             // When
             viewModel.onNfcTagRead(tag)
             viewModel.handleAction(ScanViewAction.SaveTag)
 
             // Then
-            val event = viewModel.viewEvent.value
-            assertEquals(ScanViewEvent.SaveTagSuccess, event?.peekEvent(), "Success event")
+            assertEquals(ScanViewEvent.SaveTagSuccess, event, "Success event")
+
+            job.cancel()
         }
     }
 
@@ -144,14 +158,19 @@ class ScanViewModelTest {
             // Given
             val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
             `when`(tagRepository.insert(tag)).doSuspendableAnswer { -1L }
+            var event: ScanViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
 
             // When
             viewModel.onNfcTagRead(tag)
             viewModel.handleAction(ScanViewAction.SaveTag)
 
             // Then
-            val event = viewModel.viewEvent.value
-            assertEquals(ScanViewEvent.SaveTagFailure, event?.peekEvent(), "Failure event")
+            assertEquals(ScanViewEvent.SaveTagFailure, event, "Failure event")
+
+            job.cancel()
         }
     }
 }

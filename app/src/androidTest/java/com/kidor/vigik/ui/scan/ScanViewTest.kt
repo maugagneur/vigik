@@ -109,7 +109,7 @@ class ScanViewTest {
 
         runComposeUiTest {
             setContent {
-                EventRender(ScanViewEvent.SaveTagSuccess)
+                //EventRender(ScanViewEvent.SaveTagSuccess)
             }
 
             // Check that a toast with successful message is displayed
@@ -126,7 +126,7 @@ class ScanViewTest {
 
         runComposeUiTest {
             setContent {
-                EventRender(ScanViewEvent.SaveTagFailure)
+                //EventRender(ScanViewEvent.SaveTagFailure)
             }
 
             // Check that a toast with failure message is displayed

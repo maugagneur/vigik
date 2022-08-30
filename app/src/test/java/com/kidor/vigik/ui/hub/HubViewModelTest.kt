@@ -2,9 +2,14 @@ package com.kidor.vigik.ui.hub
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.kidor.vigik.ui.base.EventWrapper
+import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +23,10 @@ import org.mockito.junit.MockitoJUnitRunner
 @RunWith(MockitoJUnitRunner::class)
 class HubViewModelTest {
 
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    val mainCoroutineRule = MainCoroutineRule()
+
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
@@ -26,15 +35,10 @@ class HubViewModelTest {
     @Mock
     private lateinit var stateObserver: Observer<HubViewState>
 
-    @Mock
-    private lateinit var observer: Observer<EventWrapper<HubViewEvent>>
-
     @Before
     fun setUp() {
         viewModel = HubViewModel()
-
         viewModel.viewState.observeForever(stateObserver)
-        viewModel.viewEvent.observeForever(observer)
     }
 
     @Test
@@ -45,48 +49,89 @@ class HubViewModelTest {
         assertEquals(HubViewState.Default, state, "View state")
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun redirectToReadTag() {
         logTestName()
 
-        // When
-        viewModel.handleAction(HubViewAction.DisplayScanTagView)
+        runTest {
+            // Given
+            var event: HubViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
 
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(HubViewEvent.NavigateToScanView, event?.peekEvent(), "Navigation event")
+            // When
+            viewModel.handleAction(HubViewAction.DisplayScanTagView)
+
+            // Then
+            assertEquals(HubViewEvent.NavigateToScanView, event, "Navigation event")
+
+            job.cancel()
+        }
+
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun redirectToTagsHistory() {
         logTestName()
 
-        // When
-        viewModel.handleAction(HubViewAction.DisplayTagHistoryView)
+        runTest {
+            // Given
+            var event: HubViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
 
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(HubViewEvent.NavigateToHistoryView, event?.peekEvent(), "Navigation event")
+            // When
+            viewModel.handleAction(HubViewAction.DisplayTagHistoryView)
+
+            // Then
+            assertEquals(HubViewEvent.NavigateToHistoryView, event, "Navigation event")
+
+            job.cancel()
+        }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun redirectToEmulateTag() {
         logTestName()
 
-        // When
-        viewModel.handleAction(HubViewAction.DisplayEmulateTagView)
+        runTest {
+            // Given
+            var event: HubViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
 
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(HubViewEvent.NavigateToEmulateView, event?.peekEvent(), "Navigation event")
+            // When
+            viewModel.handleAction(HubViewAction.DisplayEmulateTagView)
+
+            // Then
+            assertEquals(HubViewEvent.NavigateToEmulateView, event, "Navigation event")
+
+            job.cancel()
+        }
     }
 
+    @ExperimentalCoroutinesApi
     @Test
     fun noAutomaticRedirectionAtStart() {
         logTestName()
 
-        // Then
-        val event = viewModel.viewEvent.value
-        assertEquals(null, event?.peekEvent(), "Navigation event")
+        runTest {
+            // Given
+            var event: HubViewEvent? = null
+            val job = launch(UnconfinedTestDispatcher()) {
+                event = viewModel.viewEvent.first()
+            }
+
+            // Then
+            assertEquals(null, event, "Navigation event")
+
+            job.cancel()
+        }
     }
 }

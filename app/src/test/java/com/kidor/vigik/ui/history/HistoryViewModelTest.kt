@@ -1,7 +1,6 @@
 package com.kidor.vigik.ui.history
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.lifecycle.asFlow
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
@@ -46,9 +45,6 @@ class HistoryViewModelTest {
 
     @RelaxedMockK
     private lateinit var tagDao: TagDao
-
-    @MockK
-    private lateinit var stateObserver: Observer<HistoryViewState>
 
     @Before
     fun setUp() {
