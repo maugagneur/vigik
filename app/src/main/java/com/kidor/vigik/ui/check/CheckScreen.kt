@@ -33,7 +33,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.base.ObserveViewEvent
+import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
@@ -48,8 +48,18 @@ fun CheckScreen(
     navigateToHub: () -> Unit = {},
     navigateToSettings: () -> Unit = {}
 ) {
-    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
-    ObserveViewEvent(viewModel) { event -> EventRender(event, navigateToHub, navigateToSettings) }
+    ObserveViewState(viewModel) { state ->
+        when (state) {
+            CheckViewState.Loading -> LoadingState()
+            CheckViewState.NfcIsDisable -> NfcIsDisableState(NfcIsDisableStateData { action -> viewModel.handleAction(action) })
+        }
+    }
+    CollectViewEvent(viewModel) { event ->
+        when (event) {
+            CheckViewEvent.NavigateToHub -> navigateToHub()
+            CheckViewEvent.NavigateToSettings -> navigateToSettings()
+        }
+    }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
@@ -64,22 +74,6 @@ fun CheckScreen(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
-    }
-}
-
-@Composable
-private fun StateRender(viewState: CheckViewState, viewModel: CheckViewModel) {
-    when (viewState) {
-        CheckViewState.Loading -> LoadingState()
-        CheckViewState.NfcIsDisable -> NfcIsDisableState(NfcIsDisableStateData { action -> viewModel.handleAction(action) })
-    }
-}
-
-@Composable
-private fun EventRender(viewEvent: CheckViewEvent, navigateToHub: () -> Unit, navigateToSettings: () -> Unit) {
-    when (viewEvent) {
-        CheckViewEvent.NavigateToHub -> navigateToHub()
-        CheckViewEvent.NavigateToSettings -> navigateToSettings()
     }
 }
 

@@ -43,26 +43,26 @@ class ScanViewModel @Inject constructor(
         when (viewAction) {
             is ScanViewAction.SaveTag -> {
                 lastTagScanned.let { tag ->
-                    if (tag == null) {
-                        Timber.w("Trying to save invalid tag into database")
-                        _viewEvent.value = ScanViewEvent.SaveTagFailure.wrap()
-                    } else {
-                        insertTagInTheDatabase(tag)
+                    viewModelScope.launch {
+                        if (tag == null) {
+                            Timber.w("Trying to save invalid tag into database")
+                            _viewEvent.emit(ScanViewEvent.SaveTagFailure)
+                        } else {
+                            insertTagInTheDatabase(tag)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun insertTagInTheDatabase(tag: Tag) {
-        viewModelScope.launch {
-            if (tagRepository.insert(tag) > 0) {
-                Timber.i("Tag saved into database with success")
-                _viewEvent.value = ScanViewEvent.SaveTagSuccess.wrap()
-            } else {
-                Timber.e("Fail to save tag into database")
-                _viewEvent.value = ScanViewEvent.SaveTagFailure.wrap()
-            }
+    private suspend fun insertTagInTheDatabase(tag: Tag) {
+        if (tagRepository.insert(tag) > 0) {
+            Timber.i("Tag saved into database with success")
+            _viewEvent.emit(ScanViewEvent.SaveTagSuccess)
+        } else {
+            Timber.e("Fail to save tag into database")
+            _viewEvent.emit(ScanViewEvent.SaveTagFailure)
         }
     }
 }

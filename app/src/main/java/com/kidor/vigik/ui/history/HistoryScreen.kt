@@ -40,17 +40,17 @@ internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
  */
 @Composable
 fun HistoryScreen(viewModel: HistoryViewModel = hiltViewModel()) {
-    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
-}
-
-@Composable
-private fun StateRender(viewState: HistoryViewState, viewModel: HistoryViewModel) {
-    when (viewState) {
-        HistoryViewState.Initializing -> LoadingState()
-        is HistoryViewState.DisplayTags -> DisplayTags(
-            DisplayTagsStateData(viewState.tags) { action -> viewModel.handleAction(action) }
-        )
-        HistoryViewState.NoTag -> DisplayTags(DisplayTagsStateData(emptyList()))
+    ObserveViewState(viewModel) { state ->
+        when (state) {
+            HistoryViewState.Initializing -> LoadingState()
+            is HistoryViewState.DisplayTags -> DisplayTags(
+                DisplayTagsStateData(
+                    tags = state.tags,
+                    onViewAction = { action -> viewModel.handleAction(action) }
+                )
+            )
+            HistoryViewState.NoTag -> DisplayTags(DisplayTagsStateData(emptyList()))
+        }
     }
 }
 

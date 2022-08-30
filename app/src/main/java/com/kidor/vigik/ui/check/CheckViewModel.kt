@@ -30,7 +30,11 @@ class CheckViewModel @Inject constructor(
 
     override fun handleAction(viewAction: CheckViewAction) {
         when (viewAction) {
-            CheckViewAction.DisplayNfcSettings -> _viewEvent.value = CheckViewEvent.NavigateToSettings.wrap()
+            CheckViewAction.DisplayNfcSettings -> {
+                viewModelScope.launch {
+                    _viewEvent.emit(CheckViewEvent.NavigateToSettings)
+                }
+            }
             CheckViewAction.RefreshNfcStatus -> performNfcCheck()
         }
     }
@@ -50,7 +54,9 @@ class CheckViewModel @Inject constructor(
 
     private fun checkIfNfcIsAvailable() {
         if (nfcApi.isNfcEnable()) {
-            _viewEvent.value = CheckViewEvent.NavigateToHub.wrap()
+            viewModelScope.launch {
+                _viewEvent.emit(CheckViewEvent.NavigateToHub)
+            }
         } else {
             _viewState.value = CheckViewState.NfcIsDisable
         }

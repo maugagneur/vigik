@@ -1,10 +1,11 @@
 package com.kidor.vigik.ui.base
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 
 /**
- * Starts observing the states sent from the [viewModel].
+ * Starts observing states sent from the [viewModel].
  */
 @Composable
 fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> ObserveViewState(
@@ -17,17 +18,14 @@ fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> Obse
 }
 
 /**
- * Starts observing the events sent from the [viewModel].
+ * Starts collecting events sent from the [viewModel].
  */
 @Composable
-fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> ObserveViewEvent(
+fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> CollectViewEvent(
     viewModel: BaseViewModel<VIEW_ACTION, VIEW_STATE, VIEW_EVENT>,
-    eventRender: @Composable (VIEW_EVENT) -> Unit
+    eventHandler: (VIEW_EVENT) -> Unit
 ) {
-    viewModel.viewEvent.observeAsState().let {
-        it.value?.let { eventWrapper ->
-            // React on events only once
-            eventWrapper.getEventIfNotHandled()?.let { event -> eventRender(event) }
-        }
+    LaunchedEffect(true) {
+        viewModel.viewEvent.collect { event -> eventHandler(event) }
     }
 }

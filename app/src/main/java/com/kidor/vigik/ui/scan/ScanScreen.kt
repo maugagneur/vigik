@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.base.ObserveViewEvent
+import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
@@ -41,25 +41,19 @@ internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
  */
 @Composable
 fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
-    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
-    ObserveViewEvent(viewModel) { event -> EventRender(event) }
-}
-
-@Composable
-private fun StateRender(viewState: ScanViewState, viewModel: ScanViewModel) {
-    when (viewState) {
-        is ScanViewState.DisplayTag ->
-            DisplayTagState(DisplayTagStateData(viewState) { action -> viewModel.handleAction(action) })
-        ScanViewState.Loading -> LoadingState()
+    val context = LocalContext.current
+    ObserveViewState(viewModel) { state ->
+        when (state) {
+            is ScanViewState.DisplayTag ->
+                DisplayTagState(DisplayTagStateData(state) { action -> viewModel.handleAction(action) })
+            ScanViewState.Loading -> LoadingState()
+        }
     }
-}
-
-@Composable
-@VisibleForTesting
-internal fun EventRender(viewEvent: ScanViewEvent) {
-    when (viewEvent) {
-        ScanViewEvent.SaveTagFailure -> promptMessage(LocalContext.current, R.string.save_tag_fail)
-        ScanViewEvent.SaveTagSuccess -> promptMessage(LocalContext.current, R.string.save_tag_success)
+    CollectViewEvent(viewModel) { event ->
+        when (event) {
+            ScanViewEvent.SaveTagFailure -> promptMessage(context, R.string.save_tag_fail)
+            ScanViewEvent.SaveTagSuccess -> promptMessage(context, R.string.save_tag_success)
+        }
     }
 }
 

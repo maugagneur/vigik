@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.base.ObserveViewEvent
+import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
@@ -30,30 +30,17 @@ fun HubScreen(
     navigateToTagHistory: () -> Unit = {},
     navigateToEmulateTag: () -> Unit = {}
 ) {
-    ObserveViewState(viewModel) { state -> StateRender(state, viewModel) }
-    ObserveViewEvent(viewModel) { event ->
-        EventRender(event, navigateToScanTag, navigateToTagHistory, navigateToEmulateTag)
+    ObserveViewState(viewModel) { state ->
+        if (state is HubViewState.Default) {
+            DefaultState(DefaultStateData { action -> viewModel.handleAction(action) })
+        }
     }
-}
-
-@Composable
-private fun StateRender(viewState: HubViewState, viewModel: HubViewModel) {
-    if (viewState is HubViewState.Default) {
-        DefaultState(DefaultStateData { action -> viewModel.handleAction(action) })
-    }
-}
-
-@Composable
-private fun EventRender(
-    viewEvent: HubViewEvent,
-    navigateToScanTag: () -> Unit,
-    navigateToTagHistory: () -> Unit,
-    navigateToEmulateTag: () -> Unit
-) {
-    when (viewEvent) {
-        HubViewEvent.NavigateToEmulateView -> navigateToEmulateTag()
-        HubViewEvent.NavigateToHistoryView -> navigateToTagHistory()
-        HubViewEvent.NavigateToScanView -> navigateToScanTag()
+    CollectViewEvent(viewModel) { event ->
+        when (event) {
+            HubViewEvent.NavigateToEmulateView -> navigateToEmulateTag()
+            HubViewEvent.NavigateToHistoryView -> navigateToTagHistory()
+            HubViewEvent.NavigateToScanView -> navigateToScanTag()
+        }
     }
 }
 

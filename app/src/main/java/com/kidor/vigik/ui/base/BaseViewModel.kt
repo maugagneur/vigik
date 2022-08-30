@@ -3,6 +3,9 @@ package com.kidor.vigik.ui.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 
 /**
  * Base class for [ViewModel] which exposes [VIEW_STATE] and [VIEW_EVENT].
@@ -32,12 +35,12 @@ open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_
      * Internal event holder that can be modify by the view model.
      */
     @Suppress("PropertyName", "VariableNaming")
-    protected open val _viewEvent = MutableLiveData<EventWrapper<VIEW_EVENT>>()
+    protected val _viewEvent = MutableSharedFlow<VIEW_EVENT>()
 
     /**
-     * Observe this to be notify of every view event.
+     * Collect this to be notify of every view event.
      */
-    val viewEvent: LiveData<EventWrapper<VIEW_EVENT>> get() = _viewEvent
+    val viewEvent: SharedFlow<VIEW_EVENT> = _viewEvent.asSharedFlow()
 
     /**
      * Defines how the ViewModel should react to en action from the view.

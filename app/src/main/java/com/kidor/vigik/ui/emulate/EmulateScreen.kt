@@ -20,13 +20,10 @@ import com.kidor.vigik.ui.compose.AppTheme
  */
 @Composable
 fun EmulateScreen(viewModel: EmulateViewModel = hiltViewModel()) {
-    ObserveViewState(viewModel) { state -> StateRender(state) }
-}
-
-@Composable
-private fun StateRender(viewState: EmulateViewState) {
-    if (viewState is EmulateViewState.DisplayLogLines) {
-        DisplayLogLineState(viewState.logLines)
+    ObserveViewState(viewModel) { state ->
+        if (state is EmulateViewState.DisplayLogLines) {
+            DisplayLogLineState(state.logLines)
+        }
     }
 }
 
