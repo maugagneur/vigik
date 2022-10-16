@@ -1,6 +1,6 @@
 ext {
 
-    gradleBuildVer = '7.2.2'
+    gradleBuildVer = '7.3.1'
 
     sdkVer = [
             'compile': 33,
@@ -9,15 +9,15 @@ ext {
     ]
 
     androidxVer = [
-            'activity'        : '1.5.1',
+            'activity'        : '1.6.0',
             'compose'         : '1.2.1',
-            'composeCompiler' : '1.3.0',
-            'coreKtx'         : '1.8.0',
-            'fragment'        : '1.5.2',
+            'composeCompiler' : '1.3.2',
+            'coreKtx'         : '1.9.0',
+            'fragment'        : '1.5.3',
             'hilt'            : '1.0.0',
             'lifecycle'       : '2.5.1',
-            'material3'       : '1.0.0-beta01',
-            'navigation'      : '2.5.1',
+            'material3'       : '1.0.0-rc01',
+            'navigation'      : '2.5.2',
             'room'            : '2.4.3',
             'splashscreen'    : '1.0.0',
     ]
@@ -27,10 +27,10 @@ ext {
             'material': '1.6.1'
     ]
 
-    kspVer = '1.7.10-1.0.6'
+    kspVer = '1.7.20-1.0.6'
     kotlinVer = [
             'coroutines': '1.6.4',
-            'plugin'    : '1.7.10'
+            'plugin'    : '1.7.20'
     ]
 
     timberVer = '5.0.1'
@@ -42,7 +42,7 @@ ext {
             'coreTesting'   : '2.1.0',
             'espresso'      : '3.4.0',
             'junit'         : '4.13.2',
-            'mockitoAndroid': '4.6.1',
+            'mockitoAndroid': '4.8.0',
             'mockitoKotlin' : '4.0.0',
             'mockK'         : '1.12.3',
             'testExt'       : '1.1.3',

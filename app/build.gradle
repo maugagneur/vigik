@@ -13,7 +13,7 @@ android {
     compileSdk sdkVer.compile
 
     defaultConfig {
-        applicationId "com.kidor.vigik"
+        namespace "com.kidor.vigik"
         minSdk sdkVer.min
         targetSdk sdkVer.target
         versionCode 1
