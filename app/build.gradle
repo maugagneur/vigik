@@ -41,8 +41,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     configurations.all{
         resolutionStrategy {
@@ -57,12 +57,7 @@ android {
         kotlinCompilerExtensionVersion androidxVer.composeCompiler
     }
     kotlinOptions {
-        jvmTarget = '11'
-        freeCompilerArgs += [
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true",
-                "-opt-in=kotlin.RequiresOptIn"
-        ]
+        jvmTarget = '17'
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -191,4 +186,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-test-manifest:${androidxVer.compose}"
     debugImplementation "androidx.fragment:fragment-testing:${androidxVer.fragment}"
     androidTestImplementation "androidx.navigation:navigation-testing:${androidxVer.navigation}"
+
+    // Static code analysis
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:$detektVer")
 }

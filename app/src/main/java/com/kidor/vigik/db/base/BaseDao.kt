@@ -2,7 +2,7 @@ package com.kidor.vigik.db.base
 
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Update
 
 /**
