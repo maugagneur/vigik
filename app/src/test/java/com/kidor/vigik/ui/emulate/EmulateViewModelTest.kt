@@ -3,43 +3,36 @@ package com.kidor.vigik.ui.emulate
 import android.nfc.cardemulation.HostApduService
 import android.os.RemoteException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import com.kidor.vigik.nfc.hostapdu.HostApduManager
-import com.kidor.vigik.utils.AssertUtils.assertEquals
+import com.kidor.vigik.utils.AssertUtils.assertTrue
 import com.kidor.vigik.utils.TestUtils.logTestName
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
 
 /**
  * Unit tests for [EmulateViewModel].
  */
-@RunWith(MockitoJUnitRunner::class)
 class EmulateViewModelTest {
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    @InjectMocks
+    @InjectMockKs
     private lateinit var viewModel: EmulateViewModel
 
-    @Mock
+    @MockK
     private lateinit var hostApduManager: HostApduManager
-
-    @Mock
-    private lateinit var stateObserver: Observer<EmulateViewState>
 
     @Before
     fun setUp() {
-        viewModel.viewState.observeForever(stateObserver)
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        every { hostApduManager.unregister(any()) } returns true
     }
 
     @Test
@@ -47,7 +40,7 @@ class EmulateViewModelTest {
         logTestName()
 
         // Then
-        verify(hostApduManager).register(viewModel)
+        verify { hostApduManager.register(viewModel) }
     }
 
     @Test
@@ -58,7 +51,7 @@ class EmulateViewModelTest {
         viewModel.onCleared()
 
         // Then
-        verify(hostApduManager).unregister(viewModel)
+        verify { hostApduManager.unregister(viewModel) }
     }
 
     @Test
@@ -70,7 +63,7 @@ class EmulateViewModelTest {
 
         // Then
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertTrue(viewState is EmulateViewState.DisplayLogLines, "View state")
     }
 
     @Test
@@ -82,7 +75,7 @@ class EmulateViewModelTest {
 
         // Then
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertTrue(viewState is EmulateViewState.DisplayLogLines, "View state")
     }
 
     @Test
@@ -94,7 +87,7 @@ class EmulateViewModelTest {
 
         // Then
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertTrue(viewState is EmulateViewState.DisplayLogLines, "View state")
     }
 
     @Test
@@ -108,9 +101,9 @@ class EmulateViewModelTest {
         viewModel.onApduCommandReceived(receivedApduCommand)
 
         // Then
-        verify(hostApduManager).sendApduResponse(any())
+        verify { hostApduManager.sendApduResponse(any()) }
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertTrue(viewState is EmulateViewState.DisplayLogLines, "View state")
     }
 
     @Test
@@ -124,9 +117,9 @@ class EmulateViewModelTest {
         viewModel.onApduCommandReceived(receivedApduCommand)
 
         // Then
-        verify(hostApduManager).sendApduResponse(any())
+        verify { hostApduManager.sendApduResponse(any()) }
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertTrue(viewState is EmulateViewState.DisplayLogLines, "View state")
     }
 
     @Test
@@ -135,14 +128,14 @@ class EmulateViewModelTest {
 
         // Given
         val receivedApduCommand = byteArrayOf(0x00, 0xA4.toByte(), 0x04, 0x00, 0x42, 0x13, 0x37, 0x42)
-        `when`(hostApduManager.sendApduResponse(any())).doAnswer { throw RemoteException("Test exception") }
+        every { hostApduManager.sendApduResponse(any()) } answers { throw RemoteException("Test exception") }
 
         // When
         viewModel.onApduCommandReceived(receivedApduCommand)
 
         // Then
-        verify(hostApduManager).sendApduResponse(any())
+        verify { hostApduManager.sendApduResponse(any()) }
         val viewState = viewModel.viewState.value
-        assertEquals(EmulateViewState.DisplayLogLines::class.simpleName, viewState!!::class.simpleName, "View state")
+        assertTrue(viewState is EmulateViewState.DisplayLogLines, "View state")
     }
 }

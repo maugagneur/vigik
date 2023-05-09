@@ -1,33 +1,27 @@
 package com.kidor.vigik.ui.scan
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
+import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.doSuspendableAnswer
 
 /**
  * Unit test for [ScanViewModel].
  */
-@RunWith(MockitoJUnitRunner::class)
 class ScanViewModelTest {
 
     @ExperimentalCoroutinesApi
@@ -37,20 +31,17 @@ class ScanViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    @InjectMocks
-    lateinit var viewModel: ScanViewModel
+    @InjectMockKs
+    private lateinit var viewModel: ScanViewModel
 
-    @Mock
-    lateinit var nfcApi: NfcApi
-    @Mock
-    lateinit var tagRepository: TagRepository
-
-    @Mock
-    private lateinit var stateObserver: Observer<ScanViewState>
+    @MockK
+    private lateinit var nfcApi: NfcApi
+    @MockK
+    private lateinit var tagRepository: TagRepository
 
     @Before
     fun setUp() {
-        viewModel.viewState.observeForever(stateObserver)
+        MockKAnnotations.init(this, relaxUnitFun = true)
     }
 
     @Test
@@ -58,7 +49,7 @@ class ScanViewModelTest {
         logTestName()
 
         // Then
-        verify(nfcApi).register(viewModel)
+        verify { nfcApi.register(viewModel) }
         val state = viewModel.viewState.value
         assertEquals(ScanViewState.Loading, state, "View state")
     }
@@ -71,7 +62,7 @@ class ScanViewModelTest {
         viewModel.onCleared()
 
         // Then
-        verify(nfcApi).unregister(viewModel)
+        verify { nfcApi.unregister(viewModel) }
     }
 
     @Test
@@ -110,19 +101,15 @@ class ScanViewModelTest {
         logTestName()
 
         runTest {
-            // Given
-            var event: ScanViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(ScanViewAction.SaveTag)
+
+                // Then
+                assertEquals(ScanViewEvent.SaveTagFailure, awaitItem(), "Failure event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(ScanViewAction.SaveTag)
-
-            // Then
-            assertEquals(ScanViewEvent.SaveTagFailure, event, "Failure event")
-
-            job.cancel()
         }
     }
 
@@ -133,20 +120,18 @@ class ScanViewModelTest {
         runTest {
             // Given
             val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
-            `when`(tagRepository.insert(tag)).doSuspendableAnswer { 1L }
-            var event: ScanViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            coEvery { tagRepository.insert(tag) } returns 1L
+
+            viewModel.viewEvent.test {
+                // When
+                viewModel.onNfcTagRead(tag)
+                viewModel.handleAction(ScanViewAction.SaveTag)
+
+                // Then
+                assertEquals(ScanViewEvent.SaveTagSuccess, awaitItem(), "Success event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.onNfcTagRead(tag)
-            viewModel.handleAction(ScanViewAction.SaveTag)
-
-            // Then
-            assertEquals(ScanViewEvent.SaveTagSuccess, event, "Success event")
-
-            job.cancel()
         }
     }
 
@@ -157,20 +142,18 @@ class ScanViewModelTest {
         runTest {
             // Given
             val tag = Tag(System.currentTimeMillis(), byteArrayOf(0x13, 0x37), "Tech list", "Data", byteArrayOf(0x42))
-            `when`(tagRepository.insert(tag)).doSuspendableAnswer { -1L }
-            var event: ScanViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            coEvery { tagRepository.insert(tag) } returns -1L
+
+            viewModel.viewEvent.test {
+                // When
+                viewModel.onNfcTagRead(tag)
+                viewModel.handleAction(ScanViewAction.SaveTag)
+
+                // Then
+                assertEquals(ScanViewEvent.SaveTagFailure, awaitItem(), "Failure event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.onNfcTagRead(tag)
-            viewModel.handleAction(ScanViewAction.SaveTag)
-
-            // Then
-            assertEquals(ScanViewEvent.SaveTagFailure, event, "Failure event")
-
-            job.cancel()
         }
     }
 }

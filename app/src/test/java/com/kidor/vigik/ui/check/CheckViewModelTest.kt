@@ -1,29 +1,24 @@
 package com.kidor.vigik.ui.check
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
+import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Unit tests for [CheckViewModel].
  */
-@RunWith(MockitoJUnitRunner::class)
 class CheckViewModelTest {
 
     @ExperimentalCoroutinesApi
@@ -33,18 +28,15 @@ class CheckViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    @InjectMocks
+    @InjectMockKs
     private lateinit var viewModel: CheckViewModel
 
-    @Mock
+    @MockK
     private lateinit var nfcApi: NfcApi
-
-    @Mock
-    private lateinit var stateObserver: Observer<CheckViewState>
 
     @Before
     fun setUp() {
-        viewModel.viewState.observeForever(stateObserver)
+        MockKAnnotations.init(this)
     }
 
     @Test
@@ -62,29 +54,26 @@ class CheckViewModelTest {
 
         runTest {
             // Given
-            `when`(nfcApi.isNfcEnable()).thenReturn(true)
-            var event: CheckViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            every { nfcApi.isNfcEnable() } returns true
+
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
+
+                // Then
+                assertEquals(CheckViewEvent.NavigateToHub, awaitItem(), "Navigation event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-
-            // Then
-            assertEquals(CheckViewEvent.NavigateToHub, event, "Navigation event")
-
-            job.cancel()
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun displayErrorWhenNfcDisableOnStart() {
         logTestName()
 
         // Given
-        `when`(nfcApi.isNfcEnable()).thenReturn(false)
+        every { nfcApi.isNfcEnable() } returns false
 
         // When
         runTest {
@@ -103,29 +92,26 @@ class CheckViewModelTest {
 
         runTest {
             // Given
-            `when`(nfcApi.isNfcEnable()).thenReturn(true)
-            var event: CheckViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            every { nfcApi.isNfcEnable() } returns true
+
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
+
+                // Then
+                assertEquals(CheckViewEvent.NavigateToHub, awaitItem(), "Navigation event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(CheckViewAction.RefreshNfcStatus)
-
-            // Then
-            assertEquals(CheckViewEvent.NavigateToHub, event, "Navigation event")
-
-            job.cancel()
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun displayErrorWhenNfcDisableOnRefresh() {
         logTestName()
 
         // Given
-        `when`(nfcApi.isNfcEnable()).thenReturn(false)
+        every { nfcApi.isNfcEnable() } returns false
 
         // When
         runTest {
@@ -143,19 +129,15 @@ class CheckViewModelTest {
         logTestName()
 
         runTest {
-            // Given
-            var event: CheckViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
+
+                // Then
+                assertEquals(CheckViewEvent.NavigateToSettings, awaitItem(), "Navigation event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(CheckViewAction.DisplayNfcSettings)
-
-            // Then
-            assertEquals(CheckViewEvent.NavigateToSettings, event, "Navigation event")
-
-            job.cancel()
         }
     }
 }

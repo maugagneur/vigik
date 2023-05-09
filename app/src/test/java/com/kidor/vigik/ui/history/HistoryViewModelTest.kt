@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asFlow
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
-import com.kidor.vigik.db.TagDao
 import com.kidor.vigik.db.TagRepository
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils.assertEquals
@@ -12,7 +11,6 @@ import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
@@ -22,13 +20,10 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 /**
  * Unit tests for [HistoryViewModel].
  */
-@RunWith(JUnit4::class)
 class HistoryViewModelTest {
 
     @ExperimentalCoroutinesApi
@@ -43,15 +38,11 @@ class HistoryViewModelTest {
     @MockK
     private lateinit var repository: TagRepository
 
-    @RelaxedMockK
-    private lateinit var tagDao: TagDao
-
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun initialState() {
         logTestName()
@@ -75,7 +66,6 @@ class HistoryViewModelTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun displayEmptyHistoryWhenNoTagInRepository() {
         logTestName()
@@ -99,7 +89,6 @@ class HistoryViewModelTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun displayOneTag() {
         logTestName()

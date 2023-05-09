@@ -1,26 +1,19 @@
 package com.kidor.vigik.ui.hub
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
+import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
 /**
  * Unit test for [HubViewModel].
  */
-@RunWith(MockitoJUnitRunner::class)
 class HubViewModelTest {
 
     @ExperimentalCoroutinesApi
@@ -32,13 +25,9 @@ class HubViewModelTest {
 
     private lateinit var viewModel: HubViewModel
 
-    @Mock
-    private lateinit var stateObserver: Observer<HubViewState>
-
     @Before
     fun setUp() {
         viewModel = HubViewModel()
-        viewModel.viewState.observeForever(stateObserver)
     }
 
     @Test
@@ -55,19 +44,15 @@ class HubViewModelTest {
         logTestName()
 
         runTest {
-            // Given
-            var event: HubViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(HubViewAction.DisplayScanTagView)
+
+                // Then
+                assertEquals(HubViewEvent.NavigateToScanView, awaitItem(), "Navigation event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(HubViewAction.DisplayScanTagView)
-
-            // Then
-            assertEquals(HubViewEvent.NavigateToScanView, event, "Navigation event")
-
-            job.cancel()
         }
 
     }
@@ -78,19 +63,15 @@ class HubViewModelTest {
         logTestName()
 
         runTest {
-            // Given
-            var event: HubViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(HubViewAction.DisplayTagHistoryView)
+
+                // Then
+                assertEquals(HubViewEvent.NavigateToHistoryView, awaitItem(), "Navigation event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(HubViewAction.DisplayTagHistoryView)
-
-            // Then
-            assertEquals(HubViewEvent.NavigateToHistoryView, event, "Navigation event")
-
-            job.cancel()
         }
     }
 
@@ -100,19 +81,15 @@ class HubViewModelTest {
         logTestName()
 
         runTest {
-            // Given
-            var event: HubViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            viewModel.viewEvent.test {
+                // When
+                viewModel.handleAction(HubViewAction.DisplayEmulateTagView)
+
+                // Then
+                assertEquals(HubViewEvent.NavigateToEmulateView, awaitItem(), "Navigation event")
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // When
-            viewModel.handleAction(HubViewAction.DisplayEmulateTagView)
-
-            // Then
-            assertEquals(HubViewEvent.NavigateToEmulateView, event, "Navigation event")
-
-            job.cancel()
         }
     }
 
@@ -122,16 +99,12 @@ class HubViewModelTest {
         logTestName()
 
         runTest {
-            // Given
-            var event: HubViewEvent? = null
-            val job = launch(UnconfinedTestDispatcher()) {
-                event = viewModel.viewEvent.first()
+            viewModel.viewEvent.test {
+                // Then
+                expectNoEvents()
+
+                cancelAndIgnoreRemainingEvents()
             }
-
-            // Then
-            assertEquals(null, event, "Navigation event")
-
-            job.cancel()
         }
     }
 }

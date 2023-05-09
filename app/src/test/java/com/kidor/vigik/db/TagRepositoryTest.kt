@@ -10,20 +10,18 @@ import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 
 /**
  * Unit tests for [TagRepositoryImp].
  */
-@RunWith(JUnit4::class)
 class TagRepositoryTest {
 
     @ExperimentalCoroutinesApi
@@ -35,15 +33,15 @@ class TagRepositoryTest {
 
     private lateinit var repository: TagRepository
 
-    @RelaxedMockK
-    lateinit var tagDao: TagDao
+    @MockK
+    private lateinit var tagDao: TagDao
 
     @Before
     fun setup() {
-        MockKAnnotations.init(this)
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        every { tagDao.getAll() } returns flowOf(emptyList())
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun addTagInDatabase() {
         logTestName()
@@ -62,7 +60,6 @@ class TagRepositoryTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun getAllTagsWhenNothingInBase() {
         logTestName()
@@ -81,7 +78,6 @@ class TagRepositoryTest {
         }
     }
 
-    @ExperimentalCoroutinesApi
     @Test
     fun getAllTagsAfterAddingSomeInDatabase() {
         logTestName()

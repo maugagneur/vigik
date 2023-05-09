@@ -169,7 +169,6 @@ dependencies {
 
     // Test
     testImplementation "junit:junit:${testVer.junit}"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:${testVer.mockitoKotlin}"
     testImplementation "androidx.arch.core:core-testing:${testVer.coreTesting}"
     testImplementation "io.mockk:mockk:${testVer.mockK}"
     testImplementation "app.cash.turbine:turbine:${testVer.turbine}"

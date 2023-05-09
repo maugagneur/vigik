@@ -9,48 +9,50 @@ import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.api.NfcApiListener
 import com.kidor.vigik.utils.SystemWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
+import io.mockk.MockKAnnotations
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.MockK
+import io.mockk.verify
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.never
-import org.mockito.Mockito.verify
-import org.mockito.junit.MockitoJUnitRunner
-import org.mockito.kotlin.any
 
 /**
  * Unit tests for [NfcApi].
  */
-@RunWith(MockitoJUnitRunner::class)
 class NfcApiTest {
 
-    @InjectMocks
+    @InjectMockKs
     lateinit var nfcApi: NfcApi
 
-    @Mock
-    lateinit var nfcAdapter: NfcAdapter
-    @Mock
-    lateinit var systemWrapper: SystemWrapper
-    @Mock
-    lateinit var listener: NfcApiListener
-    @Mock
-    lateinit var intent: Intent
-    @Mock
-    lateinit var tag: Tag
-    @Mock
-    lateinit var ndefMessage: NdefMessage
-    @Mock
-    lateinit var ndefRecord: NdefRecord
+    @MockK
+    private lateinit var nfcAdapter: NfcAdapter
+    @MockK
+    private lateinit var systemWrapper: SystemWrapper
+    @MockK
+    private lateinit var listener: NfcApiListener
+    @MockK
+    private lateinit var intent: Intent
+    @MockK
+    private lateinit var tag: Tag
+    @MockK
+    private lateinit var ndefMessage: NdefMessage
+    @MockK
+    private lateinit var ndefRecord: NdefRecord
+
+    @Before
+    fun setUp() {
+        MockKAnnotations.init(this, relaxUnitFun = true)
+    }
 
     @Test
     fun checkNfcWhenEnable() {
         logTestName()
 
         // When
-        `when`(nfcAdapter.isEnabled).thenReturn(true)
+        every { nfcAdapter.isEnabled } returns true
 
         // Run
         val result = nfcApi.isNfcEnable()
@@ -64,7 +66,7 @@ class NfcApiTest {
         logTestName()
 
         // When
-        `when`(nfcAdapter.isEnabled).thenReturn(false)
+        every { nfcAdapter.isEnabled } returns false
 
         // Run
         val result = nfcApi.isNfcEnable()
@@ -78,14 +80,14 @@ class NfcApiTest {
         logTestName()
 
         // When
-        `when`(intent.action).thenReturn("WRONG_ACTION")
+        every { intent.action } returns "WRONG_ACTION"
 
         // Run
         nfcApi.register(listener)
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener, never()).onNfcTagRead(any())
+        verify(inverse = true) { listener.onNfcTagRead(any()) }
     }
 
     @Test
@@ -95,15 +97,18 @@ class NfcApiTest {
         val now = System.currentTimeMillis()
 
         // When
-        `when`(systemWrapper.currentTimeMillis()).thenReturn(now)
-        `when`(intent.action).thenReturn(NfcAdapter.ACTION_TAG_DISCOVERED)
+        every { systemWrapper.currentTimeMillis() } returns now
+        every { intent.action } returns NfcAdapter.ACTION_TAG_DISCOVERED
+        every { intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) } returns null
+        every { intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) } returns null
+        every { intent.getByteArrayExtra(NfcAdapter.EXTRA_ID) } returns null
 
         // Run
         nfcApi.register(listener)
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener).onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, null, null, "No NDEF messages", null))
+        verify { listener.onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, null, null, "No NDEF messages", null)) }
     }
 
     @Test
@@ -117,21 +122,21 @@ class NfcApiTest {
         val tagId = byteArrayOf(0xDE.toByte(), 0xAD.toByte(), 0xBE.toByte(), 0xEF.toByte())
 
         // When
-        `when`(systemWrapper.currentTimeMillis()).thenReturn(now)
-        `when`(tag.id).thenReturn(tagUid)
-        `when`(tag.toString()).thenReturn(tagDescription)
-        `when`(intent.action).thenReturn(NfcAdapter.ACTION_TAG_DISCOVERED)
-        `when`(intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG)).thenReturn(tag)
-        `when`(intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)).thenReturn(arrayOf(ndefMessage))
-        `when`(intent.getByteArrayExtra(NfcAdapter.EXTRA_ID)).thenReturn(tagId)
-        `when`(ndefMessage.records).thenReturn(arrayOf(ndefRecord))
-        `when`(ndefRecord.toString()).thenReturn(tagData)
+        every { systemWrapper.currentTimeMillis() } returns now
+        every { tag.id } returns tagUid
+        every { tag.toString() } returns tagDescription
+        every { intent.action } returns NfcAdapter.ACTION_TAG_DISCOVERED
+        every { intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) } returns tag
+        every { intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) } returns arrayOf(ndefMessage)
+        every { intent.getByteArrayExtra(NfcAdapter.EXTRA_ID) } returns tagId
+        every { ndefMessage.records } returns arrayOf(ndefRecord)
+        every { ndefRecord.toString() } returns tagData
 
         // Run
         nfcApi.register(listener)
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify(listener).onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, tagUid, tagDescription, tagData, tagId))
+        verify { listener.onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, tagUid, tagDescription, tagData, tagId)) }
     }
 }
