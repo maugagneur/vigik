@@ -121,70 +121,47 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 
 dependencies {
     // Annotation processor
-    implementation "com.google.devtools.ksp:symbol-processing-api:${kspVer}"
+    implementation libs.ksp.api
 
-    // Android X
-    implementation "androidx.activity:activity-ktx:${androidxVer.activity}"
-    implementation "androidx.core:core-ktx:${androidxVer.coreKtx}"
-    implementation "androidx.core:core-splashscreen:${androidxVer.splashscreen}"
-    implementation "androidx.hilt:hilt-navigation-compose:${androidxVer.hilt}"
-    implementation "androidx.lifecycle:lifecycle-common-java8:${androidxVer.lifecycle}"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:${androidxVer.lifecycle}"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:${androidxVer.lifecycle}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${androidxVer.lifecycle}"
-    implementation "androidx.navigation:navigation-compose:${androidxVer.navigation}"
-
-    // Compose
-    implementation "androidx.compose.foundation:foundation:${androidxVer.compose}"
-    implementation "androidx.compose.material:material:${androidxVer.compose}"
-    implementation "androidx.compose.material:material-icons-extended:${androidxVer.compose}"
-    implementation "androidx.compose.material3:material3:${androidxVer.material3}"
-    implementation "androidx.compose.runtime:runtime:${androidxVer.compose}"
-    implementation "androidx.compose.runtime:runtime-livedata:${androidxVer.compose}"
-    implementation "androidx.compose.ui:ui:${androidxVer.compose}"
-    implementation "androidx.compose.ui:ui-tooling:${androidxVer.compose}"
-    implementation "androidx.compose.ui:ui-tooling-preview:${androidxVer.compose}"
-    debugImplementation "androidx.compose.ui:ui-tooling:${androidxVer.compose}"
+    // UI
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.core.splashscreen
+    implementation libs.bundles.androidx.lifecycle
+    implementation libs.bundles.androidx.compose.navigation
+    implementation libs.bundles.androidx.compose.ui
+    debugImplementation libs.androidx.compose.ui.tooling
 
     // Database
-    implementation "androidx.room:room-runtime:${androidxVer.room}"
-    implementation "androidx.room:room-ktx:${androidxVer.room}"
-    ksp "androidx.room:room-compiler:${androidxVer.room}"
+    implementation libs.bundles.androidx.room
+    ksp libs.androidx.room.compiler
 
     // Kotlin
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinVer.coroutines}"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${kotlinVer.coroutines}"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${kotlinVer.coroutines}"
+    implementation libs.bundles.kotlinx.coroutines
+    testImplementation libs.kotlinx.coroutines.test
 
     // Material
-    implementation "com.google.android.material:material:${googleVer.material}"
+    implementation libs.android.material
 
     // Dependency Injection
-    implementation "com.google.dagger:hilt-android:${googleVer.hilt}"
-    kapt "com.google.dagger:hilt-compiler:${googleVer.hilt}"
-    kapt "androidx.hilt:hilt-compiler:${androidxVer.hilt}"
+    implementation libs.dagger.hilt.android
+    kapt libs.dagger.hilt.compiler
+    kapt libs.androidx.hilt.compiler
 
     // Log
-    implementation "com.jakewharton.timber:timber:$timberVer"
+    implementation libs.timber
 
     // Test
-    testImplementation "junit:junit:${testVer.junit}"
-    testImplementation "androidx.arch.core:core-testing:${testVer.coreTesting}"
-    testImplementation "io.mockk:mockk:${testVer.mockK}"
-    testImplementation "app.cash.turbine:turbine:${testVer.turbine}"
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:${androidxVer.compose}"
-    androidTestImplementation "androidx.test.ext:junit:${testVer.testExt}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${testVer.espresso}"
-    androidTestImplementation "com.google.dagger:hilt-android-testing:${googleVer.hilt}"
-    androidTestImplementation "org.mockito:mockito-android:${testVer.mockitoAndroid}"
-    kaptAndroidTest "com.google.dagger:hilt-android-compiler:${googleVer.hilt}"
-    kaptAndroidTest "androidx.hilt:hilt-compiler:${androidxVer.hilt}"
+    testImplementation libs.bundles.test.unit
+    androidTestImplementation libs.bundles.test.android
+    kaptAndroidTest libs.dagger.hilt.android.compiler
+    kaptAndroidTest libs.androidx.hilt.compiler
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.
-    debugImplementation "androidx.compose.ui:ui-test-manifest:${androidxVer.compose}"
-    debugImplementation "androidx.fragment:fragment-testing:${androidxVer.fragment}"
-    androidTestImplementation "androidx.navigation:navigation-testing:${androidxVer.navigation}"
+    debugImplementation libs.androidx.compose.ui.test.manifest
+    debugImplementation libs.androidx.fragment.testing
+    androidTestImplementation libs.androidx.navigation.testing
 
     // Static code analysis
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:$detektVer")

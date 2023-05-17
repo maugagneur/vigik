@@ -9,27 +9,15 @@ ext {
     ]
 
     androidxVer = [
-            'activity'        : '1.7.1',
-            'compose'         : '1.4.3',
-            'composeCompiler' : '1.4.7',
-            'coreKtx'         : '1.10.1',
-            'fragment'        : '1.5.7',
-            'hilt'            : '1.0.0',
-            'lifecycle'       : '2.6.1',
-            'material3'       : '1.1.0',
-            'navigation'      : '2.5.3',
-            'room'            : '2.5.1',
-            'splashscreen'    : '1.0.1',
+            'composeCompiler' : '1.4.7'
     ]
 
     googleVer = [
-            'hilt'    : '2.43.2',
-            'material': '1.9.0'
+            'hilt'    : '2.43.2'
     ]
 
     kspVer = '1.8.21-1.0.11'
     kotlinVer = [
-            'coroutines': '1.7.0',
             'plugin'    : '1.8.21'
     ]
 
@@ -37,14 +25,4 @@ ext {
     jacocoVer = '0.8.8'
     detektVer = '1.22.0'
     diktatVer = '1.2.5'
-
-    testVer = [
-            'coreTesting'   : '2.2.0',
-            'espresso'      : '3.5.1',
-            'junit'         : '4.13.2',
-            'mockitoAndroid': '4.8.0',
-            'mockK'         : '1.13.4',
-            'testExt'       : '1.1.5',
-            'turbine'       : '0.12.1'
-    ]
 }
