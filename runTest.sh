@@ -32,7 +32,7 @@ grep -E 'TEST_REPORT|TestRunner' app/build/reports/customJacocoReport/jacocoTest
 
 # Run Kotlin static code analysers
 ./gradlew detekt
-./gradlew diktatCheck
+./gradlew --no-configuration-cache diktatCheck # DiktatJavaExecTaskBase in v1.2.5 seams not compatible with configuration cache reuse
 
 echo
 echo "Unit tests report is available in app/build/reports/tests"

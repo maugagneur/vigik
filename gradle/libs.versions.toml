@@ -1,4 +1,5 @@
 [versions]
+android-desugar-jdk-libs = "1.2.2"
 android-gradle-plugin = "8.0.1"
 androidx-activity = "1.7.1"
 androidx-compose = "1.4.3"
@@ -19,8 +20,8 @@ google-hilt = "2.43.2"
 google-material = "1.9.0"
 jacoco = "0.8.8"
 junit = "4.13.2"
+kotlin = "1.8.21"
 kotlin-coroutines = "1.7.0"
-kotlin-plugin = "1.8.21"
 ksp = "1.8.21-1.0.11"
 mockito-android = "4.8.0"
 mockk = "1.13.4"
@@ -29,6 +30,7 @@ timber = "5.0.1"
 turbine = "0.12.1"
 
 [libraries]
+android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "android-desugar-jdk-libs" }
 android-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidx-compose" }
@@ -63,6 +65,7 @@ dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", vers
 dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-hilt" }
 dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "google-hilt" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "google-hilt" }
+detekt-rules-libraries = { group = "io.gitlab.arturbosch.detekt", name = "detekt-rules-libraries", version.ref = "detekt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
@@ -73,6 +76,13 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
+# Dependencies of the included build-logic
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
+detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+diktat-gradlePlugin = { group = "org.cqfn.diktat", name = "diktat-gradle-plugin", version.ref = "diktat" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
 [bundles]
 androidx-lifecycle = ["androidx-lifecycle-common-java8", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
 androidx-room = ["androidx-room-runtime", "androidx-room-ktx"]
@@ -81,3 +91,10 @@ androidx-compose-ui = ["androidx-compose-foundation", "androidx-compose-material
 kotlinx-coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
 test-unit = ["junit", "androidx-core-testing", "mockk", "turbine"]
 test-android = ["androidx-compose-ui-test", "androidx-test-ext", "androidx-test-espresso-core", "dagger-hilt-android-testing", "mockito-android"]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+diktat = { id = "org.cqfn.diktat.diktat-gradle-plugin", version.ref = "diktat" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "google-hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
