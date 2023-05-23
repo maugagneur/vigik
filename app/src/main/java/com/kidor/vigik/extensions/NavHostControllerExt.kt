@@ -2,7 +2,7 @@ package com.kidor.vigik.extensions
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import com.kidor.vigik.ui.compose.AppDestination
+import com.kidor.vigik.ui.compose.AppScreen
 
 /**
  * Navigate to a destination in the current NavGraph as single-top and poping up the start destination.
@@ -10,7 +10,7 @@ import com.kidor.vigik.ui.compose.AppDestination
  *
  * @param destination the destination
  */
-fun NavHostController.navigateSingleTopTo(destination: AppDestination) =
+fun NavHostController.navigateSingleTopTo(destination: AppScreen) =
     this.navigate(destination.route) {
         // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back
         // stack as users select items.
@@ -31,4 +31,4 @@ fun NavHostController.navigateSingleTopTo(destination: AppDestination) =
  *
  * @param destination the destination
  */
-fun NavHostController.navigate(destination: AppDestination) = this.navigate(destination.route)
+fun NavHostController.navigate(destination: AppScreen) = this.navigate(destination.route)

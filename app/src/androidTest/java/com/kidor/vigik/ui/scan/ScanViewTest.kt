@@ -24,8 +24,8 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScanViewTest {
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkLoadingState() {
         logTestName()
 
@@ -49,8 +49,8 @@ class ScanViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkDisplayTagStateWithValidTag() {
         logTestName()
 
@@ -75,8 +75,8 @@ class ScanViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkDisplayTagStateWithInvalidTag() {
         logTestName()
 
@@ -101,9 +101,9 @@ class ScanViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkUiElementsWhenTagSavedSuccessfully() {
         logTestName()
 
@@ -118,9 +118,9 @@ class ScanViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Ignore("It seems there are some issues with Toast assertion with API 30 and upper -> https://github.com/android/android-test/issues/803")
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkUiElementsWhenTagSavingFailed() {
         logTestName()
 

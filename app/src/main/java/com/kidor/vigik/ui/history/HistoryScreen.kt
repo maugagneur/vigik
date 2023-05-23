@@ -72,7 +72,9 @@ internal fun LoadingState() {
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 @VisibleForTesting
-internal fun DisplayTags(@PreviewParameter(DisplayTagsStateProvider::class) displayTagsStateData: DisplayTagsStateData) {
+internal fun DisplayTags(
+    @PreviewParameter(DisplayTagsStateProvider::class) displayTagsStateData: DisplayTagsStateData
+) {
     if (displayTagsStateData.tags.isEmpty()) {
         Box(
             modifier = Modifier.fillMaxHeight(),

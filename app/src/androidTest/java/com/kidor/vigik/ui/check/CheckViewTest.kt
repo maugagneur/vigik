@@ -44,8 +44,8 @@ class CheckViewTest {
         closeable.close()
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkLoadingState() {
         logTestName()
 
@@ -69,8 +69,8 @@ class CheckViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkNfcDisableState() {
         logTestName()
 

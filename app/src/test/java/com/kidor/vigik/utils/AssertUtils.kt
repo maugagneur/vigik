@@ -21,19 +21,19 @@ object AssertUtils {
     /**
      * Asserts that an object isn't null.
      */
-    fun assertNotNull(`object`: Any, objectName: String) {
+    fun assertNotNull(obj: Any, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-        println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': not null, Obtained: $`object`")
-        Assert.assertNotNull(`object`)
+        println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': not null, Obtained: $obj")
+        Assert.assertNotNull(obj)
     }
 
     /**
      * Asserts that an object is null.
      */
-    fun assertNull(`object`: Any, objectName: String) {
+    fun assertNull(obj: Any, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
-        println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': null, Obtained: $`object`")
-        Assert.assertNull(`object`)
+        println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': null, Obtained: $obj")
+        Assert.assertNull(obj)
     }
 
     /**

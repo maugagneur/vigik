@@ -13,10 +13,16 @@ import androidx.compose.runtime.ReadOnlyComposable
 object AppTheme {
     private var isDarkTheme: Boolean = false
 
+    /**
+     * Toggles theme between light and dark.
+     */
     fun invertTheme() {
         isDarkTheme = !isDarkTheme
     }
 
+    /**
+     * Access to application's dimension metrics.
+     */
     val dimensions: AppDimensions
         @Composable
         @ReadOnlyComposable

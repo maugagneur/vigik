@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -13,7 +14,7 @@ import com.kidor.vigik.HiltTestActivity
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.ui.compose.AppNavHost
-import com.kidor.vigik.ui.compose.AppNavigation
+import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -33,8 +34,9 @@ class MainViewTest {
     @get:Rule
     val hiltRule = HiltAndroidRule(this)
 
+    @ExperimentalMaterial3Api
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkActionBarUiElements() {
         logTestName()
 
@@ -55,9 +57,9 @@ class MainViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Ignore("WIP")
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkNavigation() {
         logTestName()
 
@@ -81,6 +83,6 @@ class MainViewTest {
         }
 
         // Check that the navigation controller moves to the emulate view
-        assertEquals(AppNavigation.EmulateScreen.route, navController?.currentDestination?.route, "Destination route")
+        assertEquals(AppScreen.EmulateScreen.route, navController?.currentDestination?.route, "Destination route")
     }
 }

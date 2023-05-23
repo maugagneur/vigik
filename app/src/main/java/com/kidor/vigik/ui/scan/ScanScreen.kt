@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -67,10 +66,11 @@ private fun promptMessage(context: Context, @StringRes resId: Int) {
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(widthDp = 400, heightDp = 700)
 @VisibleForTesting
-internal fun DisplayTagState(@PreviewParameter(DisplayTagStateDataProvider::class) displayTagStateData: DisplayTagStateData) {
+internal fun DisplayTagState(
+    @PreviewParameter(DisplayTagStateDataProvider::class) displayTagStateData: DisplayTagStateData
+) {
     Scaffold(
         floatingActionButton = {
             if (displayTagStateData.state.canBeSaved) {

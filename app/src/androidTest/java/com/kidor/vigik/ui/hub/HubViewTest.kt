@@ -41,8 +41,8 @@ class HubViewTest {
         closeable.close()
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkDefaultState() {
         logTestName()
 

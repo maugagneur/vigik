@@ -16,6 +16,9 @@ import com.kidor.vigik.ui.history.HistoryScreen
 import com.kidor.vigik.ui.hub.HubScreen
 import com.kidor.vigik.ui.scan.ScanScreen
 
+/**
+ * Implementation of [NavHost] for this application.
+ */
 @Composable
 fun AppNavHost(
     context: Context,
@@ -24,29 +27,29 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppNavigation.CheckScreen.route,
+        startDestination = AppScreen.CheckScreen.route,
         modifier = modifier
     ) {
-        composable(route = AppNavigation.CheckScreen.route) {
+        composable(route = AppScreen.CheckScreen.route) {
             CheckScreen(
-                navigateToHub = { navController.navigateSingleTopTo(AppNavigation.HubScreen) },
+                navigateToHub = { navController.navigateSingleTopTo(AppScreen.HubScreen) },
                 navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
             )
         }
-        composable(route = AppNavigation.HubScreen.route) {
+        composable(route = AppScreen.HubScreen.route) {
             HubScreen(
-                navigateToScanTag = { navController.navigate(AppNavigation.ScanScreen) },
-                navigateToTagHistory = { navController.navigate(AppNavigation.HistoryScreen) },
-                navigateToEmulateTag = { navController.navigate(AppNavigation.EmulateScreen) }
+                navigateToScanTag = { navController.navigate(AppScreen.ScanScreen) },
+                navigateToTagHistory = { navController.navigate(AppScreen.HistoryScreen) },
+                navigateToEmulateTag = { navController.navigate(AppScreen.EmulateScreen) }
             )
         }
-        composable(route = AppNavigation.ScanScreen.route) {
+        composable(route = AppScreen.ScanScreen.route) {
             ScanScreen()
         }
-        composable(route = AppNavigation.HistoryScreen.route) {
+        composable(route = AppScreen.HistoryScreen.route) {
             HistoryScreen()
         }
-        composable(route = AppNavigation.EmulateScreen.route) {
+        composable(route = AppScreen.EmulateScreen.route) {
             EmulateScreen()
         }
     }

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.sp
 /**
  * Common dimension metrics of the application.
  */
+@Suppress("UndocumentedPublicProperty")
 data class AppDimensions(
     val commonSpaceSmall: Dp = 8.dp,
     val commonSpaceMedium: Dp = 16.dp,

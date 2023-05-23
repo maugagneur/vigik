@@ -100,7 +100,9 @@ internal fun LoadingState() {
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 @VisibleForTesting
-internal fun NfcIsDisableState(@PreviewParameter(NfcIsDisableStateProvider::class) nfcIsDisableStateData: NfcIsDisableStateData) {
+internal fun NfcIsDisableState(
+    @PreviewParameter(NfcIsDisableStateProvider::class) nfcIsDisableStateData: NfcIsDisableStateData
+) {
     Column(
         modifier = Modifier
             .padding(start = AppTheme.dimensions.commonSpaceXLarge, end = AppTheme.dimensions.commonSpaceXLarge)

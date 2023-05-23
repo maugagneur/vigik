@@ -48,8 +48,8 @@ class HistoryViewTest {
         closeable.close()
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkLoadingState() {
         logTestName()
 
@@ -73,8 +73,8 @@ class HistoryViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkUiElementsWhenThereIsNoTag() {
         logTestName()
 
@@ -97,8 +97,8 @@ class HistoryViewTest {
         }
     }
 
+    @ExperimentalTestApi
     @Test
-    @OptIn(ExperimentalTestApi::class)
     fun checkUiElementsWhenThereIsTags() {
         logTestName()
 

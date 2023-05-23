@@ -43,7 +43,8 @@ class EmulateViewModel @Inject constructor(
     }
 
     override fun onApduCommandReceived(apduCommand: ByteArray?) {
-        _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("APDU command received: " + apduCommand?.toHex() + ")"))
+        _viewState.value =
+            EmulateViewState.DisplayLogLines(addLogLine("APDU command received: " + apduCommand?.toHex() + ")"))
 
         val apduResponse = when {
             apduCommand == null -> ApduStatusBytes.UNKNOWN_COMMAND.value
@@ -51,17 +52,21 @@ class EmulateViewModel @Inject constructor(
             else -> ApduStatusBytes.INSTRUCTION_NOT_SUPPORTED.value
         }
 
-        _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Sending APDU response: " + apduResponse.toHex()))
+        _viewState.value =
+            EmulateViewState.DisplayLogLines(addLogLine("Sending APDU response: " + apduResponse.toHex()))
         sendCommandApdu(apduResponse)
     }
 
     override fun onConnectionLost(reason: Int) {
         when (reason) {
             HostApduService.DEACTIVATION_DESELECTED ->
-                _viewState.value =
-                    EmulateViewState.DisplayLogLines(addLogLine("Deactivation's reason: An other AID has been selected"))
+                _viewState.value = EmulateViewState.DisplayLogLines(
+                    addLogLine("Deactivation's reason: An other AID has been selected")
+                )
+
             HostApduService.DEACTIVATION_LINK_LOSS ->
                 _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Deactivation's reason: NFC link lost"))
+
             else -> _viewState.value = EmulateViewState.DisplayLogLines(addLogLine("Deactivation's reason: Unknown"))
         }
     }

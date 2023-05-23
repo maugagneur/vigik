@@ -26,13 +26,15 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kidor.vigik.R
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
-import com.kidor.vigik.ui.compose.AppNavigation
+import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.getScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,6 +51,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     internal lateinit var nfcApi: NfcApi
 
+    @ExperimentalMaterial3Api
     override fun onCreate(savedInstanceState: Bundle?) {
         // Handle the splash screen transition
         installSplashScreen()
@@ -80,66 +83,17 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@ExperimentalMaterial3Api
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 internal fun MainComposable() {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
-    val currentScreen = AppNavigation.getScreen(currentDestination?.route)
+    val currentScreen = getScreen(currentDestination?.route)
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = currentScreen?.name() ?: "",
-                        fontSize = AppTheme.dimensions.textSizeXLarge,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                },
-                modifier = Modifier.testTag(ACTION_BAR_TEST_TAG),
-                navigationIcon = {
-                    if (navController.previousBackStackEntry != null) {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                Icons.Default.ArrowBack,
-                                contentDescription = stringResource(id = R.string.menu_action_back),
-                                tint = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
-                    }
-                },
-                actions = {
-                    if (currentScreen == AppNavigation.ScanScreen) {
-                        IconButton(
-                            onClick = { navController.popBackStack() },
-                            modifier = Modifier.testTag(ACTION_MENU_STOP_SCAN)
-                        ) {
-                            Icon(
-                                Icons.Default.Stop,
-                                contentDescription = stringResource(id = R.string.menu_action_stop_scan),
-                                tint = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
-                    }
-                    IconButton(
-                        onClick = { AppTheme.invertTheme() },
-                        modifier = Modifier.testTag(ACTION_MENU_INVERT_COLORS)
-                    ) {
-                        Icon(
-                            Icons.Default.InvertColors,
-                            contentDescription = stringResource(id = R.string.menu_action_invert_color),
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
-            )
-        },
+        topBar = { AppActionBar(currentScreen = currentScreen, navController = navController) },
         contentColor = MaterialTheme.colorScheme.onPrimary
     ) { innerPadding ->
         AppNavHost(
@@ -149,3 +103,55 @@ internal fun MainComposable() {
         )
     }
 }
+
+@ExperimentalMaterial3Api
+@Composable
+private fun AppActionBar(
+    currentScreen: AppScreen?,
+    navController: NavHostController
+) = TopAppBar(
+    title = {
+        Text(
+            text = currentScreen?.name() ?: "",
+            fontSize = AppTheme.dimensions.textSizeXLarge,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+    },
+    modifier = Modifier.testTag(ACTION_BAR_TEST_TAG),
+    navigationIcon = {
+        if (navController.previousBackStackEntry != null) {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(
+                    Icons.Default.ArrowBack,
+                    contentDescription = stringResource(id = R.string.menu_action_back),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+    },
+    actions = {
+        if (currentScreen == AppScreen.ScanScreen) {
+            IconButton(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier.testTag(ACTION_MENU_STOP_SCAN)
+            ) {
+                Icon(
+                    Icons.Default.Stop,
+                    contentDescription = stringResource(id = R.string.menu_action_stop_scan),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+        IconButton(
+            onClick = { AppTheme.invertTheme() },
+            modifier = Modifier.testTag(ACTION_MENU_INVERT_COLORS)
+        ) {
+            Icon(
+                Icons.Default.InvertColors,
+                contentDescription = stringResource(id = R.string.menu_action_invert_color),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    },
+    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+)
