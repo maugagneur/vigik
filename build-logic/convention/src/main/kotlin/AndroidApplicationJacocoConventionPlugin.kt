@@ -82,7 +82,6 @@ class AndroidApplicationJacocoConventionPlugin : Plugin<Project> {
                 configure<JacocoTaskExtension> {
                     // Required for JaCoCo + Robolectric
                     // https://github.com/robolectric/robolectric/issues/2230
-                    // TODO: Consider removing if not we don't add Robolectric
                     isIncludeNoLocationClasses = true
 
                     // Required for JDK 11 with the above

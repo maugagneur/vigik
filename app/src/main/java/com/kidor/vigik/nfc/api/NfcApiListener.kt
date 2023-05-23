@@ -5,7 +5,7 @@ import com.kidor.vigik.nfc.model.Tag
 /**
  * Callback to be notify of events provides by [NfcApi].
  */
-interface NfcApiListener {
+fun interface NfcApiListener {
 
     /**
      * Called when a NFC tag is read.
