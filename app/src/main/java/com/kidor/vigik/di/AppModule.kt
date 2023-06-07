@@ -46,7 +46,7 @@ object AppModule {
      */
     @Singleton
     @Provides
-    fun provideTagDao(dataBase: AppDataBase) = dataBase.tagDao()
+    fun provideTagDao(dataBase: AppDataBase): TagDao = dataBase.tagDao()
 
     /**
      * Provides instance of [NfcAdapter] if available.

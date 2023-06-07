@@ -33,7 +33,7 @@ class NfcApi @Inject constructor(
      *
      * @see [NfcAdapter.isEnabled]
      */
-    fun isNfcEnable() = nfcAdapter?.isEnabled ?: false
+    fun isNfcEnable(): Boolean = nfcAdapter?.isEnabled ?: false
 
     /**
      * Enable foreground dispatch to the given Activity.
@@ -126,7 +126,7 @@ class NfcApi @Inject constructor(
         listeners.remove(listener)
     }
 
-    @SuppressWarnings("kotlin:S1874") // Ignore deprecated code warning in this method
+    @Suppress("kotlin:S1874") // Ignore deprecated code warning in this method
     private fun getTag(intent: Intent): Tag? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
@@ -137,7 +137,7 @@ class NfcApi @Inject constructor(
     }
 
     private fun extractData(intent: Intent): String {
-        @SuppressWarnings("kotlin:S1874") // Ignore deprecated code warning for this variable assignment
+        @Suppress("kotlin:S1874") // Ignore deprecated code warning for this variable assignment
         val rawMessages = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES, NdefMessage::class.java)
         } else {

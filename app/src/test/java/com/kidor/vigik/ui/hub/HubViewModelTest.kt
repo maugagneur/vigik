@@ -54,7 +54,6 @@ class HubViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
         }
-
     }
 
     @ExperimentalCoroutinesApi

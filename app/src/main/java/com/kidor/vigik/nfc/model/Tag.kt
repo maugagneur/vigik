@@ -19,7 +19,7 @@ data class Tag(
     val data: String? = null,
     val id: ByteArray? = null
 ) {
-    @SuppressWarnings("kotlin:S3776") // Ignore cognitive complexity warning for this method
+    @Suppress("kotlin:S3776") // Ignore cognitive complexity warning for this method
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -30,13 +30,17 @@ data class Tag(
         if (uid != null) {
             if (other.uid == null) return false
             if (!uid.contentEquals(other.uid)) return false
-        } else if (other.uid != null) return false
+        } else if (other.uid != null) {
+            return false
+        }
         if (techList != other.techList) return false
         if (data != other.data) return false
         if (id != null) {
             if (other.id == null) return false
             if (!id.contentEquals(other.id)) return false
-        } else if (other.id != null) return false
+        } else if (other.id != null) {
+            return false
+        }
 
         return true
     }

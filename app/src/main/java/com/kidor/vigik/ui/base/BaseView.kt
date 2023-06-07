@@ -8,7 +8,7 @@ import androidx.compose.runtime.livedata.observeAsState
  * Starts observing states sent from the [viewModel].
  */
 @Composable
-fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> ObserveViewState(
+fun <VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> ObserveViewState(
     viewModel: BaseViewModel<VIEW_ACTION, VIEW_STATE, VIEW_EVENT>,
     stateRender: @Composable (VIEW_STATE) -> Unit
 ) {
@@ -21,7 +21,7 @@ fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> Obse
  * Starts collecting events sent from the [viewModel].
  */
 @Composable
-fun <VIEW_ACTION: ViewAction, VIEW_STATE: ViewState, VIEW_EVENT: ViewEvent> CollectViewEvent(
+fun <VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> CollectViewEvent(
     viewModel: BaseViewModel<VIEW_ACTION, VIEW_STATE, VIEW_EVENT>,
     eventHandler: (VIEW_EVENT) -> Unit
 ) {

@@ -24,7 +24,7 @@ open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_
      * Internal state holder that can be modify by the view model.
      */
     @Suppress("PropertyName", "VariableNaming")
-    protected open val _viewState = MutableLiveData<VIEW_STATE>()
+    protected open val _viewState: MutableLiveData<VIEW_STATE> = MutableLiveData<VIEW_STATE>()
 
     /**
      * Observe this to be notify of every view state's changes.
@@ -35,7 +35,7 @@ open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_
      * Internal event holder that can be modify by the view model.
      */
     @Suppress("PropertyName", "VariableNaming")
-    protected val _viewEvent = MutableSharedFlow<VIEW_EVENT>()
+    protected val _viewEvent: MutableSharedFlow<VIEW_EVENT> = MutableSharedFlow()
 
     /**
      * Collect this to be notify of every view event.

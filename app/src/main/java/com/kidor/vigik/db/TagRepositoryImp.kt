@@ -28,8 +28,8 @@ class TagRepositoryImp @Inject constructor(private val tagDao: TagDao) : TagRepo
     }
 
     @WorkerThread
-    override suspend fun update(newValue: Tag) = tagDao.update(newValue.toRoomTag())
+    override suspend fun update(newValue: Tag): Int = tagDao.update(newValue.toRoomTag())
 
     @WorkerThread
-    override suspend fun delete(tag: Tag) = tagDao.delete(tag.toRoomTag())
+    override suspend fun delete(tag: Tag): Int = tagDao.delete(tag.toRoomTag())
 }

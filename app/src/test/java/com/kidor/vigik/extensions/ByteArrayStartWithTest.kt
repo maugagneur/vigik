@@ -19,7 +19,8 @@ class ByteArrayStartWithTest(private val data: ByteArrayStartWithDataSet) {
         assertEquals(
             data.isArrayStartsWithPrefix,
             data.array.startWith(data.prefix),
-            "[${data.array.toHex()}] starts with [${data.prefix?.toHex()}]")
+            "[${data.array.toHex()}] starts with [${data.prefix?.toHex()}]"
+        )
     }
 
     companion object {

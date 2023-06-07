@@ -83,7 +83,7 @@ class HostApduManager @Inject constructor(@ApplicationContext context: Context) 
     /**
      * Unregister to host APDU notifications.
      */
-    fun unregister(listener: HostApduListener) = listeners.remove(listener)
+    fun unregister(listener: HostApduListener): Boolean = listeners.remove(listener)
 
     /**
      * Sends an APDU frame.

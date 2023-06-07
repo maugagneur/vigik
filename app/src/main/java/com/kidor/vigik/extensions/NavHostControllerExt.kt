@@ -10,7 +10,7 @@ import com.kidor.vigik.ui.compose.AppScreen
  *
  * @param destination the destination
  */
-fun NavHostController.navigateSingleTopTo(destination: AppScreen) =
+fun NavHostController.navigateSingleTopTo(destination: AppScreen): Unit =
     this.navigate(destination.route) {
         // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back
         // stack as users select items.
@@ -31,4 +31,4 @@ fun NavHostController.navigateSingleTopTo(destination: AppScreen) =
  *
  * @param destination the destination
  */
-fun NavHostController.navigate(destination: AppScreen) = this.navigate(destination.route)
+fun NavHostController.navigate(destination: AppScreen): Unit = this.navigate(destination.route)

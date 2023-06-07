@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase
 import com.kidor.vigik.db.model.RoomTag
 
 /** The name of the application database. **/
-const val DATABASE_NAME = "vigik_database"
+const val DATABASE_NAME: String = "vigik_database"
 /** The version of the application database. **/
-const val DATABASE_VERSION = 1
+private const val DATABASE_VERSION = 1
 
 /**
  * Representation of the database used by the application.

@@ -11,5 +11,5 @@ enum class ApduStatusBytes(val value: ByteArray) {
     /** 0x6D00 **/
     INSTRUCTION_NOT_SUPPORTED(byteArrayOf(0x6D, 0x00)),
     /** 0x9000 **/
-    COMMAND_CORRECT(byteArrayOf(0x90.toByte(), 0x00));
+    COMMAND_CORRECT(byteArrayOf(0x90.toByte(), 0x00))
 }
