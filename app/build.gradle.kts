@@ -18,8 +18,19 @@ android {
             enableUnitTestCoverage = true
         }
         getByName("release") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // Enables code shrinking, obfuscation, and optimization
+            isMinifyEnabled = true
+
+            // Enables resource shrinking, which is performed by the Android Gradle plugin.
+            isShrinkResources = true
+
+            // Includes the default ProGuard rules files that are packaged with the Android Gradle plugin
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                // By default, Android Studio creates and includes an empty rules file (located at the root directory
+                // of each module).
+                "proguard-rules.pro"
+            )
         }
     }
 
