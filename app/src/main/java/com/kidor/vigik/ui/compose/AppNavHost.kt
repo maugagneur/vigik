@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
+import com.kidor.vigik.ui.biometric.BiometricScreen
 import com.kidor.vigik.ui.check.CheckScreen
 import com.kidor.vigik.ui.emulate.EmulateScreen
 import com.kidor.vigik.ui.history.HistoryScreen
@@ -40,7 +41,8 @@ fun AppNavHost(
             HubScreen(
                 navigateToScanTag = { navController.navigate(AppScreen.ScanScreen) },
                 navigateToTagHistory = { navController.navigate(AppScreen.HistoryScreen) },
-                navigateToEmulateTag = { navController.navigate(AppScreen.EmulateScreen) }
+                navigateToEmulateTag = { navController.navigate(AppScreen.EmulateScreen) },
+                navigateToBiometric = { navController.navigate(AppScreen.BiometricScreen) }
             )
         }
         composable(route = AppScreen.ScanScreen.route) {
@@ -51,6 +53,9 @@ fun AppNavHost(
         }
         composable(route = AppScreen.EmulateScreen.route) {
             EmulateScreen()
+        }
+        composable(route = AppScreen.BiometricScreen.route) {
+            BiometricScreen()
         }
     }
 }

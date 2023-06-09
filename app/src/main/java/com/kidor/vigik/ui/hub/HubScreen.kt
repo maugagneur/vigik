@@ -28,7 +28,8 @@ fun HubScreen(
     viewModel: HubViewModel = hiltViewModel(),
     navigateToScanTag: () -> Unit = {},
     navigateToTagHistory: () -> Unit = {},
-    navigateToEmulateTag: () -> Unit = {}
+    navigateToEmulateTag: () -> Unit = {},
+    navigateToBiometric: () -> Unit = {}
 ) {
     ObserveViewState(viewModel) { state ->
         if (state is HubViewState.Default) {
@@ -36,7 +37,8 @@ fun HubScreen(
                 DefaultStateData(
                     onScanClick = { viewModel.handleAction(HubViewAction.DisplayScanTagView) },
                     onHistoryClick = { viewModel.handleAction(HubViewAction.DisplayTagHistoryView) },
-                    onEmulateClick = { viewModel.handleAction(HubViewAction.DisplayEmulateTagView) }
+                    onEmulateClick = { viewModel.handleAction(HubViewAction.DisplayEmulateTagView) },
+                    onBiometricClick = { viewModel.handleAction(HubViewAction.DisplayBiometricView) }
                 )
             )
         }
@@ -46,6 +48,7 @@ fun HubScreen(
             HubViewEvent.NavigateToEmulateView -> navigateToEmulateTag()
             HubViewEvent.NavigateToHistoryView -> navigateToTagHistory()
             HubViewEvent.NavigateToScanView -> navigateToScanTag()
+            HubViewEvent.NavigateToBiometricView -> navigateToBiometric()
         }
     }
 }
@@ -65,7 +68,7 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { defaultStateData.onScanClick() },
+            onClick = defaultStateData.onScanClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -74,7 +77,7 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
             )
         }
         Button(
-            onClick = { defaultStateData.onHistoryClick() },
+            onClick = defaultStateData.onHistoryClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -83,11 +86,20 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
             )
         }
         Button(
-            onClick = { defaultStateData.onEmulateClick() },
+            onClick = defaultStateData.onEmulateClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = stringResource(id = R.string.emulate_button_label).uppercase(),
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
+        Button(
+            onClick = defaultStateData.onBiometricClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.biometric_button_label).uppercase(),
                 fontSize = AppTheme.dimensions.textSizeMedium
             )
         }

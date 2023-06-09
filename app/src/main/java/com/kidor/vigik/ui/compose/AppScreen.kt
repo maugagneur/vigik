@@ -59,6 +59,14 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String) {
         nameId = R.string.emulate_tag_title,
         route = "emulate"
     )
+
+    /**
+     * Metadata of "biometric" screen.
+     */
+    object BiometricScreen : AppScreen(
+        nameId = R.string.biometric_title,
+        route = "biometric"
+    )
 }
 
 private val allScreens = listOf(
@@ -66,7 +74,8 @@ private val allScreens = listOf(
     AppScreen.HubScreen,
     AppScreen.ScanScreen,
     AppScreen.HistoryScreen,
-    AppScreen.EmulateScreen
+    AppScreen.EmulateScreen,
+    AppScreen.BiometricScreen
 )
 
 /**

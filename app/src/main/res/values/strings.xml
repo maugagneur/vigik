@@ -11,6 +11,7 @@
     <string name="scan_button_label">NFC scan</string>
     <string name="history_button_label">Tags history</string>
     <string name="emulate_button_label">Emulate NFC tag</string>
+    <string name="biometric_button_label">Biometric</string>
 
     <string name="scan_nfc_title">Scan NFC</string>
     <string name="menu_action_stop_scan">Stop</string>
@@ -22,4 +23,6 @@
     <string name="no_data_label">No data available</string>
 
     <string name="emulate_tag_title">Emulate tag</string>
+
+    <string name="biometric_title">Biometric</string>
 </resources>
