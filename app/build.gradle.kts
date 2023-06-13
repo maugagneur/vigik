@@ -51,6 +51,9 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.bundles.androidx.lifecycle)
 
+    // Biometric
+    implementation(libs.androidx.biometric.ktx)
+
     // Kotlin
     implementation(libs.bundles.kotlinx.coroutines)
     testImplementation(libs.kotlinx.coroutines.test)

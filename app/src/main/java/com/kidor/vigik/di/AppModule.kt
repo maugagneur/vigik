@@ -2,6 +2,7 @@ package com.kidor.vigik.di
 
 import android.content.Context
 import android.nfc.NfcAdapter
+import androidx.biometric.BiometricManager
 import androidx.room.Room
 import com.kidor.vigik.data.AppDataBase
 import com.kidor.vigik.data.DATABASE_NAME
@@ -57,6 +58,15 @@ object AppModule {
     @Provides
     fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter? =
         NfcAdapter.getDefaultAdapter(context)
+
+    /**
+     * Provides instance of [BiometricManager].
+     *
+     * @param context The application context.
+     */
+    @Singleton
+    @Provides
+    fun provideBiometricManager(@ApplicationContext context: Context): BiometricManager = BiometricManager.from(context)
 }
 
 /**
