@@ -64,6 +64,9 @@ dependencies {
     // Log
     implementation(libs.timber)
 
+    // Shared preferences
+    implementation(libs.androidx.datastore.preferences)
+
     // Test
     testImplementation(libs.bundles.test.unit)
 
