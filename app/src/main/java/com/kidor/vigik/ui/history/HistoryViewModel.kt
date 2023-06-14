@@ -19,7 +19,7 @@ class HistoryViewModel @Inject constructor(
     private val repository: TagRepository
 ) : BaseViewModel<HistoryViewAction, HistoryViewState, Nothing>() {
 
-    override val _viewState: MutableLiveData<HistoryViewState> = repository.allTags
+    override val _viewState = repository.allTags
         .map { tags ->
             if (tags.isEmpty()) {
                 HistoryViewState.NoTag
