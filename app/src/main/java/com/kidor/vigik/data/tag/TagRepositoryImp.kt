@@ -1,4 +1,4 @@
-package com.kidor.vigik.db
+package com.kidor.vigik.data.tag
 
 import android.database.sqlite.SQLiteConstraintException
 import androidx.annotation.WorkerThread

@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.history
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.kidor.vigik.db.TagRepository
+import com.kidor.vigik.data.tag.TagRepository
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map

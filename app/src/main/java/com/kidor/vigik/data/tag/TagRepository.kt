@@ -1,4 +1,4 @@
-package com.kidor.vigik.db
+package com.kidor.vigik.data.tag
 
 import com.kidor.vigik.nfc.model.Tag
 import kotlinx.coroutines.flow.Flow

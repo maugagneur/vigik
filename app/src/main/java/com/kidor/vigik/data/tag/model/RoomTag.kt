@@ -1,4 +1,4 @@
-package com.kidor.vigik.db.model
+package com.kidor.vigik.data.tag.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

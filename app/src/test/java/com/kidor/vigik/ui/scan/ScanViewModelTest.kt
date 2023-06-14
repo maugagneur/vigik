@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.scan
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
-import com.kidor.vigik.db.TagRepository
+import com.kidor.vigik.data.tag.TagRepository
 import com.kidor.vigik.nfc.api.NfcApi
 import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils.assertEquals

@@ -1,4 +1,4 @@
-package com.kidor.vigik.db.base
+package com.kidor.vigik.data
 
 import androidx.room.Delete
 import androidx.room.Insert

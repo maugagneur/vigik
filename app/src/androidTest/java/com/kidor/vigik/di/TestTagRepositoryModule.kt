@@ -1,7 +1,7 @@
 package com.kidor.vigik.di
 
-import com.kidor.vigik.db.TagRepository
-import com.kidor.vigik.db.FakeTagRepository
+import com.kidor.vigik.data.tag.TagRepository
+import com.kidor.vigik.data.FakeTagRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.components.SingletonComponent
