@@ -2,21 +2,22 @@ package com.kidor.vigik.ui.biometric.login
 
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.data.biometric.BiometricRepository
-import com.kidor.vigik.data.biometric.model.BiometricAuthenticationStatus
+import com.kidor.vigik.data.user.UserRepository
+import com.kidor.vigik.data.user.model.UserLoginError
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.UUID
 import javax.inject.Inject
 
 /**
- * Business logic of biometric screen.
+ * Business logic of biometric login screen.
  */
 @HiltViewModel
 class BiometricLoginViewModel @Inject constructor(
+    private val userRepository: UserRepository,
     private val biometricRepository: BiometricRepository
 ) : BaseViewModel<BiometricLoginViewAction, BiometricLoginViewState, BiometricLoginViewEvent>() {
 
@@ -24,6 +25,49 @@ class BiometricLoginViewModel @Inject constructor(
     val biometricPromptState: StateFlow<BiometricPromptContainerState> get() = _biometricPromptState
 
     init {
+        viewModelScope.launch {
+            userRepository.isUserLoggedIn.collect { isUserLoggedIn ->
+                if (isUserLoggedIn) {
+                    Timber.d("Login succeeded")
+                    // FIXME: for now, always show home without biometric
+                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
+
+                    /*
+                    val biometricInfo = biometricRepository.getBiometricInfo()
+                    Timber.d("Biometric Info -> $biometricInfo")
+
+                    when (biometricInfo.biometricAuthenticationStatus) {
+                        BiometricAuthenticationStatus.AVAILABLE_BUT_NOT_ENROLLED -> {
+                            // Prompts the user to create credentials that the app accepts
+                            _viewEvent.emit(
+                                BiometricLoginViewEvent.DisplayBiometricEnrollment(
+                                    enrollIntent = biometricRepository.getBiometricEnrollIntent()
+                                )
+                            )
+                        }
+
+                        BiometricAuthenticationStatus.READY -> {
+                            // TODO: Display biometric prompt
+                            /*
+                                    _viewEvent.emit(
+                                        BiometricLoginViewEvent.DisplayBiometricPromptForEncryption(
+                                            authenticationCallback = biometricRepository.getBiometricAuthenticationCallback(),
+                                            promptInfo = biometricRepository.getBiometricPromptInfoForEncryption(),
+                                            cryptoObject = biometricRepository.getCryptoObject(
+                                                CryptoPurpose.ENCRYPTION,
+                                                null
+                                            )
+                                        )
+                                    )
+                                    */
+                        }
+
+                        else -> Timber.e("Error during biometric status check")
+                    }
+                    */
+                }
+            }
+        }
         viewModelScope.launch {
             biometricRepository.getBiometricInfo().let {
                 Timber.d("Biometric info -> $it")
@@ -70,63 +114,16 @@ class BiometricLoginViewModel @Inject constructor(
      * Performs a login attempt with current values of username and password.
      */
     private fun login() {
-        viewState.value?.let { currentState ->
-            if (isPasswordValid(username = currentState.usernameField, password = currentState.passwordField)) {
-                viewModelScope.launch {
-                    // FIXME: for now, always show home without biometric
-                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
-                    // Get user token and save it
-                    // TODO: biometricRepository.saveUserToken(getUserToken())
-
-                    val biometricInfo = biometricRepository.getBiometricInfo()
-                    Timber.d("Biometric Info -> $biometricInfo")
-
-                    when (biometricInfo.biometricAuthenticationStatus) {
-                        BiometricAuthenticationStatus.AVAILABLE_BUT_NOT_ENROLLED -> {
-                            // Prompts the user to create credentials that the app accepts
-                            _viewEvent.emit(
-                                BiometricLoginViewEvent.DisplayBiometricEnrollment(
-                                    enrollIntent = biometricRepository.getBiometricEnrollIntent()
-                                )
-                            )
-                        }
-
-                        BiometricAuthenticationStatus.READY -> {
-                            // TODO: Display biometric prompt
-                            /*
-                            _viewEvent.emit(
-                                BiometricLoginViewEvent.DisplayBiometricPromptForEncryption(
-                                    authenticationCallback = biometricRepository.getBiometricAuthenticationCallback(),
-                                    promptInfo = biometricRepository.getBiometricPromptInfoForEncryption(),
-                                    cryptoObject = biometricRepository.getCryptoObject(
-                                        CryptoPurpose.ENCRYPTION,
-                                        null
-                                    )
-                                )
-                            )
-                            */
-                        }
-
-                        else -> Timber.e("Error during biometric status check")
-                    }
+        viewModelScope.launch {
+            viewState.value?.let { currentState ->
+                val loginError = userRepository.login(
+                    username = currentState.usernameField,
+                    password = currentState.passwordField)
+                if (loginError == UserLoginError.INVALID_USERNAME_PASSWORD) {
+                    Timber.w("Invalid username/password")
+                    _viewState.value = currentState.copy(displayLoginFail = true)
                 }
-            } else {
-                Timber.w("Invalid username/password")
-                _viewState.value = currentState.copy(displayLoginFail = true)
             }
         }
     }
-
-    /**
-     * Returns true if the password is correct for this username.
-     */
-    private fun isPasswordValid(username: String, password: String): Boolean {
-        // For this application every not blank username/password couple are correct.
-        return username.isNotBlank() && password.isNotBlank()
-    }
-
-    /**
-     * Returns a mocked user token as we do not have a real backend for authentication.
-     */
-    private fun getUserToken(): String = UUID.randomUUID().toString()
 }

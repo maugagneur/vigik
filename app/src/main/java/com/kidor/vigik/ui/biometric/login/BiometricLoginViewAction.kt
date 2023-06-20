@@ -4,7 +4,7 @@ import androidx.biometric.BiometricPrompt.CryptoObject
 import com.kidor.vigik.ui.base.ViewAction
 
 /**
- * Available actions from biometric view.
+ * Available actions from biometric login view.
  */
 sealed class BiometricLoginViewAction : ViewAction {
 

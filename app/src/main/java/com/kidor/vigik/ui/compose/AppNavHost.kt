@@ -3,6 +3,7 @@ package com.kidor.vigik.ui.compose
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -10,8 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
-import com.kidor.vigik.ui.biometric.home.BiometricHome
-import com.kidor.vigik.ui.biometric.home.BiometricHomeStateData
+import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.check.CheckScreen
 import com.kidor.vigik.ui.emulate.EmulateScreen
@@ -63,10 +63,11 @@ fun AppNavHost(
             )
         }
         composable(route = AppScreen.BiometricHomeScreen.route) {
-            BiometricHome(
-                loggedStateData = BiometricHomeStateData(
-                    onLogoutClick = { navController.navigate(AppScreen.BiometricLoginScreen) }
-                )
+            BackHandler(enabled = true) { }
+            BiometricHomeScreen(
+                navigateToBiometricLogin = {
+                    navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
+                }
             )
         }
     }
