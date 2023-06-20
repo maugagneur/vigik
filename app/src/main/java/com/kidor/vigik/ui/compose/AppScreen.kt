@@ -11,7 +11,7 @@ import com.kidor.vigik.R
  *
  * A screen is defined by its [name] and its [route] in the navigation graph.
  */
-sealed class AppScreen(@StringRes private val nameId: Int, val route: String) {
+sealed class AppScreen(@StringRes private val nameId: Int, val route: String, val showNavigateBack: Boolean = true) {
 
     /**
      * Returns the string resource of the screen's name.
@@ -73,7 +73,8 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String) {
      */
     object BiometricHomeScreen : AppScreen(
         nameId = R.string.biometric_title,
-        route = "biometric_home"
+        route = "biometric_home",
+        showNavigateBack = false
     )
 }
 

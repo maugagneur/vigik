@@ -119,7 +119,7 @@ private fun AppActionBar(
     },
     modifier = Modifier.testTag(ACTION_BAR_TEST_TAG),
     navigationIcon = {
-        if (navController.previousBackStackEntry != null) {
+        if (navController.previousBackStackEntry != null && currentScreen?.showNavigateBack == true) {
             IconButton(onClick = { navController.popBackStack() }) {
                 Icon(
                     Icons.Default.ArrowBack,
