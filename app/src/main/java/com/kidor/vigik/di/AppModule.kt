@@ -2,7 +2,6 @@ package com.kidor.vigik.di
 
 import android.content.Context
 import android.nfc.NfcAdapter
-import androidx.biometric.BiometricManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -76,15 +75,6 @@ object AppModule {
     @Provides
     fun provideNfcAdapter(@ApplicationContext context: Context): NfcAdapter? =
         NfcAdapter.getDefaultAdapter(context)
-
-    /**
-     * Provides instance of [BiometricManager].
-     *
-     * @param context The application context.
-     */
-    @Singleton
-    @Provides
-    fun provideBiometricManager(@ApplicationContext context: Context): BiometricManager = BiometricManager.from(context)
 }
 
 /**
