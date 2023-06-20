@@ -1,9 +1,9 @@
-package com.kidor.vigik.ui.biometric
+package com.kidor.vigik.data.biometric.model
 
 /**
- * Status of biometric.
+ * Status of biometric authentication.
  */
-enum class BiometricAuthenticateStatus {
+enum class BiometricAuthenticationStatus {
     /**
      * App can authenticate using biometrics.
      */

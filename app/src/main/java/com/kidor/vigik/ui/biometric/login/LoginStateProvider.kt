@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.biometric
+package com.kidor.vigik.ui.biometric.login
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 
@@ -7,21 +7,23 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
  */
 class LoginStateProvider : PreviewParameterProvider<LoginStateData> {
     override val values: Sequence<LoginStateData> = sequenceOf(
+        LoginStateData(loginState = BiometricLoginViewState()),
+        LoginStateData(loginState = BiometricLoginViewState(isBiometricLoginAvailable = true)),
         LoginStateData(
-            loginState = BiometricViewState.Login(
-                usernameField = "",
-                passwordField = ""
-            )
-        ),
-        LoginStateData(
-            loginState = BiometricViewState.Login(
+            loginState = BiometricLoginViewState(
                 usernameField = "Paul Hochon",
-                passwordField = "",
                 displayLoginFail = true
             )
         ),
         LoginStateData(
-            loginState = BiometricViewState.Login(
+            loginState = BiometricLoginViewState(
+                usernameField = "Jack Uzi",
+                isBiometricLoginAvailable = true,
+                displayLoginFail = true
+            )
+        ),
+        LoginStateData(
+            loginState = BiometricLoginViewState(
                 usernameField = "Paul Hochon",
                 passwordField = "password"
             )
@@ -34,12 +36,12 @@ class LoginStateProvider : PreviewParameterProvider<LoginStateData> {
  *
  * @param onUpdateUsername The function called to update the username.
  * @param onUpdatePassword The function called to update the password
- * @param loginState       The [BiometricViewState.Login] emitted from the view model.
+ * @param loginState       The [BiometricLoginViewState] emitted from the view model.
  * @param onLoginClick     The function called to log in.
  */
 data class LoginStateData(
     val onUpdateUsername: (String) -> Unit = {},
     val onUpdatePassword: (String) -> Unit = {},
-    val loginState: BiometricViewState.Login,
+    val loginState: BiometricLoginViewState,
     val onLoginClick: () -> Unit = {}
 )

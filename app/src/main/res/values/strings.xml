@@ -28,7 +28,13 @@
     <string name="biometric_username_hint">Username</string>
     <string name="biometric_password_hint">Password</string>
     <string name="biometric_login_button_label">Login</string>
+    <string name="biometric_login_with_biometric_button_label">Use biometric</string>
     <string name="biometric_login_error_label">Invalid username/password</string>
     <string name="biometric_login_success_label">Logged successfully!</string>
     <string name="biometric_logout_button_label">Logout</string>
+    <string name="biometric_prompt_enroll_title">Enable Biometric Login?</string>
+    <string name="biometric_prompt_enroll_subtitle">Authenticate yourself to enroll your credential</string>
+    <string name="biometric_prompt_login_title">Biometric login</string>
+    <string name="biometric_prompt_login_subtitle">Log in using your biometric credential</string>
+    <string name="biometric_prompt_negative_button_label">Cancel</string>
 </resources>

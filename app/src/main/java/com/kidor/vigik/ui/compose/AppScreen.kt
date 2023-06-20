@@ -61,11 +61,19 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String) {
     )
 
     /**
-     * Metadata of "biometric" screen.
+     * Metadata of "biometric login" screen.
      */
-    object BiometricScreen : AppScreen(
+    object BiometricLoginScreen : AppScreen(
         nameId = R.string.biometric_title,
-        route = "biometric"
+        route = "biometric_login"
+    )
+
+    /**
+     * Metadata of "biometric home" screen.
+     */
+    object BiometricHomeScreen : AppScreen(
+        nameId = R.string.biometric_title,
+        route = "biometric_home"
     )
 }
 
@@ -75,7 +83,8 @@ private val allScreens = listOf(
     AppScreen.ScanScreen,
     AppScreen.HistoryScreen,
     AppScreen.EmulateScreen,
-    AppScreen.BiometricScreen
+    AppScreen.BiometricLoginScreen,
+    AppScreen.BiometricHomeScreen
 )
 
 /**
