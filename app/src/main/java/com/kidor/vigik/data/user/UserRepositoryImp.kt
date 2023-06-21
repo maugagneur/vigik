@@ -22,7 +22,7 @@ class UserRepositoryImp(
     override val isUserLoggedIn: StateFlow<Boolean> get() = _isUserLoggedIn
 
     override suspend fun login(username: String, password: String): UserLoginError? {
-        // For this application every not blank username/password couple are correct.
+        // For this application any username/password are valid.
         val isSuccess = username.isNotBlank() && password.isNotBlank()
         if (isSuccess) {
             preferences.edit { it[PreferencesKeys.USER_TOKEN] = fetchUserToken() }
@@ -32,7 +32,7 @@ class UserRepositoryImp(
     }
 
     override suspend fun loginWithToken(token: String): UserLoginError? {
-        val userToken = preferences.data.firstOrNull()?.get(PreferencesKeys.USER_TOKEN)
+        val userToken = getUserToken()
         val isSuccess = userToken == token
         _isUserLoggedIn.emit(isSuccess)
         return if (isSuccess) { null } else { UserLoginError.INVALID_USER_TOKEN }
@@ -42,8 +42,6 @@ class UserRepositoryImp(
 
     override suspend fun logout() {
         Timber.i("logout()")
-        // Clear user token from persistent storage
-        preferences.edit { it.remove(PreferencesKeys.USER_TOKEN) }
         _isUserLoggedIn.emit(false)
     }
 

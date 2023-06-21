@@ -29,9 +29,12 @@ interface BiometricRepository {
     fun getBiometricPromptInfo(purpose: CryptoPurpose): BiometricPrompt.PromptInfo
 
     /**
-     * Creates a new [CryptoObject] instance for encryption purpose.
+     * Creates a new [CryptoObject] instance for given purpose.
+     *
+     * @param purpose The purpose.
+     * @return The [CryptoObject] created or null if en error occurred.
      */
-    fun getCryptoObjectForEncryption(): CryptoObject
+    suspend fun getCryptoObject(purpose: CryptoPurpose): CryptoObject?
 
     /**
      * Stores the token using the [CryptoObject] passed as parameter.
@@ -40,5 +43,18 @@ interface BiometricRepository {
      * @param cryptoObject The [CryptoObject] to use for encryption operations.
      * @return True if the operation was successful, otherwise false.
      */
-    suspend fun encryptAndStoreToken(token: String, cryptoObject: CryptoObject): Boolean
+    suspend fun encryptAndStoreToken(token: String, cryptoObject: CryptoObject)
+
+    /**
+     * Decrypts the token using the [CryptoObject] passed as parameter.
+     *
+     * @param cryptoObject The [CryptoObject] to use for decryption operations.
+     * @return The decrypted token or null if an error occurred.
+     */
+    suspend fun decryptToken(cryptoObject: CryptoObject): String?
+
+    /**
+     * Removes biometric credentials from persistent storage.
+     */
+    suspend fun removeToken()
 }

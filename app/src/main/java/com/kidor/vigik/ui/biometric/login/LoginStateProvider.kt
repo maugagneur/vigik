@@ -34,14 +34,16 @@ class LoginStateProvider : PreviewParameterProvider<LoginStateData> {
 /**
  * Data used for the preview of LoginState Composable.
  *
- * @param onUpdateUsername The function called to update the username.
- * @param onUpdatePassword The function called to update the password
- * @param loginState       The [BiometricLoginViewState] emitted from the view model.
- * @param onLoginClick     The function called to log in.
+ * @param onUpdateUsername      The function called to update the username.
+ * @param onUpdatePassword      The function called to update the password
+ * @param loginState            The [BiometricLoginViewState] emitted from the view model.
+ * @param onLoginClick          The function called to log in.
+ * @param onBiometricLoginClick The function called to log in with biometric.
  */
 data class LoginStateData(
     val onUpdateUsername: (String) -> Unit = {},
     val onUpdatePassword: (String) -> Unit = {},
     val loginState: BiometricLoginViewState,
-    val onLoginClick: () -> Unit = {}
+    val onLoginClick: () -> Unit = {},
+    val onBiometricLoginClick: () -> Unit = {}
 )

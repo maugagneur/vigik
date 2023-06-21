@@ -99,34 +99,43 @@ class BiometricRepositoryImp(
             .build()
     }
 
-    override fun getCryptoObjectForEncryption(): BiometricPrompt.CryptoObject {
+    override suspend fun getCryptoObject(purpose: CryptoPurpose): BiometricPrompt.CryptoObject? {
         // Check crypto API
         if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
             Timber.w("Calling getCryptoObjectForEncryption() when crypto API is not ready")
+            return null
         }
-        return cryptoApi.getCryptoObjectForEncryption()
+
+        return when (purpose) {
+            CryptoPurpose.ENCRYPTION -> {
+                cryptoApi.getCryptoObjectForEncryption()
+            }
+            CryptoPurpose.DECRYPTION -> {
+                // Get IV from persistent storage
+                val encodedInitializationVector = preferences.data.firstOrNull()?.get(PreferencesKeys.BIOMETRIC_IV)
+                if (encodedInitializationVector == null) {
+                    Timber.e("Trying to get crypto object for decryption with no IV saved")
+                    return null
+                }
+                // Decode IV
+                val initializationVector = Base64.decode(encodedInitializationVector, Base64.DEFAULT)
+                return cryptoApi.getCryptoObjectForDecryption(initializationVector)
+            }
+        }
     }
 
-    override fun getCryptoObjectForDecryption(initializationVector: ByteArray): BiometricPrompt.CryptoObject {
-        // Check crypto API
-        if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
-            Timber.w("Calling getCryptoObjectForDecryption() when crypto API is not ready")
-        }
-        return cryptoApi.getCryptoObjectForDecryption(initializationVector)
-    }
-
-    override suspend fun encryptAndStoreToken(token: String, cryptoObject: BiometricPrompt.CryptoObject): Boolean {
+    override suspend fun encryptAndStoreToken(token: String, cryptoObject: BiometricPrompt.CryptoObject) {
         // Check crypto API
         if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
             Timber.w("Calling encryptAndStoreToken() when crypto API is not ready")
-            return false
+            return
         }
 
         // Encrypt token using the cipher inside the given crypto object
         val cipher = cryptoObject.cipher
         if (cipher == null) {
             Timber.e("Cipher associated with given crypto object is null")
-            return false
+            return
         }
         val encryptedToken = cryptoApi.encryptData(token, cipher)
 
@@ -137,7 +146,30 @@ class BiometricRepositoryImp(
             it[PreferencesKeys.BIOMETRIC_TOKEN] = encryptedTokenDataBase64
             it[PreferencesKeys.BIOMETRIC_IV] = encryptedTokenIVBase64
         }
+    }
 
-        return true
+    override suspend fun decryptToken(cryptoObject: BiometricPrompt.CryptoObject): String? {
+        // Check crypto API
+        if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
+            Timber.w("Calling decryptToken() when crypto API is not ready")
+            return null
+        }
+
+        // Decode token from persistent storage
+        val cipher = cryptoObject.cipher
+        if (cipher == null) {
+            Timber.e("Cipher associated with given crypto object is null")
+            return null
+        }
+        val encodedTokenData = preferences.data.firstOrNull()?.get(PreferencesKeys.BIOMETRIC_TOKEN)
+        val tokenData = Base64.decode(encodedTokenData, Base64.DEFAULT)
+        return cryptoApi.decryptData(tokenData, cipher)
+    }
+
+    override suspend fun removeToken() {
+        preferences.edit {
+            it.remove(PreferencesKeys.BIOMETRIC_TOKEN)
+            it.remove(PreferencesKeys.BIOMETRIC_IV)
+        }
     }
 }

@@ -32,7 +32,14 @@ class BiometricLoginViewModel @Inject constructor(
                 if (isUserLoggedIn) {
                     Timber.d("Login succeeded")
 
-                    when (biometricRepository.getBiometricInfo().biometricAuthenticationStatus) {
+                    val biometricInfo = biometricRepository.getBiometricInfo()
+                    if (biometricInfo.biometricTokenIsPresent) {
+                        // If biometric token is already saved do not prompt biometric enrollment
+                        navigateToBiometricHome()
+                        return@collect
+                    }
+
+                    when (biometricInfo.biometricAuthenticationStatus) {
                         BiometricAuthenticationStatus.AVAILABLE_BUT_NOT_ENROLLED -> {
                             Timber.d("No biometry enrolled on the device -> display settings to enroll biometrics")
                             // Prompts settings to create credentials that the app accepts
@@ -44,17 +51,22 @@ class BiometricLoginViewModel @Inject constructor(
                         }
 
                         BiometricAuthenticationStatus.READY -> {
-                            // Display biometric prompt for encryption
-                            _biometricPromptState.emit(
-                                BiometricPromptViewState(
-                                    isVisible = true,
-                                    promptInfo = biometricRepository.getBiometricPromptInfo(
+                            // Display biometric prompt for enrollment
+                            val cryptoObject = biometricRepository.getCryptoObject(purpose = CryptoPurpose.ENCRYPTION)
+                            if (cryptoObject != null) {
+                                _biometricPromptState.emit(
+                                    BiometricPromptViewState(
+                                        isVisible = true,
+                                        promptInfo = biometricRepository.getBiometricPromptInfo(
+                                            purpose = CryptoPurpose.ENCRYPTION
+                                        ),
+                                        cryptoObject = cryptoObject,
                                         purpose = CryptoPurpose.ENCRYPTION
-                                    ),
-                                    cryptoObject = biometricRepository.getCryptoObjectForEncryption(),
-                                    purpose = CryptoPurpose.ENCRYPTION
+                                    )
                                 )
-                            )
+                            } else {
+                                Timber.e("Invalid crypto object for encryption")
+                            }
                         }
 
                         else -> Timber.e("Error during biometric status check")
@@ -77,39 +89,12 @@ class BiometricLoginViewModel @Inject constructor(
             is BiometricLoginViewAction.UpdateUsername -> updateUsername(viewAction)
             is BiometricLoginViewAction.UpdatePassword -> updatePassword(viewAction)
             is BiometricLoginViewAction.Login -> login()
+            is BiometricLoginViewAction.LoginWithBiometric -> loginWithBiometric()
             is BiometricLoginViewAction.HideBiometricPrompt -> viewModelScope.launch {
                 _biometricPromptState.emit(biometricPromptState.replayCache.firstOrNull()?.copy(isVisible = false))
             }
-            is BiometricLoginViewAction.OnBiometricAuthError -> {
-                Timber.d("OnBiometricAuthError()")
-                // Even if biometric authentication did not work (maybe because user cancelled it) always show the Home
-                navigateToBiometricHome()
-            }
-            is BiometricLoginViewAction.OnBiometricAuthSuccess -> {
-                val authenticationPurpose = viewAction.purpose
-                Timber.d("OnBiometricAuthSuccess($authenticationPurpose)")
-                viewModelScope.launch {
-                    when (authenticationPurpose) {
-                        CryptoPurpose.ENCRYPTION -> {
-                            // Enroll biometric token
-                            val userToken = userRepository.getUserToken()
-                            if (userToken != null) {
-                                biometricRepository.encryptAndStoreToken(
-                                    token = userToken,
-                                    cryptoObject = viewAction.cryptoObject
-                                )
-                            } else {
-                                Timber.wtf("Unexpected null user token just after login")
-                            }
-
-                            // Show home screen
-                            navigateToBiometricHome()
-                        }
-                        CryptoPurpose.DECRYPTION -> {
-                        }
-                    }
-                }
-            }
+            is BiometricLoginViewAction.OnBiometricAuthError -> handleBiometricAuthenticationError(viewAction)
+            is BiometricLoginViewAction.OnBiometricAuthSuccess -> handleBiometricAuthenticationSuccess(viewAction)
         }
     }
 
@@ -141,14 +126,102 @@ class BiometricLoginViewModel @Inject constructor(
     private fun login() {
         viewModelScope.launch {
             viewState.value?.let { currentState ->
-                val loginError = userRepository.login(
-                    username = currentState.usernameField,
-                    password = currentState.passwordField)
-                if (loginError == UserLoginError.INVALID_USERNAME_PASSWORD) {
-                    Timber.w("Invalid username/password")
+                if (currentState.usernameField.isBlank() || currentState.passwordField.isBlank()) {
                     _viewState.value = currentState.copy(displayLoginFail = true)
+                } else {
+                    // If we set new username/password then we should invalidate our previous biometric credentials
+                    biometricRepository.removeToken()
+                    _viewState.value = currentState.copy(isBiometricLoginAvailable = false)
+
+                    val loginError = userRepository.login(
+                        username = currentState.usernameField,
+                        password = currentState.passwordField
+                    )
+                    if (loginError == UserLoginError.INVALID_USERNAME_PASSWORD) {
+                        Timber.w("Invalid username/password")
+                        _viewState.value = currentState.copy(displayLoginFail = true)
+                    }
                 }
             }
+        }
+    }
+
+    /**
+     * Tells UI to display biometric prompt for login.
+     */
+    private fun loginWithBiometric() {
+        viewModelScope.launch {
+            val cryptoObject = biometricRepository.getCryptoObject(purpose = CryptoPurpose.DECRYPTION)
+            if (cryptoObject != null) {
+                _biometricPromptState.emit(
+                    BiometricPromptViewState(
+                        isVisible = true,
+                        promptInfo = biometricRepository.getBiometricPromptInfo(
+                            purpose = CryptoPurpose.DECRYPTION
+                        ),
+                        cryptoObject = cryptoObject,
+                        purpose = CryptoPurpose.DECRYPTION
+                    )
+                )
+            } else {
+                Timber.e("Invalid crypto object for decryption")
+            }
+        }
+    }
+
+    /**
+     * Reacts to successful biometric authentication.
+     *
+     * @param viewAction The action sent from the view.
+     */
+    private fun handleBiometricAuthenticationSuccess(viewAction: BiometricLoginViewAction.OnBiometricAuthSuccess) {
+        val authenticationPurpose = viewAction.purpose
+        Timber.d("OnBiometricAuthSuccess($authenticationPurpose)")
+        viewModelScope.launch {
+            when (authenticationPurpose) {
+                CryptoPurpose.ENCRYPTION -> {
+                    // Enroll biometric token
+                    val userToken = userRepository.getUserToken()
+                    if (userToken != null) {
+                        biometricRepository.encryptAndStoreToken(
+                            token = userToken,
+                            cryptoObject = viewAction.cryptoObject
+                        )
+                    } else {
+                        Timber.wtf("Unexpected null user token just after login")
+                    }
+
+                    // Show home screen
+                    navigateToBiometricHome()
+                }
+                CryptoPurpose.DECRYPTION -> {
+                    // Login with token
+                    val userToken = biometricRepository.decryptToken(cryptoObject = viewAction.cryptoObject)
+                    if (userToken != null) {
+                        val loginError = userRepository.loginWithToken(userToken)
+                        if (loginError == UserLoginError.INVALID_USER_TOKEN) {
+                            Timber.e("Invalid user token")
+                            _viewState.value = viewState.value?.copy(displayLoginFail = true)
+                        }
+                    } else {
+                        Timber.e("Fail to decrypt user token")
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reacts to failed biometric authentication.
+     *
+     * @param viewAction The action sent from the view.
+     */
+    private fun handleBiometricAuthenticationError(viewAction: BiometricLoginViewAction.OnBiometricAuthError) {
+        Timber.d("OnBiometricAuthError()")
+        // Even if biometric authentication did not work during encryption (maybe because user cancelled it)
+        // always show the Home
+        if (viewAction.purpose == CryptoPurpose.ENCRYPTION) {
+            navigateToBiometricHome()
         }
     }
 

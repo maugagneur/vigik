@@ -53,6 +53,16 @@ class CryptoApi @Inject constructor() {
     }
 
     /**
+     * Decrypts given data and return it as [String].
+     *
+     * @param encryptedData The data to decrypt.
+     * @param cipher        The [Cipher] use for decryption.
+     */
+    fun decryptData(encryptedData: ByteArray, cipher: Cipher): String {
+        return cipher.doFinal(encryptedData).toString(Charsets.UTF_8)
+    }
+
+    /**
      * Encrypts given data and return a [CipherDataWrapper].
      *
      * @param data   The data to encrypt.
