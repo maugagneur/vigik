@@ -2,12 +2,14 @@ package com.kidor.vigik.ui.biometric.login
 
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.data.biometric.BiometricRepository
+import com.kidor.vigik.data.biometric.model.BiometricAuthenticationStatus
+import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import com.kidor.vigik.data.user.UserRepository
 import com.kidor.vigik.data.user.model.UserLoginError
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -21,24 +23,19 @@ class BiometricLoginViewModel @Inject constructor(
     private val biometricRepository: BiometricRepository
 ) : BaseViewModel<BiometricLoginViewAction, BiometricLoginViewState, BiometricLoginViewEvent>() {
 
-    private val _biometricPromptState = MutableStateFlow(BiometricPromptContainerState())
-    val biometricPromptState: StateFlow<BiometricPromptContainerState> get() = _biometricPromptState
+    private val _biometricPromptState = MutableSharedFlow<BiometricPromptViewState?>(replay = 1)
+    val biometricPromptState: SharedFlow<BiometricPromptViewState?> get() = _biometricPromptState
 
     init {
         viewModelScope.launch {
             userRepository.isUserLoggedIn.collect { isUserLoggedIn ->
                 if (isUserLoggedIn) {
                     Timber.d("Login succeeded")
-                    // FIXME: for now, always show home without biometric
-                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
 
-                    /*
-                    val biometricInfo = biometricRepository.getBiometricInfo()
-                    Timber.d("Biometric Info -> $biometricInfo")
-
-                    when (biometricInfo.biometricAuthenticationStatus) {
+                    when (biometricRepository.getBiometricInfo().biometricAuthenticationStatus) {
                         BiometricAuthenticationStatus.AVAILABLE_BUT_NOT_ENROLLED -> {
-                            // Prompts the user to create credentials that the app accepts
+                            Timber.d("No biometry enrolled on the device -> display settings to enroll biometrics")
+                            // Prompts settings to create credentials that the app accepts
                             _viewEvent.emit(
                                 BiometricLoginViewEvent.DisplayBiometricEnrollment(
                                     enrollIntent = biometricRepository.getBiometricEnrollIntent()
@@ -47,24 +44,20 @@ class BiometricLoginViewModel @Inject constructor(
                         }
 
                         BiometricAuthenticationStatus.READY -> {
-                            // TODO: Display biometric prompt
-                            /*
-                                    _viewEvent.emit(
-                                        BiometricLoginViewEvent.DisplayBiometricPromptForEncryption(
-                                            authenticationCallback = biometricRepository.getBiometricAuthenticationCallback(),
-                                            promptInfo = biometricRepository.getBiometricPromptInfoForEncryption(),
-                                            cryptoObject = biometricRepository.getCryptoObject(
-                                                CryptoPurpose.ENCRYPTION,
-                                                null
-                                            )
-                                        )
-                                    )
-                                    */
+                            // Display biometric prompt for encryption
+                            _biometricPromptState.emit(
+                                BiometricPromptViewState(
+                                    isVisible = true,
+                                    promptInfo = biometricRepository.getBiometricPromptInfo(
+                                        purpose = CryptoPurpose.ENCRYPTION
+                                    ),
+                                    cryptoObject = biometricRepository.getCryptoObjectForEncryption()
+                                )
+                            )
                         }
 
                         else -> Timber.e("Error during biometric status check")
                     }
-                    */
                 }
             }
         }
@@ -83,8 +76,23 @@ class BiometricLoginViewModel @Inject constructor(
             is BiometricLoginViewAction.UpdateUsername -> updateUsername(viewAction)
             is BiometricLoginViewAction.UpdatePassword -> updatePassword(viewAction)
             is BiometricLoginViewAction.Login -> login()
-            is BiometricLoginViewAction.OnBiometricAuthError -> { Timber.d("OnBiometricAuthError()") }
-            is BiometricLoginViewAction.OnBiometricAuthSuccess -> { Timber.d("OnBiometricAuthSuccess()") }
+            is BiometricLoginViewAction.HideBiometricPrompt -> viewModelScope.launch {
+                _biometricPromptState.emit(biometricPromptState.replayCache.firstOrNull()?.copy(isVisible = false))
+            }
+            is BiometricLoginViewAction.OnBiometricAuthError -> {
+                Timber.d("OnBiometricAuthError()")
+                // Even if biometric authentication did not work (maybe because user cancelled it) always show the Home
+                viewModelScope.launch {
+                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
+                }
+            }
+            is BiometricLoginViewAction.OnBiometricAuthSuccess -> {
+                Timber.d("OnBiometricAuthSuccess()")
+                viewModelScope.launch {
+                    // TODO
+                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
+                }
+            }
         }
     }
 

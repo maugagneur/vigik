@@ -65,9 +65,10 @@ fun BiometricLoginScreen(
         )
     }
 
-    viewModel.biometricPromptState.collectAsState().let {
-        BiometricPromptContainer(
-            state = it.value,
+    viewModel.biometricPromptState.collectAsState(null).value?.let {
+        BiometricPromptView(
+            state = it,
+            hidePrompt = { viewModel.handleAction(BiometricLoginViewAction.HideBiometricPrompt) },
             onAuthError = { errCode, errMessage ->
                 viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthError(errCode, errMessage))
             },
@@ -121,7 +122,8 @@ private fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateDa
         )
         Button(
             onClick = { loginStateData.onLoginClick() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = AppTheme.dimensions.commonSpaceLarge)
         ) {
             Text(
@@ -130,7 +132,8 @@ private fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateDa
             )
         }
         BiometricLoginButton(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = AppTheme.dimensions.commonSpaceSmall),
             visible = loginStateData.loginState.isBiometricLoginAvailable,
             onClick = { Timber.d("BiometricLoginButton -> onClick()") }
@@ -181,8 +184,9 @@ fun BiometricLoginButton(
 }
 
 @Composable
-private fun BiometricPromptContainer(
-    state: BiometricPromptContainerState,
+private fun BiometricPromptView(
+    state: BiometricPromptViewState,
+    hidePrompt: () -> Unit = {},
     onAuthError: (errCode: Int, errString: String) -> Unit = { _: Int, _: String -> },
     onAuthSuccess: (cryptoObject: BiometricPrompt.CryptoObject) -> Unit = {}
 ) {
@@ -190,13 +194,13 @@ private fun BiometricPromptContainer(
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 Timber.e("onAuthenticationError() -> $errorCode - $errString")
-                state.hidePrompt()
+                hidePrompt()
                 onAuthError(errorCode, errString.toString())
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 Timber.d("onAuthenticationSucceeded()")
-                state.hidePrompt()
+                hidePrompt()
                 result.cryptoObject?.let { onAuthSuccess(it) } ?: {
                     onAuthError(-1, "Invalid crypto object forward after successful authentication")
                 }
@@ -204,7 +208,7 @@ private fun BiometricPromptContainer(
         }
     }
 
-    if (state.isPromptToShow.value) {
+    if (state.isVisible) {
         LocalContext.current.findActivity()?.let {
             val biometricPrompt = BiometricPrompt(it, ContextCompat.getMainExecutor(it), callback)
             biometricPrompt.authenticate(state.promptInfo, state.cryptoObject)

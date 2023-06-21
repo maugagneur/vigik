@@ -28,12 +28,17 @@ sealed class BiometricLoginViewAction : ViewAction {
     object Login : BiometricLoginViewAction()
 
     /**
-     * TODO
+     * Hides biometric prompt.
+     */
+    object HideBiometricPrompt : BiometricLoginViewAction()
+
+    /**
+     * Notify an error during biometric authentication.
      */
     data class OnBiometricAuthError(val code: Int, val message: String) : BiometricLoginViewAction()
 
     /**
-     * TODO
+     * Notifies the success of biometric authentication.
      */
     data class OnBiometricAuthSuccess(val cryptoObject: CryptoObject) : BiometricLoginViewAction()
 }

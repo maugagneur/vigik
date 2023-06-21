@@ -14,6 +14,10 @@ data class BiometricInfo(
     val biometricAuthenticationStatus: BiometricAuthenticationStatus,
     private val cryptoKeyStatus: CryptoKeyStatus?
 ) {
+    /**
+     * Returns true if the device is ready to perform biometric authentication and if the crypto key is ready to be
+     * used, otherwise returns false.
+     */
     fun isAuthenticationAvailable(): Boolean =
         biometricAuthenticationStatus == BiometricAuthenticationStatus.READY
                 && cryptoKeyStatus == CryptoKeyStatus.READY
