@@ -51,7 +51,8 @@ class BiometricLoginViewModel @Inject constructor(
                                     promptInfo = biometricRepository.getBiometricPromptInfo(
                                         purpose = CryptoPurpose.ENCRYPTION
                                     ),
-                                    cryptoObject = biometricRepository.getCryptoObjectForEncryption()
+                                    cryptoObject = biometricRepository.getCryptoObjectForEncryption(),
+                                    purpose = CryptoPurpose.ENCRYPTION
                                 )
                             )
                         }
@@ -82,15 +83,31 @@ class BiometricLoginViewModel @Inject constructor(
             is BiometricLoginViewAction.OnBiometricAuthError -> {
                 Timber.d("OnBiometricAuthError()")
                 // Even if biometric authentication did not work (maybe because user cancelled it) always show the Home
-                viewModelScope.launch {
-                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
-                }
+                navigateToBiometricHome()
             }
             is BiometricLoginViewAction.OnBiometricAuthSuccess -> {
-                Timber.d("OnBiometricAuthSuccess()")
+                val authenticationPurpose = viewAction.purpose
+                Timber.d("OnBiometricAuthSuccess($authenticationPurpose)")
                 viewModelScope.launch {
-                    // TODO
-                    _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
+                    when (authenticationPurpose) {
+                        CryptoPurpose.ENCRYPTION -> {
+                            // Enroll biometric token
+                            val userToken = userRepository.getUserToken()
+                            if (userToken != null) {
+                                biometricRepository.encryptAndStoreToken(
+                                    token = userToken,
+                                    cryptoObject = viewAction.cryptoObject
+                                )
+                            } else {
+                                Timber.wtf("Unexpected null user token just after login")
+                            }
+
+                            // Show home screen
+                            navigateToBiometricHome()
+                        }
+                        CryptoPurpose.DECRYPTION -> {
+                        }
+                    }
                 }
             }
         }
@@ -132,6 +149,15 @@ class BiometricLoginViewModel @Inject constructor(
                     _viewState.value = currentState.copy(displayLoginFail = true)
                 }
             }
+        }
+    }
+
+    /**
+     * Sends events to navigate to biometric home screen.
+     */
+    private fun navigateToBiometricHome() {
+        viewModelScope.launch {
+            _viewEvent.emit(BiometricLoginViewEvent.NavigateToBiometricHome)
         }
     }
 }

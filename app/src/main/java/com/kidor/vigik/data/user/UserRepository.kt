@@ -33,6 +33,11 @@ interface UserRepository {
     suspend fun loginWithToken(token: String): UserLoginError?
 
     /**
+     * Returns the user's token if logged, otherwise null.
+     */
+    suspend fun getUserToken(): String?
+
+    /**
      * Logout current user.
      * You should observe [isUserLoggedIn] flow to know if logout succeeded.
      */

@@ -25,9 +25,7 @@ class UserRepositoryImp(
         // For this application every not blank username/password couple are correct.
         val isSuccess = username.isNotBlank() && password.isNotBlank()
         if (isSuccess) {
-            preferences.edit {
-                it[PreferencesKeys.USER_TOKEN] = getUserToken()
-            }
+            preferences.edit { it[PreferencesKeys.USER_TOKEN] = fetchUserToken() }
         }
         _isUserLoggedIn.emit(isSuccess)
         return if (isSuccess) { null } else { UserLoginError.INVALID_USERNAME_PASSWORD }
@@ -40,15 +38,19 @@ class UserRepositoryImp(
         return if (isSuccess) { null } else { UserLoginError.INVALID_USER_TOKEN }
     }
 
+    override suspend fun getUserToken(): String? = preferences.data.firstOrNull()?.get(PreferencesKeys.USER_TOKEN)
+
     override suspend fun logout() {
         Timber.i("logout()")
+        // Clear user token from persistent storage
+        preferences.edit { it.remove(PreferencesKeys.USER_TOKEN) }
         _isUserLoggedIn.emit(false)
     }
 
     /**
      * Returns a mocked user token as we do not have a real backend for authentication.
      */
-    private fun getUserToken(): String = UUID.randomUUID().toString().also {
+    private fun fetchUserToken(): String = UUID.randomUUID().toString().also {
         Timber.d("User token generated -> $it")
     }
 }

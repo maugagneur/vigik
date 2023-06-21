@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
+import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
@@ -72,8 +73,8 @@ fun BiometricLoginScreen(
             onAuthError = { errCode, errMessage ->
                 viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthError(errCode, errMessage))
             },
-            onAuthSuccess = { cryptoObject ->
-                viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthSuccess(cryptoObject))
+            onAuthSuccess = { cryptoObject, purpose ->
+                viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthSuccess(cryptoObject, purpose))
             }
         )
     }
@@ -188,20 +189,22 @@ private fun BiometricPromptView(
     state: BiometricPromptViewState,
     hidePrompt: () -> Unit = {},
     onAuthError: (errCode: Int, errString: String) -> Unit = { _: Int, _: String -> },
-    onAuthSuccess: (cryptoObject: BiometricPrompt.CryptoObject) -> Unit = {}
+    onAuthSuccess: (cryptoObject: BiometricPrompt.CryptoObject, purpose: CryptoPurpose) -> Unit =
+        { _: BiometricPrompt.CryptoObject, _: CryptoPurpose -> }
 ) {
     val callback = remember(state) {
         object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                Timber.e("onAuthenticationError() -> $errorCode - $errString")
                 hidePrompt()
                 onAuthError(errorCode, errString.toString())
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                Timber.d("onAuthenticationSucceeded()")
                 hidePrompt()
-                result.cryptoObject?.let { onAuthSuccess(it) } ?: {
+                val cryptoObject = result.cryptoObject
+                if (cryptoObject != null) {
+                    onAuthSuccess(cryptoObject, state.purpose)
+                } else {
                     onAuthError(-1, "Invalid crypto object forward after successful authentication")
                 }
             }

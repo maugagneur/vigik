@@ -32,4 +32,13 @@ interface BiometricRepository {
      * Creates a new [CryptoObject] instance for encryption purpose.
      */
     fun getCryptoObjectForEncryption(): CryptoObject
+
+    /**
+     * Stores the token using the [CryptoObject] passed as parameter.
+     *
+     * @param token        The token to encrypt and store.
+     * @param cryptoObject The [CryptoObject] to use for encryption operations.
+     * @return True if the operation was successful, otherwise false.
+     */
+    suspend fun encryptAndStoreToken(token: String, cryptoObject: CryptoObject): Boolean
 }

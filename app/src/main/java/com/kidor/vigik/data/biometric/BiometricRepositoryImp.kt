@@ -3,18 +3,20 @@ package com.kidor.vigik.data.biometric
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.util.Base64
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricPrompt
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.PreferencesKeys
 import com.kidor.vigik.data.biometric.model.BiometricAuthenticationStatus
 import com.kidor.vigik.data.biometric.model.BiometricInfo
 import com.kidor.vigik.data.crypto.CryptoApi
-import com.kidor.vigik.data.crypto.model.CryptoKeyStatus
+import com.kidor.vigik.data.crypto.model.CryptoAPIStatus
 import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.firstOrNull
@@ -33,10 +35,6 @@ class BiometricRepositoryImp(
 ) : BiometricRepository {
 
     override suspend fun getBiometricInfo(): BiometricInfo = withContext(dispatcher) {
-        val isTokenPresent: Boolean = preferences.data.firstOrNull()?.let { preferences ->
-            preferences.contains(PreferencesKeys.BIOMETRIC_TOKEN) && preferences.contains(PreferencesKeys.BIOMETRIC_IV)
-        } ?: false
-
         val biometricAuthenticationStatus =
             when (biometricManager.canAuthenticate(BIOMETRIC_STRONG)) {
                 BiometricManager.BIOMETRIC_SUCCESS -> BiometricAuthenticationStatus.READY
@@ -49,18 +47,38 @@ class BiometricRepositoryImp(
                 }
             }
 
+        val cryptoApiStatus = cryptoApi.cryptoApiStatus
+        if (cryptoApiStatus == CryptoAPIStatus.INVALIDATED && isTokenPresent()) {
+            // In case previous secret was invalidated, remove biometric credentials from persistent storage
+            preferences.edit {
+                it.remove(PreferencesKeys.BIOMETRIC_TOKEN)
+                it.remove(PreferencesKeys.BIOMETRIC_IV)
+            }
+        }
+
         BiometricInfo(
-            biometricTokenIsPresent = isTokenPresent,
+            biometricTokenIsPresent = isTokenPresent(),
             biometricAuthenticationStatus = biometricAuthenticationStatus,
-            cryptoKeyStatus = CryptoKeyStatus.READY // FIXME
+            cryptoAPIStatus = cryptoApiStatus
         )
+    }
+
+    /**
+     * Checks persistent storage to know if it contains biometric credentials previously memorized.
+     */
+    private suspend fun isTokenPresent(): Boolean {
+        return preferences.data.firstOrNull()?.let { preferences ->
+            preferences.contains(PreferencesKeys.BIOMETRIC_TOKEN) && preferences.contains(PreferencesKeys.BIOMETRIC_IV)
+        } ?: false
     }
 
     @Suppress("DEPRECATION")
     override fun getBiometricEnrollIntent(): Intent = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> Intent(Settings.ACTION_BIOMETRIC_ENROLL)
             .putExtra(Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED, BIOMETRIC_STRONG)
+
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P -> Intent(Settings.ACTION_FINGERPRINT_ENROLL)
+
         else -> Intent(Settings.ACTION_SETTINGS)
     }
 
@@ -70,6 +88,7 @@ class BiometricRepositoryImp(
             CryptoPurpose.ENCRYPTION -> builder
                 .setTitle(localization.getString(R.string.biometric_prompt_enroll_title))
                 .setSubtitle(localization.getString(R.string.biometric_prompt_enroll_subtitle))
+
             CryptoPurpose.DECRYPTION -> builder
                 .setTitle(localization.getString(R.string.biometric_prompt_login_title))
                 .setSubtitle(localization.getString(R.string.biometric_prompt_login_subtitle))
@@ -80,35 +99,45 @@ class BiometricRepositoryImp(
             .build()
     }
 
-    override fun getBiometricAuthenticationCallback(): BiometricPrompt.AuthenticationCallback {
-        return object : BiometricPrompt.AuthenticationCallback() {
-            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                super.onAuthenticationError(errorCode, errString)
-                when (errorCode) {
-                    BiometricPrompt.ERROR_USER_CANCELED,
-                    BiometricPrompt.ERROR_CANCELED,
-                    BiometricPrompt.ERROR_NEGATIVE_BUTTON ->
-                        Timber.e("Biometric operation cancelled by user interaction")
-                    else ->
-                        Timber.e("Biometric error -> Code: $errorCode, Message: $errString")
-                }
-            }
-
-            override fun onAuthenticationFailed() {
-                super.onAuthenticationFailed()
-                Timber.e("User biometric rejected")
-            }
-
-            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                super.onAuthenticationSucceeded(result)
-                Timber.d("Biometric authentication succeeded")
-            }
+    override fun getCryptoObjectForEncryption(): BiometricPrompt.CryptoObject {
+        // Check crypto API
+        if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
+            Timber.w("Calling getCryptoObjectForEncryption() when crypto API is not ready")
         }
+        return cryptoApi.getCryptoObjectForEncryption()
     }
 
-    override fun getCryptoObjectForEncryption(): BiometricPrompt.CryptoObject =
-        cryptoApi.getCryptoObjectForEncryption()
+    override fun getCryptoObjectForDecryption(initializationVector: ByteArray): BiometricPrompt.CryptoObject {
+        // Check crypto API
+        if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
+            Timber.w("Calling getCryptoObjectForDecryption() when crypto API is not ready")
+        }
+        return cryptoApi.getCryptoObjectForDecryption(initializationVector)
+    }
 
-    override fun getCryptoObjectForDecryption(initializationVector: ByteArray): BiometricPrompt.CryptoObject =
-        cryptoApi.getCryptoObjectForDecryption(initializationVector)
+    override suspend fun encryptAndStoreToken(token: String, cryptoObject: BiometricPrompt.CryptoObject): Boolean {
+        // Check crypto API
+        if (cryptoApi.cryptoApiStatus != CryptoAPIStatus.READY) {
+            Timber.w("Calling encryptAndStoreToken() when crypto API is not ready")
+            return false
+        }
+
+        // Encrypt token using the cipher inside the given crypto object
+        val cipher = cryptoObject.cipher
+        if (cipher == null) {
+            Timber.e("Cipher associated with given crypto object is null")
+            return false
+        }
+        val encryptedToken = cryptoApi.encryptData(token, cipher)
+
+        // Store encrypted token's data and IV
+        val encryptedTokenDataBase64 = Base64.encodeToString(encryptedToken.data, Base64.DEFAULT)
+        val encryptedTokenIVBase64 = Base64.encodeToString(encryptedToken.initializationVector, Base64.DEFAULT)
+        preferences.edit {
+            it[PreferencesKeys.BIOMETRIC_TOKEN] = encryptedTokenDataBase64
+            it[PreferencesKeys.BIOMETRIC_IV] = encryptedTokenIVBase64
+        }
+
+        return true
+    }
 }

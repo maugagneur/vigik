@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.biometric.login
 
 import androidx.biometric.BiometricPrompt.CryptoObject
+import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import com.kidor.vigik.ui.base.ViewAction
 
 /**
@@ -39,6 +40,12 @@ sealed class BiometricLoginViewAction : ViewAction {
 
     /**
      * Notifies the success of biometric authentication.
+     *
+     * @param cryptoObject The [CryptoObject] associated with the authentication.
+     * @param purpose      The purpose of the authentication.
      */
-    data class OnBiometricAuthSuccess(val cryptoObject: CryptoObject) : BiometricLoginViewAction()
+    data class OnBiometricAuthSuccess(
+        val cryptoObject: CryptoObject,
+        val purpose: CryptoPurpose
+    ) : BiometricLoginViewAction()
 }
