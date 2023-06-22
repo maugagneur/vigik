@@ -188,6 +188,25 @@ class BiometricLoginViewModelTest {
     }
 
     @Test
+    fun `test display home screen on login when biometric not available`() {
+        logTestName()
+
+        runTest {
+            // Simulate biometric not available
+            every { biometricInfo.biometricAuthenticationStatus } returns BiometricAuthenticationStatus.NOT_AVAILABLE
+
+            viewModel.viewEvent.test {
+                // Simulate user login
+                isUserLoggedInFlow.emit(true)
+
+                assertEquals(BiometricLoginViewEvent.NavigateToBiometricHome, awaitItem(), "View event")
+
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+    }
+
+    @Test
     fun `test display system biometric enrollment when not enrolled`() {
         logTestName()
 

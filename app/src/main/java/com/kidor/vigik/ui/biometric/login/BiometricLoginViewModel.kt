@@ -69,7 +69,10 @@ class BiometricLoginViewModel @Inject constructor(
                             }
                         }
 
-                        else -> Timber.e("Error during biometric status check")
+                        else -> {
+                            Timber.e("Biometric not available")
+                            navigateToBiometricHome()
+                        }
                     }
                 }
             }
