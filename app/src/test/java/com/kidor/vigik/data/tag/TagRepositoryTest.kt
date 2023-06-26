@@ -1,11 +1,8 @@
-package com.kidor.vigik.data
+package com.kidor.vigik.data.tag
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
-import com.kidor.vigik.data.tag.TagDao
-import com.kidor.vigik.data.tag.TagRepository
-import com.kidor.vigik.data.tag.TagRepositoryImp
 import com.kidor.vigik.data.tag.model.RoomTag
 import com.kidor.vigik.extensions.toTagList
 import com.kidor.vigik.nfc.model.Tag

@@ -21,7 +21,7 @@ object AssertUtils {
     /**
      * Asserts that an object isn't null.
      */
-    fun assertNotNull(obj: Any, objectName: String) {
+    fun assertNotNull(obj: Any?, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': not null, Obtained: $obj")
         Assert.assertNotNull(obj)
@@ -30,7 +30,7 @@ object AssertUtils {
     /**
      * Asserts that an object is null.
      */
-    fun assertNull(obj: Any, objectName: String) {
+    fun assertNull(obj: Any?, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': null, Obtained: $obj")
         Assert.assertNull(obj)
@@ -39,19 +39,19 @@ object AssertUtils {
     /**
      * Asserts that a condition is true.
      */
-    fun assertTrue(condition: Boolean, objectName: String) {
+    fun assertTrue(condition: Boolean?, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': true, Obtained: $condition")
-        Assert.assertTrue(condition)
+        Assert.assertEquals(true, condition)
     }
 
     /**
      * Asserts that a condition is false.
      */
-    fun assertFalse(condition: Boolean, objectName: String) {
+    fun assertFalse(condition: Boolean?, objectName: String) {
         val currentDateTimeString = DateFormat.getDateTimeInstance().format(Date())
         println("$TEST_REPORT_TAG$currentDateTimeString, Expected value for '$objectName': false, Obtained: $condition")
-        Assert.assertFalse(condition)
+        Assert.assertEquals(false, condition)
     }
 
     /**

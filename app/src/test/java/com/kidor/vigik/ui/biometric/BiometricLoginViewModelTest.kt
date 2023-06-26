@@ -16,6 +16,7 @@ import com.kidor.vigik.ui.biometric.login.BiometricLoginViewAction
 import com.kidor.vigik.ui.biometric.login.BiometricLoginViewEvent
 import com.kidor.vigik.ui.biometric.login.BiometricLoginViewModel
 import com.kidor.vigik.utils.AssertUtils.assertEquals
+import com.kidor.vigik.utils.AssertUtils.assertFalse
 import com.kidor.vigik.utils.AssertUtils.assertTrue
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
@@ -78,7 +79,7 @@ class BiometricLoginViewModelTest {
         // Check that initial state has empty username and password
         assertEquals("", initialState?.usernameField, "Username")
         assertEquals("", initialState?.passwordField, "Password")
-        assertEquals(false, initialState?.displayLoginFail, "Display login fail")
+        assertFalse(initialState?.displayLoginFail, "Display login fail")
     }
 
     @Test
@@ -130,13 +131,13 @@ class BiometricLoginViewModelTest {
         // Check that initial state is 'Login' with empty username and password
         assertEquals("", state?.usernameField, "Username")
         assertEquals("", state?.passwordField, "Password")
-        assertEquals(false, state?.displayLoginFail, "Display login fail")
+        assertFalse(state?.displayLoginFail, "Display login fail")
 
         // Username and password are empty -> Log in fail
         viewModel.handleAction(BiometricLoginViewAction.Login)
         coVerify(inverse = true) { userRepository.login(any(), any()) }
         state = viewModel.viewState.value
-        assertEquals(true, state?.displayLoginFail, "Display login fail")
+        assertTrue(state?.displayLoginFail, "Display login fail")
 
         // Username is empty -> Log in fail
         viewModel.handleAction(BiometricLoginViewAction.UpdateUsername(""))
@@ -144,7 +145,7 @@ class BiometricLoginViewModelTest {
         viewModel.handleAction(BiometricLoginViewAction.Login)
         coVerify(inverse = true) { userRepository.login(any(), any()) }
         state = viewModel.viewState.value
-        assertEquals(true, state?.displayLoginFail, "Display login fail")
+        assertTrue(state?.displayLoginFail, "Display login fail")
 
         // Username is blank -> Log in fail
         viewModel.handleAction(BiometricLoginViewAction.UpdateUsername(" "))
@@ -152,7 +153,7 @@ class BiometricLoginViewModelTest {
         viewModel.handleAction(BiometricLoginViewAction.Login)
         coVerify(inverse = true) { userRepository.login(any(), any()) }
         state = viewModel.viewState.value
-        assertEquals(true, state?.displayLoginFail, "Display login fail")
+        assertTrue(state?.displayLoginFail, "Display login fail")
 
         // Password is empty -> Log in fail
         viewModel.handleAction(BiometricLoginViewAction.UpdateUsername("Bob"))
@@ -160,7 +161,7 @@ class BiometricLoginViewModelTest {
         viewModel.handleAction(BiometricLoginViewAction.Login)
         coVerify(inverse = true) { userRepository.login(any(), any()) }
         state = viewModel.viewState.value
-        assertEquals(true, state?.displayLoginFail, "Display login fail")
+        assertTrue(state?.displayLoginFail, "Display login fail")
 
         // Password is blank -> Log in fail
         viewModel.handleAction(BiometricLoginViewAction.UpdateUsername("Bob"))
@@ -168,7 +169,7 @@ class BiometricLoginViewModelTest {
         viewModel.handleAction(BiometricLoginViewAction.Login)
         coVerify(inverse = true) { userRepository.login(any(), any()) }
         state = viewModel.viewState.value
-        assertEquals(true, state?.displayLoginFail, "Display login fail")
+        assertTrue(state?.displayLoginFail, "Display login fail")
 
         // Username and password are not blank -> Correct log in request to the repository
         coEvery { userRepository.login(any(), any()) } returns null
@@ -184,7 +185,7 @@ class BiometricLoginViewModelTest {
         viewModel.handleAction(BiometricLoginViewAction.Login)
         coVerify(exactly = 2) { userRepository.login("Bob", "42") }
         state = viewModel.viewState.value
-        assertEquals(true, state?.displayLoginFail, "Display login fail")
+        assertTrue(state?.displayLoginFail, "Display login fail")
     }
 
     @Test
@@ -243,7 +244,7 @@ class BiometricLoginViewModelTest {
 
             // Check that biometric prompt is shown for encryption
             var biometricPromptState = viewModel.biometricPromptState.replayCache.lastOrNull()
-            assertEquals(true, biometricPromptState?.isVisible, "Is visible")
+            assertTrue(biometricPromptState?.isVisible, "Is visible")
             assertEquals(promptInfo, biometricPromptState?.promptInfo, "Prompt info")
             assertEquals(cryptoObject, biometricPromptState?.cryptoObject, "Crypto object")
             assertEquals(CryptoPurpose.ENCRYPTION, biometricPromptState?.purpose, "Purpose")
@@ -253,7 +254,7 @@ class BiometricLoginViewModelTest {
 
             // Check that biometric prompt is hidden
             biometricPromptState = viewModel.biometricPromptState.replayCache.lastOrNull()
-            assertEquals(false, biometricPromptState?.isVisible, "Is visible")
+            assertFalse(biometricPromptState?.isVisible, "Is visible")
         }
     }
 
@@ -274,7 +275,7 @@ class BiometricLoginViewModelTest {
 
             // Check that biometric prompt is shown for encryption
             var biometricPromptState = viewModel.biometricPromptState.replayCache.lastOrNull()
-            assertEquals(true, biometricPromptState?.isVisible, "Is visible")
+            assertTrue(biometricPromptState?.isVisible, "Is visible")
             assertEquals(promptInfo, biometricPromptState?.promptInfo, "Prompt info")
             assertEquals(cryptoObject, biometricPromptState?.cryptoObject, "Crypto object")
             assertEquals(CryptoPurpose.DECRYPTION, biometricPromptState?.purpose, "Purpose")
@@ -284,7 +285,7 @@ class BiometricLoginViewModelTest {
 
             // Check that biometric prompt is hidden
             biometricPromptState = viewModel.biometricPromptState.replayCache.lastOrNull()
-            assertEquals(false, biometricPromptState?.isVisible, "Is visible")
+            assertFalse(biometricPromptState?.isVisible, "Is visible")
         }
     }
 
@@ -351,7 +352,7 @@ class BiometricLoginViewModelTest {
                 coVerify { userRepository.loginWithToken(userToken) }
                 // Check that an error message is displayed
                 val viewState = viewModel.viewState.value
-                assertEquals(true, viewState?.displayLoginFail, "Display login fail")
+                assertTrue(viewState?.displayLoginFail, "Display login fail")
 
                 // Check that no event is send
                 expectNoEvents()
