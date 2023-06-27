@@ -54,7 +54,9 @@ fun BiometricHomeScreen(
 
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-fun BiometricHome(@PreviewParameter(BiometricHomeStateProvider::class) biometricHomeStateData: BiometricHomeStateData) {
+private fun BiometricHome(
+    @PreviewParameter(BiometricHomeStateProvider::class) biometricHomeStateData: BiometricHomeStateData
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,

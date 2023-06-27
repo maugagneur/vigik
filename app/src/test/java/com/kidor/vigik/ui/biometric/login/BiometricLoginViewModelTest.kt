@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.biometric
+package com.kidor.vigik.ui.biometric.login
 
 import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -12,9 +12,6 @@ import com.kidor.vigik.data.biometric.model.BiometricInfo
 import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import com.kidor.vigik.data.user.UserRepository
 import com.kidor.vigik.data.user.model.UserLoginError
-import com.kidor.vigik.ui.biometric.login.BiometricLoginViewAction
-import com.kidor.vigik.ui.biometric.login.BiometricLoginViewEvent
-import com.kidor.vigik.ui.biometric.login.BiometricLoginViewModel
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.AssertUtils.assertFalse
 import com.kidor.vigik.utils.AssertUtils.assertTrue
@@ -319,9 +316,11 @@ class BiometricLoginViewModelTest {
         runTest {
             viewModel.viewEvent.test {
                 // Simulate user successfully saving her biometric credentials
-                viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthSuccess(
-                    cryptoObject = cryptoObject,
-                    purpose = CryptoPurpose.ENCRYPTION)
+                viewModel.handleAction(
+                    BiometricLoginViewAction.OnBiometricAuthSuccess(
+                        cryptoObject = cryptoObject,
+                        purpose = CryptoPurpose.ENCRYPTION
+                    )
                 )
 
                 // Check that the user token is encrypted
@@ -331,23 +330,27 @@ class BiometricLoginViewModelTest {
 
                 // Simulate user successfully login with biometric
                 coEvery { userRepository.loginWithToken(userToken) } returns null
-                viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthSuccess(
-                    cryptoObject = cryptoObject,
-                    purpose = CryptoPurpose.DECRYPTION)
+                viewModel.handleAction(
+                    BiometricLoginViewAction.OnBiometricAuthSuccess(
+                        cryptoObject = cryptoObject,
+                        purpose = CryptoPurpose.DECRYPTION
+                    )
                 )
 
-                //Check that the user token is retrieved from repository and used for login
+                // Check that the user token is retrieved from repository and used for login
                 coVerify { biometricRepository.decryptToken(cryptoObject) }
                 coVerify { userRepository.loginWithToken(userToken) }
 
                 // Simulate user successfully login with biometric but encrypted token does not match
                 coEvery { userRepository.loginWithToken(userToken) } returns UserLoginError.INVALID_USER_TOKEN
-                viewModel.handleAction(BiometricLoginViewAction.OnBiometricAuthSuccess(
-                    cryptoObject = cryptoObject,
-                    purpose = CryptoPurpose.DECRYPTION)
+                viewModel.handleAction(
+                    BiometricLoginViewAction.OnBiometricAuthSuccess(
+                        cryptoObject = cryptoObject,
+                        purpose = CryptoPurpose.DECRYPTION
+                    )
                 )
 
-                //Check that the user token is retrieved from repository and used for login
+                // Check that the user token is retrieved from repository and used for login
                 coVerify { biometricRepository.decryptToken(cryptoObject) }
                 coVerify { userRepository.loginWithToken(userToken) }
                 // Check that an error message is displayed

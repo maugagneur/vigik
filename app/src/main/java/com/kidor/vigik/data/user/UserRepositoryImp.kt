@@ -28,14 +28,22 @@ class UserRepositoryImp(
             preferences.edit { it[PreferencesKeys.USER_TOKEN] = fetchUserToken() }
         }
         _isUserLoggedIn.emit(isSuccess)
-        return if (isSuccess) { null } else { UserLoginError.INVALID_USERNAME_PASSWORD }
+        return if (isSuccess) {
+            null
+        } else {
+            UserLoginError.INVALID_USERNAME_PASSWORD
+        }
     }
 
     override suspend fun loginWithToken(token: String): UserLoginError? {
         val userToken = getUserToken()
         val isSuccess = userToken == token
         _isUserLoggedIn.emit(isSuccess)
-        return if (isSuccess) { null } else { UserLoginError.INVALID_USER_TOKEN }
+        return if (isSuccess) {
+            null
+        } else {
+            UserLoginError.INVALID_USER_TOKEN
+        }
     }
 
     override suspend fun getUserToken(): String? = preferences.data.firstOrNull()?.get(PreferencesKeys.USER_TOKEN)

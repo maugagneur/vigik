@@ -141,27 +141,13 @@ private fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateDa
             onClick = { loginStateData.onBiometricLoginClick() }
         )
         if (loginStateData.loginState.displayLoginFail) {
-            Row(
-                modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceLarge),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Error,
-                    contentDescription = "Error",
-                    tint = MaterialTheme.colorScheme.error
-                )
-                Spacer(Modifier.width(AppTheme.dimensions.commonSpaceSmall))
-                Text(
-                    text = stringResource(id = R.string.biometric_login_error_label),
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
+            InvalidUsernamePasswordView()
         }
     }
 }
 
 @Composable
-fun BiometricLoginButton(
+private fun BiometricLoginButton(
     modifier: Modifier = Modifier,
     visible: Boolean,
     onClick: () -> Unit
@@ -182,6 +168,25 @@ fun BiometricLoginButton(
                 fontSize = AppTheme.dimensions.textSizeLarge
             )
         }
+    }
+}
+
+@Composable
+private fun InvalidUsernamePasswordView() {
+    Row(
+        modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceLarge),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.Default.Error,
+            contentDescription = "Error",
+            tint = MaterialTheme.colorScheme.error
+        )
+        Spacer(Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(id = R.string.biometric_login_error_label),
+            color = MaterialTheme.colorScheme.error
+        )
     }
 }
 

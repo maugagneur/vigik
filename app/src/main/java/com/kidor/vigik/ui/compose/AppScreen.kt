@@ -10,6 +10,7 @@ import com.kidor.vigik.R
  * Metadata of each screen of the application.
  *
  * A screen is defined by its [name] and its [route] in the navigation graph.
+ * You can also hide the back arrow in action by setting [showNavigateBack] to false.
  */
 sealed class AppScreen(@StringRes private val nameId: Int, val route: String, val showNavigateBack: Boolean = true) {
 

@@ -31,6 +31,9 @@ private const val GCM_AUTHENTICATION_TAG_LENGTH = 128
 @Singleton
 class CryptoApi @Inject constructor() {
 
+    /**
+     * The current status of the API.
+     */
     var cryptoApiStatus: CryptoAPIStatus = CryptoAPIStatus.NOT_READY
 
     init {
@@ -41,13 +44,17 @@ class CryptoApi @Inject constructor() {
             getCryptoObjectForEncryption()
             CryptoAPIStatus.READY
         } catch (exception: NoSuchAlgorithmException) {
+            Timber.e(exception)
             CryptoAPIStatus.INIT_FAIL
         } catch (exception: NoSuchPaddingException) {
+            Timber.e(exception)
             CryptoAPIStatus.INIT_FAIL
         } catch (exception: KeyPermanentlyInvalidatedException) {
+            Timber.e(exception)
             removeSecretKey()
             CryptoAPIStatus.INVALIDATED
-        } catch (exception: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") exception: Exception) {
+            Timber.e(exception)
             CryptoAPIStatus.NOT_READY
         }
     }

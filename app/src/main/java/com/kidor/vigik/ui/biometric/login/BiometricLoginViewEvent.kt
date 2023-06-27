@@ -10,6 +10,8 @@ sealed class BiometricLoginViewEvent : ViewEvent() {
 
     /**
      * Event when we should display the system's biometric enrollment.
+     *
+     * @param enrollIntent The intent to start.
      */
     data class DisplayBiometricEnrollment(val enrollIntent: Intent) : BiometricLoginViewEvent()
 

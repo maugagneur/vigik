@@ -19,6 +19,6 @@ data class BiometricInfo(
      * used, otherwise returns false.
      */
     fun isAuthenticationAvailable(): Boolean =
-        biometricAuthenticationStatus == BiometricAuthenticationStatus.READY
-                && cryptoAPIStatus == CryptoAPIStatus.READY
+        biometricAuthenticationStatus == BiometricAuthenticationStatus.READY &&
+                cryptoAPIStatus == CryptoAPIStatus.READY
 }

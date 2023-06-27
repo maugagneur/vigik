@@ -40,7 +40,8 @@ class BiometricRepositoryImp(
                 BiometricManager.BIOMETRIC_SUCCESS -> BiometricAuthenticationStatus.READY
                 BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> BiometricAuthenticationStatus.NOT_AVAILABLE
                 BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> BiometricAuthenticationStatus.TEMPORARY_NOT_AVAILABLE
-                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> BiometricAuthenticationStatus.AVAILABLE_BUT_NOT_ENROLLED
+                BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->
+                    BiometricAuthenticationStatus.AVAILABLE_BUT_NOT_ENROLLED
                 else -> {
                     Timber.e("Error when checking biometric authentication features")
                     BiometricAuthenticationStatus.NOT_AVAILABLE
@@ -85,13 +86,15 @@ class BiometricRepositoryImp(
     override fun getBiometricPromptInfo(purpose: CryptoPurpose): BiometricPrompt.PromptInfo {
         val builder = BiometricPrompt.PromptInfo.Builder()
         when (purpose) {
-            CryptoPurpose.ENCRYPTION -> builder
-                .setTitle(localization.getString(R.string.biometric_prompt_enroll_title))
-                .setSubtitle(localization.getString(R.string.biometric_prompt_enroll_subtitle))
+            CryptoPurpose.ENCRYPTION ->
+                builder
+                    .setTitle(localization.getString(R.string.biometric_prompt_enroll_title))
+                    .setSubtitle(localization.getString(R.string.biometric_prompt_enroll_subtitle))
 
-            CryptoPurpose.DECRYPTION -> builder
-                .setTitle(localization.getString(R.string.biometric_prompt_login_title))
-                .setSubtitle(localization.getString(R.string.biometric_prompt_login_subtitle))
+            CryptoPurpose.DECRYPTION ->
+                builder
+                    .setTitle(localization.getString(R.string.biometric_prompt_login_title))
+                    .setSubtitle(localization.getString(R.string.biometric_prompt_login_subtitle))
         }
         return builder
             .setNegativeButtonText(localization.getString(R.string.biometric_prompt_negative_button_label))
@@ -115,11 +118,12 @@ class BiometricRepositoryImp(
                 val encodedInitializationVector = preferences.data.firstOrNull()?.get(PreferencesKeys.BIOMETRIC_IV)
                 if (encodedInitializationVector == null) {
                     Timber.e("Trying to get crypto object for decryption with no IV saved")
-                    return null
+                    null
+                } else {
+                    // Decode IV
+                    val initializationVector = Base64.decode(encodedInitializationVector, Base64.DEFAULT)
+                    cryptoApi.getCryptoObjectForDecryption(initializationVector)
                 }
-                // Decode IV
-                val initializationVector = Base64.decode(encodedInitializationVector, Base64.DEFAULT)
-                return cryptoApi.getCryptoObjectForDecryption(initializationVector)
             }
         }
     }
@@ -157,13 +161,14 @@ class BiometricRepositoryImp(
 
         // Decode token from persistent storage
         val cipher = cryptoObject.cipher
-        if (cipher == null) {
+        return if (cipher == null) {
             Timber.e("Cipher associated with given crypto object is null")
-            return null
+            null
+        } else {
+            val encodedTokenData = preferences.data.firstOrNull()?.get(PreferencesKeys.BIOMETRIC_TOKEN)
+            val tokenData = Base64.decode(encodedTokenData, Base64.DEFAULT)
+            cryptoApi.decryptData(tokenData, cipher)
         }
-        val encodedTokenData = preferences.data.firstOrNull()?.get(PreferencesKeys.BIOMETRIC_TOKEN)
-        val tokenData = Base64.decode(encodedTokenData, Base64.DEFAULT)
-        return cryptoApi.decryptData(tokenData, cipher)
     }
 
     override suspend fun removeToken() {

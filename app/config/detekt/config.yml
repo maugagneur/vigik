@@ -308,6 +308,11 @@ formatting:
     active: false
   SpacingBetweenDeclarationsWithComments:
     active: false
+  Wrapping:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
+    indentSize: 4
+    maxLineLength: 120
 
 libraries:
   active: true

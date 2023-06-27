@@ -18,6 +18,9 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
+/**
+ * Dependency injection module related to biometric features.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object BiometricModule {
