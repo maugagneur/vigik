@@ -2,6 +2,10 @@ package com.kidor.vigik.di
 
 import android.content.Context
 import android.nfc.NfcAdapter
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
 import com.kidor.vigik.data.AppDataBase
 import com.kidor.vigik.data.DATABASE_NAME
@@ -15,6 +19,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+private const val SHARED_PREFERENCES_FILE_NAME = "app_shared_preferences"
+
 /**
  * Module to tell Hilt how to provide instances of types that cannot be constructor-injected.
  *
@@ -24,6 +30,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    /**
+     * Provides unique instance of [DataStore] for [Preferences].
+     *
+     * @param context Application's context.
+     */
+    @Singleton
+    @Provides
+    fun providesPreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile(SHARED_PREFERENCES_FILE_NAME) }
+        )
 
     /**
      * Provides instance of [AppDataBase].

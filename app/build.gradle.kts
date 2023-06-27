@@ -36,6 +36,7 @@ android {
 
     testOptions {
         unitTests {
+            isIncludeAndroidResources = true
             isReturnDefaultValues = true
         }
     }
@@ -51,6 +52,9 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.bundles.androidx.lifecycle)
 
+    // Biometric
+    implementation(libs.androidx.biometric.ktx)
+
     // Kotlin
     implementation(libs.bundles.kotlinx.coroutines)
     testImplementation(libs.kotlinx.coroutines.test)
@@ -60,6 +64,9 @@ dependencies {
 
     // Log
     implementation(libs.timber)
+
+    // Shared preferences
+    implementation(libs.androidx.datastore.preferences)
 
     // Test
     testImplementation(libs.bundles.test.unit)

@@ -11,6 +11,7 @@
     <string name="scan_button_label">NFC scan</string>
     <string name="history_button_label">Tags history</string>
     <string name="emulate_button_label">Emulate NFC tag</string>
+    <string name="biometric_button_label">Biometric</string>
 
     <string name="scan_nfc_title">Scan NFC</string>
     <string name="menu_action_stop_scan">Stop</string>
@@ -22,4 +23,20 @@
     <string name="no_data_label">No data available</string>
 
     <string name="emulate_tag_title">Emulate tag</string>
+
+    <string name="biometric_title">Biometric</string>
+    <string name="biometric_username_hint">Username</string>
+    <string name="biometric_password_hint">Password</string>
+    <string name="biometric_login_button_label">Login</string>
+    <string name="biometric_login_with_biometric_button_label">Use biometric</string>
+    <string name="biometric_login_error_label">Invalid username/password</string>
+    <string name="biometric_prompt_enroll_title">Enable Biometric Login?</string>
+    <string name="biometric_prompt_enroll_subtitle">Authenticate yourself to enroll your credential</string>
+    <string name="biometric_prompt_login_title">Biometric login</string>
+    <string name="biometric_prompt_login_subtitle">Log in using your biometric credential</string>
+    <string name="biometric_prompt_negative_button_label">Cancel</string>
+    <string name="biometric_home_credential_status_label">Biometric credential:</string>
+    <string name="biometric_home_credential_remove_button_label">Remove</string>
+    <string name="biometric_home_login_success_label">Logged successfully!</string>
+    <string name="biometric_home_logout_button_label">Logout</string>
 </resources>

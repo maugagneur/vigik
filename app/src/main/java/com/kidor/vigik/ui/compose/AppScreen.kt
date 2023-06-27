@@ -10,8 +10,9 @@ import com.kidor.vigik.R
  * Metadata of each screen of the application.
  *
  * A screen is defined by its [name] and its [route] in the navigation graph.
+ * You can also hide the back arrow in action by setting [showNavigateBack] to false.
  */
-sealed class AppScreen(@StringRes private val nameId: Int, val route: String) {
+sealed class AppScreen(@StringRes private val nameId: Int, val route: String, val showNavigateBack: Boolean = true) {
 
     /**
      * Returns the string resource of the screen's name.
@@ -59,6 +60,23 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String) {
         nameId = R.string.emulate_tag_title,
         route = "emulate"
     )
+
+    /**
+     * Metadata of "biometric login" screen.
+     */
+    object BiometricLoginScreen : AppScreen(
+        nameId = R.string.biometric_title,
+        route = "biometric_login"
+    )
+
+    /**
+     * Metadata of "biometric home" screen.
+     */
+    object BiometricHomeScreen : AppScreen(
+        nameId = R.string.biometric_title,
+        route = "biometric_home",
+        showNavigateBack = false
+    )
 }
 
 private val allScreens = listOf(
@@ -66,7 +84,9 @@ private val allScreens = listOf(
     AppScreen.HubScreen,
     AppScreen.ScanScreen,
     AppScreen.HistoryScreen,
-    AppScreen.EmulateScreen
+    AppScreen.EmulateScreen,
+    AppScreen.BiometricLoginScreen,
+    AppScreen.BiometricHomeScreen
 )
 
 /**

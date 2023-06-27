@@ -2,13 +2,14 @@ package com.kidor.vigik.extensions
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import com.kidor.vigik.ui.compose.AppScreen
 
 /**
  * Navigate to a destination in the current NavGraph as single-top and poping up the start destination.
  * If an invalid route is given, an [IllegalArgumentException] will be thrown.
  *
- * @param destination the destination
+ * @param destination The destination.
  */
 fun NavHostController.navigateSingleTopTo(destination: AppScreen): Unit =
     this.navigate(destination.route) {
@@ -29,6 +30,16 @@ fun NavHostController.navigateSingleTopTo(destination: AppScreen): Unit =
  * Navigate to a destination in the current NavGraph.
  * If an invalid route is given, an [IllegalArgumentException] will be thrown.
  *
- * @param destination the destination
+ * @param destination The destination.
+ * @param popUpTo     If set to true, pop up screens until the destination.
  */
-fun NavHostController.navigate(destination: AppScreen): Unit = this.navigate(destination.route)
+fun NavHostController.navigate(destination: AppScreen, popUpTo: Boolean = false): Unit = this.navigate(
+    route = destination.route,
+    navOptions = if (popUpTo) {
+        NavOptions.Builder()
+            .setPopUpTo(destination.route, inclusive = true)
+            .build()
+    } else {
+        null
+    }
+)

@@ -21,4 +21,9 @@ sealed class HubViewAction : ViewAction {
      * Display the tag history view.
      */
     object DisplayTagHistoryView : HubViewAction()
+
+    /**
+     * Display the biometric view.
+     */
+    object DisplayBiometricView : HubViewAction()
 }
