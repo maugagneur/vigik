@@ -65,6 +65,9 @@ dependencies {
     // Log
     implementation(libs.timber)
 
+    // Network calls
+    implementation(libs.bundles.retrofit)
+
     // Shared preferences
     implementation(libs.androidx.datastore.preferences)
 

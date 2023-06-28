@@ -56,15 +56,15 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
     when (worldBoss) {
         Diablo4WorldBoss.ASHAVA -> Image(
             painter = painterResource(id = R.drawable.d4_ashava),
-            contentDescription = "Ashava"
+            contentDescription = worldBoss.description
         )
         Diablo4WorldBoss.AVARICE -> Image(
             painter = painterResource(id = R.drawable.d4_avarice),
-            contentDescription = "Avarice"
+            contentDescription = worldBoss.description
         )
         Diablo4WorldBoss.WANDERING_DEATH -> Image(
             painter = painterResource(id = R.drawable.d4_wandering_death),
-            contentDescription = "Wandering Death"
+            contentDescription = worldBoss.description
         )
         null -> Image(
             painter = painterResource(id = R.drawable.d4_monster),
