@@ -23,6 +23,9 @@ private const val READ_TIMEOUT_IN_SECOND = 10L
 @InstallIn(SingletonComponent::class)
 object DiabloModule {
 
+    /**
+     * Provides instance of [OkHttpClient].
+     */
     @Provides
     fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(CONNECTION_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
@@ -30,6 +33,11 @@ object DiabloModule {
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
 
+    /**
+     * Provides instance of [Diablo4API].
+     *
+     * @param httpClient The HTTP client used for requests.
+     */
     @Singleton
     @Provides
     fun providesDiablo4API(httpClient: OkHttpClient): Diablo4API = Retrofit.Builder()

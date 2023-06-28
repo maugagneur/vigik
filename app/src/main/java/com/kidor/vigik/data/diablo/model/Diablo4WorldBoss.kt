@@ -12,7 +12,8 @@ import com.kidor.vigik.R
 enum class Diablo4WorldBoss(val description: String, @StringRes val resId: Int) {
     ASHAVA("ashava", R.string.diablo_boss_name_ashava),
     AVARICE("avarice", R.string.diablo_boss_name_avarice),
-    WANDERING_DEATH("wandering death", R.string.diablo_boss_name_wandering_death);
+    WANDERING_DEATH("wandering death", R.string.diablo_boss_name_wandering_death),
+    UNKNOWN("", R.string.diablo_boss_name_unknown);
 
     companion object {
         /**
@@ -20,13 +21,13 @@ enum class Diablo4WorldBoss(val description: String, @StringRes val resId: Int) 
          *
          * @param name The world boss's name.
          */
-        fun fromName(name: String): Diablo4WorldBoss? {
+        fun fromName(name: String): Diablo4WorldBoss {
             values().forEach { boss ->
                 if (boss.description.equals(other = name, ignoreCase = true)) {
                     return boss
                 }
             }
-            return null
+            return UNKNOWN
         }
     }
 }

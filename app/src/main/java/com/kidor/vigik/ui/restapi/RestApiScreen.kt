@@ -35,7 +35,9 @@ fun RestApiScreen(
 
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-private fun Diablo4Tracker(@PreviewParameter(Diablo4TrackerDataProvider::class) diablo4TrackerData: Diablo4TrackerData) {
+private fun Diablo4Tracker(
+    @PreviewParameter(Diablo4TrackerDataProvider::class) diablo4TrackerData: Diablo4TrackerData
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -66,7 +68,7 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
             painter = painterResource(id = R.drawable.d4_wandering_death),
             contentDescription = worldBoss.description
         )
-        null -> Image(
+        Diablo4WorldBoss.UNKNOWN, null -> Image(
             painter = painterResource(id = R.drawable.d4_monster),
             contentDescription = "World boss"
         )

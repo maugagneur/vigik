@@ -22,6 +22,11 @@ class Diablo4TrackerDataProvider : PreviewParameterProvider<Diablo4TrackerData> 
             nextBoss = Diablo4WorldBoss.WANDERING_DEATH,
             timeUntilNextBoss = null,
             timeUntilNextHellTide = "1 h 02"
+        ),
+        Diablo4TrackerData(
+            nextBoss = Diablo4WorldBoss.UNKNOWN,
+            timeUntilNextBoss = "5 h 37",
+            timeUntilNextHellTide = null
         )
     )
 }
