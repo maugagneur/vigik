@@ -12,6 +12,7 @@
     <string name="history_button_label">Tags history</string>
     <string name="emulate_button_label">Emulate NFC tag</string>
     <string name="biometric_button_label">Biometric</string>
+    <string name="rest_api_button_label">REST API</string>
 
     <string name="scan_nfc_title">Scan NFC</string>
     <string name="menu_action_stop_scan">Stop</string>

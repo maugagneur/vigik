@@ -18,10 +18,12 @@ class DefaultStateProvider : PreviewParameterProvider<DefaultStateData> {
  * @param onHistoryClick   The function called on an history click.
  * @param onEmulateClick   The function called on an emulate click.
  * @param onBiometricClick The function called on a biometric click.
+ * @param onRestApiClick   The function called on a REST API click.
  */
 data class DefaultStateData(
     val onScanClick: () -> Unit = {},
     val onHistoryClick: () -> Unit = {},
     val onEmulateClick: () -> Unit = {},
-    val onBiometricClick: () -> Unit = {}
+    val onBiometricClick: () -> Unit = {},
+    val onRestApiClick: () -> Unit = {}
 )

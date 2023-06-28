@@ -77,6 +77,14 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
         route = "biometric_home",
         showNavigateBack = false
     )
+
+    /**
+     * Metadata of "REST API" screen
+     */
+    object RestApiScreen : AppScreen(
+        nameId = R.string.rest_api_title,
+        route = "rest_api"
+    )
 }
 
 private val allScreens = listOf(
@@ -86,7 +94,8 @@ private val allScreens = listOf(
     AppScreen.HistoryScreen,
     AppScreen.EmulateScreen,
     AppScreen.BiometricLoginScreen,
-    AppScreen.BiometricHomeScreen
+    AppScreen.BiometricHomeScreen,
+    AppScreen.RestApiScreen
 )
 
 /**

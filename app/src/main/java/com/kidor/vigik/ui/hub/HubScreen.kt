@@ -29,7 +29,8 @@ fun HubScreen(
     navigateToScanTag: () -> Unit = {},
     navigateToTagHistory: () -> Unit = {},
     navigateToEmulateTag: () -> Unit = {},
-    navigateToBiometric: () -> Unit = {}
+    navigateToBiometric: () -> Unit = {},
+    navigateToRestApi: () -> Unit = {}
 ) {
     ObserveViewState(viewModel) { state ->
         if (state is HubViewState.Default) {
@@ -38,7 +39,8 @@ fun HubScreen(
                     onScanClick = { viewModel.handleAction(HubViewAction.DisplayScanTagView) },
                     onHistoryClick = { viewModel.handleAction(HubViewAction.DisplayTagHistoryView) },
                     onEmulateClick = { viewModel.handleAction(HubViewAction.DisplayEmulateTagView) },
-                    onBiometricClick = { viewModel.handleAction(HubViewAction.DisplayBiometricView) }
+                    onBiometricClick = { viewModel.handleAction(HubViewAction.DisplayBiometricView) },
+                    onRestApiClick = { viewModel.handleAction(HubViewAction.DisplayRestApiView) }
                 )
             )
         }
@@ -49,6 +51,7 @@ fun HubScreen(
             HubViewEvent.NavigateToHistoryView -> navigateToTagHistory()
             HubViewEvent.NavigateToScanView -> navigateToScanTag()
             HubViewEvent.NavigateToBiometricView -> navigateToBiometric()
+            HubViewEvent.NavigateToRestApiView -> navigateToRestApi()
         }
     }
 }
@@ -100,6 +103,15 @@ internal fun DefaultState(@PreviewParameter(DefaultStateProvider::class) default
         ) {
             Text(
                 text = stringResource(id = R.string.biometric_button_label).uppercase(),
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
+        Button(
+            onClick = defaultStateData.onRestApiClick,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.rest_api_button_label).uppercase(),
                 fontSize = AppTheme.dimensions.textSizeMedium
             )
         }

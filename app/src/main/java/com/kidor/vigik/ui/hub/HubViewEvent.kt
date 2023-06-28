@@ -26,4 +26,9 @@ sealed class HubViewEvent : ViewEvent() {
      * Event when we have to navigate to Biometric view.
      */
     object NavigateToBiometricView : HubViewEvent()
+
+    /**
+     * Event when we have to navigate to REST API view.
+     */
+    object NavigateToRestApiView : HubViewEvent()
 }

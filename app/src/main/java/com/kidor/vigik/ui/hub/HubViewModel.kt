@@ -20,6 +20,7 @@ class HubViewModel : BaseViewModel<HubViewAction, HubViewState, HubViewEvent>() 
                 HubViewAction.DisplayScanTagView -> HubViewEvent.NavigateToScanView
                 HubViewAction.DisplayTagHistoryView -> HubViewEvent.NavigateToHistoryView
                 HubViewAction.DisplayBiometricView -> HubViewEvent.NavigateToBiometricView
+                HubViewAction.DisplayRestApiView -> HubViewEvent.NavigateToRestApiView
             }
             _viewEvent.emit(event)
         }

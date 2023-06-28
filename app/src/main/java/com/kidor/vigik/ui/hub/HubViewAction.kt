@@ -26,4 +26,9 @@ sealed class HubViewAction : ViewAction {
      * Display the biometric view.
      */
     object DisplayBiometricView : HubViewAction()
+
+    /**
+     * Display the REST API view.
+     */
+    object DisplayRestApiView : HubViewAction()
 }
