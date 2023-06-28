@@ -40,4 +40,11 @@
     <string name="biometric_home_credential_remove_button_label">Remove</string>
     <string name="biometric_home_login_success_label">Logged successfully!</string>
     <string name="biometric_home_logout_button_label">Logout</string>
+
+    <string name="rest_api_title">Diablo IV event tracker</string>
+    <string name="diablo_boss_name_ashava">Ashava, the Pestilent</string>
+    <string name="diablo_boss_name_avarice">Avarice, the God Cursed</string>
+    <string name="diablo_boss_name_wandering_death">Wandering Death, the Death Given Life</string>
+    <string name="diablo_boss_next_spawn_label">Next possible spawn in %s</string>
+    <string name="diablo_hell_tide_next_rise_label">Next Hell tide in %s</string>
 </resources>

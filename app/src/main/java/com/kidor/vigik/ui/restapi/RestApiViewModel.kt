@@ -9,4 +9,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RestApiViewModel @Inject constructor() : BaseViewModel<Nothing, Diablo4TrackerData, Nothing>() {
+
+    init {
+        _viewState.value = Diablo4TrackerData()
+    }
 }
