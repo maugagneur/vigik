@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.asSharedFlow
  * ```
  *      _viewState.value = VIEW_STATE
  *      ...
- *      _viewEvent.value = VIEW_EVENT.wrap()
+ *      _viewEvent.emit(VIEW_EVENT)
  * ```
  */
 open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_EVENT : ViewEvent> : ViewModel() {

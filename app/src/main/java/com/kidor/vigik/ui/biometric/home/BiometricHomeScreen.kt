@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.CollectViewEvent
@@ -94,7 +93,7 @@ private fun BiometricHome(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceXXLarge))
         Text(
             text = stringResource(id = R.string.biometric_home_login_success_label),
             color = MaterialTheme.colorScheme.onBackground,
