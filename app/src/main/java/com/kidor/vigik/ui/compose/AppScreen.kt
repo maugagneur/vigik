@@ -22,6 +22,14 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     fun name(): String = stringResource(id = nameId)
 
     /**
+     * Metadata of 'home" screen.
+     */
+    object HomeScreen : AppScreen(
+        nameId = R.string.home_title,
+        route = "home"
+    )
+
+    /**
      * Metadata of "check" screen.
      */
     object CheckScreen : AppScreen(
@@ -88,6 +96,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
 }
 
 private val allScreens = listOf(
+    AppScreen.HomeScreen,
     AppScreen.CheckScreen,
     AppScreen.HubScreen,
     AppScreen.ScanScreen,

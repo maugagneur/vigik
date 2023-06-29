@@ -16,6 +16,7 @@ import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.check.CheckScreen
 import com.kidor.vigik.ui.emulate.EmulateScreen
 import com.kidor.vigik.ui.history.HistoryScreen
+import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.hub.HubScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
 import com.kidor.vigik.ui.scan.ScanScreen
@@ -31,9 +32,14 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.CheckScreen.route,
+        startDestination = AppScreen.HomeScreen.route,
         modifier = modifier
     ) {
+        // Home
+        composable(route = AppScreen.HomeScreen.route) {
+            HomeScreen(
+            )
+        }
         composable(route = AppScreen.CheckScreen.route) {
             CheckScreen(
                 navigateToHub = { navController.navigateSingleTopTo(AppScreen.HubScreen) },

@@ -3,6 +3,11 @@
     <string name="menu_action_back">Back</string>
     <string name="menu_action_invert_color">Invert colors</string>
 
+    <string name="home_title">Home</string>
+    <string name="home_biometric_button_label">Biometric</string>
+    <string name="home_nfc_button_label">NFC</string>
+    <string name="home_rest_api_button_label">REST API</string>
+
     <string name="check_nfc_title">Check NFC</string>
     <string name="nfc_state_refresh">Refresh</string>
     <string name="nfc_settings">Settings</string>
