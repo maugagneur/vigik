@@ -17,6 +17,7 @@ import com.kidor.vigik.ui.check.CheckScreen
 import com.kidor.vigik.ui.emulate.EmulateScreen
 import com.kidor.vigik.ui.history.HistoryScreen
 import com.kidor.vigik.ui.hub.HubScreen
+import com.kidor.vigik.ui.restapi.RestApiScreen
 import com.kidor.vigik.ui.scan.ScanScreen
 
 /**
@@ -44,7 +45,8 @@ fun AppNavHost(
                 navigateToScanTag = { navController.navigate(AppScreen.ScanScreen) },
                 navigateToTagHistory = { navController.navigate(AppScreen.HistoryScreen) },
                 navigateToEmulateTag = { navController.navigate(AppScreen.EmulateScreen) },
-                navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) }
+                navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
+                navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
             )
         }
         composable(route = AppScreen.ScanScreen.route) {
@@ -69,6 +71,9 @@ fun AppNavHost(
                     navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
                 }
             )
+        }
+        composable(route = AppScreen.RestApiScreen.route) {
+            RestApiScreen()
         }
     }
 }

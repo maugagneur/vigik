@@ -1,10 +1,10 @@
 package com.kidor.vigik.utils
 
-private const val TEST_REPORT = "\t#TEST_REPORT "
+private const val TEST_REPORT = "#TEST_REPORT "
 /**
  * Label used when logging test message in order to find and extract them for reporting.
  */
-const val TEST_REPORT_TAG = "\t\t" + TEST_REPORT
+const val TEST_REPORT_TAG = TEST_REPORT + "\t\t"
 
 object TestUtils {
 

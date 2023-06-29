@@ -2,7 +2,7 @@ package com.kidor.vigik.data
 
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
+import android.content.res.Resources.NotFoundException
 import androidx.annotation.StringRes
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -26,8 +26,23 @@ class Localization @Inject constructor(
     fun getString(@StringRes resId: Int): String {
         return try {
             context.createConfigurationContext(configuration).resources.getString(resId)
-        } catch (exception: Resources.NotFoundException) {
-            Timber.e("String resource not found: $resId", exception)
+        } catch (exception: NotFoundException) {
+            Timber.e(exception, "String resource not found: $resId")
+            resId.toString()
+        }
+    }
+
+    /**
+     * Returns the string value associated with a particular resource ID, substituting the format arguments.
+     *
+     * @param resId      The resource's ID to find.
+     * @param formatArgs The format arguments that will be used for substitution.
+     */
+    fun getString(@StringRes resId: Int, vararg formatArgs: Any?): String {
+        return try {
+            context.createConfigurationContext(configuration).resources.getString(resId, *formatArgs)
+        } catch (exception: NotFoundException) {
+            Timber.e(exception, "String resource not found: $resId")
             resId.toString()
         }
     }

@@ -17,6 +17,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val SHARED_PREFERENCES_FILE_NAME = "app_shared_preferences"
@@ -30,6 +33,13 @@ private const val SHARED_PREFERENCES_FILE_NAME = "app_shared_preferences"
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    /**
+     * Provides instance of [Dispatchers.IO].
+     */
+    @IoDispatcher
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     /**
      * Provides unique instance of [DataStore] for [Preferences].
@@ -93,3 +103,10 @@ object TagRepositoryModule {
     @Provides
     fun provideTagRepository(tagDao: TagDao): TagRepository = TagRepositoryImp(tagDao)
 }
+
+/**
+ * Annotation to inject [Dispatchers.IO].
+ */
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class IoDispatcher
