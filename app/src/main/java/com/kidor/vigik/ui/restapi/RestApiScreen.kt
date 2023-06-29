@@ -2,10 +2,17 @@ package com.kidor.vigik.ui.restapi
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,12 +31,30 @@ import com.kidor.vigik.ui.compose.AppTheme
 /**
  * View that display the section dedicated to REST API.
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RestApiScreen(
     viewModel: RestApiViewModel = hiltViewModel()
 ) {
     ObserveViewState(viewModel) { state ->
-        Diablo4Tracker(state)
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = state.isRefreshing,
+            onRefresh = { viewModel.handleAction(RestApiViewAction.RefreshData) }
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pullRefresh(pullRefreshState)
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center
+        ) {
+            Diablo4Tracker(state.diablo4TrackerData)
+            PullRefreshIndicator(
+                refreshing = state.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
     }
 }
 
@@ -39,7 +64,6 @@ private fun Diablo4Tracker(
     @PreviewParameter(Diablo4TrackerDataProvider::class) diablo4TrackerData: Diablo4TrackerData
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -60,14 +84,17 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
             painter = painterResource(id = R.drawable.d4_ashava),
             contentDescription = worldBoss.description
         )
+
         Diablo4WorldBoss.AVARICE -> Image(
             painter = painterResource(id = R.drawable.d4_avarice),
             contentDescription = worldBoss.description
         )
+
         Diablo4WorldBoss.WANDERING_DEATH -> Image(
             painter = painterResource(id = R.drawable.d4_wandering_death),
             contentDescription = worldBoss.description
         )
+
         Diablo4WorldBoss.UNKNOWN, null -> Image(
             painter = painterResource(id = R.drawable.d4_monster),
             contentDescription = "World boss"

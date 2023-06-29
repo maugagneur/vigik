@@ -6,6 +6,7 @@ import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.diablo.Diablo4API
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
 import com.kidor.vigik.di.IoDispatcher
+import com.kidor.vigik.extensions.awaitAll
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,12 +31,12 @@ class RestApiViewModel @Inject constructor(
     private val diablo4API: Diablo4API,
     private val localization: Localization,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
-) : BaseViewModel<Nothing, Diablo4TrackerData, Nothing>() {
+) : BaseViewModel<RestApiViewAction, RestApiViewState, Nothing>() {
 
     private val trackerData = AtomicReference(Diablo4TrackerData())
 
     init {
-        _viewState.value = trackerData.get()
+        _viewState.value = RestApiViewState(diablo4TrackerData = trackerData.get())
 
         // World boss
         viewModelScope.launch(context = ioDispatcher) {
@@ -64,6 +65,26 @@ class RestApiViewModel @Inject constructor(
         }
     }
 
+    override fun handleAction(viewAction: RestApiViewAction) {
+        when (viewAction) {
+            RestApiViewAction.RefreshData -> {
+                viewModelScope.launch(ioDispatcher) {
+                    // Notify refresh starts
+                    _viewState.postValue(viewState.value?.copy(isRefreshing = true))
+
+                    // Refresh all tracker data
+                    awaitAll(
+                        ::refreshWorldBoss,
+                        ::refreshHellTide
+                    )
+
+                    // Notify refresh ends
+                    _viewState.postValue(viewState.value?.copy(isRefreshing = false))
+                }
+            }
+        }
+    }
+
     /**
      * Fetch next world boss data from API then refresh UI state with it.
      *
@@ -79,12 +100,14 @@ class RestApiViewModel @Inject constructor(
                     val worldBoss = getWorldBossFromName(responseBody?.name)
                     remainingTime = responseBody?.time
                     _viewState.postValue(
-                        trackerData.updateAndGet { previousData ->
-                            previousData.copy(
-                                nextBoss = worldBoss,
-                                timeUntilNextBoss = formatDurationToReadableTime(remainingTime)
-                            )
-                        }
+                        RestApiViewState(
+                            diablo4TrackerData = trackerData.updateAndGet { previousData ->
+                                previousData.copy(
+                                    nextBoss = worldBoss,
+                                    timeUntilNextBoss = formatDurationToReadableTime(remainingTime)
+                                )
+                            }
+                        )
                     )
                 } else {
                     Timber.w("Fail to get next world boss data: ${response.errorBody()?.string()}")
@@ -114,11 +137,13 @@ class RestApiViewModel @Inject constructor(
                 if (response.isSuccessful) {
                     remainingTime = response.body()?.time
                     _viewState.postValue(
-                        trackerData.updateAndGet { previousData ->
-                            previousData.copy(
-                                timeUntilNextHellTide = formatDurationToReadableTime(remainingTime)
-                            )
-                        }
+                        RestApiViewState(
+                            diablo4TrackerData = trackerData.updateAndGet { previousData ->
+                                previousData.copy(
+                                    timeUntilNextHellTide = formatDurationToReadableTime(remainingTime)
+                                )
+                            }
+                        )
                     )
                 } else {
                     Timber.w("Fail to get next hell tide data: ${response.errorBody()?.string()}")
