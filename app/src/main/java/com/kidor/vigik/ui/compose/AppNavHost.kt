@@ -39,6 +39,7 @@ fun AppNavHost(
         composable(route = AppScreen.HomeScreen.route) {
             HomeScreen(
                 navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
+                navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
                 navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
             )
         }
@@ -58,28 +59,28 @@ fun AppNavHost(
                 }
             )
         }
-        composable(route = AppScreen.CheckScreen.route) {
+
+        // NFC
+        composable(route = AppScreen.NfcCheckScreen.route) {
             CheckScreen(
-                navigateToHub = { navController.navigateSingleTopTo(AppScreen.HubScreen) },
+                navigateToHub = { navController.navigateSingleTopTo(AppScreen.NfcHubScreen) },
                 navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
             )
         }
-        composable(route = AppScreen.HubScreen.route) {
+        composable(route = AppScreen.NfcHubScreen.route) {
             HubScreen(
-                navigateToScanTag = { navController.navigate(AppScreen.ScanScreen) },
-                navigateToTagHistory = { navController.navigate(AppScreen.HistoryScreen) },
-                navigateToEmulateTag = { navController.navigate(AppScreen.EmulateScreen) },
-                navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
-                navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
+                navigateToScanTag = { navController.navigate(AppScreen.NfcScanScreen) },
+                navigateToTagHistory = { navController.navigate(AppScreen.NfcHistoryScreen) },
+                navigateToEmulateTag = { navController.navigate(AppScreen.NfcEmulateScreen) }
             )
         }
-        composable(route = AppScreen.ScanScreen.route) {
+        composable(route = AppScreen.NfcScanScreen.route) {
             ScanScreen()
         }
-        composable(route = AppScreen.HistoryScreen.route) {
+        composable(route = AppScreen.NfcHistoryScreen.route) {
             HistoryScreen()
         }
-        composable(route = AppScreen.EmulateScreen.route) {
+        composable(route = AppScreen.NfcEmulateScreen.route) {
             EmulateScreen()
         }
 

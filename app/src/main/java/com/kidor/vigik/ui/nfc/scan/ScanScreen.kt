@@ -55,8 +55,8 @@ fun ScanScreen(viewModel: ScanViewModel = hiltViewModel()) {
     }
     CollectViewEvent(viewModel) { event ->
         when (event) {
-            ScanViewEvent.SaveTagFailure -> promptMessage(context, R.string.save_tag_fail)
-            ScanViewEvent.SaveTagSuccess -> promptMessage(context, R.string.save_tag_success)
+            ScanViewEvent.SaveTagFailure -> promptMessage(context, R.string.nfc_save_tag_fail)
+            ScanViewEvent.SaveTagSuccess -> promptMessage(context, R.string.nfc_save_tag_success)
         }
     }
 }

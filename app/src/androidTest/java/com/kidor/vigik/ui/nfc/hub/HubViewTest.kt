@@ -48,39 +48,37 @@ class HubViewTest {
 
         runComposeUiTest {
             setContent {
-                DefaultState(
-                    DefaultStateData(
-                        onScanClick = scanCallback,
-                        onHistoryClick = historyCallback,
-                        onEmulateClick = emulateCallback
-                    )
+                HubScreen(
+                    navigateToScanTag = scanCallback,
+                    navigateToTagHistory = historyCallback,
+                    navigateToEmulateTag = emulateCallback
                 )
             }
 
             // Check that button to start scanning tag is visible
-            onNodeWithText(stringResourceId = R.string.scan_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_scan_button_label, ignoreCase = true)
                 .assertIsDisplayed()
 
             // Check that button to see the tag history is visible
-            onNodeWithText(stringResourceId = R.string.history_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_history_button_label, ignoreCase = true)
                 .assertIsDisplayed()
 
             // Check that button to start emulating tag is visible
-            onNodeWithText(stringResourceId = R.string.emulate_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_emulate_button_label, ignoreCase = true)
                 .assertIsDisplayed()
 
             // Check that a click on "NFC scan" button generates a RefreshNfcStatus action
-            onNodeWithText(stringResourceId = R.string.scan_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_scan_button_label, ignoreCase = true)
                 .performClick()
             verify(scanCallback).invoke()
 
             // Check that a click on "Tags history" button generates a DisplayTagHistoryView action
-            onNodeWithText(stringResourceId = R.string.history_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_history_button_label, ignoreCase = true)
                 .performClick()
             verify(historyCallback).invoke()
 
             // Check that a click on "Emulate NFC tag" button generates a DisplayEmulateTagView action
-            onNodeWithText(stringResourceId = R.string.emulate_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_emulate_button_label, ignoreCase = true)
                 .performClick()
             verify(emulateCallback).invoke()
         }

@@ -13,8 +13,8 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.data.nfc.model.Tag
+import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.After
@@ -68,7 +68,7 @@ class HistoryViewTest {
                 .assertDoesNotExist()
 
             // Check that the text for `no-data` is hidden
-            onNodeWithText(stringResourceId = R.string.no_data_label)
+            onNodeWithText(stringResourceId = R.string.nfc_history_no_data_label)
                 .assertDoesNotExist()
         }
     }
@@ -92,7 +92,7 @@ class HistoryViewTest {
                 .assertDoesNotExist()
 
             // Check that the textview for `no-data` is visible
-            onNodeWithText(stringResourceId = R.string.no_data_label)
+            onNodeWithText(stringResourceId = R.string.nfc_history_no_data_label)
                 .assertIsDisplayed()
         }
     }
@@ -129,8 +129,8 @@ class HistoryViewTest {
                 .filter(hasTestTag(TAGS_LIST_ROW_TEST_TAG))
                 .assertCountEquals(tagList.size)
 
-            // Check that the textview for `no-data` is visible
-            onNodeWithText(stringResourceId = R.string.no_data_label)
+            // Check that the textview for `no-data` is hidden
+            onNodeWithText(stringResourceId = R.string.nfc_history_no_data_label)
                 .assertDoesNotExist()
 
             // Check that a click on delete button generates a DeleteTag action with right value

@@ -115,7 +115,7 @@ internal fun NfcIsDisableState(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = stringResource(id = R.string.nfc_state_refresh).uppercase(),
+                text = stringResource(id = R.string.nfc_refresh_button_label).uppercase(),
                 modifier = Modifier.weight(1f),
                 fontSize = AppTheme.dimensions.textSizeMedium,
                 textAlign = TextAlign.Center
@@ -131,7 +131,7 @@ internal fun NfcIsDisableState(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
-                text = stringResource(id = R.string.nfc_settings).uppercase(),
+                text = stringResource(id = R.string.nfc_settings_button_label).uppercase(),
                 modifier = Modifier.weight(1f),
                 fontSize = AppTheme.dimensions.textSizeMedium,
                 textAlign = TextAlign.Center

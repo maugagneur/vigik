@@ -60,11 +60,11 @@ class CheckViewTest {
                 .assertRangeInfoEquals(ProgressBarRangeInfo.Indeterminate)
 
             // Check that refresh button is hidden
-            onNodeWithText(stringResourceId = R.string.nfc_state_refresh)
+            onNodeWithText(stringResourceId = R.string.nfc_refresh_button_label)
                 .assertDoesNotExist()
 
             // Check that settings button is hidden
-            onNodeWithText(stringResourceId = R.string.nfc_settings)
+            onNodeWithText(stringResourceId = R.string.nfc_settings_button_label)
                 .assertDoesNotExist()
         }
     }
@@ -84,20 +84,20 @@ class CheckViewTest {
                 .assertDoesNotExist()
 
             // Check that refresh button is visible
-            onNodeWithText(stringResourceId = R.string.nfc_state_refresh, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_refresh_button_label, ignoreCase = true)
                 .assertIsDisplayed()
 
             // Check that settings button is visible
-            onNodeWithText(stringResourceId = R.string.nfc_settings, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_settings_button_label, ignoreCase = true)
                 .assertIsDisplayed()
 
             // Check that a click on refresh button generates a RefreshNfcStatus action
-            onNodeWithText(stringResourceId = R.string.nfc_state_refresh, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_refresh_button_label, ignoreCase = true)
                 .performClick()
             verify(refreshCallback).invoke()
 
             // Check that a click on refresh button generates a DisplayNfcSettings action
-            onNodeWithText(stringResourceId = R.string.nfc_settings, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_settings_button_label, ignoreCase = true)
                 .performClick()
             verify(settingsCallback).invoke()
         }

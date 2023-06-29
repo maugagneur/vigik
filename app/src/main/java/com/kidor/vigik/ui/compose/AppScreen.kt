@@ -32,40 +32,40 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "check" screen.
      */
-    object CheckScreen : AppScreen(
-        nameId = R.string.check_nfc_title,
+    object NfcCheckScreen : AppScreen(
+        nameId = R.string.nfc_check_title,
         route = "check"
     )
 
     /**
      * Metadata of "hub" screen.
      */
-    object HubScreen : AppScreen(
-        nameId = R.string.hub_title,
+    object NfcHubScreen : AppScreen(
+        nameId = R.string.nfc_hub_title,
         route = "hub"
     )
 
     /**
      * Metadata of "scan" screen.
      */
-    object ScanScreen : AppScreen(
-        nameId = R.string.scan_nfc_title,
+    object NfcScanScreen : AppScreen(
+        nameId = R.string.nfc_scan_title,
         route = "scan"
     )
 
     /**
      * Metadata of "history" screen.
      */
-    object HistoryScreen : AppScreen(
-        nameId = R.string.tag_history_title,
+    object NfcHistoryScreen : AppScreen(
+        nameId = R.string.nfc_tag_history_title,
         route = "history"
     )
 
     /**
      * Metadata of "emulate" screen.
      */
-    object EmulateScreen : AppScreen(
-        nameId = R.string.emulate_tag_title,
+    object NfcEmulateScreen : AppScreen(
+        nameId = R.string.nfc_emulate_title,
         route = "emulate"
     )
 
@@ -97,11 +97,11 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
 
 private val allScreens = listOf(
     AppScreen.HomeScreen,
-    AppScreen.CheckScreen,
-    AppScreen.HubScreen,
-    AppScreen.ScanScreen,
-    AppScreen.HistoryScreen,
-    AppScreen.EmulateScreen,
+    AppScreen.NfcCheckScreen,
+    AppScreen.NfcHubScreen,
+    AppScreen.NfcScanScreen,
+    AppScreen.NfcHistoryScreen,
+    AppScreen.NfcEmulateScreen,
     AppScreen.BiometricLoginScreen,
     AppScreen.BiometricHomeScreen,
     AppScreen.RestApiScreen

@@ -81,7 +81,7 @@ internal fun DisplayTags(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = stringResource(id = R.string.no_data_label),
+                text = stringResource(id = R.string.nfc_history_no_data_label),
                 fontSize = AppTheme.dimensions.textSizeMedium
             )
         }

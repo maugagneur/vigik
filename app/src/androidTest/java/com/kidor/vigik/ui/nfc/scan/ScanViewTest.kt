@@ -9,8 +9,8 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.R
-import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.data.nfc.model.Tag
+import com.kidor.vigik.extensions.onNodeWithText
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Ignore
@@ -113,7 +113,7 @@ class ScanViewTest {
             }
 
             // Check that a toast with successful message is displayed
-            onNodeWithText(R.string.save_tag_success, ignoreCase = true, useUnmergedTree = true)
+            onNodeWithText(R.string.nfc_save_tag_success, ignoreCase = true, useUnmergedTree = true)
                 .assertIsDisplayed()
         }
     }
@@ -130,7 +130,7 @@ class ScanViewTest {
             }
 
             // Check that a toast with failure message is displayed
-            onNodeWithText(R.string.save_tag_fail, ignoreCase = true, useUnmergedTree = true)
+            onNodeWithText(R.string.nfc_save_tag_fail, ignoreCase = true, useUnmergedTree = true)
                 .assertIsDisplayed()
         }
     }
