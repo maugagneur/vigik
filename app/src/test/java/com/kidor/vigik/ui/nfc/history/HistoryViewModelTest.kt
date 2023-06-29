@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asFlow
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
-import com.kidor.vigik.data.tag.TagRepository
 import com.kidor.vigik.data.nfc.model.Tag
+import com.kidor.vigik.data.tag.TagRepository
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations

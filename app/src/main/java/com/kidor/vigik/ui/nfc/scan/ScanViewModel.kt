@@ -2,10 +2,10 @@ package com.kidor.vigik.ui.nfc.scan
 
 import androidx.annotation.RestrictTo
 import androidx.lifecycle.viewModelScope
-import com.kidor.vigik.data.tag.TagRepository
 import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.data.nfc.api.NfcApiListener
 import com.kidor.vigik.data.nfc.model.Tag
+import com.kidor.vigik.data.tag.TagRepository
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

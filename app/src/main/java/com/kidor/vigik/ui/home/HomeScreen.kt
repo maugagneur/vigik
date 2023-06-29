@@ -15,6 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.compose.AppTheme
 
+/**
+ * View that display all sections of the application.
+ */
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 fun HomeScreen(

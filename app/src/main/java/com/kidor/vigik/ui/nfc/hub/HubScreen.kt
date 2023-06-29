@@ -16,7 +16,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.ui.compose.AppTheme
 
 /**
- * View that display all sections of the application.
+ * View that display all sub-sections of NFC.
  */
 @Preview(widthDp = 400, heightDp = 700)
 @Composable
