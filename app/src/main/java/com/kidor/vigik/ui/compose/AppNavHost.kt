@@ -13,13 +13,13 @@ import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
+import com.kidor.vigik.ui.home.HomeScreen
+import com.kidor.vigik.ui.nfc.check.CheckScreen
 import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
 import com.kidor.vigik.ui.nfc.history.HistoryScreen
-import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.hub.HubScreen
-import com.kidor.vigik.ui.nfc.check.CheckScreen
-import com.kidor.vigik.ui.restapi.RestApiScreen
 import com.kidor.vigik.ui.nfc.scan.ScanScreen
+import com.kidor.vigik.ui.restapi.RestApiScreen
 
 /**
  * Implementation of [NavHost] for this application.

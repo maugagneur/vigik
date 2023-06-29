@@ -1,6 +1,6 @@
 package com.kidor.vigik.ui.nfc.scan
 
-import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.data.nfc.model.Tag
 import com.kidor.vigik.ui.base.ViewState
 
 /**

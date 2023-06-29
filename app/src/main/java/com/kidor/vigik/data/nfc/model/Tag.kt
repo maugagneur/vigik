@@ -1,4 +1,4 @@
-package com.kidor.vigik.nfc.model
+package com.kidor.vigik.data.nfc.model
 
 import com.kidor.vigik.extensions.toHex
 import com.kidor.vigik.ui.usecases.FormatDateUseCase

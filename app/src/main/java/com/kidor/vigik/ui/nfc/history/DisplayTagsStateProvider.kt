@@ -1,7 +1,7 @@
 package com.kidor.vigik.ui.nfc.history
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.data.nfc.model.Tag
 import java.util.Calendar
 
 /**

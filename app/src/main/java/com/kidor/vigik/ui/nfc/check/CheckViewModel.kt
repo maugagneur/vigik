@@ -1,7 +1,7 @@
 package com.kidor.vigik.ui.nfc.check
 
 import androidx.lifecycle.viewModelScope
-import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.nfc.emulate
 import android.nfc.cardemulation.HostApduService
 import android.os.RemoteException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.kidor.vigik.nfc.hostapdu.HostApduManager
+import com.kidor.vigik.data.nfc.hostapdu.HostApduManager
 import com.kidor.vigik.utils.AssertUtils.assertTrue
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations

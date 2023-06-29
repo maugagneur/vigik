@@ -5,9 +5,9 @@ import android.os.RemoteException
 import androidx.annotation.RestrictTo
 import com.kidor.vigik.extensions.startWith
 import com.kidor.vigik.extensions.toHex
-import com.kidor.vigik.nfc.hostapdu.ApduStatusBytes
-import com.kidor.vigik.nfc.hostapdu.HostApduListener
-import com.kidor.vigik.nfc.hostapdu.HostApduManager
+import com.kidor.vigik.data.nfc.hostapdu.ApduStatusBytes
+import com.kidor.vigik.data.nfc.hostapdu.HostApduListener
+import com.kidor.vigik.data.nfc.hostapdu.HostApduManager
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber

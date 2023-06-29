@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteConstraintException
 import androidx.annotation.WorkerThread
 import com.kidor.vigik.extensions.toRoomTag
 import com.kidor.vigik.extensions.toTagList
-import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.data.nfc.model.Tag
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber

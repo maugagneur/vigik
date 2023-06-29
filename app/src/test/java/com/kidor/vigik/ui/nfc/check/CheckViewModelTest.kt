@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.nfc.check
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
-import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations

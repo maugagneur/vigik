@@ -1,12 +1,12 @@
-package com.kidor.vigik.nfc
+package com.kidor.vigik.data.nfc
 
 import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
-import com.kidor.vigik.nfc.api.NfcApi
-import com.kidor.vigik.nfc.api.NfcApiListener
+import com.kidor.vigik.data.nfc.api.NfcApi
+import com.kidor.vigik.data.nfc.api.NfcApiListener
 import com.kidor.vigik.utils.SystemWrapper
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
@@ -108,7 +108,7 @@ class NfcApiTest {
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify { listener.onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, null, null, "No NDEF messages", null)) }
+        verify { listener.onNfcTagRead(com.kidor.vigik.data.nfc.model.Tag(now, null, null, "No NDEF messages", null)) }
     }
 
     @Test
@@ -137,6 +137,6 @@ class NfcApiTest {
         nfcApi.onNfcIntentReceived(intent)
 
         // Verify
-        verify { listener.onNfcTagRead(com.kidor.vigik.nfc.model.Tag(now, tagUid, tagDescription, tagData, tagId)) }
+        verify { listener.onNfcTagRead(com.kidor.vigik.data.nfc.model.Tag(now, tagUid, tagDescription, tagData, tagId)) }
     }
 }

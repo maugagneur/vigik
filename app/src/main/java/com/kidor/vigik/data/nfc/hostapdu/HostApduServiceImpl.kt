@@ -1,4 +1,4 @@
-package com.kidor.vigik.nfc.hostapdu
+package com.kidor.vigik.data.nfc.hostapdu
 
 import android.content.Intent
 import android.nfc.cardemulation.HostApduService

@@ -1,4 +1,4 @@
-package com.kidor.vigik.nfc.hostapdu
+package com.kidor.vigik.data.nfc.hostapdu
 
 /**
  * Pairs of status bytes returned after a command according to ISO 7816-4.

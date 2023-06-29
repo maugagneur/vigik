@@ -1,6 +1,6 @@
-package com.kidor.vigik.nfc.api
+package com.kidor.vigik.data.nfc.api
 
-import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.data.nfc.model.Tag
 
 /**
  * Callback to be notify of events provides by [NfcApi].

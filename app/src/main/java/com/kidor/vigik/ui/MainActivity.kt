@@ -30,7 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kidor.vigik.R
-import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
 import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme

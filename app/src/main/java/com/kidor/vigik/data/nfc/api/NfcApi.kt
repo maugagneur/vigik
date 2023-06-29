@@ -1,4 +1,4 @@
-package com.kidor.vigik.nfc.api
+package com.kidor.vigik.data.nfc.api
 
 import android.app.Activity
 import android.app.PendingIntent
@@ -89,7 +89,7 @@ class NfcApi @Inject constructor(
         }
 
         val tag: Tag? = getTag(intent)
-        val tagData = com.kidor.vigik.nfc.model.Tag(
+        val tagData = com.kidor.vigik.data.nfc.model.Tag(
             timestamp = systemWrapper.currentTimeMillis(),
             uid = tag?.id,
             techList = tag?.toString(),
