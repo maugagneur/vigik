@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -31,10 +32,10 @@ class RestApiViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel<Nothing, Diablo4TrackerData, Nothing>() {
 
-    private var trackerData = Diablo4TrackerData()
+    private val trackerData = AtomicReference(Diablo4TrackerData())
 
     init {
-        _viewState.value = trackerData
+        _viewState.value = trackerData.get()
 
         // World boss
         viewModelScope.launch(context = ioDispatcher) {
@@ -77,11 +78,14 @@ class RestApiViewModel @Inject constructor(
                     val responseBody = response.body()
                     val worldBoss = getWorldBossFromName(responseBody?.name)
                     remainingTime = responseBody?.time
-                    trackerData = trackerData.copy(
-                        nextBoss = worldBoss,
-                        timeUntilNextBoss = formatDurationToReadableTime(remainingTime)
+                    _viewState.postValue(
+                        trackerData.updateAndGet { previousData ->
+                            previousData.copy(
+                                nextBoss = worldBoss,
+                                timeUntilNextBoss = formatDurationToReadableTime(remainingTime)
+                            )
+                        }
                     )
-                    _viewState.postValue(trackerData)
                 } else {
                     Timber.w("Fail to get next world boss data: ${response.errorBody()?.string()}")
                 }
@@ -109,10 +113,13 @@ class RestApiViewModel @Inject constructor(
             diablo4API.getNextHellTide().let { response ->
                 if (response.isSuccessful) {
                     remainingTime = response.body()?.time
-                    trackerData = trackerData.copy(
-                        timeUntilNextHellTide = formatDurationToReadableTime(remainingTime)
+                    _viewState.postValue(
+                        trackerData.updateAndGet { previousData ->
+                            previousData.copy(
+                                timeUntilNextHellTide = formatDurationToReadableTime(remainingTime)
+                            )
+                        }
                     )
-                    _viewState.postValue(trackerData)
                 } else {
                     Timber.w("Fail to get next hell tide data: ${response.errorBody()?.string()}")
                 }
