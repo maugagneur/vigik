@@ -13,12 +13,13 @@ import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
-import com.kidor.vigik.ui.check.CheckScreen
-import com.kidor.vigik.ui.emulate.EmulateScreen
-import com.kidor.vigik.ui.history.HistoryScreen
-import com.kidor.vigik.ui.hub.HubScreen
+import com.kidor.vigik.ui.home.HomeScreen
+import com.kidor.vigik.ui.nfc.check.CheckScreen
+import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
+import com.kidor.vigik.ui.nfc.history.HistoryScreen
+import com.kidor.vigik.ui.nfc.hub.HubScreen
+import com.kidor.vigik.ui.nfc.scan.ScanScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
-import com.kidor.vigik.ui.scan.ScanScreen
 
 /**
  * Implementation of [NavHost] for this application.
@@ -31,33 +32,19 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreen.CheckScreen.route,
+        startDestination = AppScreen.HomeScreen.route,
         modifier = modifier
     ) {
-        composable(route = AppScreen.CheckScreen.route) {
-            CheckScreen(
-                navigateToHub = { navController.navigateSingleTopTo(AppScreen.HubScreen) },
-                navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
-            )
-        }
-        composable(route = AppScreen.HubScreen.route) {
-            HubScreen(
-                navigateToScanTag = { navController.navigate(AppScreen.ScanScreen) },
-                navigateToTagHistory = { navController.navigate(AppScreen.HistoryScreen) },
-                navigateToEmulateTag = { navController.navigate(AppScreen.EmulateScreen) },
+        // Home
+        composable(route = AppScreen.HomeScreen.route) {
+            HomeScreen(
                 navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
+                navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
                 navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
             )
         }
-        composable(route = AppScreen.ScanScreen.route) {
-            ScanScreen()
-        }
-        composable(route = AppScreen.HistoryScreen.route) {
-            HistoryScreen()
-        }
-        composable(route = AppScreen.EmulateScreen.route) {
-            EmulateScreen()
-        }
+
+        // Biometric
         composable(route = AppScreen.BiometricLoginScreen.route) {
             BiometricLoginScreen(
                 startBiometricEnrollment = { enrollIntent -> context.startActivity(enrollIntent) },
@@ -72,6 +59,32 @@ fun AppNavHost(
                 }
             )
         }
+
+        // NFC
+        composable(route = AppScreen.NfcCheckScreen.route) {
+            CheckScreen(
+                navigateToHub = { navController.navigateSingleTopTo(AppScreen.NfcHubScreen) },
+                navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
+            )
+        }
+        composable(route = AppScreen.NfcHubScreen.route) {
+            HubScreen(
+                navigateToScanTag = { navController.navigate(AppScreen.NfcScanScreen) },
+                navigateToTagHistory = { navController.navigate(AppScreen.NfcHistoryScreen) },
+                navigateToEmulateTag = { navController.navigate(AppScreen.NfcEmulateScreen) }
+            )
+        }
+        composable(route = AppScreen.NfcScanScreen.route) {
+            ScanScreen()
+        }
+        composable(route = AppScreen.NfcHistoryScreen.route) {
+            HistoryScreen()
+        }
+        composable(route = AppScreen.NfcEmulateScreen.route) {
+            EmulateScreen()
+        }
+
+        // REST API
         composable(route = AppScreen.RestApiScreen.route) {
             RestApiScreen()
         }

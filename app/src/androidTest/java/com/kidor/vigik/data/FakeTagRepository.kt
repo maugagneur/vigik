@@ -3,7 +3,7 @@ package com.kidor.vigik.data
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import com.kidor.vigik.data.tag.TagRepository
-import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.data.nfc.model.Tag
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

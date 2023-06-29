@@ -1,6 +1,6 @@
 package com.kidor.vigik.data.tag
 
-import com.kidor.vigik.nfc.model.Tag
+import com.kidor.vigik.data.nfc.model.Tag
 import kotlinx.coroutines.flow.Flow
 
 /**

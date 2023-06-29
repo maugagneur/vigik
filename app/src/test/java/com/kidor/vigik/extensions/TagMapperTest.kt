@@ -1,7 +1,7 @@
 package com.kidor.vigik.extensions
 
+import com.kidor.vigik.data.nfc.model.Tag
 import com.kidor.vigik.data.tag.model.RoomTag
-import com.kidor.vigik.nfc.model.Tag
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.Test

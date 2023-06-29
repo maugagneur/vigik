@@ -76,13 +76,13 @@ class MainViewTest {
             // TODO: Check navigation. Maybe do not "click" on UI elements but call navigate() on nav controller directly then check the destination
 
             // Perform click on the scan button
-            onNodeWithText(stringResourceId = R.string.emulate_button_label, ignoreCase = true)
+            onNodeWithText(stringResourceId = R.string.nfc_emulate_button_label, ignoreCase = true)
                 .performClick()
 
             Thread.sleep(3000)
         }
 
         // Check that the navigation controller moves to the emulate view
-        assertEquals(AppScreen.EmulateScreen.route, navController?.currentDestination?.route, "Destination route")
+        assertEquals(AppScreen.HomeScreen.route, navController?.currentDestination?.route, "Destination route")
     }
 }

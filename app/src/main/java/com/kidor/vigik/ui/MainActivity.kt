@@ -30,7 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kidor.vigik.R
-import com.kidor.vigik.nfc.api.NfcApi
+import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
 import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme
@@ -130,14 +130,14 @@ private fun AppActionBar(
         }
     },
     actions = {
-        if (currentScreen == AppScreen.ScanScreen) {
+        if (currentScreen == AppScreen.NfcScanScreen) {
             IconButton(
                 onClick = { navController.popBackStack() },
                 modifier = Modifier.testTag(ACTION_MENU_STOP_SCAN)
             ) {
                 Icon(
                     Icons.Default.Stop,
-                    contentDescription = stringResource(id = R.string.menu_action_stop_scan),
+                    contentDescription = stringResource(id = R.string.nfc_menu_action_stop_scan),
                     tint = MaterialTheme.colorScheme.onPrimary
                 )
             }

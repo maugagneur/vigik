@@ -32,7 +32,7 @@
         </activity>
 
         <service
-            android:name=".nfc.hostapdu.HostApduServiceImpl"
+            android:name=".data.nfc.hostapdu.HostApduServiceImpl"
             android:exported="true"
             android:permission="android.permission.BIND_NFC_SERVICE">
             <intent-filter>
