@@ -38,6 +38,24 @@ fun AppNavHost(
         // Home
         composable(route = AppScreen.HomeScreen.route) {
             HomeScreen(
+                navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
+                navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
+            )
+        }
+
+        // Biometric
+        composable(route = AppScreen.BiometricLoginScreen.route) {
+            BiometricLoginScreen(
+                startBiometricEnrollment = { enrollIntent -> context.startActivity(enrollIntent) },
+                navigateToBiometricHome = { navController.navigate(AppScreen.BiometricHomeScreen) }
+            )
+        }
+        composable(route = AppScreen.BiometricHomeScreen.route) {
+            BackHandler(enabled = true) { }
+            BiometricHomeScreen(
+                navigateToBiometricLogin = {
+                    navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
+                }
             )
         }
         composable(route = AppScreen.CheckScreen.route) {
@@ -64,20 +82,8 @@ fun AppNavHost(
         composable(route = AppScreen.EmulateScreen.route) {
             EmulateScreen()
         }
-        composable(route = AppScreen.BiometricLoginScreen.route) {
-            BiometricLoginScreen(
-                startBiometricEnrollment = { enrollIntent -> context.startActivity(enrollIntent) },
-                navigateToBiometricHome = { navController.navigate(AppScreen.BiometricHomeScreen) }
-            )
-        }
-        composable(route = AppScreen.BiometricHomeScreen.route) {
-            BackHandler(enabled = true) { }
-            BiometricHomeScreen(
-                navigateToBiometricLogin = {
-                    navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
-                }
-            )
-        }
+
+        // REST API
         composable(route = AppScreen.RestApiScreen.route) {
             RestApiScreen()
         }
