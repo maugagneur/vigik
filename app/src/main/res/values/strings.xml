@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Vigik Pirate</string>
     <string name="menu_action_back">Back</string>
+    <string name="menu_action_app_info">App info</string>
     <string name="menu_action_invert_color">Invert colors</string>
 
     <!-- HOME -->

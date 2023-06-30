@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +42,7 @@ import javax.inject.Inject
 internal const val ACTION_BAR_TEST_TAG = "Action bar"
 internal const val ACTION_MENU_STOP_SCAN = "Action menu - Stop scan"
 internal const val ACTION_MENU_INVERT_COLORS = "Action menu - Invert colors"
+internal const val ACTION_MENU_APP_INFO = "Action menu - App info"
 
 /**
  * Main activity of the application.
@@ -149,6 +151,16 @@ private fun AppActionBar(
             Icon(
                 Icons.Default.InvertColors,
                 contentDescription = stringResource(id = R.string.menu_action_invert_color),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+        IconButton(
+            onClick = { },
+            modifier = Modifier.testTag(ACTION_MENU_APP_INFO)
+        ) {
+            Icon(
+                Icons.Default.Info,
+                contentDescription = stringResource(id = R.string.menu_action_app_info),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
