@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.biometric.login
 
 import android.content.Intent
+import androidx.annotation.VisibleForTesting
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -45,6 +47,9 @@ import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 import timber.log.Timber
+
+internal const val USERNAME_TEXT_FIELD_TEST_TAG = "username_text_field"
+internal const val PASSWORD_TEXT_FIELD_TEST_TAG = "password_text_field"
 
 /**
  * View that display the section dedicated to biometric login.
@@ -90,7 +95,8 @@ fun BiometricLoginScreen(
 
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-private fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateData: LoginStateData) {
+@VisibleForTesting
+internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateData: LoginStateData) {
     val focusManager = LocalFocusManager.current
     Column(
         modifier = Modifier
@@ -105,7 +111,9 @@ private fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateDa
         OutlinedTextField(
             value = loginStateData.loginState.usernameField,
             onValueChange = { loginStateData.onUpdateUsername(it) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(USERNAME_TEXT_FIELD_TEST_TAG),
             placeholder = { Text(text = stringResource(id = R.string.biometric_username_hint)) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
         )
@@ -113,7 +121,9 @@ private fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateDa
         OutlinedTextField(
             value = loginStateData.loginState.passwordField,
             onValueChange = { loginStateData.onUpdatePassword(it) },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(PASSWORD_TEXT_FIELD_TEST_TAG),
             placeholder = { Text(text = stringResource(id = R.string.biometric_password_hint)) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

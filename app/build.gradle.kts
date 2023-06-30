@@ -34,6 +34,10 @@ android {
         }
     }
 
+    packaging {
+        resources.excludes.add("META-INF/*")
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -73,6 +77,7 @@ dependencies {
 
     // Test
     testImplementation(libs.bundles.test.unit)
+    androidTestImplementation(libs.bundles.test.android)
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.

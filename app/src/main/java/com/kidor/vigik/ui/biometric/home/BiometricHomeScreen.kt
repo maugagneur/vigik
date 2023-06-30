@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.biometric.home
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -25,6 +27,8 @@ import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+
+internal const val BIOMETRIC_CREDENTIALS_STATUS_ICON_TEST_TAG = "biometric_credentials_status_icon"
 
 /**
  * View that display the section dedicated to biometric home.
@@ -53,7 +57,8 @@ fun BiometricHomeScreen(
 
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-private fun BiometricHome(
+@VisibleForTesting
+internal fun BiometricHome(
     @PreviewParameter(BiometricHomeStateProvider::class) biometricHomeStateData: BiometricHomeStateData
 ) {
     Column(
@@ -74,12 +79,14 @@ private fun BiometricHome(
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = "Biometric credential saved",
+                    modifier = Modifier.testTag(BIOMETRIC_CREDENTIALS_STATUS_ICON_TEST_TAG),
                     tint = MaterialTheme.colorScheme.tertiary
                 )
             } else {
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Biometric credential not saved",
+                    modifier = Modifier.testTag(BIOMETRIC_CREDENTIALS_STATUS_ICON_TEST_TAG),
                     tint = MaterialTheme.colorScheme.error
                 )
             }

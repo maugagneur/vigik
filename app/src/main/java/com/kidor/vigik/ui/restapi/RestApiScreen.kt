@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.restapi
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +29,12 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+
+internal const val WORLD_BOSS_ICON_TEST_TAG = "world_boss_icon"
+internal const val WORLD_BOSS_NAME_TEST_TAG = "world_boss_name"
+internal const val WORLD_BOSS_TIME_TEST_TAG = "world_boss_waiting_time"
+internal const val HELL_TIDE_ICON_TEST_TAG = "hell_tide_icon"
+internal const val HELL_TIDE_TIME_TEST_TAG = "hell_tide_waiting_time"
 
 /**
  * View that display the section dedicated to REST API.
@@ -60,7 +68,8 @@ fun RestApiScreen(
 
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-private fun Diablo4Tracker(
+@VisibleForTesting
+internal fun Diablo4Tracker(
     @PreviewParameter(Diablo4TrackerDataProvider::class) diablo4TrackerData: Diablo4TrackerData
 ) {
     Column(
@@ -82,22 +91,26 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
     when (worldBoss) {
         Diablo4WorldBoss.ASHAVA -> Image(
             painter = painterResource(id = R.drawable.d4_ashava),
-            contentDescription = worldBoss.description
+            contentDescription = worldBoss.description,
+            modifier = Modifier.testTag(WORLD_BOSS_ICON_TEST_TAG)
         )
 
         Diablo4WorldBoss.AVARICE -> Image(
             painter = painterResource(id = R.drawable.d4_avarice),
-            contentDescription = worldBoss.description
+            contentDescription = worldBoss.description,
+            modifier = Modifier.testTag(WORLD_BOSS_ICON_TEST_TAG)
         )
 
         Diablo4WorldBoss.WANDERING_DEATH -> Image(
             painter = painterResource(id = R.drawable.d4_wandering_death),
-            contentDescription = worldBoss.description
+            contentDescription = worldBoss.description,
+            modifier = Modifier.testTag(WORLD_BOSS_ICON_TEST_TAG)
         )
 
         Diablo4WorldBoss.UNKNOWN, null -> Image(
             painter = painterResource(id = R.drawable.d4_monster),
-            contentDescription = "World boss"
+            contentDescription = "World boss",
+            modifier = Modifier.testTag(WORLD_BOSS_ICON_TEST_TAG)
         )
     }
 
@@ -107,6 +120,7 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
 
     Text(
         text = stringResource(id = worldBoss.resId),
+        modifier = Modifier.testTag(WORLD_BOSS_NAME_TEST_TAG),
         color = MaterialTheme.colorScheme.onBackground,
         fontSize = AppTheme.dimensions.textSizeMedium
     )
@@ -114,6 +128,7 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
     val readableTime = timeToWait ?: "???"
     Text(
         text = stringResource(id = R.string.diablo_boss_next_spawn_label, readableTime),
+        modifier = Modifier.testTag(WORLD_BOSS_TIME_TEST_TAG),
         color = MaterialTheme.colorScheme.onBackground,
         fontSize = AppTheme.dimensions.textSizeMedium
     )
@@ -125,11 +140,13 @@ private fun Diablo4HellTideTracker(timeToWait: String?) {
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceXXLarge))
         Image(
             painter = painterResource(id = R.drawable.d4_helltide),
-            contentDescription = "Hell tide"
+            contentDescription = "Hell tide",
+            modifier = Modifier.testTag(HELL_TIDE_ICON_TEST_TAG)
         )
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(id = R.string.diablo_hell_tide_next_rise_label, it),
+            modifier = Modifier.testTag(HELL_TIDE_TIME_TEST_TAG),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeMedium
         )
