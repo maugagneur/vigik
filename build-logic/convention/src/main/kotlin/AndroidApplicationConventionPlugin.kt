@@ -16,7 +16,7 @@ private const val MIN_SDK_VER = 23
 
 private const val APP_MAJOR_VERSION = 2
 private const val APP_MINOR_VERSION = 2
-private const val APP_HOTFIX_VERSION = 1
+private const val APP_HOTFIX_VERSION = 2
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

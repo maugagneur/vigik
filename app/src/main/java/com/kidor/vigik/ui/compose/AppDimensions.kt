@@ -16,6 +16,7 @@ data class AppDimensions(
     val commonSpaceLarge: Dp = 24.dp,
     val commonSpaceXLarge: Dp = 32.dp,
     val commonSpaceXXLarge: Dp = 48.dp,
+    val textSizeSmall: TextUnit = 14.sp,
     val textSizeMedium: TextUnit = 16.sp,
     val textSizeLarge: TextUnit = 20.sp,
     val textSizeXLarge: TextUnit = 24.sp,

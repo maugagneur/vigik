@@ -6,6 +6,11 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 /**
+ * Base URL for the Diablo IV API remote server.
+ */
+const val DIABLO4_API_BASE_URL = "https://api.worldstone.io/"
+
+/**
  * Diablo IV HTTP API used by Retrofit.
  */
 interface Diablo4API {

@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.restapi
 
+import android.content.res.Configuration
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
+import com.kidor.vigik.data.diablo.DIABLO4_API_BASE_URL
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
@@ -61,6 +65,22 @@ fun RestApiScreen(
                 refreshing = state.isRefreshing,
                 state = pullRefreshState,
                 modifier = Modifier.align(Alignment.TopCenter)
+            )
+        }
+    }
+
+    if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = AppTheme.dimensions.commonSpaceMedium),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(id = R.string.diablo_tracker_source_label, DIABLO4_API_BASE_URL),
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = AppTheme.dimensions.textSizeSmall
             )
         }
     }

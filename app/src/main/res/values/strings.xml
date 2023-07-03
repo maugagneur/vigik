@@ -51,6 +51,7 @@
     <string name="diablo_boss_name_unknown">Unknown boss</string>
     <string name="diablo_boss_next_spawn_label">Next possible spawn in %s</string>
     <string name="diablo_hell_tide_next_rise_label">Next Hell tide in %s</string>
+    <string name="diablo_tracker_source_label">Source: %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
 </resources>

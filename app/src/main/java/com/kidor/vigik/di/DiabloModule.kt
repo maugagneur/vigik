@@ -1,5 +1,6 @@
 package com.kidor.vigik.di
 
+import com.kidor.vigik.data.diablo.DIABLO4_API_BASE_URL
 import com.kidor.vigik.data.diablo.Diablo4API
 import dagger.Module
 import dagger.Provides
@@ -12,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val DIABLO4_API_BASE_URL = "https://api.worldstone.io/"
 private const val CONNECTION_TIMEOUT_IN_SECOND = 30L
 private const val READ_TIMEOUT_IN_SECOND = 10L
 
