@@ -135,17 +135,7 @@ private fun AppActionBar(currentScreen: AppScreen?, navController: NavHostContro
             )
         },
         modifier = Modifier.testTag(ACTION_BAR_TEST_TAG),
-        navigationIcon = {
-            if (navController.previousBackStackEntry != null && currentScreen?.showNavigateBack == true) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(
-                        Icons.Default.ArrowBack,
-                        contentDescription = stringResource(id = R.string.menu_action_back),
-                        tint = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            }
-        },
+        navigationIcon = { NavigationBackButton(currentScreen = currentScreen, navController = navController) },
         actions = {
             if (currentScreen == AppScreen.NfcScanScreen) {
                 IconButton(
@@ -185,6 +175,19 @@ private fun AppActionBar(currentScreen: AppScreen?, navController: NavHostContro
 
     if (showPopup) {
         AboutAppPopup(onDismissRequest = { showPopup = false })
+    }
+}
+
+@Composable
+private fun NavigationBackButton(currentScreen: AppScreen?, navController: NavHostController) {
+    if (navController.previousBackStackEntry != null && currentScreen?.showNavigateBack == true) {
+        IconButton(onClick = { navController.popBackStack() }) {
+            Icon(
+                Icons.Default.ArrowBack,
+                contentDescription = stringResource(id = R.string.menu_action_back),
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
     }
 }
 
