@@ -35,6 +35,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     versionCode = getVersionCode()
                     versionName = getVersionName()
                 }
+                buildFeatures {
+                    buildConfig = true
+                }
                 compileOptions {
                     // Up to Java 11+ APIs are available through desugaring
                     // https://developer.android.com/studio/write/java11-minimal-support-table

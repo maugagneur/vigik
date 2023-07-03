@@ -11,7 +11,7 @@ private const val COLOR_LIGHT_BLUE = 0xFF03A9F4
 private const val COLOR_DARK = 0xFF2C2C2C
 private const val COLOR_RED_DARK = 0xFFB3261E
 private const val COLOR_RED_LIGHT = 0xFFF2B8B5
-private const val COLOR_TRANSPARENT = 0x00000000
+private const val COLOR_GREY = 0xFFEEEEEE
 private const val COLOR_BLACK = 0xFF000000
 private const val COLOR_WHITE = 0xFFFFFFFF
 private const val COLOR_GREEN_DARK = 0xFF64B538
@@ -27,7 +27,7 @@ private fun lightMaterialColors() = lightColorScheme(
     secondary = Color(COLOR_LIGHT_BLUE),
     onSecondary = Color(COLOR_WHITE),
     tertiary = Color(COLOR_GREEN_DARK),
-    surface = Color(COLOR_TRANSPARENT),
+    surface = Color(COLOR_GREY),
     error = Color(COLOR_RED_DARK),
     onError = Color(COLOR_WHITE)
 )
