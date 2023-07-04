@@ -59,4 +59,8 @@
     <string name="diablo_tracker_source_label">Source: %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
+
+    <!-- WIDGET -->
+    <string name="widget_diablo_label">Diablo IV WB tracker</string>
+    <string name="widget_diablo_loading_data">Loading data…</string>
 </resources>

@@ -79,6 +79,9 @@ dependencies {
     testImplementation(libs.bundles.test.unit)
     androidTestImplementation(libs.bundles.test.android)
 
+    // Widget
+    implementation(libs.androidx.glance.appwidget)
+
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.
     debugImplementation(libs.androidx.fragment.testing)
