@@ -14,6 +14,7 @@ import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -164,6 +165,7 @@ private fun LoadingImage(isLoading: Boolean, color: Color) {
             contentDescription = "Refresh",
             modifier = GlanceModifier
                 .size(24.dp)
+                .clickable(onClick = actionRunCallback<DiabloWidgetRefreshAction>()),
             colorFilter = ColorFilter.tint(colorProvider = ColorProvider(color = color))
         )
     }
