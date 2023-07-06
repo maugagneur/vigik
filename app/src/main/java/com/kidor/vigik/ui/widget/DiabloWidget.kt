@@ -53,9 +53,9 @@ class DiabloWidget : GlanceAppWidget() {
             Timber.d("current state = $state")
 
             val backgroundDrawable = when (state.data.worldBoss) {
-                Diablo4WorldBoss.ASHAVA -> R.drawable.widget_ashava
-                Diablo4WorldBoss.AVARICE -> R.drawable.widget_avarice
-                Diablo4WorldBoss.WANDERING_DEATH -> R.drawable.widget_wandering_death
+                Diablo4WorldBoss.ASHAVA -> R.drawable.widget_ashava_rounded
+                Diablo4WorldBoss.AVARICE -> R.drawable.widget_avarice_rounded
+                Diablo4WorldBoss.WANDERING_DEATH -> R.drawable.widget_wandering_death_rounded
                 Diablo4WorldBoss.UNKNOWN -> R.drawable.shape_rectangle_round_white
             }
 
