@@ -7,6 +7,5 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
  * Broadcast receiver listening to widget actions.
  */
 class DiabloWidgetReceiver : GlanceAppWidgetReceiver() {
-    override val glanceAppWidget: GlanceAppWidget
-        get() = DiabloWidget()
+    override val glanceAppWidget: GlanceAppWidget = DiabloWidget()
 }
