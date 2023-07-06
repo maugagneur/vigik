@@ -139,7 +139,7 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
             maxLines = 1
         )
         Text(
-            text = state.data.getFormattedDate(),
+            text = state.data.spawnDate,
             style = TextStyle(
                 color = ColorProvider(color = Color.White),
                 fontSize = 14.sp,

@@ -8,6 +8,7 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.diablo.Diablo4API
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -20,7 +21,8 @@ import timber.log.Timber
 class DiabloWidgetWorker @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted workerParams: WorkerParameters,
-    private val diablo4API: Diablo4API
+    private val diablo4API: Diablo4API,
+    private val localization: Localization
 ) : CoroutineWorker(context, workerParams) {
 
     @Suppress("TooGenericExceptionCaught")
@@ -44,7 +46,8 @@ class DiabloWidgetWorker @AssistedInject constructor(
                         DiabloWidgetStateHelper.setData(
                             preferences = preferences,
                             bossName = responseBody?.name,
-                            spawnDelay = responseBody?.time ?: 0
+                            spawnDelay = responseBody?.time ?: 0,
+                            localization = localization
                         )
                     }
                     Result.success()

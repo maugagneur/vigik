@@ -1,7 +1,6 @@
 package com.kidor.vigik.data
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 /**
@@ -34,7 +33,7 @@ object PreferencesKeys {
     val WIDGET_DIABLO_BOSS_NAME = stringPreferencesKey("widget_diablo_boss_name_key")
 
     /**
-     * Diablo IV widget preference of the timestamp of the next world boss spawn date.
+     * Diablo IV widget preference of the readable world boss next spawn date.
      */
-    val WIDGET_DIABLO_BOSS_SPAWN_TIMESTAMP = longPreferencesKey("widget_diablo_boss_spawn_timestamp_key")
+    val WIDGET_DIABLO_BOSS_SPAWN_DATE = stringPreferencesKey("widget_diablo_boss_spawn_date_key")
 }
