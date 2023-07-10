@@ -10,7 +10,6 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
-import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
@@ -36,7 +35,6 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
-import com.kidor.vigik.ui.MainActivity
 import com.kidor.vigik.ui.compose.AppTheme
 import timber.log.Timber
 
@@ -63,7 +61,7 @@ class DiabloWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.fillMaxSize()
                     .background(ImageProvider(resId = backgroundDrawable))
                     .appWidgetBackground()
-                    .clickable(onClick = actionStartActivity(activity = MainActivity::class.java)),
+                    .clickable(onClick = actionRunCallback<DiabloWidgetRefreshAction>()),
                 contentAlignment = Alignment.Center
             ) {
                 if (state.data.worldBoss == Diablo4WorldBoss.UNKNOWN) {
@@ -165,7 +163,6 @@ private fun LoadingImage(isLoading: Boolean, color: Color) {
             contentDescription = "Refresh",
             modifier = GlanceModifier
                 .size(24.dp)
-                .clickable(onClick = actionRunCallback<DiabloWidgetRefreshAction>()),
             colorFilter = ColorFilter.tint(colorProvider = ColorProvider(color = color))
         )
     }
