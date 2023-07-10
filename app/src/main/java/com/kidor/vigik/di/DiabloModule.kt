@@ -1,10 +1,13 @@
 package com.kidor.vigik.di
 
+import android.content.Context
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.kidor.vigik.data.diablo.DIABLO4_API_BASE_URL
 import com.kidor.vigik.data.diablo.Diablo4API
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -46,4 +49,14 @@ object DiabloModule {
         .client(httpClient)
         .build()
         .create(Diablo4API::class.java)
+
+    /**
+     * Provides instance of [GlanceAppWidgetManager].
+     *
+     * @param context The application context.
+     */
+    @Singleton
+    @Provides
+    fun providesGlanceAppWidgetManager(@ApplicationContext context: Context): GlanceAppWidgetManager =
+        GlanceAppWidgetManager(context)
 }

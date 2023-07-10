@@ -6,6 +6,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.PreferencesKeys
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
+import com.kidor.vigik.utils.SystemWrapper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -49,11 +50,18 @@ object DiabloWidgetStateHelper {
      * @param bossName     The boss name
      * @param spawnDelay   Spawn delay in minutes.
      * @param localization The localization module.
+     * @param system       System's wrapper to retrieve current time.
      */
-    fun setData(preferences: MutablePreferences, bossName: String?, spawnDelay: Int, localization: Localization) {
+    fun setData(
+        preferences: MutablePreferences,
+        bossName: String?,
+        spawnDelay: Int,
+        localization: Localization,
+        system: SystemWrapper
+    ) {
         preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_NAME] = bossName ?: ""
         preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_SPAWN_DATE] = getFormattedDate(
-            Date(System.currentTimeMillis() + (spawnDelay * MINUTES_TO_MILLIS)),
+            Date(system.currentTimeMillis() + (spawnDelay * MINUTES_TO_MILLIS)),
             localization
         )
         preferences[PreferencesKeys.WIDGET_DIABLO_IS_LOADING] = false
