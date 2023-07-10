@@ -28,7 +28,6 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
-import androidx.glance.layout.width
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
@@ -77,7 +76,7 @@ class DiabloWidget : GlanceAppWidget() {
 @Composable
 private fun NoData(context: Context, isLoading: Boolean) {
     Column(
-        modifier = GlanceModifier.fillMaxSize().padding(8.dp),
+        modifier = GlanceModifier.fillMaxSize().padding(AppTheme.dimensions.commonSpaceSmall),
         verticalAlignment = Alignment.CenterVertically,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -98,7 +97,7 @@ private fun NoData(context: Context, isLoading: Boolean) {
     Row(
         modifier = GlanceModifier
             .fillMaxSize()
-            .padding(8.dp),
+            .padding(AppTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.End
     ) {
         LoadingImage(isLoading = isLoading, color = Color.Black)
@@ -110,12 +109,15 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(AppTheme.dimensions.commonSpaceSmall)
     ) {
-        Row {
+        Row(modifier = GlanceModifier.fillMaxWidth()) {
             Text(
                 text = context.getString(state.data.worldBoss.resId),
-                modifier = GlanceModifier.fillMaxWidth().defaultWeight(),
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .defaultWeight()
+                    .padding(end = AppTheme.dimensions.commonSpaceSmall),
                 style = TextStyle(
                     color = ColorProvider(color = Color.White),
                     fontSize = 14.sp,
@@ -123,7 +125,6 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
                 ),
                 maxLines = 2
             )
-            Spacer(modifier = GlanceModifier.width(AppTheme.dimensions.commonSpaceSmall))
             LoadingImage(isLoading = state.isLoading, color = Color.White)
         }
         Spacer(modifier = GlanceModifier.fillMaxHeight().defaultWeight())
@@ -161,8 +162,7 @@ private fun LoadingImage(isLoading: Boolean, color: Color) {
         Image(
             provider = ImageProvider(resId = R.drawable.ic_refresh),
             contentDescription = "Refresh",
-            modifier = GlanceModifier
-                .size(24.dp)
+            modifier = GlanceModifier.size(24.dp),
             colorFilter = ColorFilter.tint(colorProvider = ColorProvider(color = color))
         )
     }
