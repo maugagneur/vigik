@@ -21,7 +21,8 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,6 +31,18 @@
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
             </intent-filter>
         </activity>
+
+        <receiver
+            android:name=".ui.widget.DiabloWidgetReceiver"
+            android:exported="false"
+            android:label="@string/widget_diablo_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/diablo_widget_provider" />
+        </receiver>
 
         <service
             android:name=".data.nfc.hostapdu.HostApduServiceImpl"
@@ -43,6 +56,18 @@
                 android:name="android.nfc.cardemulation.host_apdu_service"
                 android:resource="@xml/apdu_service" />
         </service>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <!-- Remove WorkManager default initialization from App Startup -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
     </application>
 
 </manifest>

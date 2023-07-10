@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Vigik Pirate</string>
+    <string name="menu_action_back">Retour</string>
+    <string name="menu_action_app_info">App info</string>
+    <string name="menu_action_invert_color">Inversion couleurs</string>
+    <string name="app_about_popup_text">*** APP INFO ***
+        \n\nCette app est une application de démonstration réalisée dans le but d\'améliorer mes capacités de
+        développement d\'applications Android et de tester différents patterns, concepts, lib, etc…
+        \n\n- Version: %s -</string>
+
+    <!-- WIDGET -->
+    <string name="widget_diablo_label">Diablo IV WB tracker</string>
+    <string name="widget_diablo_loading_data">Chargement…</string>
+    <string name="widget_diablo_boos_spawn_label">Prochaine apparition</string>
+    <string name="widget_diablo_boss_spawn_date_pattern">EEE d MMM \'à\' HH\'h\'mm</string>
+</resources>
