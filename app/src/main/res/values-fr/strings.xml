@@ -1,12 +1,61 @@
 <resources>
     <string name="app_name">Vigik Pirate</string>
-    <string name="menu_action_back">Retour</string>
-    <string name="menu_action_app_info">App info</string>
-    <string name="menu_action_invert_color">Inversion couleurs</string>
     <string name="app_about_popup_text">*** APP INFO ***
         \n\nCette app est une application de démonstration réalisée dans le but d\'améliorer mes capacités de
         développement d\'applications Android et de tester différents patterns, concepts, lib, etc…
         \n\n- Version: %s -</string>
+
+    <!-- HOME -->
+    <string name="home_title">Accueil</string>
+    <string name="home_biometric_button_label">Biometrique</string>
+    <string name="home_nfc_button_label">NFC</string>
+    <string name="home_rest_api_button_label">REST API</string>
+
+    <!-- Biometric -->
+    <string name="biometric_title">Biometrique</string>
+    <string name="biometric_username_hint">Identifiant</string>
+    <string name="biometric_password_hint">Mot de passe</string>
+    <string name="biometric_login_button_label">Connexion</string>
+    <string name="biometric_login_with_biometric_button_label">Utiliser biométrie</string>
+    <string name="biometric_login_error_label">Identifiant/Mot de passe invalid</string>
+    <string name="biometric_prompt_enroll_title">Activer l\'identification biométrique ?</string>
+    <string name="biometric_prompt_enroll_subtitle">Authentificez-vous pour générer vos identifiants</string>
+    <string name="biometric_prompt_login_title">Connexion biométrique</string>
+    <string name="biometric_prompt_login_subtitle">Connexion via identifiants biométriques</string>
+    <string name="biometric_prompt_negative_button_label">Annuler</string>
+    <string name="biometric_home_credential_status_label">Identifiants biométriques :</string>
+    <string name="biometric_home_credential_remove_button_label">Supprimer</string>
+    <string name="biometric_home_login_success_label">Connexion réussie !</string>
+    <string name="biometric_home_logout_button_label">Déconnexion</string>
+
+    <!-- NFC -->
+    <string name="nfc_check_title">Vérification NFC</string>
+    <string name="nfc_refresh_button_label">Actualiser</string>
+    <string name="nfc_settings_button_label">Réglages</string>
+    <string name="nfc_hub_title">HUB</string>
+    <string name="nfc_scan_button_label">Scan NFC</string>
+    <string name="nfc_history_button_label">Historique</string>
+    <string name="nfc_emulate_button_label">Émulater un tag NFC</string>
+    <string name="nfc_scan_title">Scan NFC</string>
+    <string name="nfc_menu_action_stop_scan">Stop</string>
+    <string name="nfc_fab_save_scan_result">Sauvegarder</string>
+    <string name="nfc_save_tag_success">Tag sauvegarder avec succès</string>
+    <string name="nfc_save_tag_fail">Échec lors de la sauvegarde</string>
+    <string name="nfc_tag_history_title">Historique</string>
+    <string name="nfc_history_no_data_label">Pas de donnée disponible</string>
+    <string name="nfc_emulate_title">Émulater un tag</string>
+
+    <!-- REST API -->
+    <string name="rest_api_title">Diablo IV tracker d\'évènements</string>
+    <string name="diablo_boss_name_ashava">Ashava, la Pestilentielle</string>
+    <string name="diablo_boss_name_avarice">Avarice, la Malédiction d\'or</string>
+    <string name="diablo_boss_name_wandering_death">Mort vagabonde, la Mort éveillée</string>
+    <string name="diablo_boss_name_unknown">Boss inconnu</string>
+    <string name="diablo_boss_next_spawn_label">Prochaine apparition possible dans %s</string>
+    <string name="diablo_hell_tide_next_rise_label">Prochaine vague infernale dans %s</string>
+    <string name="diablo_tracker_source_label">Source: %s</string>
+    <string name="duration_unit_minute">%s min</string>
+    <string name="duration_unit_hour">%s h</string>
 
     <!-- WIDGET -->
     <string name="widget_diablo_label">Diablo IV WB tracker</string>

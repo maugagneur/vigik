@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Vigik Pirate</string>
-    <string name="menu_action_back">Back</string>
-    <string name="menu_action_app_info">App info</string>
-    <string name="menu_action_invert_color">Invert colors</string>
+    <string name="menu_action_back" translatable="false">Back</string>
+    <string name="menu_action_app_info" translatable="false">App info</string>
+    <string name="menu_action_invert_color" translatable="false">Invert colors</string>
     <string name="app_about_popup_text">*** APP INFO ***
         \n\nThis app is a demo application made to improve my personal skills in Android development and to test
         various design patterns, concepts, libraries, etc…
