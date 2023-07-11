@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -93,6 +94,7 @@ internal fun Diablo4Tracker(
     @PreviewParameter(Diablo4TrackerDataProvider::class) diablo4TrackerData: Diablo4TrackerData
 ) {
     Column(
+        modifier = Modifier.padding(horizontal = AppTheme.dimensions.commonSpaceXLarge),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -142,7 +144,8 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
         text = stringResource(id = worldBoss.resId),
         modifier = Modifier.testTag(WORLD_BOSS_NAME_TEST_TAG),
         color = MaterialTheme.colorScheme.onBackground,
-        fontSize = AppTheme.dimensions.textSizeMedium
+        fontSize = AppTheme.dimensions.textSizeMedium,
+        textAlign = TextAlign.Center
     )
 
     val readableTime = timeToWait ?: "???"
@@ -150,7 +153,8 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
         text = stringResource(id = R.string.diablo_boss_next_spawn_label, readableTime),
         modifier = Modifier.testTag(WORLD_BOSS_TIME_TEST_TAG),
         color = MaterialTheme.colorScheme.onBackground,
-        fontSize = AppTheme.dimensions.textSizeMedium
+        fontSize = AppTheme.dimensions.textSizeMedium,
+        textAlign = TextAlign.Center
     )
 }
 
@@ -168,7 +172,8 @@ private fun Diablo4HellTideTracker(timeToWait: String?) {
             text = stringResource(id = R.string.diablo_hell_tide_next_rise_label, it),
             modifier = Modifier.testTag(HELL_TIDE_TIME_TEST_TAG),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = AppTheme.dimensions.textSizeMedium,
+            textAlign = TextAlign.Center
         )
     }
 }
