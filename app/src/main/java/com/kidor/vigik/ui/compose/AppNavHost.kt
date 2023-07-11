@@ -13,6 +13,7 @@ import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
+import com.kidor.vigik.ui.bluetooth.BluetoothScreen
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
 import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
@@ -39,6 +40,7 @@ fun AppNavHost(
         composable(route = AppScreen.HomeScreen.route) {
             HomeScreen(
                 navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
+                navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
                 navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
                 navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
             )
@@ -58,6 +60,11 @@ fun AppNavHost(
                     navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
                 }
             )
+        }
+
+        // Bluetooth
+        composable(route = AppScreen.BluetoothScreen.route) {
+            BluetoothScreen()
         }
 
         // NFC

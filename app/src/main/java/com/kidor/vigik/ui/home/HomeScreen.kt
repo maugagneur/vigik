@@ -21,8 +21,9 @@ import com.kidor.vigik.ui.compose.AppTheme
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 fun HomeScreen(
-    navigateToNfc: () -> Unit = {},
     navigateToBiometric: () -> Unit = {},
+    navigateToBluetooth: () -> Unit = {},
+    navigateToNfc: () -> Unit = {},
     navigateToRestApi: () -> Unit = {}
 ) {
     Column(
@@ -41,6 +42,15 @@ fun HomeScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.home_biometric_button_label).uppercase(),
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
+        Button(
+            onClick = navigateToBluetooth,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.home_bluetooth_button_label).uppercase(),
                 fontSize = AppTheme.dimensions.textSizeMedium
             )
         }

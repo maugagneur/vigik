@@ -8,6 +8,7 @@
     <!-- HOME -->
     <string name="home_title">Accueil</string>
     <string name="home_biometric_button_label">Biometrique</string>
+    <string name="home_bluetooth_button_label">Bluetooth</string>
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_rest_api_button_label">REST API</string>
 
@@ -27,6 +28,9 @@
     <string name="biometric_home_credential_remove_button_label">Supprimer</string>
     <string name="biometric_home_login_success_label">Connexion réussie !</string>
     <string name="biometric_home_logout_button_label">Déconnexion</string>
+
+    <!-- BLE -->
+    <string name="bluetooth_title">Bluetooth</string>
 
     <!-- NFC -->
     <string name="nfc_check_title">Vérification NFC</string>

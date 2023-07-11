@@ -27,6 +27,8 @@ class HomeViewTest {
     @Mock
     private lateinit var navigateToBiometricCallback: () -> Unit
     @Mock
+    private lateinit var navigateToBluetoothCallback: () -> Unit
+    @Mock
     private lateinit var navigateToNfcCallback: () -> Unit
     @Mock
     private lateinit var navigateToRestApiCallback: () -> Unit
@@ -50,6 +52,7 @@ class HomeViewTest {
             setContent {
                 HomeScreen(
                     navigateToBiometric = navigateToBiometricCallback,
+                    navigateToBluetooth = navigateToBluetoothCallback,
                     navigateToNfc = navigateToNfcCallback,
                     navigateToRestApi = navigateToRestApiCallback
                 )
@@ -57,6 +60,10 @@ class HomeViewTest {
 
             // Check that biometric button is visible
             onNodeWithText(stringResourceId = R.string.home_biometric_button_label, ignoreCase = true)
+                .assertIsDisplayed()
+
+            // Check that bluetooth button is visible
+            onNodeWithText(stringResourceId = R.string.home_bluetooth_button_label, ignoreCase = true)
                 .assertIsDisplayed()
 
             // Check that NFC button is visible
@@ -71,6 +78,11 @@ class HomeViewTest {
             onNodeWithText(stringResourceId = R.string.home_biometric_button_label, ignoreCase = true)
                 .performClick()
             verify(navigateToBiometricCallback).invoke()
+
+            // Check that a click on "Bluetooth" button triggers the associated callback
+            onNodeWithText(stringResourceId = R.string.home_bluetooth_button_label, ignoreCase = true)
+                .performClick()
+            verify(navigateToBluetoothCallback).invoke()
 
             // Check that a click on "NFC" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_nfc_button_label, ignoreCase = true)
