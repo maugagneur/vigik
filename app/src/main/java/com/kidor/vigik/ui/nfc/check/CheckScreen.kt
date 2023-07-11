@@ -111,7 +111,7 @@ internal fun NfcIsDisableState(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = { nfcIsDisableStateData.onRefreshClick() },
+            onClick = nfcIsDisableStateData.onRefreshClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -127,7 +127,7 @@ internal fun NfcIsDisableState(
             )
         }
         Button(
-            onClick = { nfcIsDisableStateData.onSettingsClick() },
+            onClick = nfcIsDisableStateData.onSettingsClick,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

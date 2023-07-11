@@ -39,7 +39,7 @@
     <string name="nfc_scan_title">Scan NFC</string>
     <string name="nfc_menu_action_stop_scan">Stop</string>
     <string name="nfc_fab_save_scan_result">Sauvegarder</string>
-    <string name="nfc_save_tag_success">Tag sauvegarder avec succès</string>
+    <string name="nfc_save_tag_success">Tag sauvegardé avec succès</string>
     <string name="nfc_save_tag_fail">Échec lors de la sauvegarde</string>
     <string name="nfc_tag_history_title">Historique</string>
     <string name="nfc_history_no_data_label">Pas de donnée disponible</string>

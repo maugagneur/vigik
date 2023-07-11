@@ -93,7 +93,7 @@ internal fun BiometricHome(
         }
         if (biometricHomeStateData.isBiometricCredentialSaved) {
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
-            Button(onClick = { biometricHomeStateData.onRemoveCredentialClick() }) {
+            Button(onClick = biometricHomeStateData.onRemoveCredentialClick) {
                 Text(
                     text = stringResource(id = R.string.biometric_home_credential_remove_button_label).uppercase(),
                     fontSize = AppTheme.dimensions.textSizeLarge
@@ -107,7 +107,7 @@ internal fun BiometricHome(
             fontSize = AppTheme.dimensions.textSizeMedium
         )
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
-        Button(onClick = { biometricHomeStateData.onLogoutClick() }) {
+        Button(onClick = biometricHomeStateData.onLogoutClick) {
             Text(
                 text = stringResource(id = R.string.biometric_home_logout_button_label).uppercase(),
                 fontSize = AppTheme.dimensions.textSizeLarge

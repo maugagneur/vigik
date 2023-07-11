@@ -75,7 +75,7 @@ internal fun DisplayTagState(
         floatingActionButton = {
             if (displayTagStateData.state.canBeSaved) {
                 FloatingActionButton(
-                    onClick = { displayTagStateData.onSaveTagClick() },
+                    onClick = displayTagStateData.onSaveTagClick,
                     modifier = Modifier.testTag(FLOATING_ACTION_BUTTON_TEST_TAG),
                     shape = CircleShape,
                     containerColor = MaterialTheme.colorScheme.secondary,

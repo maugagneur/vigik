@@ -133,7 +133,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
             })
         )
         Button(
-            onClick = { loginStateData.onLoginClick() },
+            onClick = loginStateData.onLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = AppTheme.dimensions.commonSpaceLarge)
@@ -148,7 +148,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
                 .fillMaxWidth()
                 .padding(top = AppTheme.dimensions.commonSpaceSmall),
             visible = loginStateData.loginState.isBiometricLoginAvailable,
-            onClick = { loginStateData.onBiometricLoginClick() }
+            onClick = loginStateData.onBiometricLoginClick
         )
         if (loginStateData.loginState.displayLoginFail) {
             InvalidUsernamePasswordView()
