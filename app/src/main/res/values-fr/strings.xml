@@ -31,6 +31,8 @@
 
     <!-- BLE -->
     <string name="bluetooth_title">Bluetooth</string>
+    <string name="bluetooth_permission_status_label">Permissions accordées :</string>
+    <string name="bluetooth_permission_request_button_label">Demander permissions</string>
 
     <!-- NFC -->
     <string name="nfc_check_title">Vérification NFC</string>

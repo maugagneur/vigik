@@ -1,4 +1,5 @@
 [versions]
+accompanist = "0.30.1"
 android-desugar-jdk-libs = "1.2.2"
 android-gradle-plugin = "8.0.2"
 androidx-activity = "1.7.2"
@@ -36,6 +37,7 @@ timber = "5.0.1"
 turbine = "1.0.0"
 
 [libraries]
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "android-desugar-jdk-libs" }
 android-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
