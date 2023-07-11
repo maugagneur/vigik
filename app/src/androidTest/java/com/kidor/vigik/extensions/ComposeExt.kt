@@ -22,7 +22,7 @@ fun SemanticsNodeInteractionsProvider.onNodeWithText(
     substring: Boolean = false,
     ignoreCase: Boolean = false,
     useUnmergedTree: Boolean = false
-) = onNodeWithText(
+): SemanticsNodeInteraction = onNodeWithText(
     text = InstrumentationRegistry.getInstrumentation().targetContext.getString(stringResourceId),
     substring = substring,
     ignoreCase = ignoreCase,

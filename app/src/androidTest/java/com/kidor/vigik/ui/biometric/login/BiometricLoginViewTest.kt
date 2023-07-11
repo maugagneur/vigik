@@ -66,7 +66,8 @@ class BiometricLoginViewTest {
                         ),
                         onLoginClick = loginClickCallback,
                         onBiometricLoginClick = biometricLoginClickCallback
-                    ))
+                    )
+                )
             }
 
             // Check visibility
@@ -113,7 +114,8 @@ class BiometricLoginViewTest {
                         ),
                         onLoginClick = loginClickCallback,
                         onBiometricLoginClick = biometricLoginClickCallback
-                    ))
+                    )
+                )
             }
 
             // Check visibility
@@ -148,7 +150,8 @@ class BiometricLoginViewTest {
                         ),
                         onLoginClick = loginClickCallback,
                         onBiometricLoginClick = biometricLoginClickCallback
-                    ))
+                    )
+                )
             }
 
             // Check visibility

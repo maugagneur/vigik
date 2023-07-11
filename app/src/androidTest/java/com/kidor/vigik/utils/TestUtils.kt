@@ -4,7 +4,7 @@ private const val TEST_REPORT = "\t#TEST_REPORT "
 /**
  * Label used when logging test message in order to find and extract them for reporting.
  */
-const val TEST_REPORT_TAG = "\t\t" + TEST_REPORT
+const val TEST_REPORT_TAG: String = "\t\t" + TEST_REPORT
 
 object TestUtils {
 

@@ -100,7 +100,7 @@ class DiabloWidgetStateHelperTest {
             this[Calendar.YEAR] = 2023
             this[Calendar.MONTH] = Calendar.JULY
             this[Calendar.DAY_OF_MONTH] = 10
-            this[Calendar.HOUR] = 9
+            this[Calendar.HOUR_OF_DAY] = 9
             this[Calendar.MINUTE] = 28
         }
         every { systemWrapper.currentTimeMillis() } returns now.timeInMillis
@@ -115,7 +115,7 @@ class DiabloWidgetStateHelperTest {
         )
         // Check that the appropriated preferences are set
         verify { preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_NAME] = "" }
-        verify { preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_SPAWN_DATE] = "Lun. 10 juil. at 10:10 PM" }
+        verify { preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_SPAWN_DATE] = "Lun. 10 juil. at 10:10 AM" }
         // Check that loading state is set to false
         verify { preferences[PreferencesKeys.WIDGET_DIABLO_IS_LOADING] = false }
 
@@ -129,7 +129,7 @@ class DiabloWidgetStateHelperTest {
         )
         // Check that the appropriated preferences are set
         verify { preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_NAME] = "ashava" }
-        verify { preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_SPAWN_DATE] = "Lun. 10 juil. at 10:10 PM" }
+        verify { preferences[PreferencesKeys.WIDGET_DIABLO_BOSS_SPAWN_DATE] = "Lun. 10 juil. at 10:10 AM" }
         // Check that loading state is set to false
         verify { preferences[PreferencesKeys.WIDGET_DIABLO_IS_LOADING] = false }
     }
