@@ -21,6 +21,11 @@ class BluetoothViewModel @Inject constructor(
                 updateViewState { it.copy(isBluetoothEnable = bluetoothEnable) }
             }
         }
+        viewModelScope.launch {
+            bluetoothApi.locationEnable.collect { locationEnable ->
+                updateViewState { it.copy(isLocationEnable = locationEnable) }
+            }
+        }
     }
 
     /**

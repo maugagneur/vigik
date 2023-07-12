@@ -1,9 +1,12 @@
 package com.kidor.vigik
 
 import android.app.Application
+import android.content.IntentFilter
+import android.location.LocationManager
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.kidor.vigik.data.bluetooth.LocationStateChangeReceiver
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,6 +31,9 @@ class VigikApplication : Application(), Configuration.Provider {
                 return super.createStackElementTag(element) + ":" + element.lineNumber
             }
         })
+
+        // This BroadcastReceiver needs to be registered at runtime
+        registerReceiver(LocationStateChangeReceiver(), IntentFilter(LocationManager.MODE_CHANGED_ACTION))
     }
 
     override fun getWorkManagerConfiguration(): Configuration =

@@ -44,7 +44,9 @@ fun BluetoothScreen(
         PermissionBlock()
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
         ObserveViewState(viewModel) { state ->
-            BluetoothAdapterStatus(state.isBluetoothEnable)
+            BluetoothAdapterStatus(isEnable = state.isBluetoothEnable)
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            LocationStatus(isEnable = state.isLocationEnable)
         }
     }
 }
@@ -121,6 +123,31 @@ private fun BluetoothAdapterStatus(isEnable: Boolean) {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Bluetooth disable",
+                tint = MaterialTheme.colorScheme.error
+            )
+        }
+    }
+}
+
+@Composable
+private fun LocationStatus(isEnable: Boolean) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(id = R.string.bluetooth_location_status_label),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+        if (isEnable) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "Location enable",
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Location disable",
                 tint = MaterialTheme.colorScheme.error
             )
         }
