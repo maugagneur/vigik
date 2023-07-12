@@ -4,5 +4,7 @@ import com.kidor.vigik.ui.base.ViewState
 
 /**
  * State of the Bluetooth view.
+ *
+ * @param isBluetoothEnable True if the Bluetooth adapter is turned ON, otherwise false.
  */
-object BluetoothViewState : ViewState()
+data class BluetoothViewState(val isBluetoothEnable: Boolean = false) : ViewState()

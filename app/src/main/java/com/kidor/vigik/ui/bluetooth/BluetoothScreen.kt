@@ -3,11 +3,9 @@ package com.kidor.vigik.ui.bluetooth
 import android.Manifest
 import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,14 +36,15 @@ import com.kidor.vigik.ui.compose.AppTheme
 fun BluetoothScreen(
     viewModel: BluetoothViewModel = hiltViewModel()
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(AppTheme.dimensions.commonSpaceMedium),
-        contentAlignment = Alignment.TopCenter
+    Column(
+        modifier = Modifier.padding(AppTheme.dimensions.commonSpaceMedium),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ObserveViewState(viewModel) {
-            PermissionBlock()
+        PermissionBlock()
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+        ObserveViewState(viewModel) { state ->
+            BluetoothAdapterStatus(state.isBluetoothEnable)
         }
     }
 }
@@ -92,13 +91,38 @@ private fun PermissionBlock() {
             }
         }
         if (!locationPermissionsState.allPermissionsGranted) {
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
             Button(onClick = { locationPermissionsState.launchMultiplePermissionRequest() }) {
                 Text(
                     text = stringResource(id = R.string.bluetooth_permission_request_button_label).uppercase(),
                     fontSize = AppTheme.dimensions.textSizeLarge
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun BluetoothAdapterStatus(isEnable: Boolean) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = stringResource(id = R.string.bluetooth_adapter_status_label),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+        if (isEnable) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "Bluetooth enable",
+                tint = MaterialTheme.colorScheme.tertiary
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Bluetooth disable",
+                tint = MaterialTheme.colorScheme.error
+            )
         }
     }
 }

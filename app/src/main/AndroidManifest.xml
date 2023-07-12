@@ -56,6 +56,14 @@
         </activity>
 
         <receiver
+            android:name=".data.bluetooth.BluetoothStateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".ui.widget.DiabloWidgetReceiver"
             android:exported="false"
             android:label="@string/widget_diablo_label">
