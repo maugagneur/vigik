@@ -6,6 +6,7 @@ import com.kidor.vigik.di.IoDispatcher
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +28,16 @@ class BluetoothViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             bluetoothApi.locationEnable.collect { locationEnable ->
                 updateViewState { it.copy(isLocationEnable = locationEnable) }
+            }
+        }
+    }
+
+    override fun handleAction(viewAction: BluetoothViewAction) {
+        when (viewAction) {
+            BluetoothViewAction.StartBluetoothScan -> viewModelScope.launch(ioDispatcher) {
+                updateViewState { it.copy(isScanning = true) }
+                delay(5000)
+                updateViewState { it.copy(isScanning = false) }
             }
         }
     }

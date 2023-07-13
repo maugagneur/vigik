@@ -38,6 +38,7 @@
     <string name="bluetooth_permission_request_button_label">Request permission</string>
     <string name="bluetooth_adapter_status_label">Bluetooth enabled:</string>
     <string name="bluetooth_location_status_label">Location enabled:</string>
+    <string name="bluetooth_detected_devices_label">Detected devices</string>
 
     <!-- NFC -->
     <string name="nfc_check_title">Check NFC</string>

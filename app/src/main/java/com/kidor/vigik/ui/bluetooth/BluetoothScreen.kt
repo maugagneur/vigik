@@ -2,18 +2,24 @@ package com.kidor.vigik.ui.bluetooth
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -47,6 +54,13 @@ fun BluetoothScreen(
             BluetoothAdapterStatus(isEnable = state.isBluetoothEnable)
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
             LocationStatus(isEnable = state.isLocationEnable)
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Divider()
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+            BluetoothScanResult(
+                scanInProgress = state.isScanning,
+                onRefreshDevicesClick = { viewModel.handleAction(BluetoothViewAction.StartBluetoothScan) }
+            )
         }
     }
 }
@@ -150,6 +164,39 @@ private fun LocationStatus(isEnable: Boolean) {
                 contentDescription = "Location disable",
                 tint = MaterialTheme.colorScheme.error
             )
+        }
+    }
+}
+
+@Composable
+private fun BluetoothScanResult(scanInProgress: Boolean, onRefreshDevicesClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(24.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.bluetooth_detected_devices_label),
+            color = MaterialTheme.colorScheme.secondary,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Box(contentAlignment = Alignment.Center) {
+            if (scanInProgress) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(18.dp),
+                    color = MaterialTheme.colorScheme.secondary,
+                    strokeWidth = 2.dp
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = "Refresh",
+                    modifier = Modifier.clickable(onClick = onRefreshDevicesClick),
+                    tint = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }
