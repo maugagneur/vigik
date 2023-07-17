@@ -6,7 +6,7 @@ import android.location.LocationManager
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.kidor.vigik.data.bluetooth.LocationStateChangeReceiver
+import com.kidor.vigik.receivers.LocationStateChangeReceiver
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
