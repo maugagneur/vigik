@@ -1,6 +1,5 @@
 package com.kidor.vigik.data.bluetooth
 
-import android.bluetooth.BluetoothAdapter
 import android.location.LocationManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +19,7 @@ class BluetoothApi @Inject constructor(
      * Indicates if the device's Bluetooth adapter is enabled.
      */
     val bluetoothEnable: StateFlow<Boolean> get() = _bluetoothEnable
-    private val _bluetoothEnable: MutableStateFlow<Boolean> = MutableStateFlow(bluetoothAdapter.isEnabled)
+    private val _bluetoothEnable: MutableStateFlow<Boolean> = MutableStateFlow(bluetoothAdapter.isEnabled())
 
     /**
      * Indicates if one of the device's location providers is enabled.
