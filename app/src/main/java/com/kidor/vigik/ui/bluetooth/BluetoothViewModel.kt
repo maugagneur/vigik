@@ -2,12 +2,15 @@ package com.kidor.vigik.ui.bluetooth
 
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.data.bluetooth.BluetoothApi
+import com.kidor.vigik.data.bluetooth.BluetoothScanCallback
+import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
+import com.kidor.vigik.data.bluetooth.model.BluetoothScanError
 import com.kidor.vigik.di.IoDispatcher
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -30,14 +33,25 @@ class BluetoothViewModel @Inject constructor(
                 updateViewState { it.copy(isLocationEnable = locationEnable) }
             }
         }
+        viewModelScope.launch(ioDispatcher) {
+            bluetoothApi.isScanning.collect { isScanning ->
+                updateViewState { it.copy(isScanning = isScanning) }
+            }
+        }
     }
 
     override fun handleAction(viewAction: BluetoothViewAction) {
         when (viewAction) {
             BluetoothViewAction.StartBluetoothScan -> viewModelScope.launch(ioDispatcher) {
-                updateViewState { it.copy(isScanning = true) }
-                delay(5000)
-                updateViewState { it.copy(isScanning = false) }
+                bluetoothApi.startScan(object : BluetoothScanCallback {
+                    override fun onDeviceFound(device: BluetoothDevice) {
+                        Timber.d("Bluetooth device detected: $device")
+                    }
+
+                    override fun onScanError(scanError: BluetoothScanError) {
+                        Timber.e("Bluetooth scan error: $scanError")
+                    }
+                })
             }
         }
     }
