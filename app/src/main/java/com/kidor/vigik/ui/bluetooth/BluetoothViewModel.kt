@@ -62,6 +62,8 @@ class BluetoothViewModel @Inject constructor(
      * @param update The operation to perform on view state.
      */
     private fun updateViewState(update: (BluetoothViewState) -> BluetoothViewState) {
-        _viewState.postValue(update(viewState.value ?: BluetoothViewState()))
+        viewModelScope.launch {
+            _viewState.value = update(viewState.value ?: BluetoothViewState())
+        }
     }
 }
