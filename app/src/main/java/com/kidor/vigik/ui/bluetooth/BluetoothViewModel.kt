@@ -43,9 +43,26 @@ class BluetoothViewModel @Inject constructor(
     override fun handleAction(viewAction: BluetoothViewAction) {
         when (viewAction) {
             BluetoothViewAction.StartBluetoothScan -> viewModelScope.launch(ioDispatcher) {
+                // Reset the list of detected devices
+                updateViewState { it.copy(detectedDevices = emptyList()) }
+
                 bluetoothApi.startScan(object : BluetoothScanCallback {
                     override fun onDeviceFound(device: BluetoothDevice) {
                         Timber.d("Bluetooth device detected: $device")
+
+                        // Ignore devices with an already known hardware address
+                        viewState.value?.detectedDevices?.let { deviceList ->
+                            if (deviceList.none { it.hardwareAddress == device.hardwareAddress }) {
+                                updateViewState { currentState ->
+                                    currentState.copy(
+                                        detectedDevices = mutableListOf<BluetoothDevice>().apply {
+                                            addAll(currentState.detectedDevices)
+                                            add(device)
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     override fun onScanError(scanError: BluetoothScanError) {

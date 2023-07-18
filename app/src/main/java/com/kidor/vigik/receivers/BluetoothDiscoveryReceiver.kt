@@ -71,7 +71,7 @@ class BluetoothDiscoveryReceiver @Inject constructor() : BroadcastReceiver() {
                 scanCallback?.onDeviceFound(
                     device = com.kidor.vigik.data.bluetooth.model.BluetoothDevice(
                         type = BluetoothDeviceType.fromMajorBluetoothClass(deviceClass?.majorDeviceClass),
-                        name = device?.name ?: "",
+                        name = device?.name ?: "???",
                         hardwareAddress = device?.address ?: ""
                     ).also {
                         Timber.d("New Bluetooth device discovered: $it")
