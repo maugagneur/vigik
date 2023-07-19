@@ -1,6 +1,8 @@
 package com.kidor.vigik.ui.bluetooth
 
 import androidx.lifecycle.viewModelScope
+import com.kidor.vigik.R
+import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.bluetooth.BluetoothApi
 import com.kidor.vigik.data.bluetooth.BluetoothScanCallback
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class BluetoothViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val bluetoothApi: BluetoothApi
+    private val bluetoothApi: BluetoothApi,
+    private val localization: Localization
 ) : BaseViewModel<BluetoothViewAction, BluetoothViewState, Nothing>() {
 
     init {
@@ -44,7 +47,12 @@ class BluetoothViewModel @Inject constructor(
         when (viewAction) {
             BluetoothViewAction.StartBluetoothScan -> viewModelScope.launch(ioDispatcher) {
                 // Reset the list of detected devices
-                updateViewState { it.copy(detectedDevices = emptyList()) }
+                updateViewState {
+                    it.copy(
+                        detectedDevices = emptyList(),
+                        errorMessage = null
+                    )
+                }
 
                 bluetoothApi.startScan(object : BluetoothScanCallback {
                     override fun onDeviceFound(device: BluetoothDevice) {
@@ -67,6 +75,12 @@ class BluetoothViewModel @Inject constructor(
 
                     override fun onScanError(scanError: BluetoothScanError) {
                         Timber.e("Bluetooth scan error: $scanError")
+                        val errorMessage = if (scanError == BluetoothScanError.SCAN_FAILED_TO_START) {
+                            localization.getString(R.string.bluetooth_start_scan_error_message)
+                        } else {
+                            scanError.name
+                        }
+                        updateViewState { it.copy(errorMessage = errorMessage) }
                     }
                 })
             }

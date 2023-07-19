@@ -51,6 +51,7 @@ class BluetoothAdapter @Inject constructor(
             val isSuccessful = bluetoothAdapter.startDiscovery()
             if (!isSuccessful) {
                 Timber.e("Fail to start Bluetooth device discovery")
+                scanCallback.onScanError(BluetoothScanError.SCAN_FAILED_TO_START)
             }
         }
     }

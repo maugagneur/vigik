@@ -39,6 +39,7 @@
     <string name="bluetooth_adapter_status_label">Bluetooth enabled:</string>
     <string name="bluetooth_location_status_label">Location enabled:</string>
     <string name="bluetooth_detected_devices_label">Detected devices</string>
+    <string name="bluetooth_start_scan_error_message">Fail to start Bluetooth scan. Please check that Bluetooth is ON!</string>
 
     <!-- NFC -->
     <string name="nfc_check_title">Check NFC</string>
