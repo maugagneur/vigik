@@ -1,6 +1,9 @@
+import com.android.build.api.dsl.ApplicationExtension
+import dagger.hilt.android.plugin.HiltExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
@@ -12,6 +15,17 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
                 // KAPT must go last to avoid build warnings.
                 // See: https://stackoverflow.com/questions/70550883/warning-the-following-options-were-not-recognized-by-any-processor-dagger-f
                 apply("org.jetbrains.kotlin.kapt")
+            }
+
+            extensions.configure<ApplicationExtension> {
+                defaultConfig.apply {
+                    testInstrumentationRunner = "com.kidor.vigik.utils.HiltTestRunner"
+                }
+            }
+
+            configure<HiltExtension> {
+                // Allows the Hilt annotation processors to be isolating so they are only invoked when necessary.
+                enableAggregatingTask = true
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

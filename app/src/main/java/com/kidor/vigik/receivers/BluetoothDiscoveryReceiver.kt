@@ -90,7 +90,7 @@ class BluetoothDiscoveryReceiver @Inject constructor() : BroadcastReceiver() {
         /**
          * The [IntentFilter] to use in order to receive broadcasts from this [BroadcastReceiver].
          */
-        val INTENT_FILTER = IntentFilter().apply {
+        val INTENT_FILTER: IntentFilter = IntentFilter().apply {
             addAction(ACTION_DISCOVERY_STARTED)
             addAction(ACTION_DISCOVERY_FINISHED)
             addAction(ACTION_DEVICE_FOUND)

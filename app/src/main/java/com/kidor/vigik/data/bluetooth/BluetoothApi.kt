@@ -17,23 +17,23 @@ class BluetoothApi @Inject constructor(
     private val locationManager: LocationManager
 ) : BluetoothApiCallback {
 
+    private val _bluetoothEnable: MutableStateFlow<Boolean> = MutableStateFlow(adapter.isEnabled())
     /**
      * Indicates if the device's Bluetooth adapter is enabled.
      */
     val bluetoothEnable: StateFlow<Boolean> get() = _bluetoothEnable
-    private val _bluetoothEnable: MutableStateFlow<Boolean> = MutableStateFlow(adapter.isEnabled())
 
+    private val _locationEnable: MutableStateFlow<Boolean> = MutableStateFlow(checkIfLocationIsEnabled())
     /**
      * Indicates if one of the device's location providers is enabled.
      */
     val locationEnable: StateFlow<Boolean> get() = _locationEnable
-    private val _locationEnable: MutableStateFlow<Boolean> = MutableStateFlow(checkIfLocationIsEnabled())
 
+    private val _isScanning: MutableStateFlow<Boolean> = MutableStateFlow(false)
     /**
      * Indicates if the Bluetooth adapter of the device is scanning.
      */
     val isScanning: StateFlow<Boolean> get() = _isScanning
-    private val _isScanning: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
         adapter.initialize(this)

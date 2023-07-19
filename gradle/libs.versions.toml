@@ -21,12 +21,12 @@ core-testing = "2.2.0"
 detekt = "1.23.0"
 diktat = "1.2.5"
 espresso = "3.5.1"
-google-hilt = "2.43.2"
+google-hilt = "2.47"
 google-material = "1.9.0"
 jacoco = "0.8.8"
 junit = "4.13.2"
-kotlin-coroutines = "1.7.1"
 kotlin = "1.9.0"
+kotlin-coroutines = "1.7.2"
 ksp = "1.9.0-1.0.11"
 mockito-android = "5.4.0"
 mockk = "1.13.5"
@@ -97,6 +97,7 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
 diktat-gradlePlugin = { group = "org.cqfn.diktat", name = "diktat-gradle-plugin", version.ref = "diktat" }
+hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "google-hilt" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 

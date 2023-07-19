@@ -34,6 +34,8 @@ class DetektConventionPlugin : Plugin<Project> {
                 //baseline = file("$projectDir/config/baseline.xml")
                 // If set to `true` the build does not fail when the maxIssues count was reached.
                 ignoreFailures = true
+                // Builds the AST in parallel (rules are always executed in parallel).
+                parallel = true
             }
 
             tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
