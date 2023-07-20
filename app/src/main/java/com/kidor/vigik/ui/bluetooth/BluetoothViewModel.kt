@@ -46,7 +46,7 @@ class BluetoothViewModel @Inject constructor(
     override fun handleAction(viewAction: BluetoothViewAction) {
         when (viewAction) {
             BluetoothViewAction.StartBluetoothScan -> viewModelScope.launch(ioDispatcher) {
-                // Reset the list of detected devices
+                // Reset the list of detected devices and the error message
                 updateViewState {
                     it.copy(
                         detectedDevices = emptyList(),

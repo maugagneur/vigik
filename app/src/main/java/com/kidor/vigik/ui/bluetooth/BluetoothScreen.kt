@@ -2,6 +2,7 @@ package com.kidor.vigik.ui.bluetooth
 
 import android.Manifest
 import android.os.Build
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +55,14 @@ import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+
+internal const val BLUETOOTH_ICON_ENABLE_TEST_TAG = "bluetooth_icon_enable"
+internal const val BLUETOOTH_ICON_DISABLE_TEST_TAG = "bluetooth_icon_disable"
+internal const val LOCATION_ICON_ENABLE_TEST_TAG = "location_icon_enable"
+internal const val LOCATION_ICON_DISABLE_TEST_TAG = "location_icon_disable"
+internal const val REFRESH_DEVICES_ICON_TEST_TAG = "refresh_devices_icon"
+internal const val CIRCULAR_PROGRESS_TEST_TAG = "circular progress"
+internal const val SCAN_ERROR_MESSAGE_TEST_TAG = "scan_error_message"
 
 /**
  * View that display the section dedicated to Bluetooth.
@@ -143,7 +153,8 @@ private fun PermissionView() {
 }
 
 @Composable
-private fun BluetoothAdapterStatus(isEnable: Boolean) {
+@VisibleForTesting
+internal fun BluetoothAdapterStatus(isEnable: Boolean) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = stringResource(id = R.string.bluetooth_adapter_status_label),
@@ -155,12 +166,14 @@ private fun BluetoothAdapterStatus(isEnable: Boolean) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Bluetooth enable",
+                modifier = Modifier.testTag(BLUETOOTH_ICON_ENABLE_TEST_TAG),
                 tint = MaterialTheme.colorScheme.tertiary
             )
         } else {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Bluetooth disable",
+                modifier = Modifier.testTag(BLUETOOTH_ICON_DISABLE_TEST_TAG),
                 tint = MaterialTheme.colorScheme.error
             )
         }
@@ -168,7 +181,8 @@ private fun BluetoothAdapterStatus(isEnable: Boolean) {
 }
 
 @Composable
-private fun LocationStatus(isEnable: Boolean) {
+@VisibleForTesting
+internal fun LocationStatus(isEnable: Boolean) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = stringResource(id = R.string.bluetooth_location_status_label),
@@ -180,12 +194,14 @@ private fun LocationStatus(isEnable: Boolean) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = "Location enable",
+                modifier = Modifier.testTag(LOCATION_ICON_ENABLE_TEST_TAG),
                 tint = MaterialTheme.colorScheme.tertiary
             )
         } else {
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Location disable",
+                modifier = Modifier.testTag(LOCATION_ICON_DISABLE_TEST_TAG),
                 tint = MaterialTheme.colorScheme.error
             )
         }
@@ -193,7 +209,8 @@ private fun LocationStatus(isEnable: Boolean) {
 }
 
 @Composable
-private fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick: () -> Unit) {
+@VisibleForTesting
+internal fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -209,7 +226,9 @@ private fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick: 
         Box(contentAlignment = Alignment.Center) {
             if (scanInProgress) {
                 CircularProgressIndicator(
-                    modifier = Modifier.size(18.dp),
+                    modifier = Modifier
+                        .size(18.dp)
+                        .testTag(CIRCULAR_PROGRESS_TEST_TAG),
                     color = MaterialTheme.colorScheme.secondary,
                     strokeWidth = 2.dp
                 )
@@ -217,7 +236,9 @@ private fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick: 
                 Icon(
                     imageVector = Icons.Default.Refresh,
                     contentDescription = "Refresh",
-                    modifier = Modifier.clickable(onClick = onRefreshDevicesClick),
+                    modifier = Modifier
+                        .clickable(onClick = onRefreshDevicesClick)
+                        .testTag(REFRESH_DEVICES_ICON_TEST_TAG),
                     tint = MaterialTheme.colorScheme.secondary
                 )
             }
@@ -242,7 +263,8 @@ private fun BluetoothScanStatusPreview() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-private fun DetectedBluetoothDeviceList(
+@VisibleForTesting
+internal fun DetectedBluetoothDeviceList(
     @PreviewParameter(DetectedBluetoothDevicesProvider::class) devices: List<BluetoothDevice>
 ) {
     if (devices.isNotEmpty()) {
@@ -294,13 +316,15 @@ private fun DetectedBluetoothDeviceList(
 }
 
 @Composable
-private fun ErrorMessage(errorMessage: String) {
+@VisibleForTesting
+internal fun ErrorMessage(errorMessage: String) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = errorMessage,
+            modifier = Modifier.testTag(SCAN_ERROR_MESSAGE_TEST_TAG),
             color = MaterialTheme.colorScheme.error,
             fontSize = AppTheme.dimensions.textSizeLarge,
             textAlign = TextAlign.Center
