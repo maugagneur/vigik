@@ -24,7 +24,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of 'home" screen.
      */
-    object HomeScreen : AppScreen(
+    data object HomeScreen : AppScreen(
         nameId = R.string.home_title,
         route = "home"
     )
@@ -32,7 +32,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "biometric login" screen.
      */
-    object BiometricLoginScreen : AppScreen(
+    data object BiometricLoginScreen : AppScreen(
         nameId = R.string.biometric_title,
         route = "biometric_login"
     )
@@ -40,7 +40,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "biometric home" screen.
      */
-    object BiometricHomeScreen : AppScreen(
+    data object BiometricHomeScreen : AppScreen(
         nameId = R.string.biometric_title,
         route = "biometric_home",
         showNavigateBack = false
@@ -49,7 +49,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "Bluetooth" screen.
      */
-    object BluetoothScreen : AppScreen(
+    data object BluetoothScreen : AppScreen(
         nameId = R.string.bluetooth_title,
         route = "bluetooth"
     )
@@ -57,7 +57,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "check" screen.
      */
-    object NfcCheckScreen : AppScreen(
+    data object NfcCheckScreen : AppScreen(
         nameId = R.string.nfc_check_title,
         route = "check"
     )
@@ -65,7 +65,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "hub" screen.
      */
-    object NfcHubScreen : AppScreen(
+    data object NfcHubScreen : AppScreen(
         nameId = R.string.nfc_hub_title,
         route = "hub"
     )
@@ -73,7 +73,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "scan" screen.
      */
-    object NfcScanScreen : AppScreen(
+    data object NfcScanScreen : AppScreen(
         nameId = R.string.nfc_scan_title,
         route = "scan"
     )
@@ -81,7 +81,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "history" screen.
      */
-    object NfcHistoryScreen : AppScreen(
+    data object NfcHistoryScreen : AppScreen(
         nameId = R.string.nfc_tag_history_title,
         route = "history"
     )
@@ -89,7 +89,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "emulate" screen.
      */
-    object NfcEmulateScreen : AppScreen(
+    data object NfcEmulateScreen : AppScreen(
         nameId = R.string.nfc_emulate_title,
         route = "emulate"
     )
@@ -97,7 +97,7 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     /**
      * Metadata of "REST API" screen
      */
-    object RestApiScreen : AppScreen(
+    data object RestApiScreen : AppScreen(
         nameId = R.string.rest_api_title,
         route = "rest_api"
     )

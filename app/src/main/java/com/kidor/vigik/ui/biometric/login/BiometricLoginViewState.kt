@@ -15,4 +15,4 @@ data class BiometricLoginViewState(
     val passwordField: String = "",
     val isBiometricLoginAvailable: Boolean = false,
     val displayLoginFail: Boolean = false
-) : ViewState()
+) : ViewState

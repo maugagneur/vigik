@@ -10,5 +10,5 @@ sealed class RestApiViewAction : ViewAction {
     /**
      * Action to refresh tracker's data.
      */
-    object RefreshData : RestApiViewAction()
+    data object RefreshData : RestApiViewAction()
 }

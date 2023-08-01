@@ -6,7 +6,7 @@ import com.kidor.vigik.ui.base.ViewEvent
 /**
  * Events that can be sent to the view from [BiometricLoginViewModel].
  */
-sealed class BiometricLoginViewEvent : ViewEvent() {
+sealed class BiometricLoginViewEvent : ViewEvent {
 
     /**
      * Event when we should display the system's biometric enrollment.
@@ -18,5 +18,5 @@ sealed class BiometricLoginViewEvent : ViewEvent() {
     /**
      * Event when we have to navigate to biometric home view.
      */
-    object NavigateToBiometricHome : BiometricLoginViewEvent()
+    data object NavigateToBiometricHome : BiometricLoginViewEvent()
 }

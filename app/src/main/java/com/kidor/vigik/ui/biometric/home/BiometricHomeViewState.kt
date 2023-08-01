@@ -7,4 +7,4 @@ import com.kidor.vigik.ui.base.ViewState
  *
  * @param isBiometricCredentialsSaved Indicates if biometric credentials are saved.
  */
-data class BiometricHomeViewState(val isBiometricCredentialsSaved: Boolean) : ViewState()
+data class BiometricHomeViewState(val isBiometricCredentialsSaved: Boolean) : ViewState

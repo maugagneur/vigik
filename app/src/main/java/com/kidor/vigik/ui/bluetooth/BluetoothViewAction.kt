@@ -10,7 +10,7 @@ sealed class BluetoothViewAction : ViewAction {
     /**
      * Action to start Bluetooth scan.
      */
-    object StartBluetoothScan : BluetoothViewAction()
+    data object StartBluetoothScan : BluetoothViewAction()
 
     /**
      * Action to toggle the low energy scan.

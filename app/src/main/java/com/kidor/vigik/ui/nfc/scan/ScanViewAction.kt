@@ -10,5 +10,5 @@ sealed class ScanViewAction : ViewAction {
     /**
      * Save the read tag in local database.
      */
-    object SaveTag : ScanViewAction()
+    data object SaveTag : ScanViewAction()
 }

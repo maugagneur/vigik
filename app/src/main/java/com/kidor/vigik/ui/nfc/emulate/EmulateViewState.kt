@@ -5,7 +5,7 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * Possible states of emulate view.
  */
-sealed class EmulateViewState : ViewState() {
+sealed class EmulateViewState : ViewState {
 
     /**
      * State when the view have to display logs.

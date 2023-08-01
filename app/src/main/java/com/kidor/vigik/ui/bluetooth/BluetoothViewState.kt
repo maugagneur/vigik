@@ -20,4 +20,4 @@ data class BluetoothViewState(
     val isScanning: Boolean = false,
     val detectedDevices: List<BluetoothDevice> = emptyList(),
     val errorMessage: String? = null
-) : ViewState()
+) : ViewState

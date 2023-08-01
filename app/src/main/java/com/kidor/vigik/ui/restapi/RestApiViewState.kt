@@ -11,4 +11,4 @@ import com.kidor.vigik.ui.base.ViewState
 data class RestApiViewState(
     val diablo4TrackerData: Diablo4TrackerData,
     val isRefreshing: Boolean = false
-) : ViewState()
+) : ViewState

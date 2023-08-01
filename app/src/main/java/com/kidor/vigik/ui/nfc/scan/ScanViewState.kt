@@ -6,12 +6,12 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * Possible states of scan view.
  */
-sealed class ScanViewState : ViewState() {
+sealed class ScanViewState : ViewState {
 
     /**
      * Initial state when the NFC sensor is looking for tag.
      */
-    object Loading : ScanViewState()
+    data object Loading : ScanViewState()
 
     /**
      * State when the view displays a tag.

@@ -10,10 +10,10 @@ sealed class CheckViewAction : ViewAction {
     /**
      * Refresh NFC status.
      */
-    object RefreshNfcStatus : CheckViewAction()
+    data object RefreshNfcStatus : CheckViewAction()
 
     /**
      * Display device's NFC settings screen.
      */
-    object DisplayNfcSettings : CheckViewAction()
+    data object DisplayNfcSettings : CheckViewAction()
 }
