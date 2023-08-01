@@ -11,7 +11,6 @@ import android.content.IntentFilter
 import androidx.core.content.IntentCompat
 import com.kidor.vigik.data.bluetooth.BluetoothApiCallback
 import com.kidor.vigik.data.bluetooth.BluetoothScanCallback
-import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -70,9 +69,9 @@ class BluetoothDiscoveryReceiver @Inject constructor() : BroadcastReceiver() {
                 )
                 scanCallback?.onDeviceFound(
                     device = com.kidor.vigik.data.bluetooth.model.BluetoothDevice(
-                        type = BluetoothDeviceType.fromMajorBluetoothClass(deviceClass?.majorDeviceClass),
-                        name = device?.name ?: "???",
-                        hardwareAddress = device?.address ?: ""
+                        majorDeviceClass = deviceClass?.majorDeviceClass,
+                        name = device?.name,
+                        hardwareAddress = device?.address
                     ).also {
                         Timber.d("New Bluetooth device discovered: $it")
                     }

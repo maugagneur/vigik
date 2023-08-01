@@ -6,7 +6,6 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
-import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.data.bluetooth.model.BluetoothScanError
 import com.kidor.vigik.receivers.BluetoothDiscoveryReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -46,9 +45,9 @@ class BluetoothAdapter @Inject constructor(
         result?.device?.let { device ->
             _scanCallback?.onDeviceFound(
                 BluetoothDevice(
-                    type = BluetoothDeviceType.fromMajorBluetoothClass(device.bluetoothClass.majorDeviceClass),
-                    name = device.name ?: "???",
-                    hardwareAddress = device.address ?: ""
+                    majorDeviceClass = device.bluetoothClass.majorDeviceClass,
+                    name = device.name,
+                    hardwareAddress = device.address
                 )
             )
         }

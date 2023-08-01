@@ -55,35 +55,38 @@ class BluetoothViewModel @Inject constructor(
                 }
 
                 val lowEnergyScanSelected = viewState.value?.leScanSelected ?: false
-                bluetoothApi.startScan(lowEnergyScanSelected, object : BluetoothScanCallback {
-                    override fun onDeviceFound(device: BluetoothDevice) {
-                        Timber.d("Bluetooth device detected: $device")
+                bluetoothApi.startScan(
+                    lowEnergy = lowEnergyScanSelected,
+                    scanCallback = object : BluetoothScanCallback {
+                        override fun onDeviceFound(device: BluetoothDevice) {
+                            Timber.d("Bluetooth device detected: $device")
 
-                        // Ignore devices with an already known hardware address
-                        viewState.value?.detectedDevices?.let { deviceList ->
-                            if (deviceList.none { it.hardwareAddress == device.hardwareAddress }) {
-                                updateViewState { currentState ->
-                                    currentState.copy(
-                                        detectedDevices = mutableListOf<BluetoothDevice>().apply {
-                                            addAll(currentState.detectedDevices)
-                                            add(device)
-                                        }
-                                    )
+                            // Ignore devices with an already known hardware address
+                            viewState.value?.detectedDevices?.let { deviceList ->
+                                if (deviceList.none { it.hardwareAddress == device.hardwareAddress }) {
+                                    updateViewState { currentState ->
+                                        currentState.copy(
+                                            detectedDevices = mutableListOf<BluetoothDevice>().apply {
+                                                addAll(currentState.detectedDevices)
+                                                add(device)
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    override fun onScanError(scanError: BluetoothScanError) {
-                        Timber.e("Bluetooth scan error: $scanError")
-                        val errorMessage = if (scanError == BluetoothScanError.SCAN_FAILED_TO_START) {
-                            localization.getString(R.string.bluetooth_start_scan_error_message)
-                        } else {
-                            scanError.name
+                        override fun onScanError(scanError: BluetoothScanError) {
+                            Timber.e("Bluetooth scan error: $scanError")
+                            val errorMessage = if (scanError == BluetoothScanError.SCAN_FAILED_TO_START) {
+                                localization.getString(R.string.bluetooth_start_scan_error_message)
+                            } else {
+                                scanError.name
+                            }
+                            updateViewState { it.copy(errorMessage = errorMessage) }
                         }
-                        updateViewState { it.copy(errorMessage = errorMessage) }
                     }
-                })
+                )
             }
 
             is BluetoothViewAction.ChangeLeScanState -> {
