@@ -54,7 +54,8 @@ class BluetoothViewModel @Inject constructor(
                     )
                 }
 
-                bluetoothApi.startScan(object : BluetoothScanCallback {
+                val lowEnergyScanSelected = viewState.value?.leScanSelected ?: false
+                bluetoothApi.startScan(lowEnergyScanSelected, object : BluetoothScanCallback {
                     override fun onDeviceFound(device: BluetoothDevice) {
                         Timber.d("Bluetooth device detected: $device")
 

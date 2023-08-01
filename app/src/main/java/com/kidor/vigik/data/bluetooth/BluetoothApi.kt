@@ -65,25 +65,15 @@ class BluetoothApi @Inject constructor(
     /**
      * Starts a Bluetooth scan.
      *
+     * @param lowEnergy    True to perform a Low Energy scan, otherwise false.
      * @param scanCallback The Bluetooth scan callback.
      */
-    fun startScan(scanCallback: BluetoothScanCallback) {
+    fun startScan(lowEnergy: Boolean, scanCallback: BluetoothScanCallback) {
         if (isScanning.value) {
             Timber.e("startScan() called when already scanning")
             scanCallback.onScanError(BluetoothScanError.SCAN_FAILED_ALREADY_STARTED)
         } else {
-            adapter.startScan(isLEScan = false, scanCallback = scanCallback)
-        }
-    }
-
-    /**
-     * Stops the current Bluetooth scan.
-     */
-    fun stopScan() {
-        if (isScanning.value) {
-            adapter.stopScan(isLEScan = false)
-        } else {
-            Timber.w("stopScan() called when already stopped")
+            adapter.startScan(isLeScan = lowEnergy, scanCallback = scanCallback)
         }
     }
 }

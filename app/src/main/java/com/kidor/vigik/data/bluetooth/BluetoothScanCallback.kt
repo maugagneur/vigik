@@ -4,7 +4,7 @@ import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothScanError
 
 /**
- * Callback used to forward devices found and errors during a bluetooth scan.
+ * Callback used to forward devices found and errors during a bluetooth scan to the element that initiated the scan.
  */
 interface BluetoothScanCallback {
 
