@@ -84,6 +84,10 @@ class BluetoothViewModel @Inject constructor(
                     }
                 })
             }
+
+            is BluetoothViewAction.ChangeLeScanState -> {
+                updateViewState { it.copy(leScanSelected = viewAction.isChecked) }
+            }
         }
     }
 

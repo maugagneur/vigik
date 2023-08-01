@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.Check
@@ -35,6 +36,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -43,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -83,6 +87,12 @@ fun BluetoothScreen(
             BluetoothAdapterStatus(isEnable = state.isBluetoothEnable)
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
             LocationStatus(isEnable = state.isLocationEnable)
+            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+            LowEnergyStatus(
+                checked = state.leScanSelected,
+                enabled = state.isBluetoothEnable && state.isLocationEnable && !state.isScanning,
+                onLeScanStateChanged = { viewModel.handleAction(BluetoothViewAction.ChangeLeScanState(it)) }
+            )
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
             Divider()
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
@@ -209,6 +219,42 @@ internal fun LocationStatus(isEnable: Boolean) {
 }
 
 @Composable
+private fun LowEnergyStatus(checked: Boolean, enabled: Boolean, onLeScanStateChanged: (Boolean) -> Unit) {
+    Row(
+        modifier = Modifier.toggleable(
+            value = checked,
+            enabled = enabled,
+            role = Role.Switch,
+            onValueChange = { onLeScanStateChanged(it) }
+        ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.bluetooth_low_energy_scan_status_label),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceMedium))
+        Switch(
+            checked = checked,
+            onCheckedChange = null,
+            thumbContent = {
+                Icon(
+                    imageVector = if (checked) Icons.Filled.Check else Icons.Filled.Close,
+                    contentDescription = null,
+                    modifier = Modifier.size(SwitchDefaults.IconSize)
+                )
+            },
+            enabled = enabled,
+            colors = SwitchDefaults.colors(
+                checkedIconColor = MaterialTheme.colorScheme.tertiary,
+                uncheckedThumbColor = MaterialTheme.colorScheme.error
+            )
+        )
+    }
+}
+
+@Composable
 @VisibleForTesting
 internal fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick: () -> Unit) {
     Row(
@@ -247,6 +293,33 @@ internal fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick:
 }
 
 @Composable
+@VisibleForTesting
+internal fun ErrorMessage(errorMessage: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = errorMessage,
+            modifier = Modifier.testTag(SCAN_ERROR_MESSAGE_TEST_TAG),
+            color = MaterialTheme.colorScheme.error,
+            fontSize = AppTheme.dimensions.textSizeLarge,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 100)
+private fun LowEnergyStatusPreview(@PreviewParameter(LowEnergyStatusDataProvider::class) status: LowEnergyStatusData) {
+    AppTheme {
+        Box(contentAlignment = Alignment.Center) {
+            LowEnergyStatus(checked = status.checked, enabled = status.enabled, onLeScanStateChanged = {})
+        }
+    }
+}
+
+@Composable
 @Preview(widthDp = 400, heightDp = 100)
 private fun BluetoothScanStatusPreview() {
     AppTheme {
@@ -262,7 +335,7 @@ private fun BluetoothScanStatusPreview() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-@Preview(widthDp = 400, heightDp = 700)
+@Preview(widthDp = 400, heightDp = 300)
 @VisibleForTesting
 internal fun DetectedBluetoothDeviceList(
     @PreviewParameter(DetectedBluetoothDevicesProvider::class) devices: List<BluetoothDevice>
@@ -312,22 +385,5 @@ internal fun DetectedBluetoothDeviceList(
                 }
             }
         }
-    }
-}
-
-@Composable
-@VisibleForTesting
-internal fun ErrorMessage(errorMessage: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = errorMessage,
-            modifier = Modifier.testTag(SCAN_ERROR_MESSAGE_TEST_TAG),
-            color = MaterialTheme.colorScheme.error,
-            fontSize = AppTheme.dimensions.textSizeLarge,
-            textAlign = TextAlign.Center
-        )
     }
 }
