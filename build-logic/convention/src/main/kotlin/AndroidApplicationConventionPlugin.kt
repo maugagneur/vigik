@@ -45,6 +45,9 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     targetCompatibility = JavaVersion.VERSION_17
                     isCoreLibraryDesugaringEnabled = true
                 }
+                packaging {
+                    resources.excludes.add("META-INF/*")
+                }
             }
 
             // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947

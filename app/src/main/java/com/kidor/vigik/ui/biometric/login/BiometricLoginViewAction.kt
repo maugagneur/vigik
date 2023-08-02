@@ -26,17 +26,17 @@ sealed class BiometricLoginViewAction : ViewAction {
     /**
      * Action to log in.
      */
-    object Login : BiometricLoginViewAction()
+    data object Login : BiometricLoginViewAction()
 
     /**
      * Action to log in with biometric.
      */
-    object LoginWithBiometric : BiometricLoginViewAction()
+    data object LoginWithBiometric : BiometricLoginViewAction()
 
     /**
      * Hides biometric prompt.
      */
-    object HideBiometricPrompt : BiometricLoginViewAction()
+    data object HideBiometricPrompt : BiometricLoginViewAction()
 
     /**
      * Notify an error during biometric authentication.

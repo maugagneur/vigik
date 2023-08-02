@@ -9,10 +9,6 @@ plugins {
 }
 
 android {
-    defaultConfig {
-        testInstrumentationRunner = "com.kidor.vigik.utils.HiltTestRunner"
-    }
-
     buildTypes {
         getByName("debug") {
             enableUnitTestCoverage = true
@@ -32,10 +28,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-    }
-
-    packaging {
-        resources.excludes.add("META-INF/*")
     }
 
     testOptions {

@@ -8,6 +8,7 @@
     <!-- HOME -->
     <string name="home_title">Accueil</string>
     <string name="home_biometric_button_label">Biometrique</string>
+    <string name="home_bluetooth_button_label">Bluetooth</string>
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_rest_api_button_label">REST API</string>
 
@@ -27,6 +28,16 @@
     <string name="biometric_home_credential_remove_button_label">Supprimer</string>
     <string name="biometric_home_login_success_label">Connexion réussie !</string>
     <string name="biometric_home_logout_button_label">Déconnexion</string>
+
+    <!-- BLE -->
+    <string name="bluetooth_title">Bluetooth</string>
+    <string name="bluetooth_permission_status_label">Permissions accordées :</string>
+    <string name="bluetooth_permission_request_button_label">Demander permissions</string>
+    <string name="bluetooth_adapter_status_label">Bluetooth activé :</string>
+    <string name="bluetooth_location_status_label">Localisation activée :</string>
+    <string name="bluetooth_low_energy_scan_status_label">Scan Low Energy</string>
+    <string name="bluetooth_detected_devices_label">Appareils détectés</string>
+    <string name="bluetooth_start_scan_error_message">Échec de la détection Bluetooth. Merci de vérifier que le Bluetooth est activé !</string>
 
     <!-- NFC -->
     <string name="nfc_check_title">Vérification NFC</string>

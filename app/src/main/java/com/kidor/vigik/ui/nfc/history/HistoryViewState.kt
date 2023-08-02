@@ -6,12 +6,12 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * Possible states of tag history's view.
  */
-sealed class HistoryViewState : ViewState() {
+sealed class HistoryViewState : ViewState {
 
     /**
      * Initial state of the view.
      */
-    object Initializing : HistoryViewState()
+    data object Initializing : HistoryViewState()
 
     /**
      * State when the view displays a list of tags.
@@ -23,5 +23,5 @@ sealed class HistoryViewState : ViewState() {
     /**
      * State when the view has not tags to display.
      */
-    object NoTag : HistoryViewState()
+    data object NoTag : HistoryViewState()
 }

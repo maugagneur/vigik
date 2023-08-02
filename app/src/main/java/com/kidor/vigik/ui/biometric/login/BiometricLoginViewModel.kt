@@ -23,11 +23,11 @@ class BiometricLoginViewModel @Inject constructor(
     private val biometricRepository: BiometricRepository
 ) : BaseViewModel<BiometricLoginViewAction, BiometricLoginViewState, BiometricLoginViewEvent>() {
 
+    private val _biometricPromptState = MutableSharedFlow<BiometricPromptViewState?>(replay = 1)
     /**
      * State flow of the biometric prompt.
      */
     val biometricPromptState: SharedFlow<BiometricPromptViewState?> get() = _biometricPromptState
-    private val _biometricPromptState = MutableSharedFlow<BiometricPromptViewState?>(replay = 1)
 
     init {
         viewModelScope.launch {

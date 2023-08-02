@@ -28,6 +28,8 @@ class AndroidApplicationComposeConventionPlugin : Plugin<Project> {
                 add("androidTestImplementation", libs.findBundle("test.android").get())
                 add("debugImplementation", libs.findLibrary("androidx.compose.ui.test.manifest").get())
                 add("debugImplementation", libs.findLibrary("androidx.compose.ui.tooling").get())
+                // Utils for Jetpack Compose
+                add("implementation", libs.findLibrary("accompanist.permissions").get())
             }
         }
     }

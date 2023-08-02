@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
  *
  * @param blocks The jobs to launch.
  */
-suspend fun awaitAll(vararg blocks: suspend () -> Unit) = coroutineScope {
+suspend fun awaitAll(vararg blocks: suspend () -> Unit): Unit = coroutineScope {
     blocks.forEach {
         launch { it() }
     }

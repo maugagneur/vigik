@@ -17,17 +17,12 @@ enum class Diablo4WorldBoss(val description: String, @StringRes val resId: Int) 
 
     companion object {
         /**
-         * Returns the [Diablo4WorldBoss] matching the given name or null if not found.
+         * Returns the [Diablo4WorldBoss] matching the given name or [UNKNOWN] if not found.
          *
          * @param name The world boss's name.
          */
-        fun fromName(name: String): Diablo4WorldBoss {
-            values().forEach { boss ->
-                if (boss.description.equals(other = name, ignoreCase = true)) {
-                    return boss
-                }
-            }
-            return UNKNOWN
-        }
+        @OptIn(ExperimentalStdlibApi::class)
+        fun fromName(name: String): Diablo4WorldBoss =
+            entries.find { it.description.equals(other = name, ignoreCase = true) } ?: UNKNOWN
     }
 }

@@ -22,6 +22,7 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.detekt.gradlePlugin)
     compileOnly(libs.diktat.gradlePlugin)
+    compileOnly(libs.hilt.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
 }

@@ -5,15 +5,15 @@ import com.kidor.vigik.ui.base.ViewEvent
 /**
  * Events that can be sent to the view from [ScanViewModel].
  */
-sealed class ScanViewEvent : ViewEvent() {
+sealed class ScanViewEvent : ViewEvent {
 
     /**
      * Event when a tag is successfully saved into local database.
      */
-    object SaveTagSuccess : ScanViewEvent()
+    data object SaveTagSuccess : ScanViewEvent()
 
     /**
      * Event when we fail to save a tag into local database.
      */
-    object SaveTagFailure : ScanViewEvent()
+    data object SaveTagFailure : ScanViewEvent()
 }

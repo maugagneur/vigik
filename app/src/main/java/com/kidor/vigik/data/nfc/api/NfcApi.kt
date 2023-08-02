@@ -7,6 +7,7 @@ import android.nfc.NdefMessage
 import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.os.Build
+import androidx.core.content.IntentCompat
 import com.kidor.vigik.utils.SystemWrapper
 import timber.log.Timber
 import javax.inject.Inject
@@ -88,7 +89,7 @@ class NfcApi @Inject constructor(
             return
         }
 
-        val tag: Tag? = getTag(intent)
+        val tag: Tag? = IntentCompat.getParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag::class.java)
         val tagData = com.kidor.vigik.data.nfc.model.Tag(
             timestamp = systemWrapper.currentTimeMillis(),
             uid = tag?.id,
@@ -124,16 +125,6 @@ class NfcApi @Inject constructor(
      */
     fun unregister(listener: NfcApiListener) {
         listeners.remove(listener)
-    }
-
-    @Suppress("kotlin:S1874") // Ignore deprecated code warning in this method
-    private fun getTag(intent: Intent): Tag? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG, Tag::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableExtra(NfcAdapter.EXTRA_TAG)
-        }
     }
 
     private fun extractData(intent: Intent): String {

@@ -14,7 +14,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -29,6 +31,16 @@ private const val SHARED_PREFERENCES_FILE_NAME = "app_shared_preferences"
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    /**
+     * Provides unique instance of [CoroutineScope] based on [SupervisorJob].
+     */
+    @Singleton
+    @Provides
+    fun provideApplicationScope(): CoroutineScope {
+        // The SupervisorJob will not propagate cancellation to other children when a child coroutine fails.
+        return CoroutineScope(SupervisorJob())
+    }
 
     /**
      * Provides instance of [Dispatchers.IO].

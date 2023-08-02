@@ -630,8 +630,6 @@ style:
     active: true
   OptionalUnit:
     active: false
-  OptionalWhenBraces:
-    active: false
   PreferToOverPairSyntax:
     active: false
   ProtectedMemberInFinalClass:
@@ -695,7 +693,7 @@ style:
     active: true
     allowedNames: 'ignored|expected'
   UnusedPrivateClass:
-    active: true
+    active: false # FIXME: Analyzing AppDataBase.kt led to an exception.
   UnusedPrivateMember:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
