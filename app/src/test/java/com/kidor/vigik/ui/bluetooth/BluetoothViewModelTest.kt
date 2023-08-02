@@ -291,4 +291,42 @@ class BluetoothViewModelTest {
             }
         }
     }
+
+    @Test
+    fun `check that scan is not stopped if not running when leaving screen`() {
+        logTestName()
+
+        runTest {
+            // Simulate that the device is not scanning
+            isScanningFlow.emit(false)
+
+            // Check that the scan is running
+            assertFalse(viewModel.viewState.value?.isScanning, "Is scanning")
+
+            // Leaved the screen
+            viewModel.onCleared()
+
+            // Check stopScan() is not called
+            verify(inverse = true) { bluetoothApi.stopScan() }
+        }
+    }
+
+    @Test
+    fun `check that scan is stopped if running when leaving screen`() {
+        logTestName()
+
+        runTest {
+            // Simulate that the device is scanning
+            isScanningFlow.emit(true)
+
+            // Check that the scan is running
+            assertTrue(viewModel.viewState.value?.isScanning, "Is scanning")
+
+            // Leaved the screen
+            viewModel.onCleared()
+
+            // Check the scan is topped
+            verify { bluetoothApi.stopScan() }
+        }
+    }
 }

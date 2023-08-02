@@ -10,6 +10,7 @@ import com.kidor.vigik.data.bluetooth.model.BluetoothScanError
 import com.kidor.vigik.receivers.BluetoothDiscoveryReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -97,10 +98,25 @@ class BluetoothAdapter @Inject constructor(
     }
 
     /**
+     * Stop current scan process.
+     */
+    @SuppressLint("MissingPermission")
+    fun stopScan() {
+        // Check if a LE scan callback is saved to determine the type of current scan.
+        if (_scanCallback != null) {
+            stopLeScan()
+            // Cancel pending job
+            coroutineScope.coroutineContext.cancelChildren()
+        } else {
+            bluetoothAdapter.cancelDiscovery()
+        }
+    }
+
+    /**
      * Stop scanning for Low Energy Bluetooth devices.
      */
     @SuppressLint("MissingPermission")
-    fun stopLeScan() {
+    private fun stopLeScan() {
         // Stop LE scan
         bluetoothAdapter.bluetoothLeScanner.stopScan(this)
         // Notify the end of scan

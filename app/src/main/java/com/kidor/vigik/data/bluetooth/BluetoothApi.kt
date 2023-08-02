@@ -76,4 +76,15 @@ class BluetoothApi @Inject constructor(
             adapter.startScan(isLeScan = lowEnergy, scanCallback = scanCallback)
         }
     }
+
+    /**
+     * Stops current Bluetooth scan.
+     */
+    fun stopScan() {
+        if (isScanning.value) {
+            adapter.stopScan()
+        } else {
+            Timber.w("Requested to stop scan while not scanning")
+        }
+    }
 }

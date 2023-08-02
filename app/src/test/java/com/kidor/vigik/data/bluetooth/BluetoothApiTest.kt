@@ -193,4 +193,23 @@ class BluetoothApiTest {
         // Check that we start a new LE scan
         verify { bluetoothAdapter.startScan(true, bluetoothScanCallback) }
     }
+
+    @Test
+    fun `check stopScan() behavior depending of scan state`() {
+        logTestName()
+
+        // When the device is not scanning
+        bluetoothApi.onScanningStateChanged(false)
+        // Stop scan
+        bluetoothApi.stopScan()
+        // Then adapter should not be asked to stop scan
+        verify(inverse = true) { bluetoothAdapter.stopScan() }
+
+        // When the device is scanning
+        bluetoothApi.onScanningStateChanged(true)
+        // Stop scan
+        bluetoothApi.stopScan()
+        // Then adapter should be asked to stop scan
+        verify { bluetoothAdapter.stopScan() }
+    }
 }

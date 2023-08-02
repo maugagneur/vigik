@@ -48,6 +48,8 @@ class BluetoothAdapterTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
+        every { bluetoothAdapter.startDiscovery() } returns true
+        every { bluetoothAdapter.cancelDiscovery() } returns true
         every { bluetoothAdapter.bluetoothLeScanner } returns bluetoothLeScanner
         every { context.registerReceiver(any(), any()) } returns Intent()
     }
@@ -122,9 +124,6 @@ class BluetoothAdapterTest {
 
         runTest {
             buildAdapter(backgroundScope)
-
-            // Mock startDiscovery() to simulate an error
-            every { bluetoothAdapter.startDiscovery() } returns true
 
             // Start Bluetooth scan
             adapter.startScan(false, bluetoothScanCallback)
@@ -219,6 +218,43 @@ class BluetoothAdapterTest {
                     )
                 )
             }
+        }
+    }
+
+    @Test
+    fun `check stopScan() behavior with Bluetooth discovery`() {
+        logTestName()
+
+        runTest {
+            buildAdapter(backgroundScope)
+
+            // When a Bluetooth scan is running
+            adapter.startScan(false, bluetoothScanCallback)
+            // Stop scan
+            adapter.stopScan()
+            // Then Bluetooth discovery should be cancel
+            verify { bluetoothAdapter.cancelDiscovery() }
+            // Then BLE scan should not be stopped
+            verify(inverse = true) { bluetoothLeScanner.stopScan(adapter) }
+        }
+    }
+
+    @Test
+    fun `check stopScan() behavior with BLE scan`() {
+        logTestName()
+
+        runTest {
+            buildAdapter(backgroundScope)
+
+            // When a BLE scan is running
+            adapter.startScan(true, bluetoothScanCallback)
+            // Stop scan
+            adapter.stopScan()
+            // Then Bluetooth discovery should not be cancel
+            verify(inverse = true) { bluetoothAdapter.cancelDiscovery() }
+            // Then BLE scan should be stopped once
+            delay(20_000)
+            verify(exactly = 1) { bluetoothLeScanner.stopScan(adapter) }
         }
     }
 }

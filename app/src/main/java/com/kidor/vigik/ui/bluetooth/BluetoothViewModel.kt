@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.bluetooth
 
+import androidx.annotation.RestrictTo
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
@@ -103,6 +104,15 @@ class BluetoothViewModel @Inject constructor(
     private fun updateViewState(update: (BluetoothViewState) -> BluetoothViewState) {
         viewModelScope.launch {
             _viewState.value = update(viewState.value ?: BluetoothViewState())
+        }
+    }
+
+    @RestrictTo(RestrictTo.Scope.TESTS)
+    public override fun onCleared() {
+        super.onCleared()
+        // Stop scan if still running
+        if (viewState.value?.isScanning == true) {
+            bluetoothApi.stopScan()
         }
     }
 }
