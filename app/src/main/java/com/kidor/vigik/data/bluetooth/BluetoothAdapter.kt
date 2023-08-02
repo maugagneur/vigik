@@ -45,7 +45,7 @@ class BluetoothAdapter @Inject constructor(
         result?.device?.let { device ->
             _scanCallback?.onDeviceFound(
                 BluetoothDevice(
-                    majorDeviceClass = device.bluetoothClass.majorDeviceClass,
+                    majorDeviceClass = device.bluetoothClass?.majorDeviceClass,
                     name = device.name,
                     hardwareAddress = device.address
                 )
@@ -56,7 +56,7 @@ class BluetoothAdapter @Inject constructor(
     override fun onScanFailed(errorCode: Int) {
         Timber.e("Error during BLE scan: $errorCode")
         _scanCallback?.onScanError(BluetoothScanError.fromErrorCode(errorCode))
-        apiCallback.onScanningStateChanged(isScanning = false)
+        stopLeScan()
     }
 
     /**

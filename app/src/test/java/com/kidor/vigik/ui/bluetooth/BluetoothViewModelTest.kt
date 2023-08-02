@@ -142,6 +142,46 @@ class BluetoothViewModelTest {
     }
 
     @Test
+    fun `check LE scan switch state when toggled`() {
+        logTestName()
+
+        runTest {
+            viewModel.viewState.asFlow().test {
+                // Turn ON the LE scan switch
+                viewModel.handleAction(BluetoothViewAction.ChangeLeScanState(isChecked = true))
+                // Check that LE scan UI state should be "selected"
+                assertTrue(expectMostRecentItem().leScanSelected, "LE scan selected")
+
+                // Turn OFF the LE scan switch
+                viewModel.handleAction(BluetoothViewAction.ChangeLeScanState(isChecked = false))
+                // Check that LE scan UI state should be "unselected"
+                assertFalse(awaitItem().leScanSelected, "LE scan selected")
+
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+    }
+
+    @Test
+    fun `check that startScan() is called with the right parameters`() {
+        logTestName()
+
+        // Turn OFF the LE scan switch
+        viewModel.handleAction(BluetoothViewAction.ChangeLeScanState(isChecked = false))
+        // Start Bluetooth scan
+        viewModel.handleAction(BluetoothViewAction.StartBluetoothScan)
+        // Check that non-LE scan started
+        verify { bluetoothApi.startScan(false, any()) }
+
+        // Turn ON the LE scan switch
+        viewModel.handleAction(BluetoothViewAction.ChangeLeScanState(isChecked = true))
+        // Start Bluetooth scan
+        viewModel.handleAction(BluetoothViewAction.StartBluetoothScan)
+        // Check that LE scan started
+        verify { bluetoothApi.startScan(true, any()) }
+    }
+
+    @Test
     fun `check view state when Bluetooth scan produces an error`() {
         logTestName()
 
@@ -150,7 +190,7 @@ class BluetoothViewModelTest {
         runTest {
             viewModel.viewState.asFlow().test {
                 // Mock startScan() call -> SCAN_FAILED_TO_START
-                every { bluetoothApi.startScan(capture(scanCallback)) } answers {
+                every { bluetoothApi.startScan(false, capture(scanCallback)) } answers {
                     scanCallback.captured.onScanError(BluetoothScanError.SCAN_FAILED_TO_START)
                 }
 
@@ -158,7 +198,7 @@ class BluetoothViewModelTest {
                 viewModel.handleAction(BluetoothViewAction.StartBluetoothScan)
 
                 // Check Bluetooth API is called
-                verify(exactly = 1) { bluetoothApi.startScan(any()) }
+                verify(exactly = 1) { bluetoothApi.startScan(any(), any()) }
                 // Check UI state
                 expectMostRecentItem().let { viewState ->
                     assertTrue(viewState.detectedDevices.isEmpty(), "Detected device list is empty")
@@ -166,7 +206,7 @@ class BluetoothViewModelTest {
                 }
 
                 // Mock startScan() call -> SCAN_FAILED_UNKNOWN_REASON
-                every { bluetoothApi.startScan(capture(scanCallback)) } answers {
+                every { bluetoothApi.startScan(false, capture(scanCallback)) } answers {
                     scanCallback.captured.onScanError(BluetoothScanError.SCAN_FAILED_UNKNOWN_REASON)
                 }
 
@@ -180,7 +220,7 @@ class BluetoothViewModelTest {
                 }
 
                 // Check Bluetooth API is called
-                verify(exactly = 2) { bluetoothApi.startScan(any()) }
+                verify(exactly = 2) { bluetoothApi.startScan(any(), any()) }
                 // Check UI state
                 awaitItem().let { viewState ->
                     assertTrue(viewState.detectedDevices.isEmpty(), "Detected device list is empty")
@@ -198,7 +238,7 @@ class BluetoothViewModelTest {
 
         // Mock startScan() call
         val scanCallback = slot<BluetoothScanCallback>()
-        every { bluetoothApi.startScan(capture(scanCallback)) } returns Unit
+        every { bluetoothApi.startScan(false, capture(scanCallback)) } returns Unit
 
         val bluetoothDevice1 = BluetoothDevice(BluetoothDeviceType.COMPUTER, "Computer", "00:11:22:33:44:55:66")
         val bluetoothDevice2 = BluetoothDevice(BluetoothDeviceType.PHONE, "Phone", "01:23:45:67:89:AB:CD:EF")
@@ -216,7 +256,7 @@ class BluetoothViewModelTest {
                 scanCallback.captured.onDeviceFound(bluetoothDevice2)
 
                 // Check Bluetooth API is called
-                verify(exactly = 1) { bluetoothApi.startScan(any()) }
+                verify(exactly = 1) { bluetoothApi.startScan(any(), any()) }
                 // Check UI state
                 expectMostRecentItem().let { viewState ->
                     assertEquals(3, viewState.detectedDevices.size, "Detected device list size")
@@ -239,7 +279,7 @@ class BluetoothViewModelTest {
                 scanCallback.captured.onDeviceFound(bluetoothDevice1)
 
                 // Check Bluetooth API is called
-                verify(exactly = 2) { bluetoothApi.startScan(any()) }
+                verify(exactly = 2) { bluetoothApi.startScan(any(), any()) }
                 // Check UI state
                 awaitItem().let { viewState ->
                     assertEquals(1, viewState.detectedDevices.size, "Detected device list size")

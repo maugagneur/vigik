@@ -161,10 +161,18 @@ class BluetoothApiTest {
         bluetoothApi.onScanningStateChanged(true)
 
         // Start new scan
-        bluetoothApi.startScan(bluetoothScanCallback)
+        bluetoothApi.startScan(false, bluetoothScanCallback)
 
         // Check that the appropriated error is emitted
-        verify { bluetoothScanCallback.onScanError(BluetoothScanError.SCAN_FAILED_ALREADY_STARTED) }
+        verify(exactly = 1) { bluetoothScanCallback.onScanError(BluetoothScanError.SCAN_FAILED_ALREADY_STARTED) }
+        // Check that we do not start a new scan
+        verify(inverse = true) { bluetoothAdapter.startScan(any(), any()) }
+
+        // Start new LE scan
+        bluetoothApi.startScan(true, bluetoothScanCallback)
+
+        // Check that the appropriated error is emitted
+        verify(exactly = 2) { bluetoothScanCallback.onScanError(BluetoothScanError.SCAN_FAILED_ALREADY_STARTED) }
         // Check that we do not start a new scan
         verify(inverse = true) { bluetoothAdapter.startScan(any(), any()) }
     }
@@ -174,9 +182,15 @@ class BluetoothApiTest {
         logTestName()
 
         // Start new scan
-        bluetoothApi.startScan(bluetoothScanCallback)
+        bluetoothApi.startScan(false, bluetoothScanCallback)
 
         // Check that we start a new scan
-        verify { bluetoothAdapter.startScan(any(), bluetoothScanCallback) }
+        verify { bluetoothAdapter.startScan(false, bluetoothScanCallback) }
+
+        // Start new LE scan
+        bluetoothApi.startScan(true, bluetoothScanCallback)
+
+        // Check that we start a new LE scan
+        verify { bluetoothAdapter.startScan(true, bluetoothScanCallback) }
     }
 }
