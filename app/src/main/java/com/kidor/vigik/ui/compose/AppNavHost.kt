@@ -2,13 +2,17 @@ package com.kidor.vigik.ui.compose
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
@@ -64,6 +68,7 @@ fun AppNavHost(
 
         // Bluetooth
         composable(route = AppScreen.BluetoothScreen.route) {
+            LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
             BluetoothScreen()
         }
 
@@ -94,6 +99,25 @@ fun AppNavHost(
         // REST API
         composable(route = AppScreen.RestApiScreen.route) {
             RestApiScreen()
+        }
+    }
+}
+
+/**
+ * Locks the screen orientation then restores the original orientation when the view disappears.
+ *
+ * @param orientation The orientation to force. Must be a ScreenOrientation from [ActivityInfo].
+ */
+@Composable
+private fun LockScreenOrientation(orientation: Int) {
+    LocalContext.current.findActivity()?.let { activity ->
+        DisposableEffect(Unit) {
+            val originalOrientation = activity.requestedOrientation
+            activity.requestedOrientation = orientation
+            onDispose {
+                // Restore original orientation when view disappears
+                activity.requestedOrientation = originalOrientation
+            }
         }
     }
 }
