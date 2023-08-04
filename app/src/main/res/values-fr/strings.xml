@@ -59,6 +59,8 @@
 
     <!-- Notification -->
     <string name="notification_title">Notification</string>
+    <string name="notification_default_channel_name">Défaut</string>
+    <string name="notification_default_channel_description">Canal de notification par défaut de l\'application.</string>
     <string name="notification_generate_notification_button_label">Générer notification</string>
     <string name="notification_permission_status_label">Permission accordée :</string>
     <string name="notification_permission_request_button_label">Demander permission</string>

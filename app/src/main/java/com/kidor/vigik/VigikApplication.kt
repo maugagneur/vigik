@@ -1,8 +1,11 @@
 package com.kidor.vigik
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.IntentFilter
 import android.location.LocationManager
+import android.os.Build
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -22,6 +25,8 @@ class VigikApplication : Application(), Configuration.Provider {
      */
     @Inject lateinit var workerFactory: HiltWorkerFactory
 
+    @Inject lateinit var notificationManager: NotificationManager
+
     override fun onCreate() {
         super.onCreate()
 
@@ -34,6 +39,8 @@ class VigikApplication : Application(), Configuration.Provider {
 
         // This BroadcastReceiver needs to be registered at runtime
         registerReceiver(LocationStateChangeReceiver(), IntentFilter(LocationManager.MODE_CHANGED_ACTION))
+
+        createNotificationChannel()
     }
 
     override fun getWorkManagerConfiguration(): Configuration =
@@ -41,4 +48,23 @@ class VigikApplication : Application(), Configuration.Provider {
             setWorkerFactory(workerFactory)
             setMinimumLoggingLevel(Log.DEBUG)
         }.build()
+
+    /**
+     * Create a notification channel for the app if needed.
+     */
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because the NotificationChannel class is new and not in
+        // the support library.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val defaultChannel = NotificationChannel(
+                applicationContext.getString(R.string.notification_default_channel_id),
+                applicationContext.getString(R.string.notification_default_channel_name),
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = applicationContext.getString(R.string.notification_default_channel_description)
+            }
+            // Register the channel with the system
+            notificationManager.createNotificationChannel(defaultChannel)
+        }
+    }
 }
