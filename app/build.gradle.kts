@@ -12,6 +12,7 @@ android {
     buildTypes {
         getByName("debug") {
             enableUnitTestCoverage = true
+            versionNameSuffix = "-DEV"
         }
         getByName("release") {
             // Enables code shrinking, obfuscation, and optimization
