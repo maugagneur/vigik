@@ -101,16 +101,13 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(
-                start = AppTheme.dimensions.commonSpaceXLarge,
-                end = AppTheme.dimensions.commonSpaceXLarge
-            ),
+            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
             value = loginStateData.loginState.usernameField,
-            onValueChange = { loginStateData.onUpdateUsername(it) },
+            onValueChange = loginStateData.onUpdateUsername,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(USERNAME_TEXT_FIELD_TEST_TAG),
@@ -120,7 +117,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
         OutlinedTextField(
             value = loginStateData.loginState.passwordField,
-            onValueChange = { loginStateData.onUpdatePassword(it) },
+            onValueChange = loginStateData.onUpdatePassword,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(PASSWORD_TEXT_FIELD_TEST_TAG),

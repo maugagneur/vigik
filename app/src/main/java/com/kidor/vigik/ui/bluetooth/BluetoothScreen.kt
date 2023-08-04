@@ -225,7 +225,7 @@ private fun LowEnergyStatus(checked: Boolean, enabled: Boolean, onLeScanStateCha
             value = checked,
             enabled = enabled,
             role = Role.Switch,
-            onValueChange = { onLeScanStateChanged(it) }
+            onValueChange = onLeScanStateChanged
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {

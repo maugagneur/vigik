@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.IntentFilter
 import android.location.LocationManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.kidor.vigik.receivers.LocationStateChangeReceiver
@@ -33,7 +34,12 @@ class VigikApplication : Application(), Configuration.Provider {
         })
 
         // This BroadcastReceiver needs to be registered at runtime
-        registerReceiver(LocationStateChangeReceiver(), IntentFilter(LocationManager.MODE_CHANGED_ACTION))
+        ContextCompat.registerReceiver(
+            applicationContext,
+            LocationStateChangeReceiver(),
+            IntentFilter(LocationManager.MODE_CHANGED_ACTION),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     override fun getWorkManagerConfiguration(): Configuration =

@@ -105,7 +105,7 @@ internal fun NfcIsDisableState(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = AppTheme.dimensions.commonSpaceXLarge, end = AppTheme.dimensions.commonSpaceXLarge)
+            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
