@@ -63,6 +63,8 @@
     <!-- Notification -->
     <string name="notification_title">Notification</string>
     <string name="notification_generate_notification_button_label">Generate notification</string>
+    <string name="notification_permission_status_label">Permission granted:</string>
+    <string name="notification_permission_request_button_label">Request permission</string>
 
     <!-- REST API -->
     <string name="rest_api_title">Diablo IV event tracker</string>
