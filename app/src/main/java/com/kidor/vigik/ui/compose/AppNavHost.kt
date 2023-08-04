@@ -25,6 +25,7 @@ import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
 import com.kidor.vigik.ui.nfc.history.HistoryScreen
 import com.kidor.vigik.ui.nfc.hub.HubScreen
 import com.kidor.vigik.ui.nfc.scan.ScanScreen
+import com.kidor.vigik.ui.notification.NotificationScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
 
 /**
@@ -45,6 +46,7 @@ fun AppNavHost(
         addBiometricScreens(navGraphBuilder = this, navController = navController, context = context)
         addBluetoothScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
+        addNotificationScreens(navGraphBuilder = this)
         addRestApiScreens(navGraphBuilder = this)
     }
 }
@@ -132,6 +134,17 @@ private fun addNfcScreens(navGraphBuilder: NavGraphBuilder, navController: NavHo
     }
     navGraphBuilder.composable(route = AppScreen.NfcEmulateScreen.route) {
         EmulateScreen()
+    }
+}
+
+/**
+ * Add screens related to Notification into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addNotificationScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.NotificationScreen.route) {
+        NotificationScreen()
     }
 }
 

@@ -26,6 +26,7 @@ fun HomeScreen(
     navigateToBiometric: () -> Unit = {},
     navigateToBluetooth: () -> Unit = {},
     navigateToNfc: () -> Unit = {},
+    navigateToNotification: () -> Unit = {},
     navigateToRestApi: () -> Unit = {}
 ) {
     LazyColumn(
@@ -40,6 +41,7 @@ fun HomeScreen(
             HomeButtonData(textId = R.string.home_biometric_button_label, navigateToBiometric),
             HomeButtonData(textId = R.string.home_bluetooth_button_label, navigateToBluetooth),
             HomeButtonData(textId = R.string.home_nfc_button_label, navigateToNfc),
+            HomeButtonData(textId = R.string.home_notification_button_label, navigateToNotification),
             HomeButtonData(textId = R.string.home_rest_api_button_label, navigateToRestApi)
         )
         items(homeButtonDataList) { buttonData ->

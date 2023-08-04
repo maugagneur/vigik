@@ -10,6 +10,7 @@
     <string name="home_biometric_button_label">Biometrique</string>
     <string name="home_bluetooth_button_label">Bluetooth</string>
     <string name="home_nfc_button_label">NFC</string>
+    <string name="home_notification_button_label">Notification</string>
     <string name="home_rest_api_button_label">REST API</string>
 
     <!-- Biometric -->
@@ -55,6 +56,10 @@
     <string name="nfc_tag_history_title">Historique</string>
     <string name="nfc_history_no_data_label">Pas de donnée disponible</string>
     <string name="nfc_emulate_title">Émulater un tag</string>
+
+    <!-- Notification -->
+    <string name="notification_title">Notification</string>
+    <string name="notification_generate_notification_button_label">Générer notification</string>
 
     <!-- REST API -->
     <string name="rest_api_title">Diablo IV tracker d\'évènements</string>

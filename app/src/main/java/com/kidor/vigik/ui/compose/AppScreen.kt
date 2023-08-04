@@ -95,6 +95,14 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
     )
 
     /**
+     * Metadata of 'notification" screen.
+     */
+    data object NotificationScreen : AppScreen(
+        nameId = R.string.notification_title,
+        route = "notification"
+    )
+
+    /**
      * Metadata of "REST API" screen
      */
     data object RestApiScreen : AppScreen(
@@ -113,6 +121,7 @@ private val allScreens = listOf(
     AppScreen.NfcScanScreen,
     AppScreen.NfcHistoryScreen,
     AppScreen.NfcEmulateScreen,
+    AppScreen.NotificationScreen,
     AppScreen.RestApiScreen
 )
 
