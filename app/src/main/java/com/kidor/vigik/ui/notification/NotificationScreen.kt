@@ -43,7 +43,7 @@ fun NotificationScreen(
         PermissionView()
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { viewModel.handleAction(NotificationViewAction.GenerateNotification) },
         ) {
             Text(
                 text = stringResource(id = R.string.notification_generate_notification_button_label).uppercase(),
