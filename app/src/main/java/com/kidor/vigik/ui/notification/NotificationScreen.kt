@@ -2,14 +2,13 @@ package com.kidor.vigik.ui.notification
 
 import android.Manifest
 import android.os.Build
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -21,10 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.kidor.vigik.R
+import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
 /**
@@ -37,14 +38,17 @@ fun NotificationScreen(
 ) {
     Column(
         modifier = Modifier.padding(all = AppTheme.dimensions.commonSpaceMedium),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PermissionView()
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
-        Button(
-            onClick = { viewModel.handleAction(NotificationViewAction.GenerateNotification) },
-        ) {
+        ObserveViewState(viewModel) { state ->
+            IconSelection(
+                selectedIcon = state.notificationIcon,
+                onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
+            )
+        }
+        Button(onClick = { viewModel.handleAction(NotificationViewAction.GenerateNotification) }) {
             Text(
                 text = stringResource(id = R.string.notification_generate_notification_button_label).uppercase(),
                 fontSize = AppTheme.dimensions.textSizeLarge
@@ -66,16 +70,18 @@ private fun PermissionView() {
 
     Column(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = stringResource(id = R.string.notification_permission_status_label),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = AppTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
             if (notificationPermissionState.allPermissionsGranted) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -91,13 +97,37 @@ private fun PermissionView() {
             }
         }
         if (!notificationPermissionState.allPermissionsGranted) {
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
             Button(onClick = { notificationPermissionState.launchMultiplePermissionRequest() }) {
                 Text(
                     text = stringResource(id = R.string.notification_permission_request_button_label).uppercase(),
                     fontSize = AppTheme.dimensions.textSizeLarge
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun IconSelection(selectedIcon: NotificationIcon, onIconClicked: (icon: NotificationIcon) -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        NotificationIcon.entries.forEach { icon ->
+            // Highlight selected icon
+            val iconTint = if (selectedIcon == icon) {
+                MaterialTheme.colorScheme.secondary
+            } else {
+                MaterialTheme.colorScheme.onBackground
+            }
+            Icon(
+                imageVector = icon.vectorImage,
+                contentDescription = "",
+                modifier = Modifier
+                    .size(48.dp)
+                    .clickable { onIconClicked(icon) },
+                tint = iconTint
+            )
         }
     }
 }
