@@ -18,4 +18,9 @@ sealed class NotificationViewAction : ViewAction {
      * Action to generate a new notification.
      */
     data object GenerateNotification : NotificationViewAction()
+
+    /**
+     * Action to remove the previous notification generated.
+     */
+    data object RemovePreviousNotification : NotificationViewAction()
 }

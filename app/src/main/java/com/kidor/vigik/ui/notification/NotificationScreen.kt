@@ -48,12 +48,8 @@ fun NotificationScreen(
                 onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
             )
         }
-        Button(onClick = { viewModel.handleAction(NotificationViewAction.GenerateNotification) }) {
-            Text(
-                text = stringResource(id = R.string.notification_generate_notification_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeLarge
-            )
-        }
+        GenerateNotificationButton { viewModel.handleAction(NotificationViewAction.GenerateNotification) }
+        RemovePreviousNotificationButton { viewModel.handleAction(NotificationViewAction.RemovePreviousNotification) }
     }
 }
 
@@ -69,7 +65,6 @@ private fun PermissionView() {
     )
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -129,5 +124,35 @@ private fun IconSelection(selectedIcon: NotificationIcon, onIconClicked: (icon: 
                 tint = iconTint
             )
         }
+    }
+}
+
+@Composable
+private fun GenerateNotificationButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppTheme.dimensions.commonSpaceLarge)
+    ) {
+        Text(
+            text = stringResource(id = R.string.notification_generate_notification_button_label).uppercase(),
+            fontSize = AppTheme.dimensions.textSizeLarge
+        )
+    }
+}
+
+@Composable
+private fun RemovePreviousNotificationButton(onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppTheme.dimensions.commonSpaceLarge)
+    ) {
+        Text(
+            text = stringResource(id = R.string.notification_remove_previous_notification_button_label).uppercase(),
+            fontSize = AppTheme.dimensions.textSizeLarge
+        )
     }
 }

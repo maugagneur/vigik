@@ -7,6 +7,7 @@ import com.kidor.vigik.data.Localization
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -20,7 +21,7 @@ class NotificationViewModel @Inject constructor(
     private val notificationManager: NotificationManager
 ) : BaseViewModel<NotificationViewAction, NotificationViewState, Nothing>() {
 
-    private var lastNotificationIdGenerated: Int? = null
+    private var generatedNotificationIds: MutableList<Int> = mutableListOf()
 
     init {
         // Emit view state with default values at start
@@ -44,10 +45,17 @@ class NotificationViewModel @Inject constructor(
 
                     // Show notification
                     Random.nextInt().let { notificationId ->
-                        lastNotificationIdGenerated = notificationId
+                        generatedNotificationIds.add(notificationId)
                         notificationManager.notify(notificationId, notification)
                     }
                 }
+            }
+
+            is NotificationViewAction.RemovePreviousNotification -> {
+                generatedNotificationIds.lastOrNull()?.let {
+                    notificationManager.cancel(it)
+                    generatedNotificationIds.removeLast()
+                } ?: Timber.d("No more notification to remove")
             }
         }
     }

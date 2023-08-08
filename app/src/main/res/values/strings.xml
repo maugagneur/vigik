@@ -70,6 +70,7 @@
     <string name="notification_permission_request_button_label">Request permission</string>
     <string name="notification_generated_notification_title">Test notification</string>
     <string name="notification_generated_notification_short_content" translatable="false">Lorem ipsum</string>
+    <string name="notification_remove_previous_notification_button_label">Remove previous</string>
 
     <!-- REST API -->
     <string name="rest_api_title">Diablo IV event tracker</string>
