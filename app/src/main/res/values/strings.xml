@@ -69,7 +69,9 @@
     <string name="notification_permission_status_label">Permission granted:</string>
     <string name="notification_permission_request_button_label">Request permission</string>
     <string name="notification_generated_notification_title">Test notification</string>
+    <string name="notification_long_content_label">Long text content</string>
     <string name="notification_generated_notification_short_content" translatable="false">Lorem ipsum</string>
+    <string name="notification_generated_notification_long_content" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.</string>
     <string name="notification_remove_previous_notification_button_label">Remove previous</string>
 
     <!-- REST API -->

@@ -9,17 +9,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -37,7 +42,10 @@ fun NotificationScreen(
     viewModel: NotificationViewModel = hiltViewModel()
 ) {
     Column(
-        modifier = Modifier.padding(all = AppTheme.dimensions.commonSpaceMedium),
+        modifier = Modifier.padding(
+            horizontal = AppTheme.dimensions.commonSpaceXLarge,
+            vertical = AppTheme.dimensions.commonSpaceMedium
+        ),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -47,7 +55,12 @@ fun NotificationScreen(
                 selectedIcon = state.notificationIcon,
                 onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
             )
+            ContentLengthSelection(
+                longContentSelected = state.longContentSelected,
+                onLongContentSelected = { viewModel.handleAction(NotificationViewAction.ChangeContentLength(it)) }
+            )
         }
+        Divider()
         GenerateNotificationButton { viewModel.handleAction(NotificationViewAction.GenerateNotification) }
         RemovePreviousNotificationButton { viewModel.handleAction(NotificationViewAction.RemovePreviousNotification) }
     }
@@ -128,12 +141,38 @@ private fun IconSelection(selectedIcon: NotificationIcon, onIconClicked: (icon: 
 }
 
 @Composable
+private fun ContentLengthSelection(
+    longContentSelected: Boolean,
+    onLongContentSelected: (longContentSelected: Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .toggleable(
+                value = longContentSelected,
+                role = Role.Switch,
+                onValueChange = onLongContentSelected
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.notification_long_content_label),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Switch(
+            checked = longContentSelected,
+            onCheckedChange = null
+        )
+    }
+}
+
+@Composable
 private fun GenerateNotificationButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimensions.commonSpaceLarge)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = stringResource(id = R.string.notification_generate_notification_button_label).uppercase(),
@@ -146,13 +185,12 @@ private fun GenerateNotificationButton(onClick: () -> Unit) {
 private fun RemovePreviousNotificationButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = AppTheme.dimensions.commonSpaceLarge)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = stringResource(id = R.string.notification_remove_previous_notification_button_label).uppercase(),
-            fontSize = AppTheme.dimensions.textSizeLarge
+            fontSize = AppTheme.dimensions.textSizeLarge,
+            textAlign = TextAlign.Center
         )
     }
 }

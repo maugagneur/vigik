@@ -34,13 +34,21 @@ class NotificationViewModel @Inject constructor(
                 updateViewState { it.copy(notificationIcon = viewAction.icon) }
             }
 
+            is NotificationViewAction.ChangeContentLength -> {
+                updateViewState { it.copy(longContentSelected = viewAction.longContentSelected) }
+            }
+
             is NotificationViewAction.GenerateNotification -> {
                 // Build notification based on current view state
                 viewState.value?.let { currentState ->
                     val notification = buildNotification(
                         icon = currentState.notificationIcon.drawableId,
                         title = localization.getString(R.string.notification_generated_notification_title),
-                        content = localization.getString(R.string.notification_generated_notification_short_content)
+                        content = if (currentState.longContentSelected) {
+                            localization.getString(R.string.notification_generated_notification_long_content)
+                        } else {
+                            localization.getString(R.string.notification_generated_notification_short_content)
+                        }
                     )
 
                     // Show notification

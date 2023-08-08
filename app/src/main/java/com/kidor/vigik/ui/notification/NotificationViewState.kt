@@ -5,6 +5,10 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * State of the notification view.
  *
- * @param notificationIcon The selected notification's icon.
+ * @param notificationIcon    The selected notification's icon.
+ * @param longContentSelected True if notification's content should be long, otherwise false.
  */
-data class NotificationViewState(val notificationIcon: NotificationIcon = NotificationIcon.DEFAULT) : ViewState
+data class NotificationViewState(
+    val notificationIcon: NotificationIcon = NotificationIcon.DEFAULT,
+    val longContentSelected: Boolean = false
+) : ViewState

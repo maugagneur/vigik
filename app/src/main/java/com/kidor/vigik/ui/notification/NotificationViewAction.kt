@@ -15,6 +15,13 @@ sealed class NotificationViewAction : ViewAction {
     data class ChangeNotificationIcon(val icon: NotificationIcon) : NotificationViewAction()
 
     /**
+     * Action to change the notification's content length.
+     *
+     * @param longContentSelected True if content length should be long, otherwise false.
+     */
+    data class ChangeContentLength(val longContentSelected: Boolean) : NotificationViewAction()
+
+    /**
      * Action to generate a new notification.
      */
     data object GenerateNotification : NotificationViewAction()
