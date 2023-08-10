@@ -22,6 +22,13 @@ sealed class NotificationViewAction : ViewAction {
     data class ChangeContentLength(val longContentSelected: Boolean) : NotificationViewAction()
 
     /**
+     * Action to change picture presence in notification.
+     *
+     * @param addPicture True if notification should contain a picture, otherwise false.
+     */
+    data class ChangePictureSelection(val addPicture: Boolean) : NotificationViewAction()
+
+    /**
      * Action to generate a new notification.
      */
     data object GenerateNotification : NotificationViewAction()

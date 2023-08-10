@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
@@ -42,10 +44,9 @@ fun NotificationScreen(
     viewModel: NotificationViewModel = hiltViewModel()
 ) {
     Column(
-        modifier = Modifier.padding(
-            horizontal = AppTheme.dimensions.commonSpaceXLarge,
-            vertical = AppTheme.dimensions.commonSpaceMedium
-        ),
+        modifier = Modifier
+            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -55,10 +56,18 @@ fun NotificationScreen(
                 selectedIcon = state.notificationIcon,
                 onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
             )
-            ContentLengthSelection(
-                longContentSelected = state.longContentSelected,
-                onLongContentSelected = { viewModel.handleAction(NotificationViewAction.ChangeContentLength(it)) }
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall)) {
+                ContentLengthSelection(
+                    longContentSelected = state.longContentSelected,
+                    onLongContentSelected = { viewModel.handleAction(NotificationViewAction.ChangeContentLength(it)) }
+                )
+                AddPictureSelection(
+                    pictureSelected = state.pictureSelected,
+                    onPictureSelectionChanged = {
+                        viewModel.handleAction(NotificationViewAction.ChangePictureSelection(it))
+                    }
+                )
+            }
         }
         Divider()
         GenerateNotificationButton { viewModel.handleAction(NotificationViewAction.GenerateNotification) }
@@ -78,6 +87,7 @@ private fun PermissionView() {
     )
 
     Column(
+        modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceMedium),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -169,6 +179,34 @@ private fun ContentLengthSelection(
 }
 
 @Composable
+private fun AddPictureSelection(
+    pictureSelected: Boolean,
+    onPictureSelectionChanged: (pictureSelected: Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .toggleable(
+                value = pictureSelected,
+                role = Role.Switch,
+                onValueChange = onPictureSelectionChanged
+            ),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.notification_add_picture_content_label),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Switch(
+            checked = pictureSelected,
+            onCheckedChange = onPictureSelectionChanged
+        )
+    }
+}
+
+@Composable
 private fun GenerateNotificationButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
@@ -185,7 +223,9 @@ private fun GenerateNotificationButton(onClick: () -> Unit) {
 private fun RemovePreviousNotificationButton(onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = AppTheme.dimensions.commonSpaceMedium)
     ) {
         Text(
             text = stringResource(id = R.string.notification_remove_previous_notification_button_label).uppercase(),

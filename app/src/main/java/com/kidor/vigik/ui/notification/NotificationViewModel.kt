@@ -38,6 +38,10 @@ class NotificationViewModel @Inject constructor(
                 updateViewState { it.copy(longContentSelected = viewAction.longContentSelected) }
             }
 
+            is NotificationViewAction.ChangePictureSelection -> {
+                updateViewState { it.copy(pictureSelected = viewAction.addPicture) }
+            }
+
             is NotificationViewAction.GenerateNotification -> {
                 // Build notification based on current view state
                 viewState.value?.let { currentState ->
@@ -48,7 +52,8 @@ class NotificationViewModel @Inject constructor(
                             localization.getString(R.string.notification_generated_notification_long_content)
                         } else {
                             localization.getString(R.string.notification_generated_notification_short_content)
-                        }
+                        },
+                        addPicture = currentState.pictureSelected
                     )
 
                     // Show notification
