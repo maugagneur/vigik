@@ -35,12 +35,16 @@ class NotificationViewModel @Inject constructor(
                 updateViewState { it.copy(notificationIcon = viewAction.icon) }
             }
 
+            is NotificationViewAction.ChangeTextContentSelection -> {
+                updateViewState { it.copy(addTextContentSelected = viewAction.addTextContent) }
+            }
+
             is NotificationViewAction.ChangeContentLength -> {
-                updateViewState { it.copy(longContentSelected = viewAction.longContentSelected) }
+                updateViewState { it.copy(longTextContentSelected = viewAction.longContentSelected) }
             }
 
             is NotificationViewAction.ChangePictureSelection -> {
-                updateViewState { it.copy(pictureSelected = viewAction.addPicture) }
+                updateViewState { it.copy(addPictureSelected = viewAction.addPicture) }
             }
 
             is NotificationViewAction.GenerateNotification -> {
@@ -49,12 +53,13 @@ class NotificationViewModel @Inject constructor(
                     val notification = notificationFactory.buildNotification(
                         icon = currentState.notificationIcon.drawableId,
                         title = localization.getString(R.string.notification_generated_notification_title),
-                        content = if (currentState.longContentSelected) {
-                            localization.getString(R.string.notification_generated_notification_long_content)
-                        } else {
-                            localization.getString(R.string.notification_generated_notification_short_content)
+                        content = when {
+                            !currentState.addTextContentSelected -> null
+                            currentState.longTextContentSelected ->
+                                localization.getString(R.string.notification_generated_notification_long_content)
+                            else -> localization.getString(R.string.notification_generated_notification_short_content)
                         },
-                        addPicture = currentState.pictureSelected
+                        addPicture = currentState.addPictureSelected
                     )
 
                     // Show notification

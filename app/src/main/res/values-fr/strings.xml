@@ -65,8 +65,9 @@
     <string name="notification_permission_status_label">Permission accordée :</string>
     <string name="notification_permission_request_button_label">Demander permission</string>
     <string name="notification_generated_notification_title">Notification de test</string>
+    <string name="notification_add_text_content_label">Ajouter un message</string>
     <string name="notification_long_content_label">Message long</string>
-    <string name="notification_add_picture_content_label">Ajouter image</string>
+    <string name="notification_add_picture_content_label">Ajouter une image</string>
     <string name="notification_remove_previous_notification_button_label">Supprimer la précédente</string>
 
     <!-- REST API -->

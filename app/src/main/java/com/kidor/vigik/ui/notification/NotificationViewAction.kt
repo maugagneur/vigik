@@ -16,6 +16,13 @@ sealed class NotificationViewAction : ViewAction {
     data class ChangeNotificationIcon(val icon: NotificationIcon) : NotificationViewAction()
 
     /**
+     * Action to change text content presence in notification.
+     *
+     * @param addTextContent True if notification should contain a text content, otherwise false.
+     */
+    data class ChangeTextContentSelection(val addTextContent: Boolean) : NotificationViewAction()
+
+    /**
      * Action to change the notification's content length.
      *
      * @param longContentSelected True if content length should be long, otherwise false.
