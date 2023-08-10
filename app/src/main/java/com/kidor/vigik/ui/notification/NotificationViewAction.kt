@@ -37,6 +37,13 @@ sealed class NotificationViewAction : ViewAction {
     data class ChangePictureSelection(val addPicture: Boolean) : NotificationViewAction()
 
     /**
+     * Action to change loader presence in notification.
+     *
+     * @param addLoader True if notification should contain a loader, otherwise false.
+     */
+    data class ChangeLoaderSelection(val addLoader: Boolean) : NotificationViewAction()
+
+    /**
      * Action to generate a new notification.
      */
     data object GenerateNotification : NotificationViewAction()

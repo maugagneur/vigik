@@ -74,6 +74,10 @@ fun NotificationScreen(
                     value = state.addPictureSelected,
                     onValueChange = { viewModel.handleAction(NotificationViewAction.ChangePictureSelection(it)) }
                 )
+                ToggleableRow(
+                    text = stringResource(id = R.string.notification_add_loader_label),
+                    value = state.addLoaderSelected,
+                    onValueChange = { viewModel.handleAction(NotificationViewAction.ChangeLoaderSelection(it)) }
                 )
             }
         }

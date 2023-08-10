@@ -10,6 +10,8 @@ import com.kidor.vigik.R
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
+private const val PROGRESS_MAX_VALUE = 100
+
 /**
  * Builds a [Notification] based on given parameters.
  */
@@ -22,8 +24,15 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
      * @param title      The notification's title.
      * @param content    The notification's text content. Can be null.
      * @param addPicture True to add a picture to the notification.
+     * @param progress   The notification's progress value. Can be null.
      */
-    fun buildNotification(@DrawableRes icon: Int, title: String, content: String?, addPicture: Boolean): Notification {
+    fun buildNotification(
+        @DrawableRes icon: Int,
+        title: String,
+        content: String?,
+        addPicture: Boolean,
+        progress: Int?
+    ): Notification {
         val builder = NotificationCompat.Builder(context, context.getString(R.string.notification_default_channel_id))
             .setSmallIcon(icon)
             .setContentTitle(title)
@@ -42,6 +51,10 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
                         // Hide small picture when notification is expanded
                         .bigLargeIcon(null as Bitmap?)
                 )
+        }
+
+        if (progress != null) {
+            builder.setProgress(PROGRESS_MAX_VALUE, progress, false)
         }
 
         return builder.build()
