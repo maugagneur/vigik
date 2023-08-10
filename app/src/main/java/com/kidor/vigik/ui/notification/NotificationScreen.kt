@@ -58,22 +58,22 @@ fun NotificationScreen(
                 onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
             )
             Column(verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall)) {
-                AddTextContentSelection(
-                    textContentSelected = state.addTextContentSelected,
-                    onTextContentSelectionChanged = {
-                        viewModel.handleAction(NotificationViewAction.ChangeTextContentSelection(it))
-                    }
+                ToggleableRow(
+                    text = stringResource(id = R.string.notification_add_text_content_label),
+                    value = state.addTextContentSelected,
+                    onValueChange = { viewModel.handleAction(NotificationViewAction.ChangeTextContentSelection(it)) }
                 )
-                TextContentLengthSelection(
-                    longContentSelected = state.longTextContentSelected,
-                    longContentEnabled = state.addTextContentSelected,
-                    onLongContentSelected = { viewModel.handleAction(NotificationViewAction.ChangeContentLength(it)) }
+                ToggleableRow(
+                    text = stringResource(id = R.string.notification_long_content_label),
+                    value = state.longTextContentSelected,
+                    enabled = state.addTextContentSelected,
+                    onValueChange = { viewModel.handleAction(NotificationViewAction.ChangeContentLength(it)) }
                 )
-                AddPictureSelection(
-                    pictureSelected = state.addPictureSelected,
-                    onPictureSelectionChanged = {
-                        viewModel.handleAction(NotificationViewAction.ChangePictureSelection(it))
-                    }
+                ToggleableRow(
+                    text = stringResource(id = R.string.notification_add_picture_content_label),
+                    value = state.addPictureSelected,
+                    onValueChange = { viewModel.handleAction(NotificationViewAction.ChangePictureSelection(it)) }
+                )
                 )
             }
         }
@@ -159,88 +159,33 @@ private fun IconSelection(selectedIcon: NotificationIcon, onIconClicked: (icon: 
 }
 
 @Composable
-private fun AddTextContentSelection(
-    textContentSelected: Boolean,
-    onTextContentSelectionChanged: (textContentSelected: Boolean) -> Unit
+private fun ToggleableRow(
+    text: String,
+    value: Boolean,
+    enabled: Boolean = true,
+    onValueChange: (newValue: Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .toggleable(
-                value = textContentSelected,
+                value = value,
                 role = Role.Switch,
-                onValueChange = onTextContentSelectionChanged
+                enabled = enabled,
+                onValueChange = onValueChange
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = R.string.notification_add_text_content_label),
+            text = text,
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeMedium
         )
         Switch(
-            checked = textContentSelected,
-            onCheckedChange = null
-        )
-    }
-}
-
-@Composable
-private fun TextContentLengthSelection(
-    longContentSelected: Boolean,
-    longContentEnabled: Boolean,
-    onLongContentSelected: (longContentSelected: Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .toggleable(
-                value = longContentSelected,
-                enabled = longContentEnabled,
-                role = Role.Switch,
-                onValueChange = onLongContentSelected
-            ),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(id = R.string.notification_long_content_label),
-            color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
-        )
-        Switch(
-            checked = longContentSelected,
+            checked = value,
             onCheckedChange = null,
-            enabled = longContentEnabled
-        )
-    }
-}
-
-@Composable
-private fun AddPictureSelection(
-    pictureSelected: Boolean,
-    onPictureSelectionChanged: (pictureSelected: Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .toggleable(
-                value = pictureSelected,
-                role = Role.Switch,
-                onValueChange = onPictureSelectionChanged
-            ),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(id = R.string.notification_add_picture_content_label),
-            color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
-        )
-        Switch(
-            checked = pictureSelected,
-            onCheckedChange = null
+            enabled = enabled
         )
     }
 }
