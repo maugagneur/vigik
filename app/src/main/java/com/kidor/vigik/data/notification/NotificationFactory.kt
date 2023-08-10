@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.notification
+package com.kidor.vigik.data.notification
 
 import android.app.Notification
 import android.content.Context
@@ -13,9 +13,7 @@ import javax.inject.Inject
 /**
  * Builds a [Notification] based on given parameters.
  */
-class BuildNotificationUseCase @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
+class NotificationFactory @Inject constructor(@ApplicationContext private val context: Context) {
 
     /**
      * Builds a notification with an icon, a title, a text content (optional) and a picture (optional).
@@ -25,7 +23,7 @@ class BuildNotificationUseCase @Inject constructor(
      * @param content    The notification's text content. Can be null.
      * @param addPicture True to add a picture to the notification.
      */
-    operator fun invoke(@DrawableRes icon: Int, title: String, content: String?, addPicture: Boolean): Notification {
+    fun buildNotification(@DrawableRes icon: Int, title: String, content: String?, addPicture: Boolean): Notification {
         val builder = NotificationCompat.Builder(context, context.getString(R.string.notification_default_channel_id))
             .setSmallIcon(icon)
             .setContentTitle(title)

@@ -4,6 +4,7 @@ import android.app.NotificationManager
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
+import com.kidor.vigik.data.notification.NotificationFactory
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ import kotlin.random.Random
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val localization: Localization,
-    private val buildNotification: BuildNotificationUseCase,
+    private val notificationFactory: NotificationFactory,
     private val notificationManager: NotificationManager
 ) : BaseViewModel<NotificationViewAction, NotificationViewState, Nothing>() {
 
@@ -45,7 +46,7 @@ class NotificationViewModel @Inject constructor(
             is NotificationViewAction.GenerateNotification -> {
                 // Build notification based on current view state
                 viewState.value?.let { currentState ->
-                    val notification = buildNotification(
+                    val notification = notificationFactory.buildNotification(
                         icon = currentState.notificationIcon.drawableId,
                         title = localization.getString(R.string.notification_generated_notification_title),
                         content = if (currentState.longContentSelected) {

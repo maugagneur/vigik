@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.notification
 
+import com.kidor.vigik.data.notification.NotificationIcon
 import com.kidor.vigik.ui.base.ViewAction
 
 /**

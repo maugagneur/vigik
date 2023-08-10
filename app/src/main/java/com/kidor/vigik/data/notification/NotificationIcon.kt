@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.notification
+package com.kidor.vigik.data.notification
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
