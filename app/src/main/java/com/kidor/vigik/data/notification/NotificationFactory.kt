@@ -1,12 +1,18 @@
 package com.kidor.vigik.data.notification
 
 import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.annotation.DrawableRes
 import androidx.core.app.NotificationCompat
+import androidx.core.app.TaskStackBuilder
+import androidx.core.net.toUri
 import com.kidor.vigik.R
+import com.kidor.vigik.ui.MainActivity
+import com.kidor.vigik.ui.compose.AppScreen
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -41,6 +47,10 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
 
+        createContentIntent()?.let {
+            builder.setContentIntent(it)
+        }
+
         if (addPicture) {
             val image = BitmapFactory.decodeResource(context.resources, R.drawable.notification_big_picture)
             builder
@@ -63,5 +73,21 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
         }
 
         return builder.build()
+    }
+
+    /**
+     * Create the [PendingIntent] that will be send when clicking on a notification.
+     */
+    private fun createContentIntent(): PendingIntent? {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            AppScreen.NotificationScreen.deeplinkPath.toUri(),
+            context,
+            MainActivity::class.java
+        )
+        return TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(intent)
+            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
     }
 }

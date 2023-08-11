@@ -11,8 +11,14 @@ import com.kidor.vigik.R
  *
  * A screen is defined by its [name] and its [route] in the navigation graph.
  * You can also hide the back arrow in action by setting [showNavigateBack] to false.
+ * If the screen is associated to an URI, this value can be find in [deeplinkPath].
  */
-sealed class AppScreen(@StringRes private val nameId: Int, val route: String, val showNavigateBack: Boolean = true) {
+sealed class AppScreen(
+    @StringRes private val nameId: Int,
+    val route: String,
+    val deeplinkPath: String = "",
+    val showNavigateBack: Boolean = true
+) {
 
     /**
      * Returns the string resource of the screen's name.
@@ -99,7 +105,8 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
      */
     data object NotificationScreen : AppScreen(
         nameId = R.string.notification_title,
-        route = "notification"
+        route = "notification",
+        deeplinkPath = "${APP_BASE_URI}/notification"
     )
 
     /**
@@ -109,6 +116,10 @@ sealed class AppScreen(@StringRes private val nameId: Int, val route: String, va
         nameId = R.string.rest_api_title,
         route = "rest_api"
     )
+
+    companion object {
+        private const val APP_BASE_URI = "myapp://navigation"
+    }
 }
 
 private val allScreens = listOf(

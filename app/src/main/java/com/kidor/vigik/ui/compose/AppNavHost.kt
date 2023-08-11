@@ -13,6 +13,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
@@ -143,7 +144,10 @@ private fun addNfcScreens(navGraphBuilder: NavGraphBuilder, navController: NavHo
  * @param navGraphBuilder The builder used to construct the graph.
  */
 private fun addNotificationScreens(navGraphBuilder: NavGraphBuilder) {
-    navGraphBuilder.composable(route = AppScreen.NotificationScreen.route) {
+    navGraphBuilder.composable(
+        route = AppScreen.NotificationScreen.route,
+        deepLinks = listOf(navDeepLink { uriPattern = AppScreen.NotificationScreen.deeplinkPath })
+    ) {
         NotificationScreen()
     }
 }

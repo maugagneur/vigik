@@ -54,6 +54,10 @@
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <data android:scheme="myapp" android:host="navigation" />
+            </intent-filter>
         </activity>
 
         <receiver

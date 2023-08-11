@@ -26,7 +26,7 @@ class NotificationViewModel @Inject constructor(
     private val notificationManager: NotificationManager
 ) : BaseViewModel<NotificationViewAction, NotificationViewState, Nothing>() {
 
-    private var generatedNotificationIds: MutableSet<Int> = mutableSetOf()
+    private val generatedNotificationIds: MutableSet<Int> = mutableSetOf()
 
     init {
         // Emit view state with default values at start
