@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-private const val COMPILE_SDK_VER = 33
+private const val COMPILE_SDK_VER = 34
 private const val TARGET_SDK_VER = 33
 private const val MIN_SDK_VER = 23
 
