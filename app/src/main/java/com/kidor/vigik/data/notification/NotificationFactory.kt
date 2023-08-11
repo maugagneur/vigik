@@ -24,7 +24,8 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
      * @param title      The notification's title.
      * @param content    The notification's text content. Can be null.
      * @param addPicture True to add a picture to the notification.
-     * @param progress   The notification's progress value. Can be null.
+     * @param progress   The notification's progress value. Will display an indeterminate progress bar if given value
+     *                   is negative. Can be null to hide it.
      */
     fun buildNotification(
         @DrawableRes icon: Int,
@@ -54,7 +55,11 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
         }
 
         if (progress != null) {
-            builder.setProgress(PROGRESS_MAX_VALUE, progress, false)
+            if (progress >= 0) {
+                builder.setProgress(PROGRESS_MAX_VALUE, progress, false)
+            } else {
+                builder.setProgress(0, 0, true)
+            }
         }
 
         return builder.build()

@@ -79,6 +79,12 @@ fun NotificationScreen(
                     value = state.addLoaderSelected,
                     onValueChange = { viewModel.handleAction(NotificationViewAction.ChangeLoaderSelection(it)) }
                 )
+                ToggleableRow(
+                    text = stringResource(id = R.string.notification_add_loader_infinite_label),
+                    value = state.infiniteLoaderSelected,
+                    enabled = state.addLoaderSelected,
+                    onValueChange = { viewModel.handleAction(NotificationViewAction.ChangeInfiniteLoaderSelection(it)) }
+                )
             }
         }
         Divider()

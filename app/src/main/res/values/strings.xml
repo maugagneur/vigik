@@ -74,6 +74,7 @@
     <string name="notification_generated_notification_long_content" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.</string>
     <string name="notification_add_picture_content_label">Add a picture</string>
     <string name="notification_add_loader_label">Add a loader</string>
+    <string name="notification_add_loader_infinite_label">Infinite loader</string>
     <string name="notification_generate_notification_button_label">Generate notification</string>
     <string name="notification_remove_previous_notification_button_label">Remove previous</string>
 

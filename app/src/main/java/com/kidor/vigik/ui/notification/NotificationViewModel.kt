@@ -55,13 +55,17 @@ class NotificationViewModel @Inject constructor(
                 updateViewState { it.copy(addLoaderSelected = viewAction.addLoader) }
             }
 
+            is NotificationViewAction.ChangeInfiniteLoaderSelection -> {
+                updateViewState { it.copy(infiniteLoaderSelected = viewAction.infiniteLoaderSelected) }
+            }
+
             is NotificationViewAction.GenerateNotification -> {
                 // Generate new notification ID
                 val notificationId = Random.nextInt()
 
                 // Build notification based on current view state
                 viewState.value?.let { currentState ->
-                    if (currentState.addLoaderSelected) {
+                    if (currentState.addLoaderSelected && !currentState.infiniteLoaderSelected) {
                         emitPeriodicNotification(currentState, notificationId)
                     } else {
                         emitSingleNotification(currentState, notificationId)
@@ -131,14 +135,18 @@ class NotificationViewModel @Inject constructor(
         // Add the notification ID in the list of emitted notifications
         generatedNotificationIds.add(notificationId)
 
-        notificationManager.notify(notificationId, generateNotification(viewState))
+        if (viewState.addLoaderSelected && viewState.infiniteLoaderSelected) {
+            notificationManager.notify(notificationId, generateNotification(viewState, -1))
+        } else {
+            notificationManager.notify(notificationId, generateNotification(viewState))
+        }
     }
 
     /**
      * Generates a notification based on given view state and a progress value.
      *
      * @param viewState The current state of the view.
-     * @param progress  The notification loader's progress value or null to hide it.
+     * @param progress  The notification loader's progress value.
      */
     private fun generateNotification(viewState: NotificationViewState, progress: Int? = null) = notificationFactory
         .buildNotification(

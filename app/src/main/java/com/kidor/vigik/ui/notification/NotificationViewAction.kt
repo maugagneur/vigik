@@ -44,6 +44,13 @@ sealed class NotificationViewAction : ViewAction {
     data class ChangeLoaderSelection(val addLoader: Boolean) : NotificationViewAction()
 
     /**
+     * Action to change the notification's loader type.
+     *
+     * @param infiniteLoaderSelected True if the notification's loader should be infinite, otherwise false.
+     */
+    data class ChangeInfiniteLoaderSelection(val infiniteLoaderSelected: Boolean) : NotificationViewAction()
+
+    /**
      * Action to generate a new notification.
      */
     data object GenerateNotification : NotificationViewAction()
