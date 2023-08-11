@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,7 +56,7 @@ fun GlitterBox(colors: List<Color>, speedCoefficient: Float, lifeTime: Int) {
             )
         )
     }
-    var lastFrame by remember { mutableStateOf(-1L) }
+    var lastFrame by remember { mutableLongStateOf(-1L) }
 
     glitterBoxState = glitterBoxState
         .updateSpeedCoefficient(speedCoefficient)

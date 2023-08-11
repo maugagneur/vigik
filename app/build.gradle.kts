@@ -31,6 +31,11 @@ android {
         }
     }
 
+    lint {
+        warning.add("AutoboxingStateCreation")
+    }
+
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
