@@ -50,7 +50,6 @@ import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
 import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme
-import com.kidor.vigik.ui.compose.getScreen
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -107,7 +106,7 @@ internal fun MainComposable() {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
-    val currentScreen = getScreen(currentDestination?.route)
+    val currentScreen = AppScreen.getScreen(currentDestination?.route)
 
     Scaffold(
         topBar = { AppActionBar(currentScreen = currentScreen, navController = navController) },

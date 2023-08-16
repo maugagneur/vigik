@@ -10,6 +10,7 @@
     <string name="home_biometric_button_label">Biometrique</string>
     <string name="home_bluetooth_button_label">Bluetooth</string>
     <string name="home_nfc_button_label">NFC</string>
+    <string name="home_notification_button_label">Notification</string>
     <string name="home_rest_api_button_label">REST API</string>
 
     <!-- Biometric -->
@@ -55,6 +56,25 @@
     <string name="nfc_tag_history_title">Historique</string>
     <string name="nfc_history_no_data_label">Pas de donnée disponible</string>
     <string name="nfc_emulate_title">Émulater un tag</string>
+
+    <!-- Notification -->
+    <string name="notification_title">Notification</string>
+    <string name="notification_default_channel_name">Défaut</string>
+    <string name="notification_default_channel_description">Canal de notification par défaut de l\'application.</string>
+    <string name="notification_generate_notification_button_label">Générer notification</string>
+    <string name="notification_permission_status_label">Permission accordée :</string>
+    <string name="notification_permission_request_button_label">Demander permission</string>
+    <string name="notification_generated_notification_title">Notification de test</string>
+    <string name="notification_add_text_content_label">Ajouter un message</string>
+    <string name="notification_long_content_label">Message long</string>
+    <string name="notification_add_picture_content_label">Ajouter une image</string>
+    <string name="notification_add_loader_label">Ajouter un chargement</string>
+    <string name="notification_add_loader_infinite_label">Chargement infini</string>
+    <string name="notification_add_action_buttons_label">Ajouter des boutons d\'action</string>
+    <string name="notification_action_button_1_label">SUPPRIMER</string>
+    <string name="notification_action_button_2_label">NE FAIT RIEN</string>
+    <string name="notification_action_button_3_label">DÉSACTIVÉ</string>
+    <string name="notification_remove_previous_notification_button_label">Supprimer la précédente</string>
 
     <!-- REST API -->
     <string name="rest_api_title">Diablo IV tracker d\'évènements</string>

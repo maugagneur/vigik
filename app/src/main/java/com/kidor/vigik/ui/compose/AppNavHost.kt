@@ -9,9 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navDeepLink
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
@@ -24,6 +26,7 @@ import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
 import com.kidor.vigik.ui.nfc.history.HistoryScreen
 import com.kidor.vigik.ui.nfc.hub.HubScreen
 import com.kidor.vigik.ui.nfc.scan.ScanScreen
+import com.kidor.vigik.ui.notification.NotificationScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
 
 /**
@@ -40,66 +43,123 @@ fun AppNavHost(
         startDestination = AppScreen.HomeScreen.route,
         modifier = modifier
     ) {
-        // Home
-        composable(route = AppScreen.HomeScreen.route) {
-            HomeScreen(
-                navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
-                navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
-                navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
-                navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
-            )
-        }
+        addHomeScreens(navGraphBuilder = this, navController = navController)
+        addBiometricScreens(navGraphBuilder = this, navController = navController, context = context)
+        addBluetoothScreens(navGraphBuilder = this)
+        addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
+        addNotificationScreens(navGraphBuilder = this)
+        addRestApiScreens(navGraphBuilder = this)
+    }
+}
 
-        // Biometric
-        composable(route = AppScreen.BiometricLoginScreen.route) {
-            BiometricLoginScreen(
-                startBiometricEnrollment = { enrollIntent -> context.startActivity(enrollIntent) },
-                navigateToBiometricHome = { navController.navigate(AppScreen.BiometricHomeScreen) }
-            )
-        }
-        composable(route = AppScreen.BiometricHomeScreen.route) {
-            BackHandler(enabled = true) { }
-            BiometricHomeScreen(
-                navigateToBiometricLogin = {
-                    navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
-                }
-            )
-        }
+/**
+ * Add screens related to Home into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ * @param navController   The navigation controller.
+ */
+private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
+    navGraphBuilder.composable(route = AppScreen.HomeScreen.route) {
+        HomeScreen(
+            navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
+            navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
+            navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
+            navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
+            navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
+        )
+    }
+}
 
-        // Bluetooth
-        composable(route = AppScreen.BluetoothScreen.route) {
-            LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-            BluetoothScreen()
-        }
+/**
+ * Add screens related to Biometric into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ * @param navController   The navigation controller.
+ * @param context         The context of the application.
+ */
+private fun addBiometricScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController, context: Context) {
+    navGraphBuilder.composable(route = AppScreen.BiometricLoginScreen.route) {
+        BiometricLoginScreen(
+            startBiometricEnrollment = { enrollIntent -> context.startActivity(enrollIntent) },
+            navigateToBiometricHome = { navController.navigate(AppScreen.BiometricHomeScreen) }
+        )
+    }
+    navGraphBuilder.composable(route = AppScreen.BiometricHomeScreen.route) {
+        BackHandler(enabled = true) { }
+        BiometricHomeScreen(
+            navigateToBiometricLogin = {
+                navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
+            }
+        )
+    }
+}
 
-        // NFC
-        composable(route = AppScreen.NfcCheckScreen.route) {
-            CheckScreen(
-                navigateToHub = { navController.navigateSingleTopTo(AppScreen.NfcHubScreen) },
-                navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
-            )
-        }
-        composable(route = AppScreen.NfcHubScreen.route) {
-            HubScreen(
-                navigateToScanTag = { navController.navigate(AppScreen.NfcScanScreen) },
-                navigateToTagHistory = { navController.navigate(AppScreen.NfcHistoryScreen) },
-                navigateToEmulateTag = { navController.navigate(AppScreen.NfcEmulateScreen) }
-            )
-        }
-        composable(route = AppScreen.NfcScanScreen.route) {
-            ScanScreen()
-        }
-        composable(route = AppScreen.NfcHistoryScreen.route) {
-            HistoryScreen()
-        }
-        composable(route = AppScreen.NfcEmulateScreen.route) {
-            EmulateScreen()
-        }
+/**
+ * Add screens related to Bluetooth into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addBluetoothScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.BluetoothScreen.route) {
+        LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
+        BluetoothScreen()
+    }
+}
 
-        // REST API
-        composable(route = AppScreen.RestApiScreen.route) {
-            RestApiScreen()
-        }
+/**
+ * Add screens related to NFC into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ * @param navController   The navigation controller.
+ * @param context         The context of the application.
+ */
+private fun addNfcScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController, context: Context) {
+    navGraphBuilder.composable(route = AppScreen.NfcCheckScreen.route) {
+        CheckScreen(
+            navigateToHub = { navController.navigateSingleTopTo(AppScreen.NfcHubScreen) },
+            navigateToSettings = { context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS)) }
+        )
+    }
+    navGraphBuilder.composable(route = AppScreen.NfcHubScreen.route) {
+        HubScreen(
+            navigateToScanTag = { navController.navigate(AppScreen.NfcScanScreen) },
+            navigateToTagHistory = { navController.navigate(AppScreen.NfcHistoryScreen) },
+            navigateToEmulateTag = { navController.navigate(AppScreen.NfcEmulateScreen) }
+        )
+    }
+    navGraphBuilder.composable(route = AppScreen.NfcScanScreen.route) {
+        ScanScreen()
+    }
+    navGraphBuilder.composable(route = AppScreen.NfcHistoryScreen.route) {
+        HistoryScreen()
+    }
+    navGraphBuilder.composable(route = AppScreen.NfcEmulateScreen.route) {
+        EmulateScreen()
+    }
+}
+
+/**
+ * Add screens related to Notification into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addNotificationScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(
+        route = AppScreen.NotificationScreen.route,
+        deepLinks = listOf(navDeepLink { uriPattern = AppScreen.NotificationScreen.deeplinkPath })
+    ) {
+        NotificationScreen()
+    }
+}
+
+/**
+ * Add screens related to REST API into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addRestApiScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.RestApiScreen.route) {
+        RestApiScreen()
     }
 }
 
