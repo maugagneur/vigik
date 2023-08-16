@@ -7,9 +7,11 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.os.Build
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.kidor.vigik.receivers.LocationStateChangeReceiver
+import com.kidor.vigik.receivers.NotificationReceiver
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,6 +41,12 @@ class VigikApplication : Application(), Configuration.Provider {
 
         // This BroadcastReceiver needs to be registered at runtime
         registerReceiver(LocationStateChangeReceiver(), IntentFilter(LocationManager.MODE_CHANGED_ACTION))
+        ContextCompat.registerReceiver(
+            applicationContext,
+            NotificationReceiver(),
+            IntentFilter(NotificationReceiver.ACTION_REMOVE),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
 
         createNotificationChannel()
     }

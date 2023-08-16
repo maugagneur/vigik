@@ -51,6 +51,13 @@ sealed class NotificationViewAction : ViewAction {
     data class ChangeInfiniteLoaderSelection(val infiniteLoaderSelected: Boolean) : NotificationViewAction()
 
     /**
+     * Action to change action buttons presence in notification.
+     *
+     * @param actionButtonsSelected True if notification should contains action buttons, otherwise false.
+     */
+    data class ChangeActionButtonsSelection(val actionButtonsSelected: Boolean) : NotificationViewAction()
+
+    /**
      * Action to generate a new notification.
      */
     data object GenerateNotification : NotificationViewAction()

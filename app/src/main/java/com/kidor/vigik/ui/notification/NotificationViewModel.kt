@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.notification.NotificationFactory
+import com.kidor.vigik.data.notification.RemoveNotificationFromUiUseCase
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -23,7 +24,8 @@ private const val SECOND_TO_MILLI = 1_000L
 class NotificationViewModel @Inject constructor(
     private val localization: Localization,
     private val notificationFactory: NotificationFactory,
-    private val notificationManager: NotificationManager
+    private val notificationManager: NotificationManager,
+    private val removeNotificationFromUi: RemoveNotificationFromUiUseCase
 ) : BaseViewModel<NotificationViewAction, NotificationViewState, Nothing>() {
 
     private val generatedNotificationIds: MutableSet<Int> = mutableSetOf()
@@ -59,23 +61,17 @@ class NotificationViewModel @Inject constructor(
                 updateViewState { it.copy(infiniteLoaderSelected = viewAction.infiniteLoaderSelected) }
             }
 
-            is NotificationViewAction.GenerateNotification -> {
-                // Generate new notification ID
-                val notificationId = Random.nextInt()
+            is NotificationViewAction.ChangeActionButtonsSelection -> {
+                updateViewState { it.copy(addActionButtons = viewAction.actionButtonsSelected) }
+            }
 
-                // Build notification based on current view state
-                viewState.value?.let { currentState ->
-                    if (currentState.addLoaderSelected && !currentState.infiniteLoaderSelected) {
-                        emitPeriodicNotification(currentState, notificationId)
-                    } else {
-                        emitSingleNotification(currentState, notificationId)
-                    }
-                }
+            is NotificationViewAction.GenerateNotification -> {
+                generateNotification()
             }
 
             is NotificationViewAction.RemovePreviousNotification -> {
                 generatedNotificationIds.lastOrNull()?.let {
-                    notificationManager.cancel(it)
+                    removeNotificationFromUi(it)
                     generatedNotificationIds.remove(it)
                 } ?: Timber.d("No more notification to remove")
             }
@@ -90,6 +86,23 @@ class NotificationViewModel @Inject constructor(
     private fun updateViewState(update: (NotificationViewState) -> NotificationViewState) {
         viewModelScope.launch {
             _viewState.value = update(viewState.value ?: NotificationViewState())
+        }
+    }
+
+    /**
+     * Generates a notification based on current view state.
+     */
+    private fun generateNotification() {
+        // Generate new notification ID
+        val notificationId = Random.nextInt()
+
+        // Build notification based on current view state
+        viewState.value?.let { currentState ->
+            if (currentState.addLoaderSelected && !currentState.infiniteLoaderSelected) {
+                emitPeriodicNotification(currentState, notificationId)
+            } else {
+                emitSingleNotification(currentState, notificationId)
+            }
         }
     }
 
@@ -110,7 +123,7 @@ class NotificationViewModel @Inject constructor(
                 // periodic updates.
                 if (!generatedNotificationIds.contains(notificationId)) break
 
-                val notification = generateNotification(viewState, progress)
+                val notification = generateNotification(notificationId, viewState, progress)
 
                 notificationManager.notify(notificationId, notification)
 
@@ -120,7 +133,7 @@ class NotificationViewModel @Inject constructor(
             // If the notification was not cancelled, make a last update without the progress bar so that text content
             // can be shown.
             if (generatedNotificationIds.contains(notificationId)) {
-                notificationManager.notify(notificationId, generateNotification(viewState))
+                notificationManager.notify(notificationId, generateNotification(notificationId, viewState))
             }
         }
     }
@@ -136,22 +149,27 @@ class NotificationViewModel @Inject constructor(
         generatedNotificationIds.add(notificationId)
 
         if (viewState.addLoaderSelected && viewState.infiniteLoaderSelected) {
-            notificationManager.notify(notificationId, generateNotification(viewState, -1))
+            notificationManager.notify(notificationId, generateNotification(notificationId, viewState, -1))
         } else {
-            notificationManager.notify(notificationId, generateNotification(viewState))
+            notificationManager.notify(notificationId, generateNotification(notificationId, viewState))
         }
     }
 
     /**
      * Generates a notification based on given view state and a progress value.
      *
-     * @param viewState The current state of the view.
-     * @param progress  The notification loader's progress value.
+     * @param notificationId The unique ID of the notification.
+     * @param viewState      The current state of the view.
+     * @param progress       The notification loader's progress value.
      */
-    private fun generateNotification(viewState: NotificationViewState, progress: Int? = null) = notificationFactory
+    private fun generateNotification(
+        notificationId: Int,
+        viewState: NotificationViewState,
+        progress: Int? = null
+    ) = notificationFactory
         .buildNotification(
+            notificationId = notificationId,
             icon = viewState.notificationIcon.drawableId,
-            title = localization.getString(R.string.notification_generated_notification_title),
             content = when {
                 !viewState.addTextContentSelected -> null
                 viewState.longTextContentSelected ->
@@ -160,6 +178,7 @@ class NotificationViewModel @Inject constructor(
                 else -> localization.getString(R.string.notification_generated_notification_short_content)
             },
             addPicture = viewState.addPictureSelected,
-            progress = progress
+            progress = progress,
+            addActions = viewState.addActionButtons
         )
 }

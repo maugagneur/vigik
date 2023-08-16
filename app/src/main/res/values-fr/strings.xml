@@ -67,9 +67,13 @@
     <string name="notification_generated_notification_title">Notification de test</string>
     <string name="notification_add_text_content_label">Ajouter un message</string>
     <string name="notification_long_content_label">Message long</string>
+    <string name="notification_add_picture_content_label">Ajouter une image</string>
     <string name="notification_add_loader_label">Ajouter un chargement</string>
     <string name="notification_add_loader_infinite_label">Chargement infini</string>
-    <string name="notification_add_picture_content_label">Ajouter une image</string>
+    <string name="notification_add_action_buttons_label">Ajouter des boutons d\'action</string>
+    <string name="notification_action_button_1_label">SUPPRIMER</string>
+    <string name="notification_action_button_2_label">NE FAIT RIEN</string>
+    <string name="notification_action_button_3_label">DÉSACTIVÉ</string>
     <string name="notification_remove_previous_notification_button_label">Supprimer la précédente</string>
 
     <!-- REST API -->

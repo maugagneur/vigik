@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.kidor.vigik.R
+import com.kidor.vigik.receivers.NotificationReceiver
 import com.kidor.vigik.ui.MainActivity
 import com.kidor.vigik.ui.compose.AppScreen
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -24,25 +25,28 @@ private const val PROGRESS_MAX_VALUE = 100
 class NotificationFactory @Inject constructor(@ApplicationContext private val context: Context) {
 
     /**
-     * Builds a notification with an icon, a title, a text content (optional) and a picture (optional).
+     * Builds a notification with given parameters.
      *
-     * @param icon       The notification's icon.
-     * @param title      The notification's title.
-     * @param content    The notification's text content. Can be null.
-     * @param addPicture True to add a picture to the notification.
-     * @param progress   The notification's progress value. Will display an indeterminate progress bar if given value
-     *                   is negative. Can be null to hide it.
+     * @param notificationId The unique ID of the notification.
+     * @param icon           The notification's icon.
+     * @param content        The notification's text content. Can be null.
+     * @param addPicture     True to add a picture to the notification.
+     * @param progress       The notification's progress value. Will display an indeterminate progress bar if given
+     *                       value is negative. Can be null to hide it.
+     * @param addActions     True to add action buttons to the notification.
      */
+    @Suppress("LongParameterList")
     fun buildNotification(
+        notificationId: Int,
         @DrawableRes icon: Int,
-        title: String,
         content: String?,
         addPicture: Boolean,
-        progress: Int?
+        progress: Int?,
+        addActions: Boolean
     ): Notification {
         val builder = NotificationCompat.Builder(context, context.getString(R.string.notification_default_channel_id))
             .setSmallIcon(icon)
-            .setContentTitle(title)
+            .setContentTitle(context.getString(R.string.notification_generated_notification_title))
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
@@ -72,6 +76,32 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
             }
         }
 
+        if (addActions) {
+            // A notification can offer up to three action buttons.
+            // Notification actions do not present with icons since Nougat (API 24).
+            builder.addAction(
+                NotificationCompat.Action.Builder(
+                    null,
+                    context.getString(R.string.notification_action_button_1_label),
+                    createRemoveNotificationIntent(notificationId)
+                ).build()
+            )
+            builder.addAction(
+                NotificationCompat.Action.Builder(
+                    null,
+                    context.getString(R.string.notification_action_button_2_label),
+                    createDoNothingNotificationIntent(notificationId)
+                ).build()
+            )
+            builder.addAction(
+                NotificationCompat.Action.Builder(
+                    null,
+                    context.getString(R.string.notification_action_button_3_label),
+                    null
+                ).build()
+            )
+        }
+
         return builder.build()
     }
 
@@ -90,4 +120,40 @@ class NotificationFactory @Inject constructor(@ApplicationContext private val co
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
     }
+
+    /**
+     * Create the [PendingIntent] that will remove the notification from the UI by clicking on related action button.
+     *
+     * @param notificationId The unique ID of the notification.
+     */
+    private fun createRemoveNotificationIntent(notificationId: Int): PendingIntent {
+        val intent = Intent().apply {
+            action = NotificationReceiver.ACTION_REMOVE
+            putExtra(NotificationReceiver.EXTRA_NOTIFICATION_ID, notificationId)
+        }
+        return buildPendingIntent(intent, notificationId, PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)
+    }
+
+    /**
+     * Create the [PendingIntent] that will do nothing. ¯\_(ツ)_/¯
+     *
+     * @param notificationId The unique ID of the notification.
+     */
+    private fun createDoNothingNotificationIntent(notificationId: Int): PendingIntent {
+        val intent = Intent().apply {
+            action = NotificationReceiver.ACTION_DO_NOTHING
+        }
+        return buildPendingIntent(intent, notificationId, PendingIntent.FLAG_IMMUTABLE)
+    }
+
+    // When using PendingIntent we must provide a request code that is different for each conversation or provide an
+    // intent that doesn't return true when you call equals(). Here the notification ID is passed as part of the
+    // intent's extras bundle, but is ignored when you call equals()... (╯°□°）╯︵ ┻━┻
+    private fun buildPendingIntent(intent: Intent, notificationId: Int, flags: Int): PendingIntent =
+        PendingIntent.getBroadcast(
+            context,
+            notificationId,
+            intent,
+            flags
+        )
 }
