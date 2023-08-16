@@ -64,6 +64,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Emoji" screen.
+     */
+    EmojiScreen(
+        nameId = R.string.emoji_title,
+        route = "emoji"
+    ),
+
+    /**
      * Metadata of "check" screen.
      */
     NfcCheckScreen(
