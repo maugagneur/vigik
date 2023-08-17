@@ -7,11 +7,15 @@
 
     <!-- HOME -->
     <string name="home_title">Accueil</string>
+    <string name="home_animation_button_label">Animation</string>
     <string name="home_biometric_button_label">Biometrique</string>
     <string name="home_bluetooth_button_label">Bluetooth</string>
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_notification_button_label">Notification</string>
     <string name="home_rest_api_button_label">REST API</string>
+
+    <!-- Animation -->
+    <string name="animation_title">Pluie de pailettes</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometrique</string>

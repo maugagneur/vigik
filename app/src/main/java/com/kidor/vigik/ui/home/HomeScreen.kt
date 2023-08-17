@@ -22,9 +22,11 @@ import com.kidor.vigik.ui.compose.AppTheme
  */
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
+@Suppress("LongParameterList")
 fun HomeScreen(
     navigateToBiometric: () -> Unit = {},
     navigateToBluetooth: () -> Unit = {},
+    navigateToAnimation: () -> Unit = {},
     navigateToNfc: () -> Unit = {},
     navigateToNotification: () -> Unit = {},
     navigateToRestApi: () -> Unit = {}
@@ -38,6 +40,7 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val homeButtonDataList = listOf(
+            HomeButtonData(textId = R.string.home_animation_button_label, navigateToAnimation),
             HomeButtonData(textId = R.string.home_biometric_button_label, navigateToBiometric),
             HomeButtonData(textId = R.string.home_bluetooth_button_label, navigateToBluetooth),
             HomeButtonData(textId = R.string.home_nfc_button_label, navigateToNfc),

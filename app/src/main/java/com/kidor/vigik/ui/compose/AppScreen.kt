@@ -31,6 +31,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Animation" screen.
+     */
+    Animation(
+        nameId = R.string.animation_title,
+        route = "animation"
+    ),
+
+    /**
      * Metadata of "biometric login" screen.
      */
     BiometricLoginScreen(
