@@ -10,9 +10,20 @@ private const val DEFAULT_EMOJI = "❔"
  * Business logic of Emoji screen.
  */
 @HiltViewModel
-class EmojiViewModel @Inject constructor() : BaseViewModel<Nothing, EmojiViewState, Nothing>() {
+class EmojiViewModel @Inject constructor() : BaseViewModel<EmojiViewAction, EmojiViewState, Nothing>() {
 
     init {
         _viewState.value = EmojiViewState.SelectedEmoji(DEFAULT_EMOJI)
+    }
+
+    override fun handleAction(viewAction: EmojiViewAction) {
+        when (viewAction) {
+            is EmojiViewAction.ChangeSelectedEmoji -> {
+                _viewState.value = EmojiViewState.SelectedEmoji(viewAction.emoji)
+            }
+            EmojiViewAction.ClickOnEmoji -> {
+                _viewState.value = EmojiViewState.EmojiPicker
+            }
+        }
     }
 }

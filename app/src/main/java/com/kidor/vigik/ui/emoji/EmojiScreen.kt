@@ -8,8 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.emoji2.emojipicker.EmojiPickerView
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.ui.base.ObserveViewState
+
+private const val EMOJI_GRID_COLUMN = 8
 
 /**
  * View that display the section dedicated to Emoji.
@@ -20,6 +24,19 @@ fun EmojiScreen(
 ) {
     ObserveViewState(viewModel) { state ->
         when (state) {
+            EmojiViewState.EmojiPicker -> {
+                AndroidView(
+                    factory = { context ->
+                        EmojiPickerView(context).apply {
+                            emojiGridColumns = EMOJI_GRID_COLUMN
+                            setOnEmojiPickedListener {
+                                viewModel.handleAction(EmojiViewAction.ChangeSelectedEmoji(it.emoji))
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
             is EmojiViewState.SelectedEmoji -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),

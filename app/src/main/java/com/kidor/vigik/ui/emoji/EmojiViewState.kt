@@ -13,4 +13,9 @@ sealed class EmojiViewState : ViewState {
      * @param emoji The Emoji selected.
      */
     data class SelectedEmoji(val emoji: String) : EmojiViewState()
+
+    /**
+     * State to select a new Emoji.
+     */
+    data object EmojiPicker : EmojiViewState()
 }
