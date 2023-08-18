@@ -38,8 +38,8 @@ fun AnimationScreen() {
     ) {
         GlitterBox(
             colors = vividRainbow,
-            fleckCount = 2, // TODO: customizable
-            speed = 0.5f // TODO: customizable
+            fleckCount = 2, // TODO: customizable, rename
+            speedCoefficient = 0.5f // TODO: customizable
         )
         Text(
             text = stringResource(id = R.string.animation_glitter_rainbow_source_label),

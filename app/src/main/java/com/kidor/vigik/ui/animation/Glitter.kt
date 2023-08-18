@@ -12,13 +12,25 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
 
-class Fleck(
+/**
+ * Class that represents a glitter.
+ *
+ * @param vector       The glitter's vector.
+ * @param glitterColor The glitter's color.
+ * @param radius       The glitter's radius.
+ * @param shape        The glitter's shape.
+ * @param position     The glitter's position.
+ */
+class Glitter(
     vector: Offset,
     private val glitterColor: Color,
     private val radius: Float,
-    private val shape: GlitterShape = GlitterShape.Circle,
+    private val shape: GlitterShape,
     position: Offset
 ) {
+    /**
+     * The number of glitter's frame until it disappears.
+     */
     var lifeCount: Int = MAX_LIFE
         private set
     private var drawRadius = radius
@@ -30,6 +42,13 @@ class Fleck(
         style = PaintingStyle.Fill
     }
 
+    /**
+     * Calculates the next glitter's position.
+     *
+     * @param borders          The size of the area where glitter can exist.
+     * @param durationMillis   The elapsed time since previous frame.
+     * @param speedCoefficient The glitter's speed coefficient.
+     */
     fun next(
         borders: Size,
         durationMillis: Long,
@@ -57,9 +76,9 @@ class Fleck(
     }
 
     /**
-     * Draw glitter shape.
+     * Draw glitter.
      *
-     * @param canvas The [Canvas] where the shape will be draw.
+     * @param canvas The [Canvas] where the shape of the glitter will be draw.
      */
     fun draw(canvas: Canvas) {
         if (lifeCount > 0) {
@@ -100,15 +119,18 @@ class Fleck(
 
     companion object {
         private const val MAX_LIFE = 100 // TODO: customizable
+        private val xVectorRange: IntRange = -100..100
+        private val yVectorRange: IntRange = 0..500
         private val radiusRange = (5..25)
 
-        fun create(
-            xVectorRange: IntRange,
-            yVectorRange: IntRange,
-            colors: List<Color>,
-            glitterShape: GlitterShape,
-            source: Offset = Offset(0f, 0f)
-        ): Fleck {
+        /**
+         * Creates a glitter with given parameters.
+         *
+         * @param color        The glitter color.
+         * @param glitterShape The glitter shape.
+         * @param source       The initial position of the glitter.
+         */
+        fun create(color: Color, glitterShape: GlitterShape, source: Offset): Glitter {
             val shape = if (glitterShape == GlitterShape.Mixed) {
                 when((0..2).random()) {
                     0 -> GlitterShape.Circle
@@ -118,13 +140,13 @@ class Fleck(
             } else {
                 glitterShape
             }
-            return Fleck(
+            return Glitter(
                 position = source,
                 vector = Offset(
-                    x = listOf(-1f, 1f).random() * xVectorRange.random().toFloat(),
+                    x = xVectorRange.random().toFloat(),
                     y = yVectorRange.random().toFloat()
                 ),
-                glitterColor = colors.random(),
+                glitterColor = color,
                 radius = radiusRange.random().toFloat(),
                 shape = shape
             )

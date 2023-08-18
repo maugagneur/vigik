@@ -7,26 +7,23 @@ import androidx.compose.ui.graphics.Color
 /**
  * State of [GlitterBox].
  *
- * @param flecks       TODO
- * @param colors       List of colors used when generated new shapes.
- * @param glitterShape TODO
- * @param size         The size of the [GlitterBox].
- * @param speed        TODO
- * @param fleckCount   TODO
- * @param sourceOffset The offset position of the cursor.
+ * @param glitters         The list of glitters in the box.
+ * @param colors           List of colors used when generated new shapes.
+ * @param glitterShape     The type of shape available for glitters.
+ * @param size             The size of the [GlitterBox].
+ * @param speedCoefficient The glitter's speed coefficient.
+ * @param fleckCount       TODO
+ * @param sourceOffset     The offset position of the cursor.
  */
 data class GlitterBoxState(
-    val flecks: List<Fleck> = emptyList(),
+    val glitters: List<Glitter> = emptyList(),
     val colors: List<Color>,
     val glitterShape: GlitterShape,
     val size: Size = Size.Zero,
-    val speed: Float,
+    val speedCoefficient: Float,
     val fleckCount: Int = 10,
     val sourceOffset: Offset = Offset(0f, 0f)
 ) {
-
-    private val xVectorRange: IntRange = -100..100
-    private val yVectorRange: IntRange = 0..500
 
     /**
      * Generates new frame of the component.
@@ -34,8 +31,8 @@ data class GlitterBoxState(
      * @param durationMillis The time since last frame was generated.
      */
     fun next(durationMillis: Long) {
-        flecks.forEach {
-            it.next(size, durationMillis, speed)
+        glitters.forEach {
+            it.next(size, durationMillis, speedCoefficient)
         }
     }
 
@@ -60,13 +57,11 @@ data class GlitterBoxState(
         fun GlitterBoxState.updateSourceOffset(source: Offset): GlitterBoxState {
             if (source == this.sourceOffset) return this
             return copy(
-                flecks = flecks.filter { it.lifeCount > 0 } + (0..fleckCount).map {
-                    Fleck.create(
-                        xVectorRange,
-                        yVectorRange,
-                        colors = colors,
+                glitters = glitters.filter { it.lifeCount > 0 } + (0..fleckCount).map {
+                    Glitter.create(
+                        color = colors.random(),
                         glitterShape = glitterShape,
-                        source
+                        source = source
                     )
                 },
                 sourceOffset = source

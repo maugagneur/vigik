@@ -34,12 +34,12 @@ private const val CURSOR_VERTICAL_OFFSET_RATIO = 2.5f
 /**
  * Component that display a cursor in a box that produces glitters when dragged.
  *
- * @param colors     The colors used to draw glitters.
- * @param fleckCount The glitter's generation frequency.
- * @param speed      The glitter's velocity.
+ * @param colors           The colors used to draw glitters.
+ * @param fleckCount       The glitter's generation frequency.
+ * @param speedCoefficient The glitter's speed coefficient.
  */
 @Composable
-fun GlitterBox(colors: List<Color>, fleckCount: Int, speed: Float) {
+fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val initialXOffset = with(density) {
@@ -53,9 +53,9 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speed: Float) {
     var glitterBoxState by remember {
         mutableStateOf(
             GlitterBoxState(
-                speed = speed,
                 colors = colors,
                 glitterShape = GlitterShape.Mixed,
+                speedCoefficient = speedCoefficient,
                 fleckCount = fleckCount,
                 sourceOffset = cursorOffset
             )
@@ -85,8 +85,8 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speed: Float) {
             modifier = Modifier.fillMaxSize()
         ) {
             glitterBoxState = glitterBoxState.sizeChanged(this.size)
-            for (fleck in glitterBoxState.flecks) {
-                fleck.draw(drawContext.canvas)
+            for (glitter in glitterBoxState.glitters) {
+                glitter.draw(drawContext.canvas)
             }
         }
 
