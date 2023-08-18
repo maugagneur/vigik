@@ -16,6 +16,7 @@
 
     <!-- Animation -->
     <string name="animation_title">Pluie de pailettes</string>
+    <string name="animation_glitter_rainbow_source_label">Source : https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometrique</string>
@@ -88,7 +89,7 @@
     <string name="diablo_boss_name_unknown">Boss inconnu</string>
     <string name="diablo_boss_next_spawn_label">Prochaine apparition possible dans %s</string>
     <string name="diablo_hell_tide_next_rise_label">Prochaine vague infernale dans %s</string>
-    <string name="diablo_tracker_source_label">Source: %s</string>
+    <string name="diablo_tracker_source_label">Source : %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
 

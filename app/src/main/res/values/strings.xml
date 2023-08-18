@@ -19,6 +19,7 @@
 
     <!-- Animation -->
     <string name="animation_title">Glitter Rainbow</string>
+    <string name="animation_glitter_rainbow_source_label">Source: https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometric</string>
