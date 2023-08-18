@@ -6,5 +6,6 @@ package com.kidor.vigik.ui.animation
 enum class GlitterShape {
     Mixed,
     Rectangle,
-    Circle
+    Circle,
+    Triangle
 }

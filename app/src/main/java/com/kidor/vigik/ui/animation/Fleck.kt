@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.Path
 
 class Fleck(
     vector: Offset,
@@ -62,23 +63,37 @@ class Fleck(
      */
     fun draw(canvas: Canvas) {
         if (lifeCount > 0) {
-            if (shape == GlitterShape.Circle) {
-                canvas.drawCircle(
-                    radius = drawRadius,
-                    center = position,
-                    paint = paint
-                )
-            } else {
-                val rect = Rect(
-                    position.x,
-                    position.y,
-                    position.x + drawRadius,
-                    position.y + drawRadius
-                )
-                canvas.drawRect(
-                    rect = rect,
-                    paint = paint
-                )
+            when (shape) {
+                GlitterShape.Circle -> {
+                    canvas.drawCircle(
+                        radius = drawRadius,
+                        center = position,
+                        paint = paint
+                    )
+                }
+                GlitterShape.Triangle -> {
+                    val path = Path()
+                    path.moveTo(position.x, position.y)
+                    path.lineTo(position.x + drawRadius, position.y + 2 * drawRadius)
+                    path.lineTo(position.x + 2 * drawRadius, position.y)
+                    path.close()
+                    canvas.drawPath(
+                        path = path,
+                        paint = paint
+                    )
+                }
+                else -> {
+                    val rect = Rect(
+                        position.x,
+                        position.y,
+                        position.x + drawRadius,
+                        position.y + drawRadius
+                    )
+                    canvas.drawRect(
+                        rect = rect,
+                        paint = paint
+                    )
+                }
             }
         }
     }
@@ -95,7 +110,11 @@ class Fleck(
             source: Offset = Offset(0f, 0f)
         ): Fleck {
             val shape = if (glitterShape == GlitterShape.Mixed) {
-                if ((0..1).random() == 0) GlitterShape.Circle else GlitterShape.Rectangle
+                when((0..2).random()) {
+                    0 -> GlitterShape.Circle
+                    1 -> GlitterShape.Triangle
+                    else -> GlitterShape.Rectangle
+                }
             } else {
                 glitterShape
             }
