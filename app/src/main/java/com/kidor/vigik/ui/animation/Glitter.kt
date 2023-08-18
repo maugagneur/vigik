@@ -25,7 +25,7 @@ class Glitter(
     vector: Offset,
     private val glitterColor: Color,
     private val radius: Float,
-    private val shape: GlitterShape,
+    private val shape: GeometricShape,
     position: Offset
 ) {
     /**
@@ -83,14 +83,15 @@ class Glitter(
     fun draw(canvas: Canvas) {
         if (lifeCount > 0) {
             when (shape) {
-                GlitterShape.Circle -> {
+                GeometricShape.Circle -> {
                     canvas.drawCircle(
                         radius = drawRadius,
                         center = position,
                         paint = paint
                     )
                 }
-                GlitterShape.Triangle -> {
+
+                GeometricShape.Triangle -> {
                     val path = Path()
                     path.moveTo(position.x, position.y)
                     path.lineTo(position.x + drawRadius, position.y + 2 * drawRadius)
@@ -101,7 +102,8 @@ class Glitter(
                         paint = paint
                     )
                 }
-                else -> {
+
+                GeometricShape.Rectangle -> {
                     val rect = Rect(
                         position.x,
                         position.y,
@@ -131,14 +133,10 @@ class Glitter(
          * @param source       The initial position of the glitter.
          */
         fun create(color: Color, glitterShape: GlitterShape, source: Offset): Glitter {
-            val shape = if (glitterShape == GlitterShape.Mixed) {
-                when((0..2).random()) {
-                    0 -> GlitterShape.Circle
-                    1 -> GlitterShape.Triangle
-                    else -> GlitterShape.Rectangle
-                }
-            } else {
+            val shape: GeometricShape = if (glitterShape is GeometricShape) {
                 glitterShape
+            } else {
+                GeometricShape.entries.random()
             }
             return Glitter(
                 position = source,

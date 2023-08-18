@@ -54,7 +54,7 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
         mutableStateOf(
             GlitterBoxState(
                 colors = colors,
-                glitterShape = GlitterShape.Mixed,
+                glitterShape = Mixed,
                 speedCoefficient = speedCoefficient,
                 fleckCount = fleckCount,
                 sourceOffset = cursorOffset

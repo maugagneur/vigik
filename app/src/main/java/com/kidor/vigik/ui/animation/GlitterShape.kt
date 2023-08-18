@@ -1,10 +1,19 @@
 package com.kidor.vigik.ui.animation
 
 /**
- * Types of shape.
+ * A shape configuration for glitters.
  */
-enum class GlitterShape {
-    Mixed,
+interface GlitterShape
+
+/**
+ * Undefined shape for glitters.
+ */
+data object Mixed : GlitterShape
+
+/**
+ * Geometric shape for glitters.
+ */
+enum class GeometricShape : GlitterShape {
     Rectangle,
     Circle,
     Triangle
