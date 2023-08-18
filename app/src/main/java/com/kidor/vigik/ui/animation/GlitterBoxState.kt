@@ -57,7 +57,7 @@ data class GlitterBoxState(
          * @param source The new source offset.
          * @return A [GlitterBoxState] with the new source offset.
          */
-        fun GlitterBoxState.updateSource(source: Offset): GlitterBoxState {
+        fun GlitterBoxState.updateSourceOffset(source: Offset): GlitterBoxState {
             if (source == this.sourceOffset) return this
             return copy(
                 flecks = flecks.filter { it.lifeCount > 0 } + (0..fleckCount).map {
