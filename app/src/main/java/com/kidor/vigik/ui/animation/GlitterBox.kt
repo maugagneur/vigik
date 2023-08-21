@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.toSize
 import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.sizeChanged
 import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSourceOffset
+import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSpeedCoefficient
 import kotlinx.coroutines.isActive
 
 private const val CURSOR_HORIZONTAL_OFFSET_RATIO = 2f
@@ -62,6 +63,8 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
         )
     }
     var lastFrame by remember { mutableStateOf(-1L) }
+
+    glitterBoxState = glitterBoxState.updateSpeedCoefficient(speedCoefficient)
 
     LaunchedEffect(true) {
         while (isActive) {

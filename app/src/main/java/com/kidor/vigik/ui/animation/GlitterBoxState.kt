@@ -67,5 +67,16 @@ data class GlitterBoxState(
                 sourceOffset = source
             )
         }
+
+        /**
+         * Update the glitter speed coefficient if needed.
+         *
+         * @param speedCoefficient The new speed coefficient.
+         * @return A [GlitterBoxState] with the new speed coefficient.
+         */
+        fun GlitterBoxState.updateSpeedCoefficient(speedCoefficient: Float): GlitterBoxState {
+            if (speedCoefficient == this.speedCoefficient) return this
+            return copy(speedCoefficient = speedCoefficient)
+        }
     }
 }

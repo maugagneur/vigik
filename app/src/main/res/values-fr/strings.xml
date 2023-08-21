@@ -16,6 +16,7 @@
 
     <!-- Animation -->
     <string name="animation_title">Pluie de pailettes</string>
+    <string name="animation_speed_coefficient_label">Vitesse</string>
     <string name="animation_glitter_rainbow_source_label">Source : https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
     <!-- Biometric -->
