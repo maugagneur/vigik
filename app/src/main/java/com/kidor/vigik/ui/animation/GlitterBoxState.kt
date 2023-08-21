@@ -22,7 +22,7 @@ data class GlitterBoxState(
     val size: Size = Size.Zero,
     val speedCoefficient: Float,
     val fleckCount: Int = 10,
-    val sourceOffset: Offset = Offset(0f, 0f)
+    val sourceOffset: Offset = Offset.Zero
 ) {
 
     /**

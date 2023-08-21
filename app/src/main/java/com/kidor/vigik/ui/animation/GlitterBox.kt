@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.animation
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
@@ -30,7 +31,8 @@ import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSpeedCoeffic
 import kotlinx.coroutines.isActive
 
 private const val CURSOR_HORIZONTAL_OFFSET_RATIO = 2f
-private const val CURSOR_VERTICAL_OFFSET_RATIO = 2.5f
+private const val CURSOR_VERTICAL_OFFSET_RATIO_LANDSCAPE = 4f
+private const val CURSOR_VERTICAL_OFFSET_RATIO_PORTRAIT = 3f
 
 /**
  * Component that display a cursor in a box that produces glitters when dragged.
@@ -41,24 +43,14 @@ private const val CURSOR_VERTICAL_OFFSET_RATIO = 2.5f
  */
 @Composable
 fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
-    val configuration = LocalConfiguration.current
-    val density = LocalDensity.current
-    val initialXOffset = with(density) {
-        configuration.screenWidthDp.dp.roundToPx() / CURSOR_HORIZONTAL_OFFSET_RATIO
-    }
-    val initialYOffset = with(density) {
-        configuration.screenHeightDp.dp.roundToPx() / CURSOR_VERTICAL_OFFSET_RATIO
-    }
     var size by remember { mutableStateOf(Size.Zero) }
-    var cursorOffset by remember { mutableStateOf(Offset(initialXOffset, initialYOffset)) }
     var glitterBoxState by remember {
         mutableStateOf(
             GlitterBoxState(
                 colors = colors,
                 glitterShape = Mixed,
                 speedCoefficient = speedCoefficient,
-                fleckCount = fleckCount,
-                sourceOffset = cursorOffset
+                fleckCount = fleckCount
             )
         )
     }
@@ -83,7 +75,6 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
             .fillMaxSize()
             .onSizeChanged { size = it.toSize() }
     ) {
-        // Glitters
         Canvas(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -93,28 +84,50 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
             }
         }
 
-        // Cursor = glitter source
-        val cursorColor = MaterialTheme.colorScheme.secondary
-        val cursorRadius = 16.dp
-        Canvas(
-            modifier = Modifier
-                .offset { cursorOffset.round() }
-                .pointerInput(Unit) {
-                    detectDragGestures { _, dragAmount ->
-                        val offsetAfterGesture = cursorOffset + dragAmount
-                        val newOffsetValue = Offset(
-                            x = offsetAfterGesture.x.coerceIn(cursorRadius.toPx(), size.width - cursorRadius.toPx()),
-                            y = offsetAfterGesture.y.coerceIn(cursorRadius.toPx(), size.height - cursorRadius.toPx())
-                        )
-                        cursorOffset = newOffsetValue
-                        glitterBoxState = glitterBoxState.updateSourceOffset(cursorOffset)
-                    }
-                }
-        ) {
-            drawCircle(
-                color = cursorColor,
-                radius = cursorRadius.toPx()
-            )
+        if (size != Size.Zero) {
+            GlitterSource(size = glitterBoxState.size) {
+                glitterBoxState = glitterBoxState.updateSourceOffset(it)
+            }
         }
+    }
+}
+
+@Composable
+private fun GlitterSource(size: Size, updateSourceOffset: (Offset) -> Unit) {
+    val sourceColor = MaterialTheme.colorScheme.secondary
+    val sourceRadius = 16.dp
+    val configuration = LocalConfiguration.current
+    val density = LocalDensity.current
+    val initialXOffset = with(density) {
+        configuration.screenWidthDp.dp.roundToPx() / CURSOR_HORIZONTAL_OFFSET_RATIO
+    }
+    val initialYOffset = with(density) {
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            configuration.screenHeightDp.dp.roundToPx() / CURSOR_VERTICAL_OFFSET_RATIO_LANDSCAPE
+        } else {
+            configuration.screenHeightDp.dp.roundToPx() / CURSOR_VERTICAL_OFFSET_RATIO_PORTRAIT
+        }
+    }
+    var sourceOffset by remember { mutableStateOf(Offset(initialXOffset, initialYOffset)) }
+
+    Canvas(
+        modifier = Modifier
+            .offset { sourceOffset.round() }
+            .pointerInput(Unit) {
+                detectDragGestures { _, dragAmount ->
+                    val offsetAfterGesture = sourceOffset + dragAmount
+                    val newOffsetValue = Offset(
+                        x = offsetAfterGesture.x.coerceIn(sourceRadius.toPx(), size.width - sourceRadius.toPx()),
+                        y = offsetAfterGesture.y.coerceIn(sourceRadius.toPx(), size.height - sourceRadius.toPx())
+                    )
+                    sourceOffset = newOffsetValue
+                    updateSourceOffset(newOffsetValue)
+                }
+            }
+    ) {
+        drawCircle(
+            color = sourceColor,
+            radius = sourceRadius.toPx()
+        )
     }
 }
