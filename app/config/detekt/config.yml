@@ -693,7 +693,7 @@ style:
     active: true
     allowedNames: 'ignored|expected'
   UnusedPrivateClass:
-    active: false # FIXME: Analyzing AppDataBase.kt led to an exception.
+    active: false # FIXME: Analyzing AppDataBase.kt leads to an exception.
   UnusedPrivateMember:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']
