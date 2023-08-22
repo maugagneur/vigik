@@ -17,6 +17,7 @@ import androidx.navigation.navDeepLink
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
+import com.kidor.vigik.ui.animation.AnimationScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
@@ -43,6 +44,7 @@ fun AppNavHost(
         startDestination = AppScreen.HomeScreen.route,
         modifier = modifier
     ) {
+        addAnimationScreens(navGraphBuilder = this)
         addHomeScreens(navGraphBuilder = this, navController = navController)
         addBiometricScreens(navGraphBuilder = this, navController = navController, context = context)
         addBluetoothScreens(navGraphBuilder = this)
@@ -61,12 +63,24 @@ fun AppNavHost(
 private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
     navGraphBuilder.composable(route = AppScreen.HomeScreen.route) {
         HomeScreen(
+            navigateToAnimation = { navController.navigate(AppScreen.Animation) },
             navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
             navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
             navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
             navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
             navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
         )
+    }
+}
+
+/**
+ * Add screens related to Animation into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.Animation.route) {
+        AnimationScreen()
     }
 }
 
