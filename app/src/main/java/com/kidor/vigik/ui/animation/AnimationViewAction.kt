@@ -13,4 +13,11 @@ sealed class AnimationViewAction : ViewAction {
      * @param speedCoefficient The new speed coefficient value.
      */
     data class ChangeSpeedCoefficient(val speedCoefficient: Float) : AnimationViewAction()
+
+    /**
+     * Action to change the life time of glitters.
+     *
+     * @param lifeTime The new life time value.
+     */
+    data class ChangeLifeTime(val lifeTime: Int) : AnimationViewAction()
 }

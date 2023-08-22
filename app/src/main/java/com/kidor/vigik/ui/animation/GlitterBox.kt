@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.toSize
 import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.sizeChanged
+import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateLifeTime
 import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSourceOffset
 import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSpeedCoefficient
 import kotlinx.coroutines.isActive
@@ -38,11 +39,11 @@ private const val CURSOR_VERTICAL_OFFSET_RATIO_PORTRAIT = 3f
  * Component that display a cursor in a box that produces glitters when dragged.
  *
  * @param colors           The colors used to draw glitters.
- * @param fleckCount       The glitter's generation frequency.
  * @param speedCoefficient The glitter's speed coefficient.
+ * @param lifeTime         The glitter's life time.
  */
 @Composable
-fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
+fun GlitterBox(colors: List<Color>, speedCoefficient: Float, lifeTime: Int) {
     var size by remember { mutableStateOf(Size.Zero) }
     var glitterBoxState by remember {
         mutableStateOf(
@@ -50,13 +51,15 @@ fun GlitterBox(colors: List<Color>, fleckCount: Int, speedCoefficient: Float) {
                 colors = colors,
                 glitterShape = Mixed,
                 speedCoefficient = speedCoefficient,
-                fleckCount = fleckCount
+                lifeTime = lifeTime
             )
         )
     }
     var lastFrame by remember { mutableStateOf(-1L) }
 
-    glitterBoxState = glitterBoxState.updateSpeedCoefficient(speedCoefficient)
+    glitterBoxState = glitterBoxState
+        .updateSpeedCoefficient(speedCoefficient)
+        .updateLifeTime(lifeTime)
 
     LaunchedEffect(true) {
         while (isActive) {

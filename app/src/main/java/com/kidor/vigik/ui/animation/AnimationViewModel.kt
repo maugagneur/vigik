@@ -21,6 +21,10 @@ class AnimationViewModel @Inject constructor() : BaseViewModel<AnimationViewActi
             is AnimationViewAction.ChangeSpeedCoefficient -> updateViewState {
                 it.copy(speedCoefficient = viewAction.speedCoefficient)
             }
+
+            is AnimationViewAction.ChangeLifeTime -> updateViewState {
+                it.copy(lifeTime = viewAction.lifeTime)
+            }
         }
     }
 

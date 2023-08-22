@@ -12,8 +12,9 @@ import androidx.compose.ui.graphics.Color
  * @param glitterShape     The type of shape available for glitters.
  * @param size             The size of the [GlitterBox].
  * @param speedCoefficient The glitter's speed coefficient.
- * @param fleckCount       TODO
+ * @param fleckCount       The number of tasks that create glitters.
  * @param sourceOffset     The offset position of the cursor.
+ * @param lifeTime         The life time of glitters.
  */
 data class GlitterBoxState(
     val glitters: List<Glitter> = emptyList(),
@@ -21,8 +22,9 @@ data class GlitterBoxState(
     val glitterShape: GlitterShape,
     val size: Size = Size.Zero,
     val speedCoefficient: Float,
-    val fleckCount: Int = 10,
-    val sourceOffset: Offset = Offset.Zero
+    val fleckCount: Int = 2,
+    val sourceOffset: Offset = Offset.Zero,
+    val lifeTime: Int
 ) {
 
     /**
@@ -61,7 +63,8 @@ data class GlitterBoxState(
                     Glitter.create(
                         color = colors.random(),
                         glitterShape = glitterShape,
-                        source = source
+                        source = source,
+                        lifeTime = lifeTime
                     )
                 },
                 sourceOffset = source
@@ -77,6 +80,17 @@ data class GlitterBoxState(
         fun GlitterBoxState.updateSpeedCoefficient(speedCoefficient: Float): GlitterBoxState {
             if (speedCoefficient == this.speedCoefficient) return this
             return copy(speedCoefficient = speedCoefficient)
+        }
+
+        /**
+         * Update the glitter life time if needed.
+         *
+         * @param lifeTime The new life time.
+         * @return A [GlitterBoxState] with the new life time.
+         */
+        fun GlitterBoxState.updateLifeTime(lifeTime: Int): GlitterBoxState {
+            if (lifeTime == this.lifeTime) return this
+            return copy(lifeTime = lifeTime)
         }
     }
 }

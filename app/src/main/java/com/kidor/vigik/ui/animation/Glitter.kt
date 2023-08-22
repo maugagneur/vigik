@@ -26,12 +26,13 @@ class Glitter(
     private val glitterColor: Color,
     private val radius: Float,
     private val shape: GeometricShape,
-    position: Offset
+    position: Offset,
+    private val lifeTime: Int
 ) {
     /**
      * The number of glitter's frame until it disappears.
      */
-    var lifeCount: Int = MAX_LIFE
+    var lifeCount: Int = lifeTime
         private set
     private var drawRadius = radius
     private var position by mutableStateOf(position)
@@ -56,7 +57,7 @@ class Glitter(
     ) {
         lifeCount -= 1
         if (lifeCount <= 0) lifeCount = 0
-        drawRadius = radius * lifeCount / MAX_LIFE
+        drawRadius = radius * lifeCount / lifeTime
         val speed = vector * speedCoefficient
         val borderTop = 0
         val borderLeft = 0
@@ -120,7 +121,6 @@ class Glitter(
     }
 
     companion object {
-        private const val MAX_LIFE = 100 // TODO: customizable
         private val xVectorRange: IntRange = -100..100
         private val yVectorRange: IntRange = 0..500
         private val radiusRange = (5..25)
@@ -131,8 +131,9 @@ class Glitter(
          * @param color        The glitter color.
          * @param glitterShape The glitter shape.
          * @param source       The initial position of the glitter.
+         * @param lifeTime     The life time of the glitter.
          */
-        fun create(color: Color, glitterShape: GlitterShape, source: Offset): Glitter {
+        fun create(color: Color, glitterShape: GlitterShape, source: Offset, lifeTime: Int): Glitter {
             val shape: GeometricShape = if (glitterShape is GeometricShape) {
                 glitterShape
             } else {
@@ -146,7 +147,8 @@ class Glitter(
                 ),
                 glitterColor = color,
                 radius = radiusRange.random().toFloat(),
-                shape = shape
+                shape = shape,
+                lifeTime = lifeTime
             )
         }
     }

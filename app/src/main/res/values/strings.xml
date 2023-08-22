@@ -20,6 +20,7 @@
     <!-- Animation -->
     <string name="animation_title">Glitter Rainbow</string>
     <string name="animation_speed_coefficient_label">Speed</string>
+    <string name="animation_life_time_label">Life time</string>
     <string name="animation_glitter_rainbow_source_label">Source: https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
     <!-- Biometric -->
