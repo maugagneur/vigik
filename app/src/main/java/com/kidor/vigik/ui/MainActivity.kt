@@ -75,8 +75,9 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            AppTheme {
-                MainComposable()
+            var inverseTheme by remember { mutableStateOf(false) }
+            AppTheme(inverseTheme = inverseTheme) {
+                MainComposable(switchColorTheme = { inverseTheme = !inverseTheme })
             }
         }
     }
@@ -102,14 +103,20 @@ class MainActivity : FragmentActivity() {
 @ExperimentalMaterial3Api
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-internal fun MainComposable() {
+internal fun MainComposable(switchColorTheme: () -> Unit = {}) {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
     val currentScreen = AppScreen.getScreen(currentDestination?.route)
 
     Scaffold(
-        topBar = { AppActionBar(currentScreen = currentScreen, navController = navController) },
+        topBar = {
+            AppActionBar(
+                currentScreen = currentScreen,
+                navController = navController,
+                switchColorTheme = switchColorTheme
+            )
+         },
         contentColor = MaterialTheme.colorScheme.onPrimary
     ) { innerPadding ->
         AppNavHost(
@@ -122,7 +129,7 @@ internal fun MainComposable() {
 
 @ExperimentalMaterial3Api
 @Composable
-private fun AppActionBar(currentScreen: AppScreen?, navController: NavHostController) {
+private fun AppActionBar(currentScreen: AppScreen?, navController: NavHostController, switchColorTheme: () -> Unit) {
     var showPopup by remember { mutableStateOf(false) }
 
     TopAppBar(
@@ -149,7 +156,7 @@ private fun AppActionBar(currentScreen: AppScreen?, navController: NavHostContro
                 }
             }
             IconButton(
-                onClick = { AppTheme.invertTheme() },
+                onClick = switchColorTheme,
                 modifier = Modifier.testTag(ACTION_MENU_INVERT_COLORS)
             ) {
                 Icon(

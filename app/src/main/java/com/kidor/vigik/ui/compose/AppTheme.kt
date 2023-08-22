@@ -7,18 +7,8 @@ import androidx.compose.runtime.ReadOnlyComposable
 
 /**
  * Utility class used to access to common app's dimensions.
- *
- * WIP: Should be able to switch the light/dark theme on the fly.
  */
 object AppTheme {
-    private var isDarkTheme: Boolean = false
-
-    /**
-     * Toggles theme between light and dark.
-     */
-    fun invertTheme() {
-        isDarkTheme = !isDarkTheme
-    }
 
     /**
      * Access to application's dimension metrics.
@@ -34,11 +24,12 @@ object AppTheme {
  */
 @Composable
 fun AppTheme(
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
+    inverseTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
+    val isDarkTheme: Boolean = isSystemInDarkTheme()
     MaterialTheme(
-        colorScheme = if (isDarkTheme) LocalDarkColors.current else LocalLightColors.current,
+        colorScheme = if (isDarkTheme xor inverseTheme) LocalDarkColors.current else LocalLightColors.current,
         content = content
     )
 }
