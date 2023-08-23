@@ -43,6 +43,19 @@
         android:theme="@style/Theme.Vigik.Starting"
         tools:targetApi="s">
 
+        <meta-data
+            android:name="com.google.android.gms.car.application"
+            android:resource="@xml/automotive_app_desc" />
+
+        <meta-data
+            android:name="androidx.car.app.minCarApiLevel"
+            android:value="1" />
+
+        <!-- This allows the app to run when the car is moving. -->
+        <meta-data
+            android:name="distractionOptimized"
+            android:value="true" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
@@ -93,6 +106,17 @@
                 android:resource="@xml/apdu_service" />
         </service>
 
+        <service
+            android:name=".car.CarService"
+            android:exported="true"
+            android:label="@string/car_app_name"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="androidx.car.app.CarAppService" />
+                <category android:name="androidx.car.app.category.POI" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
@@ -104,6 +128,7 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
     </application>
 
 </manifest>

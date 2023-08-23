@@ -23,6 +23,9 @@
     <string name="animation_life_time_label">Life time</string>
     <string name="animation_glitter_rainbow_source_label">Source: https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
+    <!-- CAR -->
+    <string name="car_app_name">Vigik Auto</string>
+
     <!-- Biometric -->
     <string name="biometric_title">Biometric</string>
     <string name="biometric_username_hint">Username</string>
