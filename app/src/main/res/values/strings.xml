@@ -25,6 +25,9 @@
 
     <!-- CAR -->
     <string name="car_app_name">Vigik Auto</string>
+    <string name="car_need_permissions_title">Need permissions</string>
+    <string name="car_need_permissions_message">Please check your mobile and enable required permissions</string>
+    <string name="car_need_permissions_ok_action_label">OK</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometric</string>

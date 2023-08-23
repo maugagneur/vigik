@@ -7,6 +7,11 @@
         android:required="true" />
     <uses-feature android:name="android.hardware.nfc.hce" />
 
+    <!-- Android car permissions -->
+    <uses-permission android:name="com.google.android.gms.permission.CAR_FUEL" />
+    <uses-permission android:name="com.google.android.gms.permission.CAR_SPEED" />
+    <uses-permission android:name="com.google.android.gms.permission.CAR_MILEAGE" />
+
     <!-- Legacy Bluetooth permissions for devices on API 30 and below -->
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
