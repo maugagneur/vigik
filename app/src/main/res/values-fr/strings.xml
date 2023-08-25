@@ -27,9 +27,16 @@
     <string name="car_need_permissions_ok_action_label">OK</string>
     <string name="car_car_api_level_action_label">Niveau API</string>
     <string name="car_car_api_level_toast_message">Niveau API véhicule : %d</string>
+    <string name="car_hardaware_data_error_title">Erreur</string>
+    <string name="car_hardaware_data_error_message">Une erreur est survenue lors de la colecte des données du véhicule</string>
+    <string name="car_hardaware_data_error_ok_action_label">OK</string>
     <string name="car_car_info_label">Info véhicule</string>
+    <string name="car_car_info_name_label">Nom</string>
+    <string name="car_car_info_manufacturer_label">Constructeur</string>
+    <string name="car_car_info_year_label">Année</string>
     <string name="car_car_sensors_label">Capteurs</string>
     <string name="car_car_climate_label">Climat</string>
+    <string name="car_data_not_available_label">N/A</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometrique</string>
