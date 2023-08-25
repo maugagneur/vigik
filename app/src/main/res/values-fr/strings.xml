@@ -25,6 +25,11 @@
     <string name="car_need_permissions_title">Permissions requises</string>
     <string name="car_need_permissions_message">Veuillez vérifier votre mobile afin d\'autoriser les permissions requises</string>
     <string name="car_need_permissions_ok_action_label">OK</string>
+    <string name="car_car_api_level_action_label">Niveau API</string>
+    <string name="car_car_api_level_toast_message">Niveau API véhicule : %d</string>
+    <string name="car_car_info_label">Info véhicule</string>
+    <string name="car_car_sensors_label">Capteurs</string>
+    <string name="car_car_climate_label">Climat</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometrique</string>

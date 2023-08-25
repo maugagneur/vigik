@@ -28,6 +28,11 @@
     <string name="car_need_permissions_title">Need permissions</string>
     <string name="car_need_permissions_message">Please check your mobile and enable required permissions</string>
     <string name="car_need_permissions_ok_action_label">OK</string>
+    <string name="car_car_api_level_action_label">API level</string>
+    <string name="car_car_api_level_toast_message">Car API level: %d</string>
+    <string name="car_car_info_label">Car info</string>
+    <string name="car_car_sensors_label">Sensors</string>
+    <string name="car_car_climate_label">Climate</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometric</string>

@@ -5,37 +5,62 @@ import androidx.car.app.CarToast
 import androidx.car.app.Screen
 import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
-import androidx.car.app.model.Pane
-import androidx.car.app.model.PaneTemplate
-import androidx.car.app.model.Row
-import androidx.car.app.model.Template
+import androidx.car.app.model.CarColor
+import androidx.car.app.model.GridItem
+import androidx.car.app.model.GridTemplate
+import androidx.car.app.model.ItemList
+import com.kidor.vigik.R
+import com.kidor.vigik.extensions.setImageFromDrawable
 
 /**
  * Main screen of the car application.
  */
 class CarMainScreen(carContext: CarContext) : Screen(carContext) {
 
-    override fun onGetTemplate(): Template {
-        val row = Row.Builder()
-            .setTitle("Titre dans une ligne")
-            .build()
-
-        val action = Action.Builder()
-            .setTitle("Action A")
-            .setOnClickListener {
-                CarToast.makeText(carContext, "Clic de Action A détecté", CarToast.LENGTH_SHORT).show()
-            }
-            .build()
-
-        return PaneTemplate.Builder(
-            Pane.Builder()
-                .addRow(row)
-                .build()
-        )
+    override fun onGetTemplate(): GridTemplate {
+        return GridTemplate.Builder()
+            .setTitle(carContext.getString(R.string.car_app_name))
             .setHeaderAction(Action.APP_ICON)
             .setActionStrip(
                 ActionStrip.Builder()
-                    .addAction(action)
+                    .addAction(
+                        Action.Builder()
+                            .setTitle(carContext.getString(R.string.car_car_api_level_action_label))
+                            .setOnClickListener {
+                                CarToast.makeText(
+                                    carContext,
+                                    carContext.getString(
+                                        R.string.car_car_api_level_toast_message,
+                                        carContext.carAppApiLevel
+                                    ),
+                                    CarToast.LENGTH_SHORT
+                                ).show()
+                            }.build()
+                    ).build()
+            )
+            .setSingleList(
+                ItemList.Builder()
+                    .addItem(
+                        GridItem.Builder()
+                            .setTitle(carContext.getString(R.string.car_car_info_label))
+                            .setImageFromDrawable(carContext, R.drawable.ic_car)
+                            .setOnClickListener { }
+                            .build()
+                    )
+                    .addItem(
+                        GridItem.Builder()
+                            .setTitle(carContext.getString(R.string.car_car_sensors_label))
+                            .setImageFromDrawable(carContext, R.drawable.ic_sensors, CarColor.YELLOW)
+                            .setOnClickListener { }
+                            .build()
+                    )
+                    .addItem(
+                        GridItem.Builder()
+                            .setTitle(carContext.getString(R.string.car_car_climate_label))
+                            .setImageFromDrawable(carContext, R.drawable.ic_cloud, CarColor.BLUE)
+                            .setOnClickListener { }
+                            .build()
+                    )
                     .build()
             )
             .build()
