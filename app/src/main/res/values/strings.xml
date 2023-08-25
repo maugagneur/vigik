@@ -38,6 +38,10 @@
     <string name="car_car_info_manufacturer_label">Manufacturer</string>
     <string name="car_car_info_year_label">Year</string>
     <string name="car_car_sensors_label">Sensors</string>
+    <string name="car_car_sensors_accelerometer_forces">Accelerometer forces</string>
+    <string name="car_car_sensors_compass_orientations">Compass orientations</string>
+    <string name="car_car_sensors_gyroscope_rotations">Gyroscope rotations</string>
+    <string name="car_car_sensors_hardware_location">Hardware location</string>
     <string name="car_car_climate_label">Climate</string>
     <string name="car_data_not_available_label">N/A</string>
 

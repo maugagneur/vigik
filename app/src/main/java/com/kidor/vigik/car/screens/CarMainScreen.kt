@@ -54,7 +54,7 @@ class CarMainScreen(carContext: CarContext) : Screen(carContext) {
                         GridItem.Builder()
                             .setTitle(carContext.getString(R.string.car_car_sensors_label))
                             .setImageFromDrawable(carContext, R.drawable.ic_sensors, CarColor.YELLOW)
-                            .setOnClickListener { }
+                            .setOnClickListener { screenManager.push(CarSensorsScreen(carContext)) }
                             .build()
                     )
                     .addItem(
