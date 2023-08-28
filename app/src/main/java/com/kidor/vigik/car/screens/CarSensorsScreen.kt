@@ -25,6 +25,7 @@ class CarSensorsScreen(carContext: CarContext) : HardwareDataCarScreen(carContex
     private var hardwareLocation: Location? = null
 
     override fun collectData(carHardwareManager: CarHardwareManager, executor: Executor) {
+        // Requires Car API 3
         val carSensors = carHardwareManager.carSensors
 
         carSensors.addAccelerometerListener(CarSensors.UPDATE_RATE_NORMAL, executor) { accelerometer ->

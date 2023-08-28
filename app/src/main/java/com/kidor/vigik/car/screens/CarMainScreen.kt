@@ -61,7 +61,7 @@ class CarMainScreen(carContext: CarContext) : Screen(carContext) {
                         GridItem.Builder()
                             .setTitle(carContext.getString(R.string.car_car_climate_label))
                             .setImageFromDrawable(carContext, R.drawable.ic_cloud, CarColor.BLUE)
-                            .setOnClickListener { }
+                            .setOnClickListener { screenManager.push(CarClimateScreen(carContext)) }
                             .build()
                     )
                     .build()

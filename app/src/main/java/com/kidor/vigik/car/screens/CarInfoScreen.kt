@@ -20,6 +20,7 @@ class CarInfoScreen(carContext: CarContext) : HardwareDataCarScreen(carContext) 
     private var carModel: Model? = null
 
     override fun collectData(carHardwareManager: CarHardwareManager, executor: Executor) {
+        // Requires Car API 3
         val carInfo = carHardwareManager.carInfo
         carInfo.fetchModel(executor) { model ->
             carModel = model
