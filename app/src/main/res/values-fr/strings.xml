@@ -27,9 +27,9 @@
     <string name="car_need_permissions_ok_action_label">OK</string>
     <string name="car_car_api_level_action_label">Niveau API</string>
     <string name="car_car_api_level_toast_message">Niveau API véhicule : %d</string>
-    <string name="car_hardaware_data_error_title">Erreur</string>
-    <string name="car_hardaware_data_error_message">Une erreur est survenue lors de la colecte des données du véhicule</string>
-    <string name="car_hardaware_data_error_ok_action_label">OK</string>
+    <string name="car_hardware_data_error_title">Erreur</string>
+    <string name="car_hardware_data_error_message">Une erreur est survenue lors de la colecte des données du véhicule</string>
+    <string name="car_hardware_data_error_ok_action_label">OK</string>
     <string name="car_car_info_label">Info véhicule</string>
     <string name="car_car_info_model_label">Modèle</string>
     <string name="car_car_info_model_value">Nom : %s, Année : %s, Constructeur : %s</string>

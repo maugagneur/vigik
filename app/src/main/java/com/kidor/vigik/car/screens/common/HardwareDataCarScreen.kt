@@ -2,7 +2,6 @@ package com.kidor.vigik.car.screens.common
 
 import androidx.car.app.CarContext
 import androidx.car.app.Screen
-import androidx.car.app.ScreenManager
 import androidx.car.app.hardware.CarHardwareManager
 import androidx.car.app.model.Action
 import androidx.car.app.model.CarIcon
@@ -79,14 +78,13 @@ abstract class HardwareDataCarScreen(carContext: CarContext) : Screen(carContext
      * Returns the template to display when an error occurred when collecting data.
      */
     private fun getErrorTemplate(): MessageTemplate =
-        MessageTemplate.Builder(carContext.getString(R.string.car_hardaware_data_error_message))
-            .setTitle(carContext.getString(R.string.car_hardaware_data_error_title))
+        MessageTemplate.Builder(carContext.getString(R.string.car_hardware_data_error_message))
+            .setTitle(carContext.getString(R.string.car_hardware_data_error_title))
             .setIcon(CarIcon.ALERT)
             .addAction(
                 Action.Builder()
-                    .setTitle(carContext.getString(R.string.car_hardaware_data_error_ok_action_label))
+                    .setTitle(carContext.getString(R.string.car_hardware_data_error_ok_action_label))
                     .setOnClickListener {
-                        val screenManager: ScreenManager = carContext.getCarService(ScreenManager::class.java)
                         screenManager.pop()
                     }
                     .build()

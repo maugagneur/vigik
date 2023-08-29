@@ -40,7 +40,9 @@ class CarInfoScreen(carContext: CarContext) : HardwareDataCarScreen(carContext) 
         notifyDataChanged()
     }
     private val mileageListener = OnCarDataAvailableListener<Mileage> {
-        if (it.odometerMeters.status == CarValue.STATUS_SUCCESS && it.distanceDisplayUnit.status == CarValue.STATUS_SUCCESS) {
+        val isMileageValueValid = it.odometerMeters.status == CarValue.STATUS_SUCCESS &&
+                it.distanceDisplayUnit.status == CarValue.STATUS_SUCCESS
+        if (isMileageValueValid) {
             mileage = it
             notifyDataChanged()
         }

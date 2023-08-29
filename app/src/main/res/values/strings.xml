@@ -30,9 +30,9 @@
     <string name="car_need_permissions_ok_action_label">OK</string>
     <string name="car_car_api_level_action_label">API level</string>
     <string name="car_car_api_level_toast_message">Car API level: %d</string>
-    <string name="car_hardaware_data_error_title">Error</string>
-    <string name="car_hardaware_data_error_message">An error occurred when gathering car data</string>
-    <string name="car_hardaware_data_error_ok_action_label">OK</string>
+    <string name="car_hardware_data_error_title">Error</string>
+    <string name="car_hardware_data_error_message">An error occurred when gathering car data</string>
+    <string name="car_hardware_data_error_ok_action_label">OK</string>
     <string name="car_car_info_label">Car info</string>
     <string name="car_car_info_model_label">Model</string>
     <string name="car_car_info_model_value">Name: %s, Year: %s, Manufacturer: %s</string>

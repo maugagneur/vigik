@@ -3,7 +3,6 @@ package com.kidor.vigik.car.screens
 import androidx.car.app.CarContext
 import androidx.car.app.CarToast
 import androidx.car.app.Screen
-import androidx.car.app.ScreenManager
 import androidx.car.app.model.Action
 import androidx.car.app.model.ActionStrip
 import androidx.car.app.model.CarColor
@@ -19,8 +18,6 @@ import com.kidor.vigik.extensions.setImageFromDrawable
 class CarMainScreen(carContext: CarContext) : Screen(carContext) {
 
     override fun onGetTemplate(): GridTemplate {
-        val screenManager: ScreenManager = carContext.getCarService(ScreenManager::class.java)
-
         return GridTemplate.Builder()
             .setTitle(carContext.getString(R.string.car_app_name))
             .setHeaderAction(Action.APP_ICON)
