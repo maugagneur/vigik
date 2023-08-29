@@ -2,6 +2,7 @@ package com.kidor.vigik.car.screens.common
 
 import androidx.car.app.CarContext
 import androidx.car.app.Screen
+import androidx.car.app.constraints.ConstraintManager
 import androidx.car.app.hardware.CarHardwareManager
 import androidx.car.app.model.Action
 import androidx.car.app.model.CarIcon
@@ -17,6 +18,9 @@ import java.util.concurrent.Executor
  */
 abstract class HardwareDataCarScreen(carContext: CarContext) : Screen(carContext) {
 
+    protected val constraintManager: ConstraintManager by lazy {
+        carContext.getCarService(ConstraintManager::class.java)
+    }
     private var screenState = CarDataScreenState.NOT_INITIALIZED
 
     override fun onGetTemplate(): Template {

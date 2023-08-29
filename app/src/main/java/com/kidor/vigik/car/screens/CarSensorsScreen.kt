@@ -2,6 +2,7 @@ package com.kidor.vigik.car.screens
 
 import android.location.Location
 import androidx.car.app.CarContext
+import androidx.car.app.constraints.ConstraintManager
 import androidx.car.app.hardware.CarHardwareManager
 import androidx.car.app.hardware.common.CarValue
 import androidx.car.app.hardware.info.CarSensors
@@ -13,6 +14,7 @@ import androidx.car.app.model.Template
 import com.kidor.vigik.R
 import com.kidor.vigik.car.screens.common.HardwareDataCarScreen
 import java.util.concurrent.Executor
+import kotlin.math.min
 
 /**
  * Screens that displays information about sensors.
@@ -75,33 +77,34 @@ class CarSensorsScreen(carContext: CarContext) : HardwareDataCarScreen(carContex
     }
 
     override fun getTemplate(): Template {
+        val rows = listOf(
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_sensors_accelerometer_forces))
+                .addText(formatAccelerometerForces())
+                .build(),
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_sensors_compass_orientations))
+                .addText(formatCompassOrientations())
+                .build(),
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_sensors_gyroscope_rotations))
+                .addText(formatGyroscopeRotations())
+                .build(),
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_sensors_hardware_location))
+                .addText(formatHardwareLocation())
+                .build()
+        )
         return PaneTemplate
             .Builder(
                 Pane.Builder()
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_sensors_accelerometer_forces))
-                            .addText(formatAccelerometerForces())
-                            .build()
-                    )
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_sensors_compass_orientations))
-                            .addText(formatCompassOrientations())
-                            .build()
-                    )
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_sensors_gyroscope_rotations))
-                            .addText(formatGyroscopeRotations())
-                            .build()
-                    )
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_sensors_hardware_location))
-                            .addText(formatHardwareLocation())
-                            .build()
-                    )
+                    .apply {
+                        val rowLimit = constraintManager.getContentLimit(ConstraintManager.CONTENT_LIMIT_TYPE_PANE)
+                        val numberOfRowsToAdd = min(rows.size, rowLimit)
+                        for (index in 0 until numberOfRowsToAdd) {
+                            addRow(rows[index])
+                        }
+                    }
                     .setLoading(false)
                     .build()
             )

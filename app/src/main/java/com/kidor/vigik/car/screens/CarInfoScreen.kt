@@ -4,6 +4,7 @@ import androidx.activity.addCallback
 import androidx.annotation.OptIn
 import androidx.car.app.CarContext
 import androidx.car.app.annotations.ExperimentalCarApi
+import androidx.car.app.constraints.ConstraintManager
 import androidx.car.app.hardware.CarHardwareManager
 import androidx.car.app.hardware.common.CarUnit
 import androidx.car.app.hardware.common.CarValue
@@ -20,6 +21,7 @@ import androidx.car.app.model.Template
 import com.kidor.vigik.R
 import com.kidor.vigik.car.screens.common.HardwareDataCarScreen
 import java.util.concurrent.Executor
+import kotlin.math.min
 
 /**
  * Screens that displays information about the car.
@@ -85,33 +87,34 @@ class CarInfoScreen(carContext: CarContext) : HardwareDataCarScreen(carContext) 
 
     override fun getTemplate(): Template {
         val notAvailableLabel = carContext.getString(R.string.car_data_not_available_label)
+        val rows = listOf(
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_info_model_label))
+                .addText(formatCarModel(notAvailableLabel))
+                .build(),
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_info_energy_level_label))
+                .addText(formatEnergyLevel(notAvailableLabel))
+                .build(),
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_info_speed_label))
+                .addText(formatSpeed(notAvailableLabel))
+                .build(),
+            Row.Builder()
+                .setTitle(carContext.getString(R.string.car_car_info_mileage_label))
+                .addText(formatMileage(notAvailableLabel))
+                .build()
+        )
         return PaneTemplate
             .Builder(
                 Pane.Builder()
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_info_model_label))
-                            .addText(formatCarModel(notAvailableLabel))
-                            .build()
-                    )
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_info_energy_level_label))
-                            .addText(formatEnergyLevel(notAvailableLabel))
-                            .build()
-                    )
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_info_speed_label))
-                            .addText(formatSpeed(notAvailableLabel))
-                            .build()
-                    )
-                    .addRow(
-                        Row.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_info_mileage_label))
-                            .addText(formatMileage(notAvailableLabel))
-                            .build()
-                    )
+                    .apply {
+                        val rowLimit = constraintManager.getContentLimit(ConstraintManager.CONTENT_LIMIT_TYPE_PANE)
+                        val numberOfRowsToAdd = min(rows.size, rowLimit)
+                        for (index in 0 until numberOfRowsToAdd) {
+                            addRow(rows[index])
+                        }
+                    }
                     .setLoading(false)
                     .build()
             )
