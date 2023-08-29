@@ -61,6 +61,13 @@ class CarMainScreen(carContext: CarContext) : Screen(carContext) {
                             .setOnClickListener { screenManager.push(CarClimateScreen(carContext)) }
                             .build()
                     )
+                    .addItem(
+                        GridItem.Builder()
+                            .setTitle(carContext.getString(R.string.car_login_label))
+                            .setImageFromDrawable(carContext, R.drawable.ic_key)
+                            .setOnClickListener { screenManager.push(CarLoginScreen(carContext)) }
+                            .build()
+                    )
                     .build()
             )
             .build()

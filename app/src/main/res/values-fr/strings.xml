@@ -47,6 +47,14 @@
     <string name="car_car_climate_cabin_temperature">Temperature habitacle</string>
     <string name="car_car_climate_fan_speed_level">Plage de vitesse ventilateur</string>
     <string name="car_data_not_available_label">N/A</string>
+    <string name="car_login_label">Connexion</string>
+    <string name="car_login_action_help_label">Aide</string>
+    <string name="car_login_action_login_label">Se connecter</string>
+    <string name="car_login_action_cancel_label">Annuler</string>
+    <string name="car_login_hint_text">Code PIN à 4 chiffres</string>
+    <string name="car_login_additional_text">Se connecter avec un code PIN</string>
+    <string name="car_login_error_message">Code PIN erroné</string>
+    <string name="car_login_success_message">Félicitation !</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometrique</string>

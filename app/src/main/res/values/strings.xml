@@ -50,6 +50,14 @@
     <string name="car_car_climate_cabin_temperature">Cabin temperature</string>
     <string name="car_car_climate_fan_speed_level">Fan speed level</string>
     <string name="car_data_not_available_label">N/A</string>
+    <string name="car_login_label">Login</string>
+    <string name="car_login_action_help_label">Help</string>
+    <string name="car_login_action_login_label">Login</string>
+    <string name="car_login_action_cancel_label">Cancel</string>
+    <string name="car_login_hint_text">4 length PIN code</string>
+    <string name="car_login_additional_text">Sign in with PIN code</string>
+    <string name="car_login_error_message">Wrong PIN code</string>
+    <string name="car_login_success_message">Congratulation!</string>
 
     <!-- Biometric -->
     <string name="biometric_title">Biometric</string>
