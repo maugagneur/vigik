@@ -34,9 +34,13 @@
     <string name="car_hardaware_data_error_message">An error occurred when gathering car data</string>
     <string name="car_hardaware_data_error_ok_action_label">OK</string>
     <string name="car_car_info_label">Car info</string>
-    <string name="car_car_info_name_label">Name</string>
-    <string name="car_car_info_manufacturer_label">Manufacturer</string>
-    <string name="car_car_info_year_label">Year</string>
+    <string name="car_car_info_model_label">Model</string>
+    <string name="car_car_info_model_value">Name: %s, Year: %s, Manufacturer: %s</string>
+    <string name="car_car_info_energy_level_label">Energy level</string>
+    <string name="car_car_info_energy_level_value">Battery percent: %s, Fuel percent: %s, Energy is low: %s, Range remaining: %s, Distance display unit: %s, Fuel volume display unit: %s</string>
+    <string name="car_car_info_speed_label">Speed</string>
+    <string name="car_car_info_speed_value">Raw speed: %s, Display speed: %s, Speed display unit: %s</string>
+    <string name="car_car_info_mileage_label">Mileage</string>
     <string name="car_car_sensors_label">Sensors</string>
     <string name="car_car_sensors_accelerometer_forces">Accelerometer forces</string>
     <string name="car_car_sensors_compass_orientations">Compass orientations</string>

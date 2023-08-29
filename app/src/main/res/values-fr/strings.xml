@@ -31,9 +31,13 @@
     <string name="car_hardaware_data_error_message">Une erreur est survenue lors de la colecte des données du véhicule</string>
     <string name="car_hardaware_data_error_ok_action_label">OK</string>
     <string name="car_car_info_label">Info véhicule</string>
-    <string name="car_car_info_name_label">Nom</string>
-    <string name="car_car_info_manufacturer_label">Constructeur</string>
-    <string name="car_car_info_year_label">Année</string>
+    <string name="car_car_info_model_label">Modèle</string>
+    <string name="car_car_info_model_value">Nom : %s, Année : %s, Constructeur : %s</string>
+    <string name="car_car_info_energy_level_label">Carburant</string>
+    <string name="car_car_info_energy_level_value">Pourcentage batterie: %s, Pourcentage carburant: %s, Niveau d\'énergie bas: %s, Autonomie restante: %s, Unité de distance affichée: %s, Unité de carburant affichée: %s</string>
+    <string name="car_car_info_speed_label">Speed</string>
+    <string name="car_car_info_speed_value">Vitesse brute: %s, Vitesse affichée: %s, Unité de vitesse affichée: %s</string>
+    <string name="car_car_info_mileage_label">Kilométrage</string>
     <string name="car_car_sensors_label">Capteurs</string>
     <string name="car_car_sensors_accelerometer_forces">Forces accélérométrique</string>
     <string name="car_car_sensors_compass_orientations">Orientation boussole</string>
