@@ -23,6 +23,7 @@ import com.kidor.vigik.ui.animations.typewriter.TypewriterScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
+import com.kidor.vigik.ui.camera.CameraScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
@@ -139,6 +140,7 @@ private fun addBluetoothScreens(navGraphBuilder: NavGraphBuilder) {
  */
 private fun addCameraScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.CameraScreen.route) {
+        CameraScreen()
     }
 }
 
