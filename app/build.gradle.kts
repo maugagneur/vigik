@@ -25,6 +25,9 @@ dependencies {
     // Biometric
     implementation(libs.androidx.biometric.ktx)
 
+    // Camera
+    implementation(libs.bundles.androidx.camera)
+
     // Kotlin
     implementation(libs.bundles.kotlinx.coroutines)
     testImplementation(libs.kotlinx.coroutines.test)
