@@ -10,6 +10,7 @@
     <string name="home_animations_button_label">Animations</string>
     <string name="home_biometric_button_label">Biometrique</string>
     <string name="home_bluetooth_button_label">Bluetooth</string>
+    <string name="home_camera_button_label">Caméra</string>
     <string name="home_emoji_button_label">Emoji</string>
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_notification_button_label">Notification</string>
@@ -87,6 +88,9 @@
     <string name="bluetooth_low_energy_scan_status_label">Scan Low Energy</string>
     <string name="bluetooth_detected_devices_label">Appareils détectés</string>
     <string name="bluetooth_start_scan_error_message">Échec de la détection Bluetooth. Merci de vérifier que le Bluetooth est activé !</string>
+
+    <!-- Camera -->
+    <string name="camera_title">Caméra</string>
 
     <!-- Emoji -->
     <string name="emoji_title">Emoji</string>

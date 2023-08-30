@@ -80,6 +80,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "camera" screen.
+     */
+    CameraScreen(
+        nameId = R.string.camera_title,
+        route = "camera"
+    ),
+
+    /**
      * Metadata of "Emoji" screen.
      */
     EmojiScreen(
