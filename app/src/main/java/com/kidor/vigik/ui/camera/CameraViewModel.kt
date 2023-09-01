@@ -19,9 +19,12 @@ class CameraViewModel @Inject constructor() : BaseViewModel<CameraViewAction, Ca
     override fun handleAction(viewAction: CameraViewAction) {
         when (viewAction) {
             CameraViewAction.PermissionGranted -> _viewState.value = CameraViewState.ShowCamera
+
             is CameraViewAction.PhotoCaptured -> viewModelScope.launch {
                 _viewState.value = CameraViewState.ShowCapturedPhoto(viewAction.uri)
             }
+
+            CameraViewAction.RetryCapture -> _viewState.value = CameraViewState.ShowCamera
         }
     }
 }

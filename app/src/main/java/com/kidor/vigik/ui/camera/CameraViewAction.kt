@@ -18,4 +18,9 @@ sealed class CameraViewAction : ViewAction {
      * @param uri The photo's URI.
      */
     data class PhotoCaptured(val uri: Uri) : CameraViewAction()
+
+    /**
+     * Action to retry to take a photo.
+     */
+    data object RetryCapture : CameraViewAction()
 }

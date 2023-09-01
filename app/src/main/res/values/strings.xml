@@ -96,6 +96,7 @@
     <string name="camera_title">Camera</string>
     <string name="camera_permission_status_label">Permission granted:</string>
     <string name="camera_permission_request_button_label">Request permission</string>
+    <string name="camera_retry_capture_button_label">Retry</string>
 
     <!-- Emoji -->
     <string name="emoji_title">Emoji</string>

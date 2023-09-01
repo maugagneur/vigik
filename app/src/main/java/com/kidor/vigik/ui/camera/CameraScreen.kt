@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FlipCameraAndroid
 import androidx.compose.material.icons.filled.Lens
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +49,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.extensions.getCameraProvider
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.home.HomeButtonData
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.Executor
@@ -62,20 +65,33 @@ fun CameraScreen(viewModel: CameraViewModel = hiltViewModel()) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PermissionView { viewModel.handleAction(CameraViewAction.PermissionGranted) }
         ObserveViewState(viewModel) { state ->
             when (state) {
-                CameraViewState.CheckPermission -> { /* Do nothing */ }
-                CameraViewState.ShowCamera -> CameraView(
-                    executor = Executors.newSingleThreadExecutor(),
-                    onImageCaptured = { viewModel.handleAction(CameraViewAction.PhotoCaptured(it)) }
-                )
+                CameraViewState.CheckPermission -> PermissionView {
+                    viewModel.handleAction(CameraViewAction.PermissionGranted)
+                }
 
-                is CameraViewState.ShowCapturedPhoto -> Image(
-                    painter = rememberAsyncImagePainter(model = state.uri),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
-                )
+                CameraViewState.ShowCamera -> {
+                    CameraView(
+                        executor = Executors.newSingleThreadExecutor(),
+                        onImageCaptured = { viewModel.handleAction(CameraViewAction.PhotoCaptured(it)) }
+                    )
+                }
+
+                is CameraViewState.ShowCapturedPhoto -> {
+                    ButtonBar(
+                        buttons = listOf(
+                            HomeButtonData(R.string.camera_retry_capture_button_label) {
+                                viewModel.handleAction(CameraViewAction.RetryCapture)
+                            }
+                        )
+                    )
+                    Image(
+                        painter = rememberAsyncImagePainter(model = state.uri),
+                        contentDescription = "Photo",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
             }
         }
     }
@@ -134,15 +150,19 @@ private fun CameraView(
     executor: Executor,
     onImageCaptured: (Uri) -> Unit
 ) {
-    val lensFacing = CameraSelector.LENS_FACING_BACK
+    val lensFacing = remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val preview = Preview.Builder().build()
     val previewView = remember { PreviewView(context) }
-    val imageCapture = remember { ImageCapture.Builder().build() }
+    val imageCapture = remember {
+        ImageCapture.Builder()
+            .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
+            .build()
+    }
     val cameraSelector = CameraSelector.Builder()
-        .requireLensFacing(lensFacing)
+        .requireLensFacing(lensFacing.value)
         .build()
 
     LaunchedEffect(lensFacing) {
@@ -154,35 +174,56 @@ private fun CameraView(
     }
 
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = AppTheme.dimensions.commonSpaceLarge),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.BottomCenter
     ) {
         AndroidView(
             factory = { previewView },
             modifier = Modifier.fillMaxSize()
         )
-        IconButton(
-            onClick = {
-                takePhoto(
-                    outputDirectory = context.filesDir, // Photo will be saved in \\data\data\{package_name}\files\
-                    imageCapture = imageCapture,
-                    executor = executor,
-                    onImageCaptured = onImageCaptured
-                )
-            },
-            modifier = Modifier.padding(bottom = AppTheme.dimensions.commonSpaceXLarge)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Default.Lens,
-                contentDescription = "Take photo",
+            Row(
+                modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceMedium)
+            ) {
+                IconButton(
+                    onClick = {
+                        lensFacing.value = if (lensFacing.value == CameraSelector.LENS_FACING_BACK) {
+                            CameraSelector.LENS_FACING_FRONT
+                        } else {
+                            CameraSelector.LENS_FACING_BACK
+                        }
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.FlipCameraAndroid, contentDescription = "Flip")
+                }
+            }
+            IconButton(
+                onClick = {
+                    takePhoto(
+                        outputDirectory = context.filesDir, // Photo will be saved in \\data\data\{package_name}\files\
+                        imageCapture = imageCapture,
+                        executor = executor,
+                        onImageCaptured = onImageCaptured
+                    )
+                },
                 modifier = Modifier
-                    .size(100.dp)
-                    .padding(1.dp)
-                    .border(1.dp, Color.White, CircleShape),
-                tint = Color.White
-            )
+                    .size(120.dp)
+                    .padding(bottom = AppTheme.dimensions.commonSpaceXLarge)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Lens,
+                    contentDescription = "Take photo",
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(1.dp)
+                        .border(1.dp, Color.White, CircleShape),
+                    tint = Color.White
+                )
+            }
         }
     }
 }
@@ -217,4 +258,24 @@ private fun takePhoto(
             }
         }
     )
+}
+
+@Composable
+private fun ButtonBar(buttons: List<HomeButtonData>) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = AppTheme.dimensions.commonSpaceMedium),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        buttons.forEach { data ->
+            Button(onClick = data.onClick) {
+                Text(
+                    text = stringResource(id = data.textId).uppercase(),
+                    fontSize = AppTheme.dimensions.textSizeSmall
+                )
+            }
+        }
+    }
 }
