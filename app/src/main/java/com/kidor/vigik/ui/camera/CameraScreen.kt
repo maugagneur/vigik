@@ -36,6 +36,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -160,7 +161,7 @@ private fun CameraView(
     executor: Executor,
     onImageCaptured: (Uri) -> Unit
 ) {
-    val lensFacing = remember { mutableStateOf(CameraSelector.LENS_FACING_BACK) }
+    val lensFacing = remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -172,14 +173,14 @@ private fun CameraView(
             .build()
     }
     val cameraSelector = CameraSelector.Builder()
-        .requireLensFacing(lensFacing.value)
+        .requireLensFacing(lensFacing.intValue)
         .build()
-    var camera: Camera? = null
+    val camera = remember { mutableStateOf(null as Camera?) }
     val isTorchAvailable = remember { mutableStateOf(false) }
     val isTorchEnabled = remember { mutableStateOf(false) }
 
-    LaunchedEffect(lensFacing.value) {
-        camera = context.getCameraProvider().let { cameraProvider ->
+    LaunchedEffect(lensFacing.intValue) {
+        camera.value = context.getCameraProvider().let { cameraProvider ->
             cameraProvider.unbindAll()
             cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
         }.also {
@@ -207,7 +208,7 @@ private fun CameraView(
             ) {
                 IconButton(
                     onClick = {
-                        lensFacing.value = if (lensFacing.value == CameraSelector.LENS_FACING_BACK) {
+                        lensFacing.intValue = if (lensFacing.intValue == CameraSelector.LENS_FACING_BACK) {
                             CameraSelector.LENS_FACING_FRONT
                         } else {
                             CameraSelector.LENS_FACING_BACK
@@ -218,7 +219,7 @@ private fun CameraView(
                 }
                 IconButton(
                     onClick = {
-                        camera?.let {
+                        camera.value?.let {
                             it.cameraInfo.zoomState.value?.let { zoomState ->
                                 it.cameraControl.setZoomRatio(
                                     max(zoomState.minZoomRatio, zoomState.zoomRatio - CAMERA_ZOOM_RATIO_STEP)
@@ -231,7 +232,7 @@ private fun CameraView(
                 }
                 IconButton(
                     onClick = {
-                        camera?.let {
+                        camera.value?.let {
                             it.cameraInfo.zoomState.value?.let { zoomState ->
                                 it.cameraControl.setZoomRatio(
                                     min(zoomState.maxZoomRatio, zoomState.zoomRatio + CAMERA_ZOOM_RATIO_STEP)
@@ -246,7 +247,7 @@ private fun CameraView(
                 if (isTorchAvailable.value) {
                     IconButton(
                         onClick = {
-                            camera?.let {
+                            camera.value?.let {
                                 // Inverse torch state
                                 isTorchEnabled.value = !isTorchEnabled.value
                                 it.cameraControl.enableTorch(isTorchEnabled.value)
