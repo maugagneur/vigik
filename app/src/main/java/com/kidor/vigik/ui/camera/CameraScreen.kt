@@ -2,10 +2,12 @@ package com.kidor.vigik.ui.camera
 
 import android.Manifest
 import android.net.Uri
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.TorchState
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -21,8 +23,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FlashlightOff
+import androidx.compose.material.icons.filled.FlashlightOn
 import androidx.compose.material.icons.filled.FlipCameraAndroid
 import androidx.compose.material.icons.filled.Lens
+import androidx.compose.material.icons.filled.ZoomIn
+import androidx.compose.material.icons.filled.ZoomOut
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,6 +60,10 @@ import timber.log.Timber
 import java.io.File
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
+import kotlin.math.max
+import kotlin.math.min
+
+private const val CAMERA_ZOOM_RATIO_STEP = 0.25f
 
 /**
  * View that display the section dedicated to camera.
@@ -164,11 +174,17 @@ private fun CameraView(
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing.value)
         .build()
+    var camera: Camera? = null
+    val isTorchAvailable = remember { mutableStateOf(false) }
+    val isTorchEnabled = remember { mutableStateOf(false) }
 
-    LaunchedEffect(lensFacing) {
-        context.getCameraProvider().let { cameraProvider ->
+    LaunchedEffect(lensFacing.value) {
+        camera = context.getCameraProvider().let { cameraProvider ->
             cameraProvider.unbindAll()
             cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
+        }.also {
+            isTorchAvailable.value = it.cameraInfo.hasFlashUnit()
+            isTorchEnabled.value = it.cameraInfo.torchState.value == TorchState.ON
         }
         preview.setSurfaceProvider(previewView.surfaceProvider)
     }
@@ -199,6 +215,50 @@ private fun CameraView(
                     }
                 ) {
                     Icon(imageVector = Icons.Default.FlipCameraAndroid, contentDescription = "Flip")
+                }
+                IconButton(
+                    onClick = {
+                        camera?.let {
+                            it.cameraInfo.zoomState.value?.let { zoomState ->
+                                it.cameraControl.setZoomRatio(
+                                    max(zoomState.minZoomRatio, zoomState.zoomRatio - CAMERA_ZOOM_RATIO_STEP)
+                                )
+                            }
+                        }
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.ZoomOut, contentDescription = "Zoom out")
+                }
+                IconButton(
+                    onClick = {
+                        camera?.let {
+                            it.cameraInfo.zoomState.value?.let { zoomState ->
+                                it.cameraControl.setZoomRatio(
+                                    min(zoomState.maxZoomRatio, zoomState.zoomRatio + CAMERA_ZOOM_RATIO_STEP)
+                                )
+                            }
+                        }
+                    }
+                ) {
+                    Icon(imageVector = Icons.Default.ZoomIn, contentDescription = "Zoom in")
+                }
+                // Hide flash icon if camera does not have torch
+                if (isTorchAvailable.value) {
+                    IconButton(
+                        onClick = {
+                            camera?.let {
+                                // Inverse torch state
+                                isTorchEnabled.value = !isTorchEnabled.value
+                                it.cameraControl.enableTorch(isTorchEnabled.value)
+                            }
+                        }
+                    ) {
+                        if (isTorchEnabled.value) {
+                            Icon(imageVector = Icons.Default.FlashlightOff, contentDescription = "Torch Off")
+                        } else {
+                            Icon(imageVector = Icons.Default.FlashlightOn, contentDescription = "Torch On")
+                        }
+                    }
                 }
             }
             IconButton(
