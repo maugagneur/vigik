@@ -28,6 +28,9 @@ dependencies {
     // Camera
     implementation(libs.bundles.androidx.camera)
 
+    // Image loader
+    implementation(libs.coil.compose)
+
     // Kotlin
     implementation(libs.bundles.kotlinx.coroutines)
     testImplementation(libs.kotlinx.coroutines.test)
