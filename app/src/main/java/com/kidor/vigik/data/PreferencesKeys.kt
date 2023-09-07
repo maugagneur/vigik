@@ -19,6 +19,11 @@ object PreferencesKeys {
     val BIOMETRIC_IV: Preferences.Key<String> = stringPreferencesKey("biometric_iv_key")
 
     /**
+     * Last Emoji picked with EmojiPicker.
+     */
+    val EMOJI_PICKED: Preferences.Key<String> = stringPreferencesKey("emoji_picked_key")
+
+    /**
      * The user token used for biometric login.
      */
     val USER_TOKEN: Preferences.Key<String> = stringPreferencesKey("user_token_key")

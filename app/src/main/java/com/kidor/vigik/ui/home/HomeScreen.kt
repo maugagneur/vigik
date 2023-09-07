@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -24,18 +23,17 @@ import com.kidor.vigik.ui.compose.AppTheme
 @Preview(widthDp = 400, heightDp = 700)
 @Suppress("LongParameterList")
 fun HomeScreen(
+    navigateToAnimation: () -> Unit = {},
     navigateToBiometric: () -> Unit = {},
     navigateToBluetooth: () -> Unit = {},
-    navigateToAnimation: () -> Unit = {},
+    navigateToEmoji: () -> Unit = {},
     navigateToNfc: () -> Unit = {},
     navigateToNotification: () -> Unit = {},
     navigateToRestApi: () -> Unit = {}
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge),
-        contentPadding = PaddingValues(vertical = AppTheme.dimensions.commonSpaceXLarge),
+        modifier = Modifier.fillMaxHeight(),
+        contentPadding = PaddingValues(all = AppTheme.dimensions.commonSpaceXLarge),
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -43,6 +41,7 @@ fun HomeScreen(
             HomeButtonData(textId = R.string.home_animation_button_label, navigateToAnimation),
             HomeButtonData(textId = R.string.home_biometric_button_label, navigateToBiometric),
             HomeButtonData(textId = R.string.home_bluetooth_button_label, navigateToBluetooth),
+            HomeButtonData(textId = R.string.home_emoji_button_label, navigateToEmoji),
             HomeButtonData(textId = R.string.home_nfc_button_label, navigateToNfc),
             HomeButtonData(textId = R.string.home_notification_button_label, navigateToNotification),
             HomeButtonData(textId = R.string.home_rest_api_button_label, navigateToRestApi)
