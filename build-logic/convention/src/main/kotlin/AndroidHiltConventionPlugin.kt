@@ -12,9 +12,7 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("dagger.hilt.android.plugin")
-                // KAPT must go last to avoid build warnings.
-                // See: https://stackoverflow.com/questions/70550883/warning-the-following-options-were-not-recognized-by-any-processor-dagger-f
-                apply("org.jetbrains.kotlin.kapt")
+                apply("com.google.devtools.ksp")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -32,10 +30,10 @@ class AndroidHiltConventionPlugin : Plugin<Project> {
             dependencies {
                 add("implementation", (libs.findLibrary("dagger.hilt.android").get()))
                 add("implementation", (libs.findLibrary("androidx.hilt.work").get()))
-                add("kapt", (libs.findLibrary("androidx.hilt.compiler").get()))
-                add("kapt", (libs.findLibrary("dagger.hilt.compiler").get()))
-                add("kaptAndroidTest", (libs.findLibrary("dagger.hilt.android.compiler").get()))
-                add("kaptAndroidTest", (libs.findLibrary("androidx.hilt.compiler").get()))
+                add("ksp", (libs.findLibrary("androidx.hilt.compiler").get()))
+                add("ksp", (libs.findLibrary("dagger.hilt.compiler").get()))
+                add("kspAndroidTest", (libs.findLibrary("dagger.hilt.android.compiler").get()))
+                add("kspAndroidTest", (libs.findLibrary("androidx.hilt.compiler").get()))
             }
         }
     }
