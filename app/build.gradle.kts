@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.bundles.androidx.lifecycle)
 
+    // Car
+    implementation(libs.bundles.androidx.car)
+
     // Biometric
     implementation(libs.androidx.biometric.ktx)
 

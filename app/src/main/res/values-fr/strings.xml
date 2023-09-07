@@ -21,6 +21,42 @@
     <string name="animation_life_time_label">Durée de vie</string>
     <string name="animation_glitter_rainbow_source_label">Source : https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
+    <!-- CAR -->
+    <string name="car_app_name">Vigik Auto</string>
+    <string name="car_need_permissions_title">Permissions requises</string>
+    <string name="car_need_permissions_message">Veuillez vérifier votre mobile afin d\'autoriser les permissions requises</string>
+    <string name="car_need_permissions_ok_action_label">OK</string>
+    <string name="car_car_api_level_action_label">Niveau API</string>
+    <string name="car_car_api_level_toast_message">Niveau API véhicule : %d</string>
+    <string name="car_hardware_data_error_title">Erreur</string>
+    <string name="car_hardware_data_error_message">Une erreur est survenue lors de la colecte des données du véhicule</string>
+    <string name="car_hardware_data_error_ok_action_label">OK</string>
+    <string name="car_car_info_label">Info véhicule</string>
+    <string name="car_car_info_model_label">Modèle</string>
+    <string name="car_car_info_model_value">Nom : %s, Année : %s, Constructeur : %s</string>
+    <string name="car_car_info_energy_level_label">Carburant</string>
+    <string name="car_car_info_energy_level_value">Pourcentage batterie: %s, Pourcentage carburant: %s, Niveau d\'énergie bas: %s, Autonomie restante: %s, Unité de distance affichée: %s, Unité de carburant affichée: %s</string>
+    <string name="car_car_info_speed_label">Speed</string>
+    <string name="car_car_info_speed_value">Vitesse brute: %s, Vitesse affichée: %s, Unité de vitesse affichée: %s</string>
+    <string name="car_car_info_mileage_label">Kilométrage</string>
+    <string name="car_car_sensors_label">Capteurs</string>
+    <string name="car_car_sensors_accelerometer_forces">Forces accélérométrique</string>
+    <string name="car_car_sensors_compass_orientations">Orientation boussole</string>
+    <string name="car_car_sensors_gyroscope_rotations">Rotation gyroscopique</string>
+    <string name="car_car_sensors_hardware_location">Localisation</string>
+    <string name="car_car_climate_label">Climat</string>
+    <string name="car_car_climate_cabin_temperature">Temperature habitacle</string>
+    <string name="car_car_climate_fan_speed_level">Plage de vitesse ventilateur</string>
+    <string name="car_data_not_available_label">N/A</string>
+    <string name="car_login_label">Connexion</string>
+    <string name="car_login_action_help_label">Aide</string>
+    <string name="car_login_action_login_label">Se connecter</string>
+    <string name="car_login_action_cancel_label">Annuler</string>
+    <string name="car_login_hint_text">Code PIN à 4 chiffres</string>
+    <string name="car_login_additional_text">Se connecter avec un code PIN</string>
+    <string name="car_login_error_message">Code PIN erroné</string>
+    <string name="car_login_success_message">Félicitation !</string>
+
     <!-- Biometric -->
     <string name="biometric_title">Biometrique</string>
     <string name="biometric_username_hint">Identifiant</string>

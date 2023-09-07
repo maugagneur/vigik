@@ -24,6 +24,42 @@
     <string name="animation_life_time_label">Life time</string>
     <string name="animation_glitter_rainbow_source_label">Source: https://github.com/maiatoday/GrooveIsInTheHeart</string>
 
+    <!-- CAR -->
+    <string name="car_app_name">Vigik Auto</string>
+    <string name="car_need_permissions_title">Need permissions</string>
+    <string name="car_need_permissions_message">Please check your mobile and enable required permissions</string>
+    <string name="car_need_permissions_ok_action_label">OK</string>
+    <string name="car_car_api_level_action_label">API level</string>
+    <string name="car_car_api_level_toast_message">Car API level: %d</string>
+    <string name="car_hardware_data_error_title">Error</string>
+    <string name="car_hardware_data_error_message">An error occurred when gathering car data</string>
+    <string name="car_hardware_data_error_ok_action_label">OK</string>
+    <string name="car_car_info_label">Car info</string>
+    <string name="car_car_info_model_label">Model</string>
+    <string name="car_car_info_model_value">Name: %s, Year: %s, Manufacturer: %s</string>
+    <string name="car_car_info_energy_level_label">Energy level</string>
+    <string name="car_car_info_energy_level_value">Battery percent: %s, Fuel percent: %s, Energy is low: %s, Range remaining: %s, Distance display unit: %s, Fuel volume display unit: %s</string>
+    <string name="car_car_info_speed_label">Speed</string>
+    <string name="car_car_info_speed_value">Raw speed: %s, Display speed: %s, Speed display unit: %s</string>
+    <string name="car_car_info_mileage_label">Mileage</string>
+    <string name="car_car_sensors_label">Sensors</string>
+    <string name="car_car_sensors_accelerometer_forces">Accelerometer forces</string>
+    <string name="car_car_sensors_compass_orientations">Compass orientations</string>
+    <string name="car_car_sensors_gyroscope_rotations">Gyroscope rotations</string>
+    <string name="car_car_sensors_hardware_location">Hardware location</string>
+    <string name="car_car_climate_label">Climate</string>
+    <string name="car_car_climate_cabin_temperature">Cabin temperature</string>
+    <string name="car_car_climate_fan_speed_level">Fan speed level</string>
+    <string name="car_data_not_available_label">N/A</string>
+    <string name="car_login_label">Login</string>
+    <string name="car_login_action_help_label">Help</string>
+    <string name="car_login_action_login_label">Login</string>
+    <string name="car_login_action_cancel_label">Cancel</string>
+    <string name="car_login_hint_text">4 length PIN code</string>
+    <string name="car_login_additional_text">Sign in with PIN code</string>
+    <string name="car_login_error_message">Wrong PIN code</string>
+    <string name="car_login_success_message">Congratulation!</string>
+
     <!-- Biometric -->
     <string name="biometric_title">Biometric</string>
     <string name="biometric_username_hint">Username</string>
