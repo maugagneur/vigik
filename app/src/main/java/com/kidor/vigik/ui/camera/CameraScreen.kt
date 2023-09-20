@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.camera
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -36,6 +37,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +59,6 @@ import com.kidor.vigik.R
 import com.kidor.vigik.extensions.getCameraProvider
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
-import com.kidor.vigik.ui.home.HomeButtonData
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.Executor
@@ -92,7 +94,7 @@ fun CameraScreen(viewModel: CameraViewModel = hiltViewModel()) {
                 is CameraViewState.ShowCapturedPhoto -> {
                     ButtonBar(
                         buttons = listOf(
-                            HomeButtonData(R.string.camera_retry_capture_button_label) {
+                            CameraButtonData(R.string.camera_retry_capture_button_label) {
                                 viewModel.handleAction(CameraViewAction.RetryCapture)
                             }
                         )
@@ -157,10 +159,7 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
 }
 
 @Composable
-private fun CameraView(
-    executor: Executor,
-    onImageCaptured: (Uri) -> Unit
-) {
+private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val lensFacing = remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -206,86 +205,121 @@ private fun CameraView(
             Row(
                 modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceMedium)
             ) {
-                IconButton(
-                    onClick = {
-                        lensFacing.intValue = if (lensFacing.intValue == CameraSelector.LENS_FACING_BACK) {
-                            CameraSelector.LENS_FACING_FRONT
-                        } else {
-                            CameraSelector.LENS_FACING_BACK
-                        }
-                    }
-                ) {
-                    Icon(imageVector = Icons.Default.FlipCameraAndroid, contentDescription = "Flip")
-                }
-                IconButton(
-                    onClick = {
-                        camera.value?.let {
-                            it.cameraInfo.zoomState.value?.let { zoomState ->
-                                it.cameraControl.setZoomRatio(
-                                    max(zoomState.minZoomRatio, zoomState.zoomRatio - CAMERA_ZOOM_RATIO_STEP)
-                                )
-                            }
-                        }
-                    }
-                ) {
-                    Icon(imageVector = Icons.Default.ZoomOut, contentDescription = "Zoom out")
-                }
-                IconButton(
-                    onClick = {
-                        camera.value?.let {
-                            it.cameraInfo.zoomState.value?.let { zoomState ->
-                                it.cameraControl.setZoomRatio(
-                                    min(zoomState.maxZoomRatio, zoomState.zoomRatio + CAMERA_ZOOM_RATIO_STEP)
-                                )
-                            }
-                        }
-                    }
-                ) {
-                    Icon(imageVector = Icons.Default.ZoomIn, contentDescription = "Zoom in")
-                }
+                SettingsLensButton(lensFacing = lensFacing)
+                SettingsZoomOutButton(camera = camera)
+                SettingsZoomInButton(camera = camera)
                 // Hide flash icon if camera does not have torch
                 if (isTorchAvailable.value) {
-                    IconButton(
-                        onClick = {
-                            camera.value?.let {
-                                // Inverse torch state
-                                isTorchEnabled.value = !isTorchEnabled.value
-                                it.cameraControl.enableTorch(isTorchEnabled.value)
-                            }
-                        }
-                    ) {
-                        if (isTorchEnabled.value) {
-                            Icon(imageVector = Icons.Default.FlashlightOff, contentDescription = "Torch Off")
-                        } else {
-                            Icon(imageVector = Icons.Default.FlashlightOn, contentDescription = "Torch On")
-                        }
-                    }
+                    SettingsTorchButton(camera = camera, isTorchEnabled = isTorchEnabled)
                 }
             }
-            IconButton(
-                onClick = {
-                    takePhoto(
-                        outputDirectory = context.filesDir, // Photo will be saved in \\data\data\{package_name}\files\
-                        imageCapture = imageCapture,
-                        executor = executor,
-                        onImageCaptured = onImageCaptured
-                    )
-                },
-                modifier = Modifier
-                    .size(120.dp)
-                    .padding(bottom = AppTheme.dimensions.commonSpaceXLarge)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Lens,
-                    contentDescription = "Take photo",
-                    modifier = Modifier
-                        .size(80.dp)
-                        .padding(1.dp)
-                        .border(1.dp, Color.White, CircleShape),
-                    tint = Color.White
-                )
+            TakePhotoButton(
+                context = context,
+                executor = executor,
+                imageCapture = imageCapture,
+                onImageCaptured = onImageCaptured
+            )
+        }
+    }
+}
+
+@Composable
+private fun SettingsLensButton(lensFacing: MutableIntState) {
+    IconButton(
+        onClick = {
+            lensFacing.intValue = if (lensFacing.intValue == CameraSelector.LENS_FACING_BACK) {
+                CameraSelector.LENS_FACING_FRONT
+            } else {
+                CameraSelector.LENS_FACING_BACK
             }
         }
+    ) {
+        Icon(imageVector = Icons.Default.FlipCameraAndroid, contentDescription = "Flip")
+    }
+}
+
+@Composable
+private fun SettingsZoomOutButton(camera: MutableState<Camera?>) {
+    IconButton(
+        onClick = {
+            camera.value?.let {
+                it.cameraInfo.zoomState.value?.let { zoomState ->
+                    it.cameraControl.setZoomRatio(
+                        max(zoomState.minZoomRatio, zoomState.zoomRatio - CAMERA_ZOOM_RATIO_STEP)
+                    )
+                }
+            }
+        }
+    ) {
+        Icon(imageVector = Icons.Default.ZoomOut, contentDescription = "Zoom out")
+    }
+}
+
+@Composable
+private fun SettingsZoomInButton(camera: MutableState<Camera?>) {
+    IconButton(
+        onClick = {
+            camera.value?.let {
+                it.cameraInfo.zoomState.value?.let { zoomState ->
+                    it.cameraControl.setZoomRatio(
+                        min(zoomState.maxZoomRatio, zoomState.zoomRatio + CAMERA_ZOOM_RATIO_STEP)
+                    )
+                }
+            }
+        }
+    ) {
+        Icon(imageVector = Icons.Default.ZoomIn, contentDescription = "Zoom in")
+    }
+}
+
+@Composable
+private fun SettingsTorchButton(camera: MutableState<Camera?>, isTorchEnabled: MutableState<Boolean>) {
+    IconButton(
+        onClick = {
+            camera.value?.let {
+                // Inverse torch state
+                isTorchEnabled.value = !isTorchEnabled.value
+                it.cameraControl.enableTorch(isTorchEnabled.value)
+            }
+        }
+    ) {
+        if (isTorchEnabled.value) {
+            Icon(imageVector = Icons.Default.FlashlightOff, contentDescription = "Torch Off")
+        } else {
+            Icon(imageVector = Icons.Default.FlashlightOn, contentDescription = "Torch On")
+        }
+    }
+}
+
+@Composable
+private fun TakePhotoButton(
+    context: Context,
+    executor: Executor,
+    imageCapture: ImageCapture,
+    onImageCaptured: (Uri) -> Unit
+) {
+    IconButton(
+        onClick = {
+            takePhoto(
+                outputDirectory = context.filesDir, // Photo will be saved in \\data\data\{package_name}\files\
+                imageCapture = imageCapture,
+                executor = executor,
+                onImageCaptured = onImageCaptured
+            )
+        },
+        modifier = Modifier
+            .size(120.dp)
+            .padding(bottom = AppTheme.dimensions.commonSpaceXLarge)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Lens,
+            contentDescription = "Take photo",
+            modifier = Modifier
+                .size(80.dp)
+                .padding(1.dp)
+                .border(1.dp, Color.White, CircleShape),
+            tint = Color.White
+        )
     }
 }
 
@@ -322,7 +356,7 @@ private fun takePhoto(
 }
 
 @Composable
-private fun ButtonBar(buttons: List<HomeButtonData>) {
+private fun ButtonBar(buttons: List<CameraButtonData>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -330,10 +364,10 @@ private fun ButtonBar(buttons: List<HomeButtonData>) {
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        buttons.forEach { data ->
-            Button(onClick = data.onClick) {
+        buttons.forEach { button ->
+            Button(onClick = button.onClick) {
                 Text(
-                    text = stringResource(id = data.textId).uppercase(),
+                    text = stringResource(id = button.textId).uppercase(),
                     fontSize = AppTheme.dimensions.textSizeSmall
                 )
             }
