@@ -344,7 +344,10 @@ internal fun DetectedBluetoothDeviceList(
         // Remove overscroll effect
         CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
             LazyColumn {
-                items(devices) { device ->
+                items(
+                    items = devices,
+                    key = { device -> device.hardwareAddress }
+                ) { device ->
                     val deviceIcon: ImageVector = when (device.type) {
                         BluetoothDeviceType.COMPUTER -> Icons.Default.Laptop
                         BluetoothDeviceType.HEADPHONE -> Icons.Default.Headphones

@@ -36,10 +36,10 @@ import com.kidor.vigik.ui.restapi.RestApiScreen
  */
 @Composable
 fun AppNavHost(
-    context: Context,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = AppScreen.HomeScreen.route,
