@@ -8,6 +8,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private const val COMPILE_SDK_VER = 34
@@ -65,6 +66,13 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-opt-in=kotlinx.coroutines.FlowPreview",
                     )
+                }
+            }
+
+            // Use Kotlin K2 compiler
+            kotlinExtension.sourceSets.all {
+                languageSettings {
+                    languageVersion = "2.0"
                 }
             }
 
