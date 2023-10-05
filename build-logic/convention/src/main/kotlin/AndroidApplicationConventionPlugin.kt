@@ -36,9 +36,33 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     versionCode = getVersionCode()
                     versionName = getVersionName()
                 }
+
                 buildFeatures {
                     buildConfig = true
                 }
+
+                buildTypes {
+                    getByName("debug") {
+                        enableUnitTestCoverage = true
+                        versionNameSuffix = "-DEV"
+                    }
+                    getByName("release") {
+                        // Enables code shrinking, obfuscation, and optimization
+                        isMinifyEnabled = true
+
+                        // Enables resource shrinking, which is performed by the Android Gradle plugin.
+                        isShrinkResources = true
+
+                        // Includes the default ProGuard rules files that are packaged with the Android Gradle plugin
+                        proguardFiles(
+                            getDefaultProguardFile("proguard-android-optimize.txt"),
+                            // By default, Android Studio creates and includes an empty rules file (located at the root directory
+                            // of each module).
+                            "proguard-rules.pro"
+                        )
+                    }
+                }
+
                 compileOptions {
                     // Up to Java 11+ APIs are available through desugaring
                     // https://developer.android.com/studio/write/java11-minimal-support-table
@@ -46,8 +70,20 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     targetCompatibility = JavaVersion.VERSION_17
                     isCoreLibraryDesugaringEnabled = true
                 }
+
+                lint {
+                    warning.add("AutoboxingStateCreation")
+                }
+
                 packaging {
                     resources.excludes.add("META-INF/*")
+                }
+
+                testOptions {
+                    unitTests {
+                        isIncludeAndroidResources = true
+                        isReturnDefaultValues = true
+                    }
                 }
             }
 
