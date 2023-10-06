@@ -24,6 +24,7 @@ dependencies {
     compileOnly(libs.diktat.gradlePlugin)
     compileOnly(libs.hilt.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.kover.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
 }
@@ -57,6 +58,10 @@ gradlePlugin {
         register("diktat") {
             id = "vigik.diktat"
             implementationClass = "DiktatConventionPlugin"
+        }
+        register("kover") {
+            id = "vigik.kover"
+            implementationClass = "KoverConventionPlugin"
         }
     }
 }
