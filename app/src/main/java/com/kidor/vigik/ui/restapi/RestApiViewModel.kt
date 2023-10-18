@@ -8,6 +8,8 @@ import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
 import com.kidor.vigik.di.IoDispatcher
 import com.kidor.vigik.extensions.awaitAll
 import com.kidor.vigik.ui.base.BaseViewModel
+import com.kidor.vigik.utils.NetworkHelper
+import com.kidor.vigik.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
@@ -90,15 +92,13 @@ class RestApiViewModel @Inject constructor(
      *
      * @return Return the remaining time until next boss spawn or a negative value if an error occurred.
      */
-    @Suppress("TooGenericExceptionCaught")
     private suspend fun refreshWorldBoss(): Int {
         var remainingTime: Int? = null
-        try {
-            diablo4API.getNextWorldBoss().let { response ->
-                if (response.isSuccessful) {
-                    val responseBody = response.body()
-                    val worldBoss = getWorldBossFromName(responseBody?.name)
-                    remainingTime = responseBody?.time
+        NetworkHelper.handleApi { diablo4API.getNextWorldBoss() }.let { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    val worldBoss = getWorldBossFromName(response.data?.name)
+                    remainingTime = response.data?.time
                     _viewState.postValue(
                         RestApiViewState(
                             diablo4TrackerData = trackerData.updateAndGet { previousData ->
@@ -109,12 +109,10 @@ class RestApiViewModel @Inject constructor(
                             }
                         )
                     )
-                } else {
-                    Timber.w("Fail to get next world boss data: ${response.errorBody()?.string()}")
                 }
+                is NetworkResult.Error -> Timber.w("Fail to get next world boss data: ${response.errorMessage}")
+                is NetworkResult.Exception -> Timber.e(response.throwable, "Error when refreshing world boss data")
             }
-        } catch (exception: Exception) {
-            Timber.e(exception, "Error when refreshing world boss data")
         }
         return remainingTime ?: -1
     }
@@ -129,13 +127,12 @@ class RestApiViewModel @Inject constructor(
      *
      * Return the remaining time until next hell tide rise or a negative value if an error occurred.
      */
-    @Suppress("TooGenericExceptionCaught")
     private suspend fun refreshHellTide(): Int {
         var remainingTime: Int? = null
-        try {
-            diablo4API.getNextHellTide().let { response ->
-                if (response.isSuccessful) {
-                    remainingTime = response.body()?.time
+        NetworkHelper.handleApi { diablo4API.getNextHellTide() }.let { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    remainingTime = response.data?.time
                     _viewState.postValue(
                         RestApiViewState(
                             diablo4TrackerData = trackerData.updateAndGet { previousData ->
@@ -145,12 +142,10 @@ class RestApiViewModel @Inject constructor(
                             }
                         )
                     )
-                } else {
-                    Timber.w("Fail to get next hell tide data: ${response.errorBody()?.string()}")
                 }
+                is NetworkResult.Error -> Timber.w("Fail to get next hell tide data: ${response.errorMessage}")
+                is NetworkResult.Exception -> Timber.e(response.throwable, "Error when refreshing hell tide data")
             }
-        } catch (exception: Exception) {
-            Timber.e(exception, "Error when refreshing hell tide data")
         }
         return remainingTime ?: -1
     }
