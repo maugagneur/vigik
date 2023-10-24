@@ -1,4 +1,4 @@
-import com.google.devtools.ksp.gradle.KspExtension
+import androidx.room.gradle.RoomExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -14,13 +14,16 @@ import java.io.File
 class AndroidRoomConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            pluginManager.apply("com.google.devtools.ksp")
+            with(pluginManager) {
+                apply("androidx.room")
+                apply("com.google.devtools.ksp")
+            }
 
-            extensions.configure<KspExtension> {
+            extensions.configure<RoomExtension> {
                 // The schemas directory contains a schema file for each version of the Room database.
                 // This is required to enable Room auto migrations.
                 // See https://developer.android.com/reference/kotlin/androidx/room/AutoMigration.
-                arg(RoomSchemaArgProvider(File(projectDir, "schemas")))
+                schemaDirectory("$projectDir/schemas/")
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

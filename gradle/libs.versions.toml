@@ -105,6 +105,7 @@ diktat-gradlePlugin = { group = "org.cqfn.diktat", name = "diktat-gradle-plugin"
 hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "google-hilt" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 
 [bundles]
 androidx-car = ["androidx-car-app", "androidx-car-app-projected"]
@@ -124,3 +125,4 @@ diktat = { id = "org.cqfn.diktat.diktat-gradle-plugin", version.ref = "diktat" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "google-hilt" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "androidx-room" }
