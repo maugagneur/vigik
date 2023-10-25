@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private const val COMPILE_SDK_VER = 34
-private const val TARGET_SDK_VER = 33
+private const val TARGET_SDK_VER = 34
 private const val MIN_SDK_VER = 23
 
 private const val APP_MAJOR_VERSION = 2
