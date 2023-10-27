@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -160,12 +161,26 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
 
 @Composable
 private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
+    val camera = remember { mutableStateOf(null as Camera?) }
     val lensFacing = remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
+    // Preview use case
     val preview = Preview.Builder().build()
     val previewView = remember { PreviewView(context) }
+    // Focus camera on clicked point
+    previewView.setOnTouchListener { view, motionEvent ->
+        val meteringPoint = previewView.meteringPointFactory.createPoint(motionEvent.x, motionEvent.y)
+        camera.value?.cameraControl?.startFocusAndMetering(
+            FocusMeteringAction.Builder(meteringPoint)
+                .build()
+        )
+        view.performClick()
+        false
+    }
+
+    // Image capture use case
     val imageCapture = remember {
         ImageCapture.Builder()
             .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
@@ -174,14 +189,19 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing.intValue)
         .build()
-    val camera = remember { mutableStateOf(null as Camera?) }
     val isTorchAvailable = remember { mutableStateOf(false) }
     val isTorchEnabled = remember { mutableStateOf(false) }
+
+    // Group use cases
+    val useCaseGroup = UseCaseGroup.Builder()
+        .addUseCase(preview)
+        .addUseCase(imageCapture)
+        .build()
 
     LaunchedEffect(lensFacing.intValue) {
         camera.value = context.getCameraProvider().let { cameraProvider ->
             cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, preview, imageCapture)
+            cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, useCaseGroup)
         }.also {
             isTorchAvailable.value = it.cameraInfo.hasFlashUnit()
             isTorchEnabled.value = it.cameraInfo.torchState.value == TorchState.ON
