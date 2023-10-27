@@ -111,9 +111,11 @@ private fun SettingsPanel(
         Column(verticalArrangement = Arrangement.SpaceEvenly) {
             Slider(
                 value = speedCoefficientValue,
-                onValueChange = { speedCoefficientValue = it },
-                valueRange = 0.1f..5f,
-                onValueChangeFinished = { onSpeedCoefficientChanged(speedCoefficientValue) }
+                onValueChange = {
+                    speedCoefficientValue = it
+                    onSpeedCoefficientChanged(it)
+                },
+                valueRange = 0.1f..5f
             )
             Slider(
                 value = lifeTimeValue.toFloat(),

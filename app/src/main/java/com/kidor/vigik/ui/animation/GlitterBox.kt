@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
@@ -99,6 +101,7 @@ fun GlitterBox(colors: List<Color>, speedCoefficient: Float, lifeTime: Int) {
 private fun GlitterSource(size: Size, updateSourceOffset: (Offset) -> Unit) {
     val sourceColor = MaterialTheme.colorScheme.secondary
     val sourceRadius = 16.dp
+    val sourceStrokeWidth = 4.dp
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val initialXOffset = with(density) {
@@ -130,7 +133,11 @@ private fun GlitterSource(size: Size, updateSourceOffset: (Offset) -> Unit) {
     ) {
         drawCircle(
             color = sourceColor,
-            radius = sourceRadius.toPx()
+            radius = sourceRadius.toPx(),
+            style = Stroke(
+                width = sourceStrokeWidth.toPx(),
+                cap = StrokeCap.Round
+            )
         )
     }
 }
