@@ -21,6 +21,7 @@ import com.kidor.vigik.ui.animation.AnimationScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
+import com.kidor.vigik.ui.emoji.EmojiScreen
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
 import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
@@ -35,10 +36,10 @@ import com.kidor.vigik.ui.restapi.RestApiScreen
  */
 @Composable
 fun AppNavHost(
-    context: Context,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = AppScreen.HomeScreen.route,
@@ -48,6 +49,7 @@ fun AppNavHost(
         addHomeScreens(navGraphBuilder = this, navController = navController)
         addBiometricScreens(navGraphBuilder = this, navController = navController, context = context)
         addBluetoothScreens(navGraphBuilder = this)
+        addEmojiScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
         addRestApiScreens(navGraphBuilder = this)
@@ -66,6 +68,7 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
             navigateToAnimation = { navController.navigate(AppScreen.Animation) },
             navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
             navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
+            navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
             navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
             navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
             navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
@@ -117,6 +120,17 @@ private fun addBluetoothScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.BluetoothScreen.route) {
         LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         BluetoothScreen()
+    }
+}
+
+/**
+ * Add screens related to Emoji into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addEmojiScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.EmojiScreen.route) {
+        EmojiScreen()
     }
 }
 

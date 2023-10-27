@@ -21,7 +21,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="colorControlNormal">?attr/colorOnPrimary</item>
+        <item name="colorControlNormal">@color/grey</item>
         <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/primary_light</item>
     </style>
 </resources>

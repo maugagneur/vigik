@@ -8,10 +8,11 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-private const val COMPILE_SDK_VER = 33
-private const val TARGET_SDK_VER = 33
+private const val COMPILE_SDK_VER = 34
+private const val TARGET_SDK_VER = 34
 private const val MIN_SDK_VER = 23
 
 private const val APP_MAJOR_VERSION = 2
@@ -35,9 +36,33 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     versionCode = getVersionCode()
                     versionName = getVersionName()
                 }
+
                 buildFeatures {
                     buildConfig = true
                 }
+
+                buildTypes {
+                    getByName("debug") {
+                        enableUnitTestCoverage = true
+                        versionNameSuffix = "-DEV"
+                    }
+                    getByName("release") {
+                        // Enables code shrinking, obfuscation, and optimization
+                        isMinifyEnabled = true
+
+                        // Enables resource shrinking, which is performed by the Android Gradle plugin.
+                        isShrinkResources = true
+
+                        // Includes the default ProGuard rules files that are packaged with the Android Gradle plugin
+                        proguardFiles(
+                            getDefaultProguardFile("proguard-android-optimize.txt"),
+                            // By default, Android Studio creates and includes an empty rules file (located at the root directory
+                            // of each module).
+                            "proguard-rules.pro"
+                        )
+                    }
+                }
+
                 compileOptions {
                     // Up to Java 11+ APIs are available through desugaring
                     // https://developer.android.com/studio/write/java11-minimal-support-table
@@ -45,8 +70,20 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     targetCompatibility = JavaVersion.VERSION_17
                     isCoreLibraryDesugaringEnabled = true
                 }
+
+                lint {
+                    warning.add("AutoboxingStateCreation")
+                }
+
                 packaging {
                     resources.excludes.add("META-INF/*")
+                }
+
+                testOptions {
+                    unitTests {
+                        isIncludeAndroidResources = true
+                        isReturnDefaultValues = true
+                    }
                 }
             }
 
@@ -65,6 +102,13 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-opt-in=kotlinx.coroutines.FlowPreview",
                     )
+                }
+            }
+
+            // Use Kotlin K2 compiler
+            kotlinExtension.sourceSets.all {
+                languageSettings {
+                    languageVersion = "2.0"
                 }
             }
 

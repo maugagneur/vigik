@@ -34,6 +34,9 @@ internal const val DELETE_ICON_TEST_TAG_PREFIX = "Delete tag "
 internal const val TAGS_LIST_TEST_TAG = "Tags list"
 internal const val TAGS_LIST_ROW_TEST_TAG = "Tags list row"
 internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
+private const val TAG_ROW_TIMESTAMP_WEIGHT = 0.5f
+private const val TAG_ROW_UID_WEIGHT = 0.3f
+private const val TAG_ROW_ICON_WEIGHT = 0.2f
 
 /**
  * View that display all tags saved in the database.
@@ -89,7 +92,10 @@ internal fun DisplayTags(
         LazyColumn(
             modifier = Modifier.testTag(TAGS_LIST_TEST_TAG)
         ) {
-            items(displayTagsStateData.tags) { tag ->
+            items(
+                items = displayTagsStateData.tags,
+                key = { tag -> tag.timestamp ?: 0 }
+            ) { tag ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -98,14 +104,14 @@ internal fun DisplayTags(
                 ) {
                     Text(
                         text = FormatDateUseCase().invoke(tag.timestamp),
-                        modifier = Modifier.weight(0.5f),
+                        modifier = Modifier.weight(TAG_ROW_TIMESTAMP_WEIGHT),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = AppTheme.dimensions.textSizeMedium,
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = tag.uid?.toHex() ?: "",
-                        modifier = Modifier.weight(0.3f),
+                        modifier = Modifier.weight(TAG_ROW_UID_WEIGHT),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = AppTheme.dimensions.textSizeMedium,
                         textAlign = TextAlign.Center
@@ -113,7 +119,7 @@ internal fun DisplayTags(
                     IconButton(
                         onClick = { displayTagsStateData.onDeleteClick(tag) },
                         modifier = Modifier
-                            .weight(0.2f)
+                            .weight(TAG_ROW_ICON_WEIGHT)
                             .testTag(DELETE_ICON_TEST_TAG_PREFIX + (tag.timestamp ?: 0))
                     ) {
                         Icon(
