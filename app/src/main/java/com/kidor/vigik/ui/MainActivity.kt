@@ -4,9 +4,14 @@ import android.content.Intent
 import android.nfc.NfcAdapter
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,11 +31,17 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,13 +60,21 @@ import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
 import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.switchingtheme.RemovableDiagonalRectShape
+import com.kidor.vigik.ui.compose.switchingtheme.ScreenshotScope
+import com.kidor.vigik.ui.compose.switchingtheme.ShapeDirection
+import com.kidor.vigik.ui.compose.switchingtheme.rememberScreenshotState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 internal const val ACTION_BAR_TEST_TAG = "Action bar"
 internal const val ACTION_MENU_STOP_SCAN = "Action menu - Stop scan"
 internal const val ACTION_MENU_INVERT_COLORS = "Action menu - Invert colors"
 internal const val ACTION_MENU_APP_INFO = "Action menu - App info"
+private const val SWITCHING_THEME_ANIMATION_DURATION = 1200
+private const val SWITCHING_THEME_ANIMATION_DELAY = 100L
 
 /**
  * Main activity of the application.
@@ -74,9 +93,57 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            var inverseTheme by remember { mutableStateOf(false) }
-            AppTheme(inverseTheme = inverseTheme) {
-                MainComposable(switchColorTheme = { inverseTheme = !inverseTheme })
+            val isDarkMode = remember { mutableStateOf(false) }
+            val scope = rememberCoroutineScope()
+            val screenshotState = rememberScreenshotState()
+            val offset = remember { mutableFloatStateOf(0f) }
+            val screenWidth = LocalConfiguration.current.screenWidthDp
+            val screenWishPx = with(LocalDensity.current) { screenWidth.dp.toPx() }
+            val animationOffset = animateFloatAsState(
+                targetValue = offset.floatValue,
+                animationSpec = tween(SWITCHING_THEME_ANIMATION_DURATION),
+                label = "Animation offset",
+                finishedListener = {
+                    screenshotState.setBitmap(null)
+                }
+            )
+
+            AppTheme(inverseTheme = isDarkMode.value) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    ScreenshotScope(
+                        modifier = Modifier.fillMaxSize(),
+                        screenshotState = screenshotState
+                    ) {
+                        MainComposable(
+                            switchColorTheme = {
+                                scope.launch {
+                                    screenshotState.capture()
+                                    offset.floatValue = if (offset.floatValue == 0f) screenWishPx else 0f
+                                    delay(SWITCHING_THEME_ANIMATION_DELAY)
+                                    isDarkMode.value = isDarkMode.value.not()
+                                }
+                            }
+                        )
+                    }
+                }
+                screenshotState.bitmap.value?.asImageBitmap()?.let {
+                    Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(
+                                shape = RemovableDiagonalRectShape(
+                                    offset = animationOffset.value,
+                                    direction = if (isDarkMode.value) {
+                                        ShapeDirection.FROM_LEFT_TO_RIGHT
+                                    } else {
+                                        ShapeDirection.FROM_RIGHT_TO_LEFT
+                                    }
+                                )
+                            )
+                    )
+                }
             }
         }
     }
@@ -115,7 +182,7 @@ internal fun MainComposable(switchColorTheme: () -> Unit = {}) {
                 navController = navController,
                 switchColorTheme = switchColorTheme
             )
-         },
+        },
         contentColor = MaterialTheme.colorScheme.onPrimary
     ) { innerPadding ->
         AppNavHost(
