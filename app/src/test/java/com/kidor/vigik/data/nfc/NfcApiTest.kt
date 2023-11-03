@@ -5,6 +5,7 @@ import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NfcAdapter
 import android.nfc.Tag
+import androidx.core.content.IntentCompat
 import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.data.nfc.api.NfcApiListener
 import com.kidor.vigik.utils.SystemWrapper
@@ -13,6 +14,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import io.mockk.verify
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -45,6 +47,7 @@ class NfcApiTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
+        mockkStatic(IntentCompat::class)
     }
 
     @Test
@@ -99,8 +102,8 @@ class NfcApiTest {
         // When
         every { systemWrapper.currentTimeMillis() } returns now
         every { intent.action } returns NfcAdapter.ACTION_TAG_DISCOVERED
-        every { intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) } returns null
-        every { intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) } returns null
+        every { IntentCompat.getParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag::class.java) } returns null
+        every { IntentCompat.getParcelableArrayExtra(intent, NfcAdapter.EXTRA_NDEF_MESSAGES, NdefMessage::class.java) } returns null
         every { intent.getByteArrayExtra(NfcAdapter.EXTRA_ID) } returns null
 
         // Run
@@ -126,8 +129,8 @@ class NfcApiTest {
         every { tag.id } returns tagUid
         every { tag.toString() } returns tagDescription
         every { intent.action } returns NfcAdapter.ACTION_TAG_DISCOVERED
-        every { intent.getParcelableExtra<Tag>(NfcAdapter.EXTRA_TAG) } returns tag
-        every { intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES) } returns arrayOf(ndefMessage)
+        every { IntentCompat.getParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag::class.java) } returns tag
+        every { IntentCompat.getParcelableArrayExtra(intent, NfcAdapter.EXTRA_NDEF_MESSAGES, NdefMessage::class.java) } returns arrayOf(ndefMessage)
         every { intent.getByteArrayExtra(NfcAdapter.EXTRA_ID) } returns tagId
         every { ndefMessage.records } returns arrayOf(ndefRecord)
         every { ndefRecord.toString() } returns tagData
