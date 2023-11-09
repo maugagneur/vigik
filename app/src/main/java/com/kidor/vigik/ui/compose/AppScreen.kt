@@ -47,6 +47,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Typewriter" animation screen.
+     */
+    AnimationTypewriterScreen(
+        nameId = R.string.animation_typewriter_title,
+        route = "animation_typewriter"
+    ),
+
+    /**
      * Metadata of "biometric login" screen.
      */
     BiometricLoginScreen(

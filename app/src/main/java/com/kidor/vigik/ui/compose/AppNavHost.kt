@@ -19,6 +19,7 @@ import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
+import com.kidor.vigik.ui.animations.typewriter.TypewriterScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
@@ -85,10 +86,12 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
 private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
     navGraphBuilder.composable(route = AppScreen.AnimationsHubScreen.route) {
         AnimationsHubScreen(
-            navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) }
+            navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) },
+            navigateToTypewriter = { navController.navigate(AppScreen.AnimationTypewriterScreen) }
         )
     }
     navGraphBuilder.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
+    navGraphBuilder.composable(route = AppScreen.AnimationTypewriterScreen.route) { TypewriterScreen() }
 }
 
 /**
