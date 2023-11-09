@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.animation
+package com.kidor.vigik.ui.animations.glitterrainbow
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
@@ -28,10 +28,10 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import androidx.compose.ui.unit.toSize
-import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.sizeChanged
-import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateLifeTime
-import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSourceOffset
-import com.kidor.vigik.ui.animation.GlitterBoxState.Companion.updateSpeedCoefficient
+import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.sizeChanged
+import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.updateLifeTime
+import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.updateSourceOffset
+import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.updateSpeedCoefficient
 import kotlinx.coroutines.isActive
 
 private const val CURSOR_HORIZONTAL_OFFSET_RATIO = 2f

@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.home
+package com.kidor.vigik.ui.animations
 
 import androidx.annotation.StringRes
 import com.kidor.vigik.ui.base.AbsButtonData
@@ -9,7 +9,7 @@ import com.kidor.vigik.ui.base.AbsButtonData
  * @param textId  Button's text to be displayed.
  * @param onClick Action called when the button is clicked.
  */
-data class HomeButtonData(
+data class AnimationButtonData(
     @StringRes override val textId: Int,
     override val onClick: () -> Unit
 ) : AbsButtonData()

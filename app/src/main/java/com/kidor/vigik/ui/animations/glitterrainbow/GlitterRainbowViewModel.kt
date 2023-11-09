@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.animation
+package com.kidor.vigik.ui.animations.glitterrainbow
 
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.ui.base.BaseViewModel
@@ -10,19 +10,20 @@ import javax.inject.Inject
  * Business logic of Animation screen.
  */
 @HiltViewModel
-class AnimationViewModel @Inject constructor() : BaseViewModel<AnimationViewAction, AnimationViewState, Nothing>() {
+class GlitterRainbowViewModel @Inject constructor() :
+    BaseViewModel<GlitterRainbowViewAction, GlitterRainbowViewState, Nothing>() {
 
     init {
-        _viewState.value = AnimationViewState()
+        _viewState.value = GlitterRainbowViewState()
     }
 
-    override fun handleAction(viewAction: AnimationViewAction) {
+    override fun handleAction(viewAction: GlitterRainbowViewAction) {
         when (viewAction) {
-            is AnimationViewAction.ChangeSpeedCoefficient -> updateViewState {
+            is GlitterRainbowViewAction.ChangeSpeedCoefficient -> updateViewState {
                 it.copy(speedCoefficient = viewAction.speedCoefficient)
             }
 
-            is AnimationViewAction.ChangeLifeTime -> updateViewState {
+            is GlitterRainbowViewAction.ChangeLifeTime -> updateViewState {
                 it.copy(lifeTime = viewAction.lifeTime)
             }
         }
@@ -33,9 +34,9 @@ class AnimationViewModel @Inject constructor() : BaseViewModel<AnimationViewActi
      *
      * @param update The operation to perform on view state.
      */
-    private fun updateViewState(update: (AnimationViewState) -> AnimationViewState) {
+    private fun updateViewState(update: (GlitterRainbowViewState) -> GlitterRainbowViewState) {
         viewModelScope.launch {
-            _viewState.value = update(viewState.value ?: AnimationViewState())
+            _viewState.value = update(viewState.value ?: GlitterRainbowViewState())
         }
     }
 }

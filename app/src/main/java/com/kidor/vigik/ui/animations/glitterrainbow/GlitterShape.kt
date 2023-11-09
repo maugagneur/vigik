@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.animation
+package com.kidor.vigik.ui.animations.glitterrainbow
 
 /**
  * A shape configuration for glitters.

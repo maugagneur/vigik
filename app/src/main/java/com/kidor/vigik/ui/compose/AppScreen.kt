@@ -31,11 +31,19 @@ enum class AppScreen(
     ),
 
     /**
-     * Metadata of "Animation" screen.
+     * Metadata of "Animations" hub screen.
      */
-    Animation(
-        nameId = R.string.animation_title,
-        route = "animation"
+    AnimationsHubScreen(
+        nameId = R.string.animations_hub_title,
+        route = "animations_hub"
+    ),
+
+    /**
+     * Metadata of "Glitter Rainbow" animation screen.
+     */
+    AnimationGlitterRainbowScreen(
+        nameId = R.string.animation_glitter_rainbow_title,
+        route = "animation_glitter_rainbow"
     ),
 
     /**

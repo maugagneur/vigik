@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.animation
+package com.kidor.vigik.ui.animations.glitterrainbow
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.animation
+package com.kidor.vigik.ui.animations.glitterrainbow
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,18 +44,20 @@ private val vividRainbow = listOf(
 )
 
 /**
- * View that display the section dedicated to Animation.
+ * View that display the section dedicated to glitter rainbow animation.
  */
 @Composable
-fun AnimationScreen(
-    viewModel: AnimationViewModel = hiltViewModel()
+fun GlitterRainbowScreen(
+    viewModel: GlitterRainbowViewModel = hiltViewModel()
 ) {
     ObserveViewState(viewModel) { state ->
         Column {
             SettingsPanel(
                 viewState = state,
-                onSpeedCoefficientChanged = { viewModel.handleAction(AnimationViewAction.ChangeSpeedCoefficient(it)) },
-                onLifeTimeChanged = { viewModel.handleAction(AnimationViewAction.ChangeLifeTime(it)) }
+                onSpeedCoefficientChanged = {
+                    viewModel.handleAction(GlitterRainbowViewAction.ChangeSpeedCoefficient(it))
+                },
+                onLifeTimeChanged = { viewModel.handleAction(GlitterRainbowViewAction.ChangeLifeTime(it)) }
             )
             Divider()
             Box(
@@ -81,7 +83,7 @@ fun AnimationScreen(
 
 @Composable
 private fun SettingsPanel(
-    viewState: AnimationViewState,
+    viewState: GlitterRainbowViewState,
     onSpeedCoefficientChanged: (Float) -> Unit,
     onLifeTimeChanged: (Int) -> Unit
 ) {
@@ -97,12 +99,12 @@ private fun SettingsPanel(
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                text = stringResource(id = R.string.animation_speed_coefficient_label),
+                text = stringResource(id = R.string.animation_glitter_rainbow_speed_coefficient_label),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = AppTheme.dimensions.textSizeMedium
             )
             Text(
-                text = stringResource(id = R.string.animation_life_time_label),
+                text = stringResource(id = R.string.animation_glitter_rainbow_life_time_label),
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = AppTheme.dimensions.textSizeMedium
             )

@@ -17,7 +17,8 @@ import androidx.navigation.navDeepLink
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
-import com.kidor.vigik.ui.animation.AnimationScreen
+import com.kidor.vigik.ui.animations.AnimationsHubScreen
+import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
@@ -45,7 +46,7 @@ fun AppNavHost(
         startDestination = AppScreen.HomeScreen.route,
         modifier = modifier
     ) {
-        addAnimationScreens(navGraphBuilder = this)
+        addAnimationScreens(navGraphBuilder = this, navController = navController)
         addHomeScreens(navGraphBuilder = this, navController = navController)
         addBiometricScreens(navGraphBuilder = this, navController = navController, context = context)
         addBluetoothScreens(navGraphBuilder = this)
@@ -65,7 +66,7 @@ fun AppNavHost(
 private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
     navGraphBuilder.composable(route = AppScreen.HomeScreen.route) {
         HomeScreen(
-            navigateToAnimation = { navController.navigate(AppScreen.Animation) },
+            navigateToAnimations = { navController.navigate(AppScreen.AnimationsHubScreen) },
             navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
             navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
             navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
@@ -77,14 +78,17 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
 }
 
 /**
- * Add screens related to Animation into the graph.
+ * Add screens related to Animations into the graph.
  *
  * @param navGraphBuilder The builder used to construct the graph.
  */
-private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder) {
-    navGraphBuilder.composable(route = AppScreen.Animation.route) {
-        AnimationScreen()
+private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
+    navGraphBuilder.composable(route = AppScreen.AnimationsHubScreen.route) {
+        AnimationsHubScreen(
+            navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) }
+        )
     }
+    navGraphBuilder.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
 }
 
 /**

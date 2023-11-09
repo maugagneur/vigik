@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.home
+package com.kidor.vigik.ui.animations
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,19 +17,12 @@ import com.kidor.vigik.R
 import com.kidor.vigik.ui.compose.AppTheme
 
 /**
- * View that display all sections of the application.
+ * View that display all animation sections.
  */
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-@Suppress("LongParameterList")
-fun HomeScreen(
-    navigateToAnimations: () -> Unit = {},
-    navigateToBiometric: () -> Unit = {},
-    navigateToBluetooth: () -> Unit = {},
-    navigateToEmoji: () -> Unit = {},
-    navigateToNfc: () -> Unit = {},
-    navigateToNotification: () -> Unit = {},
-    navigateToRestApi: () -> Unit = {}
+fun AnimationsHubScreen(
+    navigateToGlitterRainbow: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -37,16 +30,10 @@ fun HomeScreen(
         verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val homeButtonDataList = listOf(
-            HomeButtonData(textId = R.string.home_animations_button_label, navigateToAnimations),
-            HomeButtonData(textId = R.string.home_biometric_button_label, navigateToBiometric),
-            HomeButtonData(textId = R.string.home_bluetooth_button_label, navigateToBluetooth),
-            HomeButtonData(textId = R.string.home_emoji_button_label, navigateToEmoji),
-            HomeButtonData(textId = R.string.home_nfc_button_label, navigateToNfc),
-            HomeButtonData(textId = R.string.home_notification_button_label, navigateToNotification),
-            HomeButtonData(textId = R.string.home_rest_api_button_label, navigateToRestApi)
+        val animationButtonDataList = listOf(
+            AnimationButtonData(R.string.animation_glitter_rainbow_title, navigateToGlitterRainbow)
         )
-        items(homeButtonDataList) { buttonData ->
+        items(animationButtonDataList) { buttonData ->
             Button(
                 onClick = buttonData.onClick,
                 modifier = Modifier.fillMaxWidth()
