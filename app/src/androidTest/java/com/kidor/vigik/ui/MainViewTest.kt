@@ -1,7 +1,6 @@
 package com.kidor.vigik.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
@@ -68,7 +67,7 @@ class MainViewTest {
         runAndroidComposeUiTest(HiltTestActivity::class.java) {
             setContent {
                 navController = rememberNavController()
-                AppNavHost(context = LocalContext.current, navController = navController!!)
+                AppNavHost(navController = navController!!)
             }
 
             Thread.sleep(3000)
