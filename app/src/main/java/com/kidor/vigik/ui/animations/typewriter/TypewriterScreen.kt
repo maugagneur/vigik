@@ -14,11 +14,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import com.kidor.vigik.extensions.getBoundingBoxesForRange
 import com.kidor.vigik.ui.compose.AppTheme
 import kotlinx.coroutines.delay
+import kotlin.math.min
 
 private const val ADD_CHARACTER_DELAY = 100L
 private const val REMOVE_CHARACTER_DELAY = 30L
@@ -38,7 +42,18 @@ fun TypewriterScreen() {
         contentAlignment = Alignment.CenterStart
     ) {
         TypewriterText(
-            base = "Never gonna",
+            base = "Never gonna ",
+            highlights = listOf(
+                "Never",
+                "up",
+                "run around",
+                "desert you",
+                "down",
+                "cry",
+                "goodbye",
+                "lie",
+                "hurt you"
+            ),
             parts = listOf(
                 "give you up",
                 "let you down",
@@ -54,18 +69,20 @@ fun TypewriterScreen() {
 /**
  * Animated [Text] like it is created with typewriter.
  *
- * @param base          Base part of the text which will never change.
- * @param parts         Animated part of the text.
+ * @param base       Base part of the text which will never change.
+ * @param highlights Text to highlight.
+ * @param parts      Changing part of the text.
  */
 @Composable
 private fun TypewriterText(
     base: String,
+    highlights: List<String>,
     parts: List<String>
 ) {
     var baseText by remember { mutableStateOf("") }
     var partIndex by remember { mutableIntStateOf(0) }
     var partText by remember { mutableStateOf("") }
-    val textToDisplay = "$baseText $partText"
+    val textToDisplay = "$baseText$partText" // FIXME: last char is not highlight. Workaround: add a dummy space char
 
     LaunchedEffect(key1 = parts) {
         // Type each character of base text
@@ -97,10 +114,39 @@ private fun TypewriterText(
         }
     }
 
+    val highlightColor = MaterialTheme.colorScheme.secondary
+    var highlightPartRectList by remember { mutableStateOf(listOf<Rect>()) }
+
     Text(
         text = textToDisplay,
+        modifier = Modifier.drawBehind {
+            val borderSize = 20.sp.toPx()
+            highlightPartRectList.forEach { rect ->
+                val selectedRect = rect.translate(0f, -borderSize / 1.5f)
+                drawLine(
+                    color = highlightColor,
+                    start = selectedRect.bottomLeft,
+                    end = selectedRect.bottomRight,
+                    strokeWidth = borderSize
+                )
+            }
+        },
         color = MaterialTheme.colorScheme.onBackground,
         fontSize = 40.sp,
-        fontWeight = FontWeight.SemiBold
+        fontWeight = FontWeight.SemiBold,
+        lineHeight = 52.sp,
+        onTextLayout = { layoutResult ->
+            // Reset rect list to remove old highlight areas
+            highlightPartRectList = emptyList()
+
+            // Search for highlight parts
+            highlights.forEach { highlight ->
+                val start = textToDisplay.indexOf(highlight)
+                if (start >= 0) {
+                    val end = min(start + highlight.length, textToDisplay.length - 1)
+                    highlightPartRectList += layoutResult.getBoundingBoxesForRange(start, end)
+                }
+            }
+        }
     )
 }
