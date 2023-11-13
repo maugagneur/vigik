@@ -82,6 +82,7 @@ private fun TypewriterText(
     var baseText by remember { mutableStateOf("") }
     var partIndex by remember { mutableIntStateOf(0) }
     var partText by remember { mutableStateOf("") }
+    val fullText = "$base${parts[partIndex]}]"
     val textToDisplay = "$baseText$partText" // FIXME: last char is not highlight. Workaround: add a dummy space char
 
     LaunchedEffect(key1 = parts) {
@@ -141,7 +142,7 @@ private fun TypewriterText(
 
             // Search for highlight parts
             highlights.forEach { highlight ->
-                val start = textToDisplay.indexOf(highlight)
+                val start = fullText.indexOf(highlight)
                 if (start >= 0) {
                     val end = min(start + highlight.length, textToDisplay.length - 1)
                     highlightPartRectList += layoutResult.getBoundingBoxesForRange(start, end)
