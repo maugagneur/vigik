@@ -28,6 +28,7 @@ private const val ADD_CHARACTER_DELAY = 100L
 private const val REMOVE_CHARACTER_DELAY = 30L
 private const val DELAY_BEFORE_REMOVING_PART = 1000L
 private const val DELAY_BEFORE_TYPING_NEW_PART = 500L
+private const val HIGHLIGHT_VERTICAL_TRANSLATION_RATIO = -1.5f
 
 /**
  * View that display the section dedicated to typewriter animation.
@@ -83,7 +84,7 @@ private fun TypewriterText(
     var partIndex by remember { mutableIntStateOf(0) }
     var partText by remember { mutableStateOf("") }
     val fullText = "$base${parts[partIndex]}]"
-    val textToDisplay = "$baseText$partText" // FIXME: last char is not highlight. Workaround: add a dummy space char
+    val textToDisplay = "$baseText$partText"
 
     LaunchedEffect(key1 = parts) {
         // Type each character of base text
@@ -123,7 +124,7 @@ private fun TypewriterText(
         modifier = Modifier.drawBehind {
             val borderSize = 20.sp.toPx()
             highlightPartRectList.forEach { rect ->
-                val selectedRect = rect.translate(0f, -borderSize / 1.5f)
+                val selectedRect = rect.translate(0f, borderSize / HIGHLIGHT_VERTICAL_TRANSLATION_RATIO)
                 drawLine(
                     color = highlightColor,
                     start = selectedRect.bottomLeft,
@@ -144,7 +145,7 @@ private fun TypewriterText(
             highlights.forEach { highlight ->
                 val start = fullText.indexOf(highlight)
                 if (start >= 0) {
-                    val end = min(start + highlight.length, textToDisplay.length - 1)
+                    val end = min(start + highlight.length - 1, textToDisplay.length - 1)
                     highlightPartRectList += layoutResult.getBoundingBoxesForRange(start, end)
                 }
             }

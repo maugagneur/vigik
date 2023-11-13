@@ -27,9 +27,13 @@ fun TextLayoutResult.getBoundingBoxesForRange(start: Int, end: Int): List<Rect> 
 
         if (firstLineCharRect == null) {
             firstLineCharRect = rect
-        } else if (prevRect != null && (prevRect.bottom != rect.bottom || isLastRect)) {
-            boundingBoxes.add(firstLineCharRect.copy(right = prevRect.right))
-            firstLineCharRect = rect
+        } else if (prevRect != null) {
+            if (prevRect.bottom != rect.bottom) {
+                boundingBoxes.add(firstLineCharRect.copy(right = prevRect.right))
+                firstLineCharRect = rect
+            } else if (isLastRect) {
+                boundingBoxes.add(firstLineCharRect.copy(right = rect.right))
+            }
         }
         prevRect = rect
     }
