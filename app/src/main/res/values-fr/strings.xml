@@ -22,6 +22,8 @@
     <string name="animation_glitter_rainbow_speed_coefficient_label">Vitesse</string>
     <string name="animation_glitter_rainbow_life_time_label">Durée de vie</string>
     <string name="animation_glitter_rainbow_source_label">Source : https://github.com/maiatoday/GrooveIsInTheHeart</string>
+    <!-- Animation - Typewriter -->
+    <string name="animation_typewriter_title">Machine à écrire</string>
 
     <!-- CAR -->
     <string name="car_app_name">Vigik Auto</string>

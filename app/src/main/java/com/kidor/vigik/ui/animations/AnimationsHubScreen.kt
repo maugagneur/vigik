@@ -22,7 +22,8 @@ import com.kidor.vigik.ui.compose.AppTheme
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 fun AnimationsHubScreen(
-    navigateToGlitterRainbow: () -> Unit = {}
+    navigateToGlitterRainbow: () -> Unit = {},
+    navigateToTypewriter: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -31,7 +32,8 @@ fun AnimationsHubScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val animationButtonDataList = listOf(
-            AnimationButtonData(R.string.animation_glitter_rainbow_title, navigateToGlitterRainbow)
+            AnimationButtonData(R.string.animation_glitter_rainbow_title, navigateToGlitterRainbow),
+            AnimationButtonData(R.string.animation_typewriter_title, navigateToTypewriter)
         )
         items(animationButtonDataList) { buttonData ->
             Button(
