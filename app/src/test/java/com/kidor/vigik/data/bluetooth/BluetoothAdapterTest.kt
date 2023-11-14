@@ -6,6 +6,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
 import android.content.Intent
+import androidx.core.content.ContextCompat
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.receivers.BluetoothDiscoveryReceiver
 import com.kidor.vigik.utils.AssertUtils.assertFalse
@@ -14,6 +15,7 @@ import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -48,10 +50,11 @@ class BluetoothAdapterTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)
+        mockkStatic(ContextCompat::class)
         every { bluetoothAdapter.startDiscovery() } returns true
         every { bluetoothAdapter.cancelDiscovery() } returns true
         every { bluetoothAdapter.bluetoothLeScanner } returns bluetoothLeScanner
-        every { context.registerReceiver(any(), any()) } returns Intent()
+        every { ContextCompat.registerReceiver(context, bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER, ContextCompat.RECEIVER_EXPORTED) } returns Intent()
     }
 
     /**
@@ -110,7 +113,7 @@ class BluetoothAdapterTest {
             verify(inverse = true) { bluetoothAdapter.bluetoothLeScanner.startScan(any()) }
             // Check that receiver is registered and configured
             verify { bluetoothDiscoveryReceiver.registerCallbacks(bluetoothApiCallback, bluetoothScanCallback) }
-            verify { context.registerReceiver(bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER) }
+            verify { ContextCompat.registerReceiver(context, bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER, ContextCompat.RECEIVER_EXPORTED) }
             // Check that startDiscovery() is called
             verify { bluetoothAdapter.startDiscovery() }
             // Check that error callback is called
@@ -132,7 +135,7 @@ class BluetoothAdapterTest {
             verify(inverse = true) { bluetoothAdapter.bluetoothLeScanner.startScan(any()) }
             // Check that receiver is registered and configured
             verify { bluetoothDiscoveryReceiver.registerCallbacks(bluetoothApiCallback, bluetoothScanCallback) }
-            verify { context.registerReceiver(bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER) }
+            verify { ContextCompat.registerReceiver(context, bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER, ContextCompat.RECEIVER_EXPORTED) }
             // Check that startDiscovery() is called
             verify { bluetoothAdapter.startDiscovery() }
             // Check that error callback is never called

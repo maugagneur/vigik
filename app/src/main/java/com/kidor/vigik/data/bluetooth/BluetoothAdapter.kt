@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.content.Context
+import androidx.core.content.ContextCompat
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothScanError
 import com.kidor.vigik.receivers.BluetoothDiscoveryReceiver
@@ -88,7 +89,12 @@ class BluetoothAdapter @Inject constructor(
             // Register callback
             bluetoothDiscoveryReceiver.registerCallbacks(apiCallback, scanCallback)
             // Register receiver
-            context.registerReceiver(bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER)
+            ContextCompat.registerReceiver(
+                context,
+                bluetoothDiscoveryReceiver,
+                BluetoothDiscoveryReceiver.INTENT_FILTER,
+                ContextCompat.RECEIVER_EXPORTED
+            )
             val isSuccessful = bluetoothAdapter.startDiscovery()
             if (!isSuccessful) {
                 Timber.e("Fail to start Bluetooth device discovery")
