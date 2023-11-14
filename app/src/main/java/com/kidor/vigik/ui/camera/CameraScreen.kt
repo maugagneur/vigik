@@ -6,10 +6,12 @@ import android.net.Uri
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.FocusMeteringAction
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.core.TorchState
+import androidx.camera.core.UseCaseGroup
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -163,6 +165,9 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
 private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val camera = remember { mutableStateOf(null as Camera?) }
     val lensFacing = remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
+    val rotationDegrees = remember { mutableIntStateOf(0) }
+    val imageHeight = remember { mutableIntStateOf(0) }
+    val imageWidth = remember { mutableIntStateOf(0) }
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -192,10 +197,23 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val isTorchAvailable = remember { mutableStateOf(false) }
     val isTorchEnabled = remember { mutableStateOf(false) }
 
+    // Image analysis use case
+    val imageAnalysis = ImageAnalysis.Builder()
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .build()
+    imageAnalysis.setAnalyzer(executor) { imageProxy ->
+        rotationDegrees.intValue = imageProxy.imageInfo.rotationDegrees
+        imageHeight.intValue = imageProxy.height
+        imageWidth.intValue = imageProxy.width
+        // Release the ImageProxy object when the analyse is done
+        imageProxy.close()
+    }
+
     // Group use cases
     val useCaseGroup = UseCaseGroup.Builder()
         .addUseCase(preview)
         .addUseCase(imageCapture)
+        .addUseCase(imageAnalysis)
         .build()
 
     LaunchedEffect(lensFacing.intValue) {
@@ -216,6 +234,13 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
         AndroidView(
             factory = { previewView },
             modifier = Modifier.fillMaxSize()
+        )
+        Text(
+            text = "Rotation: ${rotationDegrees.intValue}\n" +
+                    "Height: ${imageHeight.intValue} / Width: ${imageWidth.intValue}",
+            modifier = Modifier.fillMaxWidth(),
+            color = Color.Yellow,
+            fontSize = AppTheme.dimensions.textSizeSmall
         )
         Column(
             modifier = Modifier.fillMaxSize(),
