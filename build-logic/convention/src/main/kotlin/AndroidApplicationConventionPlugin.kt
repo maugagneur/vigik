@@ -16,8 +16,8 @@ private const val TARGET_SDK_VER = 34
 private const val MIN_SDK_VER = 23
 
 private const val APP_MAJOR_VERSION = 2
-private const val APP_MINOR_VERSION = 8
-private const val APP_HOTFIX_VERSION = 1
+private const val APP_MINOR_VERSION = 9
+private const val APP_FIX_VERSION = 0
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -123,10 +123,10 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
     /**
      * Computes then returns the version code of the application.
      */
-    private fun getVersionCode(): Int = APP_MAJOR_VERSION * 10_000 + APP_MINOR_VERSION * 100 + APP_HOTFIX_VERSION
+    private fun getVersionCode(): Int = APP_MAJOR_VERSION * 10_000 + APP_MINOR_VERSION * 100 + APP_FIX_VERSION
 
     /**
      * Computes then returns the version name of the application.
      */
-    private fun getVersionName(): String = "$APP_MAJOR_VERSION.$APP_MINOR_VERSION.$APP_HOTFIX_VERSION"
+    private fun getVersionName(): String = "$APP_MAJOR_VERSION.$APP_MINOR_VERSION.$APP_FIX_VERSION"
 }
