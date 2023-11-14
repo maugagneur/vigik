@@ -34,7 +34,10 @@ class BluetoothViewModel @Inject constructor(
         }
         viewModelScope.launch(ioDispatcher) {
             bluetoothApi.locationEnable.collect { locationEnable ->
-                updateViewState { it.copy(isLocationEnable = locationEnable) }
+                updateViewState {
+                    // Force LE scan to false when location is turned OFF
+                    it.copy(isLocationEnable = locationEnable, leScanSelected = it.leScanSelected && locationEnable)
+                }
             }
         }
         viewModelScope.launch(ioDispatcher) {
