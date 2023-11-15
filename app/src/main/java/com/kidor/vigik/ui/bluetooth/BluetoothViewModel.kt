@@ -27,6 +27,9 @@ class BluetoothViewModel @Inject constructor(
 ) : BaseViewModel<BluetoothViewAction, BluetoothViewState, Nothing>() {
 
     init {
+        // Emit view state with default values at start
+        _viewState.value = BluetoothViewState()
+
         viewModelScope.launch(ioDispatcher) {
             bluetoothApi.bluetoothEnable.collect { bluetoothEnable ->
                 updateViewState { it.copy(isBluetoothEnable = bluetoothEnable) }
@@ -96,17 +99,6 @@ class BluetoothViewModel @Inject constructor(
             is BluetoothViewAction.ChangeLeScanState -> {
                 updateViewState { it.copy(leScanSelected = viewAction.isChecked) }
             }
-        }
-    }
-
-    /**
-     * Update the current view state.
-     *
-     * @param update The operation to perform on view state.
-     */
-    private fun updateViewState(update: (BluetoothViewState) -> BluetoothViewState) {
-        viewModelScope.launch {
-            _viewState.value = update(viewState.value ?: BluetoothViewState())
         }
     }
 

@@ -79,17 +79,6 @@ class NotificationViewModel @Inject constructor(
     }
 
     /**
-     * Update the current view state.
-     *
-     * @param update The operation to perform on view state.
-     */
-    private fun updateViewState(update: (NotificationViewState) -> NotificationViewState) {
-        viewModelScope.launch {
-            _viewState.value = update(viewState.value ?: NotificationViewState())
-        }
-    }
-
-    /**
      * Generates a notification based on current view state.
      */
     private fun generateNotification() {

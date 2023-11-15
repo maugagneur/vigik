@@ -3,9 +3,12 @@ package com.kidor.vigik.ui.base
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Base class for [ViewModel] which exposes [VIEW_STATE] and [VIEW_EVENT].
@@ -51,5 +54,22 @@ open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_
      */
     open fun handleAction(viewAction: VIEW_ACTION) {
         // Default implementation
+    }
+
+    /**
+     * Update the current view state.
+     *
+     * @param update The operation to perform on view state.
+     */
+    protected fun updateViewState(update: (VIEW_STATE) -> VIEW_STATE) {
+        viewState.value.let { currentViewState ->
+            if (currentViewState == null) {
+                Timber.w("Current view state is null, please initialize it before trying to update it")
+            } else {
+                viewModelScope.launch {
+                    _viewState.value = update(currentViewState)
+                }
+            }
+        }
     }
 }

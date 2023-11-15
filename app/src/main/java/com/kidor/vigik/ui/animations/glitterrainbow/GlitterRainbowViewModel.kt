@@ -1,9 +1,7 @@
 package com.kidor.vigik.ui.animations.glitterrainbow
 
-import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -26,17 +24,6 @@ class GlitterRainbowViewModel @Inject constructor() :
             is GlitterRainbowViewAction.ChangeLifeTime -> updateViewState {
                 it.copy(lifeTime = viewAction.lifeTime)
             }
-        }
-    }
-
-    /**
-     * Update the current view state.
-     *
-     * @param update The operation to perform on view state.
-     */
-    private fun updateViewState(update: (GlitterRainbowViewState) -> GlitterRainbowViewState) {
-        viewModelScope.launch {
-            _viewState.value = update(viewState.value ?: GlitterRainbowViewState())
         }
     }
 }
