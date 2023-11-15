@@ -279,7 +279,7 @@ private fun SettingsLensButton(lensFacing: MutableIntState) {
             }
         }
     ) {
-        Icon(imageVector = Icons.Default.FlipCameraAndroid, contentDescription = "Flip")
+        Icon(imageVector = Icons.Default.FlipCameraAndroid, contentDescription = "Flip", tint = Color.White)
     }
 }
 
@@ -296,7 +296,7 @@ private fun SettingsZoomOutButton(camera: MutableState<Camera?>) {
             }
         }
     ) {
-        Icon(imageVector = Icons.Default.ZoomOut, contentDescription = "Zoom out")
+        Icon(imageVector = Icons.Default.ZoomOut, contentDescription = "Zoom out", tint = Color.White)
     }
 }
 
@@ -313,7 +313,7 @@ private fun SettingsZoomInButton(camera: MutableState<Camera?>) {
             }
         }
     ) {
-        Icon(imageVector = Icons.Default.ZoomIn, contentDescription = "Zoom in")
+        Icon(imageVector = Icons.Default.ZoomIn, contentDescription = "Zoom in", tint = Color.White)
     }
 }
 
@@ -329,9 +329,9 @@ private fun SettingsTorchButton(camera: MutableState<Camera?>, isTorchEnabled: M
         }
     ) {
         if (isTorchEnabled.value) {
-            Icon(imageVector = Icons.Default.FlashlightOff, contentDescription = "Torch Off")
+            Icon(imageVector = Icons.Default.FlashlightOff, contentDescription = "Torch Off", tint = Color.White)
         } else {
-            Icon(imageVector = Icons.Default.FlashlightOn, contentDescription = "Torch On")
+            Icon(imageVector = Icons.Default.FlashlightOn, contentDescription = "Torch On", tint = Color.White)
         }
     }
 }
