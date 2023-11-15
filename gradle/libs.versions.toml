@@ -47,7 +47,6 @@ android-material = { group = "com.google.android.material", name = "material", v
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-biometric-ktx = { group = "androidx.biometric", name = "biometric-ktx", version.ref = "androidx-biometric" }
 androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "androidx-camera" }
-androidx-camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "androidx-camera" } # TODO: Check if needed
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidx-camera" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "androidx-camera" }
 androidx-car-app = { group = "androidx.car.app", name = "app", version.ref = "androidx-car" }
@@ -116,7 +115,7 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 
 [bundles]
-androidx-camera = ["androidx-camera-camera2", "androidx-camera-extensions", "androidx-camera-lifecycle", "androidx-camera-view"]
+androidx-camera = ["androidx-camera-camera2", "androidx-camera-lifecycle", "androidx-camera-view"]
 androidx-car = ["androidx-car-app", "androidx-car-app-projected"]
 androidx-lifecycle = ["androidx-lifecycle-common-java8", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
 androidx-room = ["androidx-room-runtime", "androidx-room-ktx"]
