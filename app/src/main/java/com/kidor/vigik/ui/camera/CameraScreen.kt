@@ -1,7 +1,6 @@
 package com.kidor.vigik.ui.camera
 
 import android.Manifest
-import android.content.Context
 import android.net.Uri
 import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
@@ -162,6 +161,7 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val camera = remember { mutableStateOf(null as Camera?) }
     val lensFacing = remember { mutableIntStateOf(CameraSelector.LENS_FACING_BACK) }
@@ -172,25 +172,24 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
 
     // Preview use case
-    val preview = Preview.Builder().build()
-    val previewView = remember { PreviewView(context) }
-    // Focus camera on clicked point
-    previewView.setOnTouchListener { view, motionEvent ->
-        val meteringPoint = previewView.meteringPointFactory.createPoint(motionEvent.x, motionEvent.y)
-        camera.value?.cameraControl?.startFocusAndMetering(
-            FocusMeteringAction.Builder(meteringPoint)
-                .build()
-        )
-        view.performClick()
-        false
+    val preview = remember { Preview.Builder().build() }
+    val previewView = remember {
+        PreviewView(context).apply {
+            // Focus camera on clicked point
+            setOnTouchListener { view, motionEvent ->
+                val meteringPoint = this.meteringPointFactory.createPoint(motionEvent.x, motionEvent.y)
+                camera.value?.cameraControl?.startFocusAndMetering(
+                    FocusMeteringAction.Builder(meteringPoint)
+                        .build()
+                )
+                view.performClick()
+                false
+            }
+        }
     }
 
     // Image capture use case
-    val imageCapture = remember {
-        ImageCapture.Builder()
-            .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
-            .build()
-    }
+    val imageCapture = rememberImageCapture()
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(lensFacing.intValue)
         .build()
@@ -198,23 +197,24 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
     val isTorchEnabled = remember { mutableStateOf(false) }
 
     // Image analysis use case
-    val imageAnalysis = ImageAnalysis.Builder()
-        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-        .build()
-    imageAnalysis.setAnalyzer(executor) { imageProxy ->
-        rotationDegrees.intValue = imageProxy.imageInfo.rotationDegrees
-        imageHeight.intValue = imageProxy.height
-        imageWidth.intValue = imageProxy.width
-        // Release the ImageProxy object when the analyse is done
-        imageProxy.close()
+    val imageAnalysis = rememberImageAnalysis {
+        it.setAnalyzer(executor) { imageProxy ->
+            rotationDegrees.intValue = imageProxy.imageInfo.rotationDegrees
+            imageHeight.intValue = imageProxy.height
+            imageWidth.intValue = imageProxy.width
+            // Release the ImageProxy object when the analyse is done
+            imageProxy.close()
+        }
     }
 
     // Group use cases
-    val useCaseGroup = UseCaseGroup.Builder()
-        .addUseCase(preview)
-        .addUseCase(imageCapture)
-        .addUseCase(imageAnalysis)
-        .build()
+    val useCaseGroup = remember {
+        UseCaseGroup.Builder()
+            .addUseCase(preview)
+            .addUseCase(imageCapture)
+            .addUseCase(imageAnalysis)
+            .build()
+    }
 
     LaunchedEffect(lensFacing.intValue) {
         camera.value = context.getCameraProvider().let { cameraProvider ->
@@ -259,7 +259,7 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
                 }
             }
             TakePhotoButton(
-                context = context,
+                outputDirectory = context.filesDir, // Photo will be saved in \\data\data\{package_name}\files\
                 executor = executor,
                 imageCapture = imageCapture,
                 onImageCaptured = onImageCaptured
@@ -338,7 +338,7 @@ private fun SettingsTorchButton(camera: MutableState<Camera?>, isTorchEnabled: M
 
 @Composable
 private fun TakePhotoButton(
-    context: Context,
+    outputDirectory: File,
     executor: Executor,
     imageCapture: ImageCapture,
     onImageCaptured: (Uri) -> Unit
@@ -346,7 +346,7 @@ private fun TakePhotoButton(
     IconButton(
         onClick = {
             takePhoto(
-                outputDirectory = context.filesDir, // Photo will be saved in \\data\data\{package_name}\files\
+                outputDirectory = outputDirectory,
                 imageCapture = imageCapture,
                 executor = executor,
                 onImageCaptured = onImageCaptured
@@ -398,6 +398,23 @@ private fun takePhoto(
             }
         }
     )
+}
+
+@Composable
+private fun rememberImageCapture() = remember {
+    ImageCapture.Builder()
+        .setFlashMode(ImageCapture.FLASH_MODE_AUTO)
+        .build()
+}
+
+@Composable
+private fun rememberImageAnalysis(initialize: (ImageAnalysis) -> Unit) = remember {
+    ImageAnalysis.Builder()
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .build()
+        .apply {
+            initialize(this)
+        }
 }
 
 @Composable
