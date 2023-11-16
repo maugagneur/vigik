@@ -34,9 +34,14 @@ grep -E 'TEST_REPORT|TestRunner' app/build/reports/customJacocoReport/jacocoTest
 ./gradlew detekt
 ./gradlew --no-configuration-cache diktatCheck # DiktatJavaExecTaskBase in v1.2.5 seams not compatible with configuration cache reuse
 
+# Run Kover code coverage report generation and custom rule verification tasks
+./gradlew koverHtmlReportDebug
+./gradlew koverVerifyDebug
+
 echo
 echo "Unit tests report is available in app/build/reports/tests"
 echo "Instrumentation tests report is available in app/build/reports/androidTests/connected"
 echo "Code coverage report is available in app/build/reports/jacocoTestReport/html"
 echo "Detekt analysis report is available in app/build/reports/detekt"
 echo "Diktat analysis report is available in app/build/reports/diktat"
+echo "Kover reports are available in app/build/reports/kover"

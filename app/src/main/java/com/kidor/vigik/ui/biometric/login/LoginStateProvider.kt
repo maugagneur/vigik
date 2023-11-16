@@ -1,10 +1,12 @@
 package com.kidor.vigik.ui.biometric.login
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 
 /**
  * Provides a set of data for the preview of LoginState Composable.
  */
+@ExcludedFromKoverReport
 class LoginStateProvider : PreviewParameterProvider<LoginStateData> {
     override val values: Sequence<LoginStateData> = sequenceOf(
         LoginStateData(loginState = BiometricLoginViewState()),
@@ -40,6 +42,7 @@ class LoginStateProvider : PreviewParameterProvider<LoginStateData> {
  * @param onLoginClick          The function called to log in.
  * @param onBiometricLoginClick The function called to log in with biometric.
  */
+@ExcludedFromKoverReport
 data class LoginStateData(
     val onUpdateUsername: (String) -> Unit = {},
     val onUpdatePassword: (String) -> Unit = {},

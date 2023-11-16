@@ -1,10 +1,12 @@
 package com.kidor.vigik.ui.nfc.emulate
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 
 /**
  * Provider of logs for preview of Emulate screen.
  */
+@ExcludedFromKoverReport
 class LogProvider : PreviewParameterProvider<String> {
     override val values: Sequence<String> = sequenceOf(
         "Simple line",

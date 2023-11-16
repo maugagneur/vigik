@@ -2,11 +2,13 @@ package com.kidor.vigik.ui.nfc.history
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.kidor.vigik.data.nfc.model.Tag
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 import java.util.Calendar
 
 /**
  * Provides a set of data for the preview of DisplayTagsState Composable.
  */
+@ExcludedFromKoverReport
 class DisplayTagsStateProvider : PreviewParameterProvider<DisplayTagsStateData> {
     private val defaultTag = Tag(
         timestamp = Calendar.getInstance().timeInMillis,
@@ -29,4 +31,5 @@ class DisplayTagsStateProvider : PreviewParameterProvider<DisplayTagsStateData> 
  * @param tags          The list of tags to display.
  * @param onDeleteClick The function called on a delete click.
  */
+@ExcludedFromKoverReport
 data class DisplayTagsStateData(val tags: List<Tag>, val onDeleteClick: (Tag) -> Unit = {})

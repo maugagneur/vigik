@@ -6,6 +6,7 @@ plugins {
     id("vigik.android.room")
     id("vigik.detekt")
     id("vigik.diktat")
+    id("vigik.kover")
 }
 
 dependencies {
