@@ -11,7 +11,7 @@ class KoverConventionPlugin : Plugin<Project> {
             pluginManager.apply("org.jetbrains.kotlinx.kover")
 
             configure<KoverReportExtension> {
-                // Report generation tack can be run with "./gradlew koverHtmlReportDebug"
+                // Report generation task can be run with "./gradlew koverHtmlReportDebug"
                 androidReports("debug") {
                     filters {
                         excludes {

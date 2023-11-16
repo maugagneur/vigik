@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
 
     // Worker
-    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.work.runtime)
 
     // Testing Navigation
     // debugImplementation is used here so that the empty activity that FragmentScenario relies on is accessible by the test target process.

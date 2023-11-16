@@ -49,11 +49,12 @@ class VigikApplication : Application(), Configuration.Provider {
         createNotificationChannel()
     }
 
-    override fun getWorkManagerConfiguration(): Configuration =
+    override val workManagerConfiguration: Configuration by lazy {
         Configuration.Builder().apply {
             setWorkerFactory(workerFactory)
             setMinimumLoggingLevel(Log.DEBUG)
         }.build()
+    }
 
     /**
      * Create a notification channel for the app if needed.
