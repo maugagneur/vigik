@@ -4,6 +4,7 @@ android-desugar-jdk-libs = "2.0.3"
 android-gradle-plugin = "8.1.3"
 androidx-activity = "1.8.0"
 androidx-biometric = "1.2.0-alpha05"
+androidx-camera = "1.3.0"
 androidx-car = "1.4.0-rc01"
 androidx-compose = "1.5.4"
 androidx-compose-compiler = "1.5.4"
@@ -19,6 +20,7 @@ androidx-navigation = "2.7.5"
 androidx-room = "2.6.0"
 androidx-splashscreen = "1.0.1"
 androidx-work = "2.8.1"
+coil = "2.5.0"
 core-testing = "2.2.0"
 detekt = "1.23.1"
 diktat = "1.2.5"
@@ -44,6 +46,9 @@ android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs
 android-material = { group = "com.google.android.material", name = "material", version.ref = "google-material" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-biometric-ktx = { group = "androidx.biometric", name = "biometric-ktx", version.ref = "androidx-biometric" }
+androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "androidx-camera" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidx-camera" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "androidx-camera" }
 androidx-car-app = { group = "androidx.car.app", name = "app", version.ref = "androidx-car" }
 androidx-car-app-projected = { group = "androidx.car.app", name = "app-projected", version.ref = "androidx-car" }
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "androidx-compose" }
@@ -80,6 +85,7 @@ androidx-room-runtime = { group = "androidx.room", name = "room-runtime", versio
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 androidx-test-ext = { group = "androidx.test.ext", name = "junit", version.ref = "test-ext" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidx-work" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "google-hilt" }
 dagger-hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "google-hilt" }
 dagger-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "google-hilt" }
@@ -109,6 +115,7 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "androidx-room" }
 
 [bundles]
+androidx-camera = ["androidx-camera-camera2", "androidx-camera-lifecycle", "androidx-camera-view"]
 androidx-car = ["androidx-car-app", "androidx-car-app-projected"]
 androidx-lifecycle = ["androidx-lifecycle-common-java8", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
 androidx-room = ["androidx-room-runtime", "androidx-room-ktx"]

@@ -23,6 +23,7 @@ import com.kidor.vigik.ui.animations.typewriter.TypewriterScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
+import com.kidor.vigik.ui.camera.CameraScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
@@ -51,6 +52,7 @@ fun AppNavHost(
         addHomeScreens(navGraphBuilder = this, navController = navController)
         addBiometricScreens(navGraphBuilder = this, navController = navController, context = context)
         addBluetoothScreens(navGraphBuilder = this)
+        addCameraScreens(navGraphBuilder = this)
         addEmojiScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
@@ -70,6 +72,7 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
             navigateToAnimations = { navController.navigate(AppScreen.AnimationsHubScreen) },
             navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
             navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
+            navigateToCamera = { navController.navigate(AppScreen.CameraScreen) },
             navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
             navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
             navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
@@ -127,6 +130,17 @@ private fun addBluetoothScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.BluetoothScreen.route) {
         LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         BluetoothScreen()
+    }
+}
+
+/**
+ * Add screens related to Camera into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addCameraScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.CameraScreen.route) {
+        CameraScreen()
     }
 }
 

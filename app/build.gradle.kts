@@ -25,6 +25,18 @@ dependencies {
     // Biometric
     implementation(libs.androidx.biometric.ktx)
 
+    // Camera
+    implementation(libs.bundles.androidx.camera) {
+        modules {
+            module("com.google.guava:listenablefuture") {
+                replacedBy("com.google.guava:guava", "ListenableFuture is part of Guava")
+            }
+        }
+    }
+
+    // Image loader
+    implementation(libs.coil.compose)
+
     // Kotlin
     implementation(libs.bundles.kotlinx.coroutines)
     testImplementation(libs.kotlinx.coroutines.test)
