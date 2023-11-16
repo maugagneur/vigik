@@ -15,6 +15,7 @@ class KoverConventionPlugin : Plugin<Project> {
                         excludes {
                             annotatedBy(
                                 "androidx.compose.runtime.Composable",
+                                "com.kidor.vigik.utils.ExcludedFromKoverReport"
                             )
                             classes(
                                 "*Activity*",           // Ignore activities

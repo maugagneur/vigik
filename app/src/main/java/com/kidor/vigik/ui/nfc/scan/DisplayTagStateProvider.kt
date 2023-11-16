@@ -2,11 +2,13 @@ package com.kidor.vigik.ui.nfc.scan
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.kidor.vigik.data.nfc.model.Tag
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 import java.util.Calendar
 
 /**
  * Provides a set of data for the preview of DisplayTagState Composable.
  */
+@ExcludedFromKoverReport
 class DisplayTagStateDataProvider : PreviewParameterProvider<DisplayTagStateData> {
     override val values: Sequence<DisplayTagStateData> = sequenceOf(
         DisplayTagStateData(ScanViewState.DisplayTag(Tag(), false)),
@@ -33,4 +35,5 @@ class DisplayTagStateDataProvider : PreviewParameterProvider<DisplayTagStateData
  * @param state          The view state to be displayed.
  * @param onSaveTagClick The function called on a save tag click.
  */
+@ExcludedFromKoverReport
 data class DisplayTagStateData(val state: ScanViewState.DisplayTag, val onSaveTagClick: () -> Unit = {})
