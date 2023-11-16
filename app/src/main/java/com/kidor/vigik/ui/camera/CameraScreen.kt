@@ -94,17 +94,21 @@ fun CameraScreen(viewModel: CameraViewModel = hiltViewModel()) {
                 }
 
                 is CameraViewState.ShowCapturedPhoto -> {
-                    ButtonBar(
-                        buttons = listOf(
-                            CameraButtonData(R.string.camera_retry_capture_button_label) {
-                                viewModel.handleAction(CameraViewAction.RetryCapture)
-                            }
+                    Button(
+                        onClick = { viewModel.handleAction(CameraViewAction.RetryCapture) },
+                        modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceSmall)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.camera_retry_capture_button_label).uppercase(),
+                            fontSize = AppTheme.dimensions.textSizeSmall
                         )
-                    )
+                    }
                     Image(
                         painter = rememberAsyncImagePainter(model = state.uri),
                         contentDescription = "Photo",
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = AppTheme.dimensions.commonSpaceMedium)
                     )
                 }
             }
@@ -415,24 +419,4 @@ private fun rememberImageAnalysis(initialize: (ImageAnalysis) -> Unit) = remembe
         .apply {
             initialize(this)
         }
-}
-
-@Composable
-private fun ButtonBar(buttons: List<CameraButtonData>) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = AppTheme.dimensions.commonSpaceMedium),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        buttons.forEach { button ->
-            Button(onClick = button.onClick) {
-                Text(
-                    text = stringResource(id = button.textId).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeSmall
-                )
-            }
-        }
-    }
 }
