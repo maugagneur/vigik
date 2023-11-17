@@ -8,7 +8,6 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.notification.NotificationFactory
 import com.kidor.vigik.data.notification.NotificationIcon
-import com.kidor.vigik.data.notification.RemoveNotificationFromUiUseCase
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.AssertUtils.assertFalse
 import com.kidor.vigik.utils.AssertUtils.assertTrue
@@ -47,8 +46,6 @@ class NotificationViewModelTest {
     private lateinit var notification: Notification
     @MockK
     private lateinit var notificationManager: NotificationManager
-    @MockK
-    private lateinit var removeNotificationFromUiUseCase: RemoveNotificationFromUiUseCase
 
     @Before
     fun setUp() {
@@ -56,8 +53,7 @@ class NotificationViewModelTest {
         viewModel = NotificationViewModel(
             localization = localization,
             notificationFactory = notificationFactory,
-            notificationManager = notificationManager,
-            removeNotificationFromUi = removeNotificationFromUiUseCase
+            notificationManager = notificationManager
         )
     }
 
@@ -462,7 +458,7 @@ class NotificationViewModelTest {
         viewModel.handleAction(NotificationViewAction.RemovePreviousNotification)
 
         // Check that remove notification use case is never called
-        verify(inverse = true) { removeNotificationFromUiUseCase(any()) }
+        verify(inverse = true) { notificationManager.cancel(any()) }
 
         // Generate 3 notifications
         val notificationIds = mutableListOf<Int>()
@@ -480,16 +476,16 @@ class NotificationViewModelTest {
 
         // Remove each notifications one by one
         viewModel.handleAction(NotificationViewAction.RemovePreviousNotification)
-        verify { removeNotificationFromUiUseCase(notificationIds[2]) }
+        verify { notificationManager.cancel(notificationIds[2]) }
         viewModel.handleAction(NotificationViewAction.RemovePreviousNotification)
-        verify { removeNotificationFromUiUseCase(notificationIds[1]) }
+        verify { notificationManager.cancel(notificationIds[1]) }
         viewModel.handleAction(NotificationViewAction.RemovePreviousNotification)
-        verify { removeNotificationFromUiUseCase(notificationIds[0]) }
+        verify { notificationManager.cancel(notificationIds[0]) }
 
         // Try to remove notification one more time when no more notification should be prompted
         viewModel.handleAction(NotificationViewAction.RemovePreviousNotification)
 
         // Check that remove notification use case is not called more than 3 times
-        verify(exactly = 3) { removeNotificationFromUiUseCase(any()) }
+        verify(exactly = 3) { notificationManager.cancel(any()) }
     }
 }

@@ -43,6 +43,7 @@ fun View.screenshot(bounds: Rect, bitmapCallback: (Bitmap?) -> Unit) {
             )
         } catch (exception: IllegalStateException) {
             Timber.e(exception, "Fail to take a screenshot of the view")
+            bitmapCallback.invoke(null)
         }
     } else {
         Timber.i("Screenshot of current view unavailable on this device")

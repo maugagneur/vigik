@@ -3,12 +3,14 @@ package com.kidor.vigik.ui.bluetooth
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 
 private const val DEVICE_ADDRESS = "12:34:56:78:90:AB"
 
 /**
  * Provides a set of data for the preview of Bluetooth screen.
  */
+@ExcludedFromKoverReport
 class DetectedBluetoothDevicesProvider : PreviewParameterProvider<List<BluetoothDevice>> {
     override val values: Sequence<List<BluetoothDevice>> = sequenceOf(
         emptyList(),

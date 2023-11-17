@@ -1,25 +1,22 @@
 package com.kidor.vigik.receivers
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.kidor.vigik.data.notification.RemoveNotificationFromUiUseCase
-import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import javax.inject.Inject
 
 /**
  * Broadcast receiver listening to notification's action buttons.
  */
-@AndroidEntryPoint
-class NotificationReceiver : BroadcastReceiver() {
-
-    @Inject lateinit var removeNotificationFromUi: RemoveNotificationFromUiUseCase
+class NotificationReceiver(private val notificationManager: NotificationManager) : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
             ACTION_REMOVE -> {
-                removeNotificationFromUi(intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0))
+                if (intent.hasExtra(EXTRA_NOTIFICATION_ID)) {
+                    notificationManager.cancel(intent.getIntExtra(EXTRA_NOTIFICATION_ID, 0))
+                }
             }
             ACTION_DO_NOTHING -> {
                 // Nothing to do

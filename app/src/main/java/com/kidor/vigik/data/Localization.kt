@@ -1,7 +1,6 @@
 package com.kidor.vigik.data
 
 import android.content.Context
-import android.content.res.Configuration
 import android.content.res.Resources.NotFoundException
 import androidx.annotation.StringRes
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,7 +15,6 @@ import javax.inject.Singleton
 class Localization @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val configuration = Configuration(context.resources.configuration)
 
     /**
      * Returns the string value associated with a particular resource ID.
@@ -25,7 +23,7 @@ class Localization @Inject constructor(
      */
     fun getString(@StringRes resId: Int): String {
         return try {
-            context.createConfigurationContext(configuration).resources.getString(resId)
+            context.resources.getString(resId)
         } catch (exception: NotFoundException) {
             Timber.e(exception, "String resource not found: $resId")
             resId.toString()
@@ -40,7 +38,7 @@ class Localization @Inject constructor(
      */
     fun getString(@StringRes resId: Int, vararg formatArgs: Any?): String {
         return try {
-            context.createConfigurationContext(configuration).resources.getString(resId, *formatArgs)
+            context.resources.getString(resId, *formatArgs)
         } catch (exception: NotFoundException) {
             Timber.e(exception, "String resource not found: $resId")
             resId.toString()

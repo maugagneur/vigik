@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.notification.NotificationFactory
-import com.kidor.vigik.data.notification.RemoveNotificationFromUiUseCase
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -24,8 +23,7 @@ private const val SECOND_TO_MILLI = 1_000L
 class NotificationViewModel @Inject constructor(
     private val localization: Localization,
     private val notificationFactory: NotificationFactory,
-    private val notificationManager: NotificationManager,
-    private val removeNotificationFromUi: RemoveNotificationFromUiUseCase
+    private val notificationManager: NotificationManager
 ) : BaseViewModel<NotificationViewAction, NotificationViewState, Nothing>() {
 
     private val generatedNotificationIds: MutableSet<Int> = mutableSetOf()
@@ -71,7 +69,7 @@ class NotificationViewModel @Inject constructor(
 
             is NotificationViewAction.RemovePreviousNotification -> {
                 generatedNotificationIds.lastOrNull()?.let {
-                    removeNotificationFromUi(it)
+                    notificationManager.cancel(it)
                     generatedNotificationIds.remove(it)
                 } ?: Timber.d("No more notification to remove")
             }

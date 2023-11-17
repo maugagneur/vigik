@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Path
  * @param shape        The glitter's shape.
  * @param position     The glitter's position.
  */
-class Glitter(
+class Glitter private constructor(
     vector: Offset,
     private val glitterColor: Color,
     private val radius: Float,

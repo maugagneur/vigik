@@ -83,6 +83,13 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     unitTests {
                         isIncludeAndroidResources = true
                         isReturnDefaultValues = true
+                        all {
+                            // Added to allow to modify SDK_INT static field via reflection
+                            it.jvmArgs(
+                                "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                                "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED"
+                            )
+                        }
                     }
                 }
             }

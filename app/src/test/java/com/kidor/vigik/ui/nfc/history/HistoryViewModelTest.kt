@@ -10,6 +10,7 @@ import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -111,5 +112,22 @@ class HistoryViewModelTest {
                 cancelAndIgnoreRemainingEvents()
             }
         }
+    }
+
+    @Test
+    fun `delete tag`() {
+        logTestName()
+
+        // Given
+        val tagToDelete = Tag()
+        coEvery { repository.allTags } returns flow { emit(emptyList()) }
+        coEvery { repository.delete(any()) } returns 1
+
+        // When
+        viewModel = HistoryViewModel(repository)
+        viewModel.handleAction(HistoryViewAction.DeleteTag(tagToDelete))
+
+        // Then
+        coVerify { repository.delete(tagToDelete) }
     }
 }

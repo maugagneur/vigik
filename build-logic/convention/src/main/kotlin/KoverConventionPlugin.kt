@@ -1,4 +1,6 @@
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
+import kotlinx.kover.gradle.plugin.dsl.MetricType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -42,6 +44,8 @@ class KoverConventionPlugin : Plugin<Project> {
                         rule("Minimal line coverage rate") {
                             isEnabled = true
                             bound {
+                                aggregation = AggregationType.COVERED_PERCENTAGE
+                                metric = MetricType.LINE
                                 minValue = 60
                             }
                         }
