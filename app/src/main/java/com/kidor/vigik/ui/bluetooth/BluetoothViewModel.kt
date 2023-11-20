@@ -28,7 +28,10 @@ class BluetoothViewModel @Inject constructor(
 
     init {
         // Emit view state with default values at start
-        _viewState.value = BluetoothViewState()
+        _viewState.value = BluetoothViewState(
+            isBluetoothEnable = bluetoothApi.bluetoothEnable.value,
+            isLocationEnable = bluetoothApi.locationEnable.value
+        )
 
         viewModelScope.launch(ioDispatcher) {
             bluetoothApi.bluetoothEnable.collect { bluetoothEnable ->
