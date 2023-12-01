@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.InvertColors
 import androidx.compose.material.icons.filled.Stop
@@ -254,7 +254,7 @@ private fun NavigationBackButton(currentScreen: AppScreen?, navController: NavHo
     if (navController.previousBackStackEntry != null && currentScreen?.showNavigateBack == true) {
         IconButton(onClick = { navController.popBackStack() }) {
             Icon(
-                Icons.Default.ArrowBack,
+                Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(id = R.string.menu_action_back),
                 tint = MaterialTheme.colorScheme.onPrimary
             )
