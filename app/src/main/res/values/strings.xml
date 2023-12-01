@@ -13,6 +13,7 @@
     <string name="home_animations_button_label">Animations</string>
     <string name="home_biometric_button_label">Biometric</string>
     <string name="home_bluetooth_button_label">Bluetooth</string>
+    <string name="home_bottom_sheet_button_label">Bottom Sheet</string>
     <string name="home_camera_button_label">Camera</string>
     <string name="home_emoji_button_label">Emoji</string>
     <string name="home_nfc_button_label">NFC</string>
@@ -93,6 +94,9 @@
     <string name="bluetooth_low_energy_scan_status_label">Low Energy scan</string>
     <string name="bluetooth_detected_devices_label">Detected devices</string>
     <string name="bluetooth_start_scan_error_message">Fail to start Bluetooth scan. Please check that Bluetooth is ON!</string>
+
+    <!-- Bottom Sheet -->
+    <string name="bottom_sheet_title">Bottom Sheet</string>
 
     <!-- Camera -->
     <string name="camera_title">Camera</string>
