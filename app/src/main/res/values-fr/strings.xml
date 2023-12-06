@@ -94,6 +94,11 @@
 
     <!-- Bottom Sheet -->
     <string name="bottom_sheet_title">Bottom Sheet</string>
+    <string name="bottom_sheet_current_state">État actuel : %s</string>
+    <string name="bottom_sheet_target_state">Prochain état : %s</string>
+    <string name="bottom_sheet_switch_button_hide_label">Masquer</string>
+    <string name="bottom_sheet_switch_button_show_label">Afficher</string>
+    <string name="bottom_sheet_custom_bottom_sheet_title">Bottom sheet</string>
 
     <!-- Camera -->
     <string name="camera_title">Caméra</string>
