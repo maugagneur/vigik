@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.compose.AppTheme
 import kotlinx.coroutines.CoroutineScope
@@ -178,5 +179,32 @@ private fun BottomSheetContent(coroutineScope: CoroutineScope, bottomSheetState:
             style = MaterialTheme.typography.headlineLarge
         )
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    if (bottomSheetState.isHalfExpanded) {
+                        bottomSheetState.expand()
+                    } else {
+                        bottomSheetState.halfExpand()
+                    }
+                }
+            }
+        ) {
+            Text(
+                text = if (bottomSheetState.isExpanded) {
+                    stringResource(id = R.string.bottom_sheet_switch_button_reduce_label).uppercase()
+                } else {
+                    stringResource(id = R.string.bottom_sheet_switch_button_expand_label).uppercase()
+                },
+                fontSize = AppTheme.dimensions.textSizeMedium
+            )
+        }
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+        AsyncImage(
+            model = R.drawable.notification_big_picture,
+            contentDescription = "Bottom sheet content",
+            modifier = Modifier.padding(horizontal = AppTheme.dimensions.commonSpaceMedium)
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceXLarge))
     }
 }

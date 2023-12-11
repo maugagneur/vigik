@@ -99,6 +99,8 @@
     <string name="bottom_sheet_switch_button_hide_label">Masquer</string>
     <string name="bottom_sheet_switch_button_show_label">Afficher</string>
     <string name="bottom_sheet_custom_bottom_sheet_title">Bottom sheet</string>
+    <string name="bottom_sheet_switch_button_expand_label">Étendre</string>
+    <string name="bottom_sheet_switch_button_reduce_label">Réduire</string>
 
     <!-- Camera -->
     <string name="camera_title">Caméra</string>
