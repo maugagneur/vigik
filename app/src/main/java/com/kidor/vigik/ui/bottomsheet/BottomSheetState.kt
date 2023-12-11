@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.bottomsheet
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -114,7 +115,8 @@ class BottomSheetState(
      */
     fun requireOffset() = draggableState.requireOffset()
 
-    private suspend fun animateTo(
+    @VisibleForTesting
+    internal suspend fun animateTo(
         targetValue: BottomSheetStateValue,
         velocity: Float = draggableState.lastVelocity
     ) = draggableState.animateTo(targetValue, velocity)
