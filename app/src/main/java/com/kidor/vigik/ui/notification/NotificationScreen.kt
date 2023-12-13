@@ -16,7 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -92,7 +92,7 @@ fun NotificationScreen(
                 )
             }
         }
-        Divider()
+        HorizontalDivider()
         GenerateNotificationButton { viewModel.handleAction(NotificationViewAction.GenerateNotification) }
         RemovePreviousNotificationButton { viewModel.handleAction(NotificationViewAction.RemovePreviousNotification) }
     }
