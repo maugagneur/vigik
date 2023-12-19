@@ -19,6 +19,7 @@ import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
+import com.kidor.vigik.ui.animations.snowfall.SnowfallScreen
 import com.kidor.vigik.ui.animations.typewriter.TypewriterScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
 import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
@@ -87,14 +88,18 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
  * @param navGraphBuilder The builder used to construct the graph.
  */
 private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
-    navGraphBuilder.composable(route = AppScreen.AnimationsHubScreen.route) {
-        AnimationsHubScreen(
-            navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) },
-            navigateToTypewriter = { navController.navigate(AppScreen.AnimationTypewriterScreen) }
-        )
+    navGraphBuilder.let {
+        it.composable(route = AppScreen.AnimationsHubScreen.route) {
+            AnimationsHubScreen(
+                navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) },
+                navigateToSnowfall = { navController.navigate(AppScreen.AnimationSnowfallScreen) },
+                navigateToTypewriter = { navController.navigate(AppScreen.AnimationTypewriterScreen) }
+            )
+        }
+        it.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
+        it.composable(route = AppScreen.AnimationSnowfallScreen.route) { SnowfallScreen() }
+        it.composable(route = AppScreen.AnimationTypewriterScreen.route) { TypewriterScreen() }
     }
-    navGraphBuilder.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
-    navGraphBuilder.composable(route = AppScreen.AnimationTypewriterScreen.route) { TypewriterScreen() }
 }
 
 /**

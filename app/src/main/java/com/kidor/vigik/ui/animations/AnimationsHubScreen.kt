@@ -23,6 +23,7 @@ import com.kidor.vigik.ui.compose.AppTheme
 @Preview(widthDp = 400, heightDp = 700)
 fun AnimationsHubScreen(
     navigateToGlitterRainbow: () -> Unit = {},
+    navigateToSnowfall: () -> Unit = {},
     navigateToTypewriter: () -> Unit = {}
 ) {
     LazyColumn(
@@ -33,6 +34,7 @@ fun AnimationsHubScreen(
     ) {
         val animationButtonDataList = listOf(
             AnimationButtonData(R.string.animation_glitter_rainbow_title, navigateToGlitterRainbow),
+            AnimationButtonData(R.string.animation_snowfall_title, navigateToSnowfall),
             AnimationButtonData(R.string.animation_typewriter_title, navigateToTypewriter)
         )
         items(animationButtonDataList) { buttonData ->
