@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -13,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,6 +24,7 @@ import com.kidor.vigik.ui.animations.snowfall.SnowfallBoxState.Companion.updateS
 import kotlinx.coroutines.isActive
 
 private const val SNOWFLAKE_NUMBER = 100
+private const val BOTTOM_GRADIENT_BACKGROUND_COLOR = 0xFFAB6E81
 
 /**
  * View that display the section dedicated to snowfall animation.
@@ -64,7 +67,14 @@ private fun SnowfallBox(modifier: Modifier, snowfallBoxState: SnowfallBoxState, 
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.background,
+                            Color(BOTTOM_GRADIENT_BACKGROUND_COLOR)
+                        )
+                    )
+                )
         ) {
             snowfallBoxState.snowflakes.forEach { snowflake ->
                 snowflake.draw(drawContext.canvas, drawContext.size)
