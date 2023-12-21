@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.animations.snowfall
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
@@ -15,10 +16,10 @@ import kotlin.random.Random
  * @param radius   Snowflake's size.
  * @param speed    Snowflake's falling speed.
  */
-data class Snowflake(
-    var position: Offset,
-    var radius: Float,
-    var speed: Float
+class Snowflake private constructor(
+    @get:VisibleForTesting internal var position: Offset,
+    @get:VisibleForTesting internal var radius: Float,
+    @get:VisibleForTesting internal var speed: Float
 ) {
     /**
      * Calculates the next snowflake's position.
