@@ -18,6 +18,7 @@ import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
+import com.kidor.vigik.ui.animations.followingarrows.FollowingArrows
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
 import com.kidor.vigik.ui.animations.snowfall.SnowfallScreen
 import com.kidor.vigik.ui.animations.typewriter.TypewriterScreen
@@ -94,11 +95,13 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
     navGraphBuilder.let {
         it.composable(route = AppScreen.AnimationsHubScreen.route) {
             AnimationsHubScreen(
+                navigateToFollowingArrows = { navController.navigate(AppScreen.AnimationFollowingArrows) },
                 navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) },
                 navigateToSnowfall = { navController.navigate(AppScreen.AnimationSnowfallScreen) },
                 navigateToTypewriter = { navController.navigate(AppScreen.AnimationTypewriterScreen) }
             )
         }
+        it.composable(route = AppScreen.AnimationFollowingArrows.route) { FollowingArrows() }
         it.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
         it.composable(route = AppScreen.AnimationSnowfallScreen.route) { SnowfallScreen() }
         it.composable(route = AppScreen.AnimationTypewriterScreen.route) { TypewriterScreen() }
