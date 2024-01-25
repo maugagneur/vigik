@@ -41,7 +41,7 @@ enum class AppScreen(
     /**
      * Metadata of "Following arrows" animation screen.
      */
-    AnimationFollowingArrows(
+    AnimationFollowingArrowsScreen(
         nameId = R.string.animation_following_arrows_title,
         route = "animation_following_arrows"
     ),
