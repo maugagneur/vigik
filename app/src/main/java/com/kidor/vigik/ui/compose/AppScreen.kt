@@ -88,6 +88,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Bottom Sheet" screen.
+     */
+    BottomSheetScreen(
+        nameId = R.string.bottom_sheet_title,
+        route = "bottom_sheet"
+    ),
+
+    /**
      * Metadata of "camera" screen.
      */
     CameraScreen(
