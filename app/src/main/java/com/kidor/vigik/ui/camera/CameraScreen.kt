@@ -14,6 +14,7 @@ import androidx.camera.core.UseCaseGroup
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -41,15 +43,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -69,6 +76,9 @@ import kotlin.math.max
 import kotlin.math.min
 
 private const val CAMERA_ZOOM_RATIO_STEP = 0.25f
+private const val MAGNIFIER_Y_OFFSET = 200f
+private val MAGNIFIER_SIZE = 100.dp
+private val MAGNIFIER_CORNER_RADIUS = 100.dp
 
 /**
  * View that display the section dedicated to camera.
@@ -86,31 +96,15 @@ fun CameraScreen(viewModel: CameraViewModel = hiltViewModel()) {
                     viewModel.handleAction(CameraViewAction.PermissionGranted)
                 }
 
-                CameraViewState.ShowCamera -> {
-                    CameraView(
-                        executor = Executors.newSingleThreadExecutor(),
-                        onImageCaptured = { viewModel.handleAction(CameraViewAction.PhotoCaptured(it)) }
-                    )
-                }
+                CameraViewState.ShowCamera -> CameraView(
+                    executor = Executors.newSingleThreadExecutor(),
+                    onImageCaptured = { viewModel.handleAction(CameraViewAction.PhotoCaptured(it)) }
+                )
 
-                is CameraViewState.ShowCapturedPhoto -> {
-                    Button(
-                        onClick = { viewModel.handleAction(CameraViewAction.RetryCapture) },
-                        modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceSmall)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.camera_retry_capture_button_label).uppercase(),
-                            fontSize = AppTheme.dimensions.textSizeSmall
-                        )
-                    }
-                    Image(
-                        painter = rememberAsyncImagePainter(model = state.uri),
-                        contentDescription = "Photo",
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(bottom = AppTheme.dimensions.commonSpaceMedium)
-                    )
-                }
+                is CameraViewState.ShowCapturedPhoto -> DisplayPhotoView(
+                    imageUri = state.uri,
+                    retry = { viewModel.handleAction(CameraViewAction.RetryCapture) }
+                )
             }
         }
     }
@@ -419,4 +413,49 @@ private fun rememberImageAnalysis(initialize: (ImageAnalysis) -> Unit) = remembe
         .apply {
             initialize(this)
         }
+}
+
+@Composable
+private fun DisplayPhotoView(imageUri: Uri, retry: () -> Unit) {
+    var magnifierCenter by remember { mutableStateOf(Offset.Unspecified) }
+
+    Button(
+        onClick = retry,
+        modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceSmall)
+    ) {
+        Text(
+            text = stringResource(id = R.string.camera_retry_capture_button_label).uppercase(),
+            fontSize = AppTheme.dimensions.textSizeSmall
+        )
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = AppTheme.dimensions.commonSpaceMedium)
+            .pointerInput(true) {
+                detectDragGestures(
+                    // Show the magnifier in the initial position
+                    onDragStart = { magnifierCenter = it },
+                    // Magnifier follows the pointer during a drag event
+                    onDrag = { change, _ -> magnifierCenter = change.position },
+                    // Hide the magnifier when a user ends the drag movement
+                    onDragEnd = { magnifierCenter = Offset.Unspecified },
+                    onDragCancel = { magnifierCenter = Offset.Unspecified }
+                )
+            }
+            .magnifier(
+                sourceCenter = { magnifierCenter },
+                magnifierCenter = { magnifierCenter - Offset(x = 0f, y = MAGNIFIER_Y_OFFSET) },
+                zoom = 2f,
+                size = DpSize(width = MAGNIFIER_SIZE, height = MAGNIFIER_SIZE),
+                cornerRadius = MAGNIFIER_CORNER_RADIUS
+            )
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(model = imageUri),
+            contentDescription = "Photo",
+            modifier = Modifier.fillMaxSize()
+        )
+    }
 }
