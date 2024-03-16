@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +63,7 @@ class BluetoothViewTest {
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
             LocationStatus(isEnable = viewState.isLocationEnable)
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
-            Divider()
+            HorizontalDivider()
             Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
             BluetoothScanStatus(
                 scanInProgress = viewState.isScanning,
