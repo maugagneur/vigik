@@ -50,6 +50,7 @@ import kotlin.math.sqrt
 private const val SHORT_ELEMENT_NUMBER = 5
 private const val LARGE_ELEMENT_NUMBER = 10
 private const val DISPLACEMENT = 50f
+private const val SCALE_COEFFICIENT = 0.9f
 private const val MINIMUM_SCALE_VALUE = 0.4f
 private const val FULL_CIRCLE_ANGLE = 360f
 private const val HALF_CIRCLE_ANGLE = 180f
@@ -59,6 +60,7 @@ private const val HALF_CIRCLE_ANGLE = 180f
  */
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
+@Suppress("LongMethod")
 fun FollowingArrowsScreen() {
     var size by remember { mutableStateOf(Size.Zero) }
     var position by remember { mutableStateOf(Offset.Zero) }
@@ -104,6 +106,7 @@ fun FollowingArrowsScreen() {
 
                             val angle = (atan2(delta.y, delta.x) * HALF_CIRCLE_ANGLE / PI).toFloat()
 
+                            @Suppress("MaximumLineLength", "MaxLineLength")
                             rotation += ((((angle - rotation) % FULL_CIRCLE_ANGLE) + FULL_CIRCLE_ANGLE + HALF_CIRCLE_ANGLE) % FULL_CIRCLE_ANGLE) - HALF_CIRCLE_ANGLE
 
                             val diagonal = sqrt(size.width.pow(2) + size.height.pow(2))
@@ -113,7 +116,7 @@ fun FollowingArrowsScreen() {
                                 x = DISPLACEMENT * (delta.x / distance),
                                 y = DISPLACEMENT * (delta.y / distance)
                             )
-                            scale = max(1f - (distance / (diagonal * 0.9f)), MINIMUM_SCALE_VALUE)
+                            scale = max(1f - (distance / (diagonal * SCALE_COEFFICIENT)), MINIMUM_SCALE_VALUE)
                         }
                     }
 
