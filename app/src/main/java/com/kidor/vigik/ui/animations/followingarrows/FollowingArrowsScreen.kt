@@ -47,10 +47,12 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-private const val SHORT_ELEMENT_NUMBER = 6
-private const val LARGE_ELEMENT_NUMBER = 12
+private const val SHORT_ELEMENT_NUMBER = 5
+private const val LARGE_ELEMENT_NUMBER = 10
 private const val DISPLACEMENT = 50f
 private const val MINIMUM_SCALE_VALUE = 0.4f
+private const val FULL_CIRCLE_ANGLE = 360f
+private const val HALF_CIRCLE_ANGLE = 180f
 
 /**
  * View that display the section dedicated to the following arrows animation.
@@ -78,7 +80,7 @@ fun FollowingArrowsScreen() {
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectDragGestures { change, _ ->
-                    position = Offset(max(0f, change.position.x), max(0f, change.position.y))
+                    position = Offset(max(0f, change.position.x), max(0f, change.position.y + (size.height / rowNb)))
                 }
             }
     ) {
@@ -100,9 +102,9 @@ fun FollowingArrowsScreen() {
                             val center = it.boundsInRoot().center
                             val delta = center - position
 
-                            val angle = (atan2(delta.y, delta.x) * 180 / PI).toFloat()
+                            val angle = (atan2(delta.y, delta.x) * HALF_CIRCLE_ANGLE / PI).toFloat()
 
-                            rotation += ((((angle - rotation) % 360f) + 540f) % 360f) - 180f
+                            rotation += ((((angle - rotation) % FULL_CIRCLE_ANGLE) + FULL_CIRCLE_ANGLE + HALF_CIRCLE_ANGLE) % FULL_CIRCLE_ANGLE) - HALF_CIRCLE_ANGLE
 
                             val diagonal = sqrt(size.width.pow(2) + size.height.pow(2))
                             val distance = sqrt(delta.x.pow(2) + delta.y.pow(2))
