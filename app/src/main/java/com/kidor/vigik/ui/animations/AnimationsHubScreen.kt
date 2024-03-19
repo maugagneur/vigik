@@ -25,6 +25,7 @@ import com.kidor.vigik.ui.compose.dimensions
 fun AnimationsHubScreen(
     navigateToFollowingArrows: () -> Unit = {},
     navigateToGlitterRainbow: () -> Unit = {},
+    navigateToLookahead: () -> Unit = {},
     navigateToShape: () -> Unit = {},
     navigateToSnowfall: () -> Unit = {},
     navigateToTypewriter: () -> Unit = {}
@@ -38,6 +39,7 @@ fun AnimationsHubScreen(
         val animationButtonDataList = listOf(
             AnimationButtonData(R.string.animation_following_arrows_title, navigateToFollowingArrows),
             AnimationButtonData(R.string.animation_glitter_rainbow_title, navigateToGlitterRainbow),
+            AnimationButtonData(R.string.animation_lookahead_title, navigateToLookahead),
             AnimationButtonData(R.string.animation_shape_title, navigateToShape),
             AnimationButtonData(R.string.animation_snowfall_title, navigateToSnowfall),
             AnimationButtonData(R.string.animation_typewriter_title, navigateToTypewriter)
