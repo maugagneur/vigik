@@ -105,9 +105,10 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     allWarningsAsErrors = warningsAsErrors.toBoolean()
                     freeCompilerArgs = freeCompilerArgs + listOf(
                         "-opt-in=kotlin.RequiresOptIn",
-                        // Enable experimental coroutines APIs, including Flow
+                        // Enable experimental coroutines APIs, including Flow and Context Receivers
                         "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
                         "-opt-in=kotlinx.coroutines.FlowPreview",
+                        "-Xcontext-receivers"
                     )
                 }
             }
