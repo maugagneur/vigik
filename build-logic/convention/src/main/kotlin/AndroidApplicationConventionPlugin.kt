@@ -16,7 +16,7 @@ private const val TARGET_SDK_VER = 34
 private const val MIN_SDK_VER = 23
 
 private const val APP_MAJOR_VERSION = 2
-private const val APP_MINOR_VERSION = 12
+private const val APP_MINOR_VERSION = 13
 private const val APP_FIX_VERSION = 0
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
