@@ -2,7 +2,10 @@ package com.kidor.vigik.ui.bottomsheet
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.DecayAnimationSpec
+import androidx.compose.animation.core.FloatExponentialDecaySpec
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.generateDecayAnimationSpec
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.AnchoredDraggableState
@@ -26,6 +29,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 class BottomSheetState(
     initialValue: BottomSheetStateValue,
     animationSpec: AnimationSpec<Float>,
+    decayAnimationSpec: DecayAnimationSpec<Float>,
     confirmValueChanged: (BottomSheetStateValue) -> Boolean
 ) {
     /**
@@ -33,7 +37,8 @@ class BottomSheetState(
      */
     val draggableState: AnchoredDraggableState<BottomSheetStateValue> = AnchoredDraggableState(
         initialValue = initialValue,
-        animationSpec = animationSpec,
+        snapAnimationSpec = animationSpec,
+        decayAnimationSpec = decayAnimationSpec,
         positionalThreshold = { distance: Float -> distance * 0.5f },
         velocityThreshold = { 125f },
         confirmValueChange = confirmValueChanged
@@ -117,9 +122,8 @@ class BottomSheetState(
 
     @VisibleForTesting
     internal suspend fun animateTo(
-        targetValue: BottomSheetStateValue,
-        velocity: Float = draggableState.lastVelocity
-    ) = draggableState.animateTo(targetValue, velocity)
+        targetValue: BottomSheetStateValue
+    ) = draggableState.animateTo(targetValue)
 
     /**
      * Updates bottom sheet's anchors based on it's height and the screen's height.
@@ -145,6 +149,7 @@ class BottomSheetState(
          */
         fun Saver(
             animationSpec: AnimationSpec<Float>,
+            decayAnimationSpec: DecayAnimationSpec<Float>,
             confirmValueChanged: (BottomSheetStateValue) -> Boolean
         ): Saver<BottomSheetState, BottomSheetStateValue> = Saver(
             save = { currentState -> currentState.currentValue },
@@ -152,6 +157,7 @@ class BottomSheetState(
                 BottomSheetState(
                     initialValue = savedState,
                     animationSpec = animationSpec,
+                    decayAnimationSpec = decayAnimationSpec,
                     confirmValueChanged = confirmValueChanged
                 )
             }
@@ -173,6 +179,7 @@ fun rememberBottomSheetState(
         dampingRatio = Spring.DampingRatioLowBouncy,
         stiffness = Spring.StiffnessMedium
     ),
+    decayAnimationSpec: DecayAnimationSpec<Float> = FloatExponentialDecaySpec().generateDecayAnimationSpec(),
     confirmValueChanged: (BottomSheetStateValue) -> Boolean = { true },
 ): BottomSheetState {
     return key(initialValue) {
@@ -182,12 +189,14 @@ fun rememberBottomSheetState(
             confirmValueChanged,
             saver = BottomSheetState.Saver(
                 animationSpec = animationSpec,
+                decayAnimationSpec = decayAnimationSpec,
                 confirmValueChanged = confirmValueChanged
             )
         ) {
             BottomSheetState(
                 initialValue = initialValue,
                 animationSpec = animationSpec,
+                decayAnimationSpec = decayAnimationSpec,
                 confirmValueChanged = confirmValueChanged
             )
         }
