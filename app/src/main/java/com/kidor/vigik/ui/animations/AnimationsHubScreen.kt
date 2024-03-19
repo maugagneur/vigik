@@ -22,6 +22,7 @@ import com.kidor.vigik.ui.compose.AppTheme
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
 fun AnimationsHubScreen(
+    navigateToFollowingArrows: () -> Unit = {},
     navigateToGlitterRainbow: () -> Unit = {},
     navigateToSnowfall: () -> Unit = {},
     navigateToTypewriter: () -> Unit = {}
@@ -33,6 +34,7 @@ fun AnimationsHubScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val animationButtonDataList = listOf(
+            AnimationButtonData(R.string.animation_following_arrows_title, navigateToFollowingArrows),
             AnimationButtonData(R.string.animation_glitter_rainbow_title, navigateToGlitterRainbow),
             AnimationButtonData(R.string.animation_snowfall_title, navigateToSnowfall),
             AnimationButtonData(R.string.animation_typewriter_title, navigateToTypewriter)

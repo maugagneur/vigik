@@ -39,6 +39,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Following arrows" animation screen.
+     */
+    AnimationFollowingArrowsScreen(
+        nameId = R.string.animation_following_arrows_title,
+        route = "animation_following_arrows"
+    ),
+
+    /**
      * Metadata of "Glitter Rainbow" animation screen.
      */
     AnimationGlitterRainbowScreen(

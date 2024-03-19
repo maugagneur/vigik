@@ -19,6 +19,8 @@
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>
+    <!-- Animation - Following arrows -->
+    <string name="animation_following_arrows_title">Flèches suiveuses</string>
     <!-- Animation - Glitter rainbow -->
     <string name="animation_glitter_rainbow_title">Pluie de pailettes</string>
     <string name="animation_glitter_rainbow_speed_coefficient_label">Vitesse</string>
