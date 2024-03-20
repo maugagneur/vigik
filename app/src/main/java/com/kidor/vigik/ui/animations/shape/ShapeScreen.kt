@@ -42,6 +42,7 @@ private const val STAR_ROUNDING_RADIUS = 0.05f
 private const val PROGRESS_ANIMATION_DURATION = 4000
 private const val FULL_CIRCLE_ANGLE = 360f
 private val STROKE_WIDTH = 8.dp
+@Suppress("MagicNumber")
 private val rainbowColors = listOf(
     Color(0xFF3FCEBC),
     Color(0xFF3CBCEB),
@@ -82,10 +83,9 @@ fun ShapeScreen() {
     val progress = createProgressAnimation(transition = infiniteTransition)
     val rotation = createRotationAnimation(transition = infiniteTransition)
 
-    var morphPath = remember { Path() }
-    var destinationPath = remember { Path() }
+    val shapePath = remember { Path() }
     var androidPath = remember { android.graphics.Path() }
-    var matrix = remember { Matrix() }
+    val matrix = remember { Matrix() }
     val pathMeasurer = remember { PathMeasure() }
 
     Box(
@@ -94,20 +94,21 @@ fun ShapeScreen() {
             .padding(all = AppTheme.dimensions.commonSpaceMedium)
             .drawWithCache {
                 androidPath = morph.toPath(progress.value, androidPath)
-                morphPath = androidPath.asComposePath()
+                val polygonPath = androidPath.asComposePath()
                 matrix.reset()
                 // Took the maximum space available (depending of screen orientation)
                 val matrixSize = size.minDimension / 2f
                 matrix.scale(x = matrixSize, y = matrixSize)
-                morphPath.transform(matrix)
+                polygonPath.transform(matrix)
 
-                pathMeasurer.setPath(path = morphPath, forceClosed = false)
+                // Draw only a segment of the polygon, depending on progress value
+                pathMeasurer.setPath(path = polygonPath, forceClosed = false)
                 val totalLength = pathMeasurer.length
-                destinationPath.reset()
+                shapePath.reset()
                 pathMeasurer.getSegment(
                     startDistance = 0f,
                     stopDistance = totalLength * progress.value,
-                    destination = destinationPath
+                    destination = shapePath
                 )
 
                 onDrawBehind {
@@ -115,8 +116,11 @@ fun ShapeScreen() {
                         // Translate to the center of the screen
                         translate(left = size.width / 2f, top = size.height / 2f) {
                             drawPath(
-                                path = destinationPath,
-                                brush = Brush.sweepGradient(colors = rainbowColors, center = Offset(x = 0.5f, y = 0.5f)),
+                                path = shapePath,
+                                brush = Brush.sweepGradient(
+                                    colors = rainbowColors,
+                                    center = Offset(x = 0.5f, y = 0.5f)
+                                ),
                                 style = Stroke(width = STROKE_WIDTH.toPx(), cap = StrokeCap.Round)
                             )
                         }
