@@ -16,8 +16,9 @@ dependencies {
     // UI
     implementation(libs.androidx.activity)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.emoji2.emojipicker)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.emoji2.emojipicker)
+    implementation(libs.androidx.graphics.shapes)
     implementation(libs.bundles.androidx.lifecycle)
     implementation(libs.bundles.androidx.paging)
 
