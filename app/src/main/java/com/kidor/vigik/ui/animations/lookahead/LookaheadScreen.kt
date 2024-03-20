@@ -3,6 +3,7 @@ package com.kidor.vigik.ui.animations.lookahead
 import androidx.compose.animation.core.DeferredTargetAnimation
 import androidx.compose.animation.core.ExperimentalAnimatableApi
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,11 +30,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.approachLayout
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
 import com.kidor.vigik.ui.compose.dimensions
 
+private const val OFFSET_ANIMATION_DURATION = 1000
+private const val SIZE_ANIMATION_DURATION = 500
 private val colors = listOf(
     Color.Red,
     Color.Yellow,
@@ -54,7 +59,7 @@ fun LookaheadScreen() {
                 Box(
                     modifier = Modifier
                         .padding(all = MaterialTheme.dimensions.commonSpaceSmall)
-                        .size(80.dp)
+                        .size(if (isInColumn) 80.dp else 20.dp)
                         .animateBounds()
                         .background(color = color, shape = RoundedCornerShape(16.dp))
                 )
@@ -82,16 +87,21 @@ context(LookaheadScope)
 @OptIn(ExperimentalAnimatableApi::class, ExperimentalComposeUiApi::class)
 private fun Modifier.animateBounds(): Modifier = composed {
     val offsetAnim = remember { DeferredTargetAnimation(IntOffset.VectorConverter) }
+    val sizeAnim = remember { DeferredTargetAnimation(IntSize.VectorConverter) }
     val scope = rememberCoroutineScope()
     this.approachLayout(
-        isMeasurementApproachComplete = { true },
+        isMeasurementApproachComplete = {
+            sizeAnim.updateTarget(it, scope, tween(durationMillis = SIZE_ANIMATION_DURATION))
+            sizeAnim.isIdle
+        },
         isPlacementApproachComplete = {
             val target = lookaheadScopeCoordinates.localLookaheadPositionOf(it)
-            offsetAnim.updateTarget(target.round(), scope)
+            offsetAnim.updateTarget(target.round(), scope, tween(durationMillis = OFFSET_ANIMATION_DURATION))
             offsetAnim.isIdle
         }
-    ) { measurable, constraints ->
-        measurable.measure(constraints)
+    ) { measurable, _ ->
+        val (animWidth, animHeight) = sizeAnim.updateTarget(lookaheadSize, scope)
+        measurable.measure(Constraints.fixed(animWidth, animHeight))
             .run {
                 layout(width, height) {
                     coordinates?.let {
