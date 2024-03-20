@@ -19,6 +19,7 @@
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_notification_button_label">Notification</string>
     <string name="home_rest_api_button_label">REST API</string>
+    <string name="home_telephony_button_label">Telephony</string>
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>
@@ -166,6 +167,9 @@
     <string name="diablo_tracker_source_label">Source: %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
+
+    <!-- Telephony -->
+    <string name="telephony_title">Telephony</string>
 
     <!-- WIDGET -->
     <string name="widget_diablo_label">Diablo IV WB tracker</string>

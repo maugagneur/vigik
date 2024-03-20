@@ -36,6 +36,7 @@ import com.kidor.vigik.ui.nfc.hub.HubScreen
 import com.kidor.vigik.ui.nfc.scan.ScanScreen
 import com.kidor.vigik.ui.notification.NotificationScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
+import com.kidor.vigik.ui.telephony.TelephonyScreen
 
 /**
  * Implementation of [NavHost] for this application.
@@ -61,6 +62,7 @@ fun AppNavHost(
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
         addRestApiScreens(navGraphBuilder = this)
+        addTelephonyScreens(navGraphBuilder = this)
     }
 }
 
@@ -81,7 +83,8 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
             navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
             navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
             navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
-            navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) }
+            navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) },
+            navigateToTelephony = { navController.navigate(AppScreen.TelephonyScreen) }
         )
     }
 }
@@ -231,6 +234,17 @@ private fun addNotificationScreens(navGraphBuilder: NavGraphBuilder) {
 private fun addRestApiScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.RestApiScreen.route) {
         RestApiScreen()
+    }
+}
+
+/**
+ * Add screens related to Telephony into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addTelephonyScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.TelephonyScreen.route) {
+        TelephonyScreen()
     }
 }
 
