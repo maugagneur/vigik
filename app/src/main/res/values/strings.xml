@@ -170,6 +170,11 @@
 
     <!-- Telephony -->
     <string name="telephony_title">Telephony</string>
+    <string name="telephony_permission_status_label">Permissions granted:</string>
+    <string name="telephony_permission_request_button_label">Request permission</string>
+    <string name="telephony_contact_section_title">Contact</string>
+    <string name="telephony_contact_total_number_label">Total number of contacts: %s</string>
+    <string name="telephony_contact_mobile_number_label">Number of mobile contacts: %s</string>
 
     <!-- WIDGET -->
     <string name="widget_diablo_label">Diablo IV WB tracker</string>
