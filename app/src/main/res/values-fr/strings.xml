@@ -28,6 +28,8 @@
     <string name="animation_glitter_rainbow_speed_coefficient_label">Vitesse</string>
     <string name="animation_glitter_rainbow_life_time_label">Durée de vie</string>
     <string name="animation_glitter_rainbow_source_label">Source : https://github.com/maiatoday/GrooveIsInTheHeart</string>
+    <!-- Animation - Shape -->
+    <string name="animation_shape_title">Forme</string>
     <!-- Animation - Snowfall -->
     <string name="animation_snowfall_title">Chute de neige</string>
     <!-- Animation - Typewriter -->
