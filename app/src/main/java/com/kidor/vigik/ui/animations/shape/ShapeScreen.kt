@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.animations.shape
 
+import androidx.compose.animation.core.InfiniteTransition
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -18,6 +20,7 @@ import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +33,10 @@ import androidx.graphics.shapes.toPath
 import com.kidor.vigik.ui.compose.AppTheme
 
 private const val VERTICES_NUMBER = 12
+private const val STAR_INNER_RADIUS = 0.3f
+private const val STAR_ROUNDING_RADIUS = 0.05f
 private const val PROGRESS_ANIMATION_DURATION = 4000
+private const val FULL_CIRCLE_ANGLE = 360f
 private val STROKE_WIDTH = 8.dp
 
 /**
@@ -42,8 +48,8 @@ fun ShapeScreen() {
     val starPolygon = remember {
         RoundedPolygon.star(
             numVerticesPerRadius = VERTICES_NUMBER,
-            innerRadius = 1f / 3f,
-            rounding = CornerRounding(radius = 1f / 6f)
+            innerRadius = STAR_INNER_RADIUS,
+            rounding = CornerRounding(radius = STAR_ROUNDING_RADIUS)
         )
     }
     val circlePolygon = remember {
@@ -54,15 +60,8 @@ fun ShapeScreen() {
     val morph = remember { Morph(starPolygon, circlePolygon) }
 
     val infiniteTransition = rememberInfiniteTransition(label = "Shape infinite transition")
-    val progress = infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            tween(durationMillis = PROGRESS_ANIMATION_DURATION, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "Progress animation"
-    )
+    val progress = createProgressAnimation(transition = infiniteTransition)
+    val rotation = createRotationAnimation(transition = infiniteTransition)
 
     var morphPath = remember { Path() }
     var androidPath = remember { android.graphics.Path() }
@@ -82,15 +81,39 @@ fun ShapeScreen() {
                 morphPath.transform(matrix)
 
                 onDrawBehind {
-                    // Translate to the center of the screen
-                    translate(left = size.width / 2f, top = size.height / 2f) {
-                        drawPath(
-                            path = morphPath,
-                            color = Color.Blue,
-                            style = Stroke(width = STROKE_WIDTH.toPx())
-                        )
+                    rotate(rotation.value) {
+                        // Translate to the center of the screen
+                        translate(left = size.width / 2f, top = size.height / 2f) {
+                            drawPath(
+                                path = morphPath,
+                                color = Color.Blue,
+                                style = Stroke(width = STROKE_WIDTH.toPx())
+                            )
+                        }
                     }
                 }
             }
     )
 }
+
+@Composable
+private fun createProgressAnimation(transition: InfiniteTransition): State<Float> = transition.animateFloat(
+    initialValue = 0f,
+    targetValue = 1f,
+    animationSpec = infiniteRepeatable(
+        animation = tween(durationMillis = PROGRESS_ANIMATION_DURATION, easing = LinearEasing),
+        repeatMode = RepeatMode.Reverse
+    ),
+    label = "Progress animation"
+)
+
+@Composable
+private fun createRotationAnimation(transition: InfiniteTransition): State<Float> = transition.animateFloat(
+    initialValue = 0f,
+    targetValue = FULL_CIRCLE_ANGLE,
+    animationSpec = infiniteRepeatable(
+        animation = tween(durationMillis = PROGRESS_ANIMATION_DURATION, easing = LinearEasing),
+        repeatMode = RepeatMode.Reverse
+    ),
+    label = "Rotation animation"
+)
