@@ -18,6 +18,8 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathMeasure
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asComposePath
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
@@ -64,8 +66,10 @@ fun ShapeScreen() {
     val rotation = createRotationAnimation(transition = infiniteTransition)
 
     var morphPath = remember { Path() }
+    var destinationPath = remember { Path() }
     var androidPath = remember { android.graphics.Path() }
     var matrix = remember { Matrix() }
+    val pathMeasurer = remember { PathMeasure() }
 
     Box(
         modifier = Modifier
@@ -80,14 +84,23 @@ fun ShapeScreen() {
                 matrix.scale(x = matrixSize, y = matrixSize)
                 morphPath.transform(matrix)
 
+                pathMeasurer.setPath(path = morphPath, forceClosed = false)
+                val totalLength = pathMeasurer.length
+                destinationPath.reset()
+                pathMeasurer.getSegment(
+                    startDistance = 0f,
+                    stopDistance = totalLength * progress.value,
+                    destination = destinationPath
+                )
+
                 onDrawBehind {
                     rotate(rotation.value) {
                         // Translate to the center of the screen
                         translate(left = size.width / 2f, top = size.height / 2f) {
                             drawPath(
-                                path = morphPath,
                                 color = Color.Blue,
-                                style = Stroke(width = STROKE_WIDTH.toPx())
+                                path = destinationPath,
+                                style = Stroke(width = STROKE_WIDTH.toPx(), cap = StrokeCap.Round)
                             )
                         }
                     }
