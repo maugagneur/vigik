@@ -48,7 +48,7 @@ class BottomSheetState(
      * The current value of the bottom sheet state.
      */
     val currentValue: BottomSheetStateValue
-        get() = draggableState.currentValue
+        get() = draggableState.settledValue
 
     /**
      * The target value of the bottom sheet state.

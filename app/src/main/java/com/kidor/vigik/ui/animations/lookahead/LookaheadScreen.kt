@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.geometry.Offset
@@ -84,20 +83,20 @@ fun LookaheadScreen() {
 }
 
 context(LookaheadScope)
-@OptIn(ExperimentalAnimatableApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalAnimatableApi::class)
 private fun Modifier.animateBounds(): Modifier = composed {
     val offsetAnim = remember { DeferredTargetAnimation(IntOffset.VectorConverter) }
     val sizeAnim = remember { DeferredTargetAnimation(IntSize.VectorConverter) }
     val scope = rememberCoroutineScope()
     this.approachLayout(
-        isMeasurementApproachComplete = {
+        isMeasurementApproachInProgress = {
             sizeAnim.updateTarget(it, scope, tween(durationMillis = SIZE_ANIMATION_DURATION))
-            sizeAnim.isIdle
+            !sizeAnim.isIdle
         },
-        isPlacementApproachComplete = {
+        isPlacementApproachInProgress = {
             val target = lookaheadScopeCoordinates.localLookaheadPositionOf(it)
             offsetAnim.updateTarget(target.round(), scope, tween(durationMillis = OFFSET_ANIMATION_DURATION))
-            offsetAnim.isIdle
+            !offsetAnim.isIdle
         }
     ) { measurable, _ ->
         val (animWidth, animHeight) = sizeAnim.updateTarget(lookaheadSize, scope)

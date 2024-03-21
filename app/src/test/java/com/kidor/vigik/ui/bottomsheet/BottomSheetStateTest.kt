@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.bottomsheet
 
 import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.foundation.ExperimentalFoundationApi
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.AssertUtils.assertFalse
@@ -30,6 +31,8 @@ class BottomSheetStateTest {
     @MockK
     private lateinit var animationSpec: AnimationSpec<Float>
     @MockK
+    private lateinit var decayAnimationSpec: DecayAnimationSpec<Float>
+    @MockK
     private lateinit var confirmValueChanged: (BottomSheetStateValue) -> Boolean
 
     @Before
@@ -45,10 +48,12 @@ class BottomSheetStateTest {
         bottomSheetState = BottomSheetState(
             initialValue = BottomSheetStateValue.HIDDEN,
             animationSpec = animationSpec,
+            decayAnimationSpec = decayAnimationSpec,
             confirmValueChanged = confirmValueChanged
         )
 
-        assertEquals(animationSpec, bottomSheetState.draggableState.animationSpec, "Animation spec")
+        assertEquals(animationSpec, bottomSheetState.draggableState.snapAnimationSpec, "Animation spec")
+        assertEquals(decayAnimationSpec, bottomSheetState.draggableState.decayAnimationSpec, "Decay animation spec")
         assertEquals(BottomSheetStateValue.HIDDEN, bottomSheetState.currentValue, "Current value")
         assertEquals(BottomSheetStateValue.HIDDEN, bottomSheetState.targetValue, "Target value")
     }
@@ -60,6 +65,7 @@ class BottomSheetStateTest {
         bottomSheetState = BottomSheetState(
             initialValue = BottomSheetStateValue.HIDDEN,
             animationSpec = animationSpec,
+            decayAnimationSpec = decayAnimationSpec,
             confirmValueChanged = confirmValueChanged
         )
 
@@ -77,10 +83,11 @@ class BottomSheetStateTest {
             BottomSheetState(
                 initialValue = BottomSheetStateValue.HIDDEN,
                 animationSpec = animationSpec,
+                decayAnimationSpec = decayAnimationSpec,
                 confirmValueChanged = confirmValueChanged
             )
         )
-        coEvery { bottomSheetState.animateTo(any(), any()) } answers {
+        coEvery { bottomSheetState.animateTo(any()) } answers {
             val target = it.invocation.args[0] as BottomSheetStateValue
             every { bottomSheetState.currentValue } returns target
             every { bottomSheetState.targetValue } returns target
@@ -152,6 +159,7 @@ class BottomSheetStateTest {
 
         val saver = BottomSheetState.Saver(
             animationSpec = animationSpec,
+            decayAnimationSpec = decayAnimationSpec,
             confirmValueChanged = confirmValueChanged
         )
         val stateValue = BottomSheetStateValue.HALF_EXPANDED
