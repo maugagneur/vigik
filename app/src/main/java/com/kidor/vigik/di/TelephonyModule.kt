@@ -2,8 +2,8 @@ package com.kidor.vigik.di
 
 import android.content.ContentResolver
 import android.content.Context
-import com.kidor.vigik.data.telephony.ContactRepository
-import com.kidor.vigik.data.telephony.ContactRepositoryImp
+import com.kidor.vigik.data.telephony.TelephonyRepository
+import com.kidor.vigik.data.telephony.TelephonyRepositoryImp
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,10 +27,10 @@ object TelephonyModule {
     fun providesContentResolver(@ApplicationContext context: Context): ContentResolver = context.contentResolver
 
     /**
-     * Provides instance of [ContactRepository].
+     * Provides instance of [TelephonyRepository].
      */
     @Singleton
     @Provides
-    fun providesContactRepository(contentResolver: ContentResolver): ContactRepository =
-        ContactRepositoryImp(contentResolver)
+    fun providesTelephonyRepository(contentResolver: ContentResolver): TelephonyRepository =
+        TelephonyRepositoryImp(contentResolver)
 }

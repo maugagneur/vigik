@@ -175,6 +175,8 @@
     <string name="telephony_contact_section_title">Contact</string>
     <string name="telephony_contact_total_number_label">Total number of contacts: %s</string>
     <string name="telephony_contact_mobile_number_label">Number of mobile contacts: %s</string>
+    <string name="telephony_sms_section_title">SMS</string>
+    <string name="telephony_sms_total_number_label">Total number of SMS: %s</string>
 
     <!-- WIDGET -->
     <string name="widget_diablo_label">Diablo IV WB tracker</string>

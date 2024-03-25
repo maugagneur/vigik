@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -55,10 +56,12 @@ fun TelephonyScreen(
                             .padding(all = AppTheme.dimensions.commonSpaceMedium),
                         verticalArrangement = Arrangement.Center
                     ) {
-                        ContactData(
+                        ContactView(
                             totalContactNumber = state.totalContactNumber,
                             mobileContactNumber = state.mobileContactNumber
                         )
+                        HorizontalDivider(modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium))
+                        SmsView(totalSmsNumber = state.totalSmsNumber)
                     }
                 }
             }
@@ -71,7 +74,8 @@ fun TelephonyScreen(
 private fun PermissionView(onPermissionsGranted: () -> Unit) {
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
-            Manifest.permission.READ_CONTACTS
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.READ_SMS
         )
     )
 
@@ -108,7 +112,7 @@ private fun PermissionView(onPermissionsGranted: () -> Unit) {
 }
 
 @Composable
-private fun ContactData(totalContactNumber: Int?, mobileContactNumber: Int?) {
+private fun ContactView(totalContactNumber: Int?, mobileContactNumber: Int?) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -118,7 +122,7 @@ private fun ContactData(totalContactNumber: Int?, mobileContactNumber: Int?) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_contact_total_number_label, totalContactNumber ?: DATA_PLACEHOLDER
@@ -137,13 +141,47 @@ private fun ContactData(totalContactNumber: Int?, mobileContactNumber: Int?) {
 }
 
 @Composable
-@Preview(widthDp = 400, heightDp = 100)
-private fun ContactDataWithoutData() {
-    ContactData(totalContactNumber = null, mobileContactNumber = null)
+private fun SmsView(totalSmsNumber: Int?) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.telephony_sms_section_title),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeXLarge
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(
+                id = R.string.telephony_sms_total_number_label, totalSmsNumber ?: DATA_PLACEHOLDER
+            ),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+    }
 }
 
 @Composable
 @Preview(widthDp = 400, heightDp = 100)
-private fun ContactDataWithData() {
-    ContactData(totalContactNumber = 1337, mobileContactNumber = 42)
+private fun ContactViewWithoutData() {
+    ContactView(totalContactNumber = null, mobileContactNumber = null)
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 100)
+private fun ContactViewWithData() {
+    ContactView(totalContactNumber = 1337, mobileContactNumber = 42)
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 100)
+private fun SmsViewWithoutData() {
+    SmsView(totalSmsNumber = null)
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 100)
+private fun SmsViewWithData() {
+    SmsView(totalSmsNumber = 1337)
 }

@@ -17,9 +17,11 @@ sealed class TelephonyViewState : ViewState {
      *
      * @param totalContactNumber  Total number of contacts on the device.
      * @param mobileContactNumber Number of mobile contacts on the device.
+     * @param totalSmsNumber      Total number of SMS on the device.
      */
     data class ShowData(
         val totalContactNumber: Int? = null,
-        val mobileContactNumber: Int? = null
+        val mobileContactNumber: Int? = null,
+        val totalSmsNumber: Int? = null
     ) : TelephonyViewState()
 }

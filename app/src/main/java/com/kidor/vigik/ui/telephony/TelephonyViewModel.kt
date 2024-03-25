@@ -1,7 +1,7 @@
 package com.kidor.vigik.ui.telephony
 
 import androidx.lifecycle.viewModelScope
-import com.kidor.vigik.data.telephony.ContactRepository
+import com.kidor.vigik.data.telephony.TelephonyRepository
 import com.kidor.vigik.di.IoDispatcher
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TelephonyViewModel @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val contactRepository: ContactRepository
+    private val telephonyRepository: TelephonyRepository
 ) : BaseViewModel<TelephonyViewAction, TelephonyViewState, Nothing>() {
 
     init {
@@ -26,12 +26,14 @@ class TelephonyViewModel @Inject constructor(
     override fun handleAction(viewAction: TelephonyViewAction) {
         if (viewAction is TelephonyViewAction.PermissionsGranted) {
             viewModelScope.launch(ioDispatcher) {
-                val allContacts = contactRepository.getAllContact()
-                val mobileContacts = contactRepository.getAllMobileContact()
+                val allContacts = telephonyRepository.getAllContact()
+                val mobileContacts = telephonyRepository.getAllMobileContact()
+                val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
                 updateState {
                     it.copy(
                         totalContactNumber = allContacts.size,
-                        mobileContactNumber = mobileContacts.size
+                        mobileContactNumber = mobileContacts.size,
+                        totalSmsNumber = totalSmsNumber
                     )
                 }
             }
