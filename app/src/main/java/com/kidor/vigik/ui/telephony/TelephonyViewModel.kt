@@ -6,8 +6,11 @@ import com.kidor.vigik.di.IoDispatcher
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val DELAY_BEFORE_REFRESH_SMS_NUMBER = 1_000L
 
 /**
  * Business logic of Telephony screen.
@@ -24,17 +27,34 @@ class TelephonyViewModel @Inject constructor(
     }
 
     override fun handleAction(viewAction: TelephonyViewAction) {
-        if (viewAction is TelephonyViewAction.PermissionsGranted) {
-            viewModelScope.launch(ioDispatcher) {
-                val allContacts = telephonyRepository.getAllContact()
-                val mobileContacts = telephonyRepository.getAllMobileContact()
-                val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
-                updateState {
-                    it.copy(
-                        totalContactNumber = allContacts.size,
-                        mobileContactNumber = mobileContacts.size,
-                        totalSmsNumber = totalSmsNumber
-                    )
+        when (viewAction) {
+            is TelephonyViewAction.PermissionsGranted -> {
+                viewModelScope.launch(ioDispatcher) {
+                    val allContacts = telephonyRepository.getAllContact()
+                    val mobileContacts = telephonyRepository.getAllMobileContact()
+                    val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
+                    updateState {
+                        it.copy(
+                            totalContactNumber = allContacts.size,
+                            mobileContactNumber = mobileContacts.size,
+                            totalSmsNumber = totalSmsNumber
+                        )
+                    }
+                }
+            }
+
+            is TelephonyViewAction.SendSms -> {
+                if (viewAction.message.isNotBlank()) {
+                    viewModelScope.launch(ioDispatcher) {
+                        telephonyRepository.sendSms(
+                            phoneNumber = viewAction.phoneNumber,
+                            message = viewAction.message
+                        )
+                        // Refresh number of SMS after a short delay
+                        delay(DELAY_BEFORE_REFRESH_SMS_NUMBER)
+                        val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
+                        updateState { it.copy(totalSmsNumber = totalSmsNumber) }
+                    }
                 }
             }
         }

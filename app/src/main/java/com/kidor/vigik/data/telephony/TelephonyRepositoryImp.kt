@@ -3,13 +3,15 @@ package com.kidor.vigik.data.telephony
 import android.content.ContentResolver
 import android.provider.ContactsContract
 import android.provider.Telephony
+import android.telephony.SmsManager
 import timber.log.Timber
 
 /**
  * Implementation of [TelephonyRepository].
  */
 class TelephonyRepositoryImp(
-    private val contentResolver: ContentResolver
+    private val contentResolver: ContentResolver,
+    private val smsManager: SmsManager
 ) : TelephonyRepository {
 
     override suspend fun getAllContact(): List<Contact> {
@@ -62,5 +64,9 @@ class TelephonyRepositoryImp(
         }
 
         return result
+    }
+
+    override suspend fun sendSms(phoneNumber: String, message: String) {
+        smsManager.sendTextMessage(phoneNumber, null, message, null, null)
     }
 }
