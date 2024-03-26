@@ -42,6 +42,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.kidor.vigik.R
+import com.kidor.vigik.data.telephony.PhoneCall
+import com.kidor.vigik.data.telephony.PhoneCallStatus
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
@@ -65,7 +67,10 @@ fun TelephonyScreen(
     ) {
         ObserveViewState(viewModel = viewModel) { state ->
             when (state) {
-                TelephonyViewState.CheckPermission -> PermissionView { viewModel.handleAction(TelephonyViewAction.PermissionsGranted) }
+                TelephonyViewState.CheckPermission -> PermissionView {
+                    viewModel.handleAction(TelephonyViewAction.PermissionsGranted)
+                }
+
                 is TelephonyViewState.ShowData -> {
                     Column(
                         modifier = Modifier
@@ -82,6 +87,8 @@ fun TelephonyScreen(
                         SmsView(totalSmsNumber = state.totalSmsNumber) { phoneNumber, message ->
                             viewModel.handleAction(TelephonyViewAction.SendSms(phoneNumber, message))
                         }
+                        HorizontalDivider(modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium))
+                        CallView(phoneCalls = state.phoneCalls)
                     }
                 }
             }
@@ -94,6 +101,7 @@ fun TelephonyScreen(
 private fun PermissionView(onPermissionsGranted: () -> Unit) {
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
+            Manifest.permission.READ_CALL_LOG,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.READ_SMS,
             Manifest.permission.SEND_SMS
@@ -106,7 +114,9 @@ private fun PermissionView(onPermissionsGranted: () -> Unit) {
     }
 
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(all = AppTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -146,14 +156,16 @@ private fun ContactView(totalContactNumber: Int?, mobileContactNumber: Int?) {
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
-                id = R.string.telephony_contact_total_number_label, totalContactNumber ?: DATA_PLACEHOLDER
+                id = R.string.telephony_contact_total_number_label,
+                totalContactNumber ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeMedium
         )
         Text(
             text = stringResource(
-                id = R.string.telephony_contact_mobile_number_label, mobileContactNumber ?: DATA_PLACEHOLDER
+                id = R.string.telephony_contact_mobile_number_label,
+                mobileContactNumber ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeMedium
@@ -179,7 +191,8 @@ private fun SmsView(totalSmsNumber: Int?, sendSms: (phoneNumber: String, message
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
-                id = R.string.telephony_sms_total_number_label, totalSmsNumber ?: DATA_PLACEHOLDER
+                id = R.string.telephony_sms_total_number_label,
+                totalSmsNumber ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeMedium
@@ -213,6 +226,56 @@ private fun SmsView(totalSmsNumber: Int?, sendSms: (phoneNumber: String, message
 }
 
 @Composable
+private fun CallView(phoneCalls: List<PhoneCall>?) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.telephony_call_section_title),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeXLarge
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(
+                id = R.string.telephony_call_emitted_label,
+                phoneCalls?.filter { call -> call.status == PhoneCallStatus.EMITTED }?.size ?: DATA_PLACEHOLDER
+            ),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(
+                id = R.string.telephony_call_received_label,
+                phoneCalls?.filter { call -> call.status == PhoneCallStatus.RECEIVED }?.size ?: DATA_PLACEHOLDER
+            ),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(
+                id = R.string.telephony_call_ignored_label,
+                phoneCalls?.filter { call -> call.status == PhoneCallStatus.MISSED }?.size ?: DATA_PLACEHOLDER
+            ),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(
+                id = R.string.telephony_call_rejected_label,
+                phoneCalls?.filter { call -> call.status == PhoneCallStatus.REJECTED }?.size ?: DATA_PLACEHOLDER
+            ),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+    }
+}
+
+@Composable
 @Preview(widthDp = 400, heightDp = 100)
 private fun ContactViewWithoutData() {
     ContactView(totalContactNumber = null, mobileContactNumber = null)
@@ -225,13 +288,34 @@ private fun ContactViewWithData() {
 }
 
 @Composable
-@Preview(widthDp = 400, heightDp = 200)
+@Preview(widthDp = 400, heightDp = 250)
 private fun SmsViewWithoutData() {
     SmsView(totalSmsNumber = null) { _, _ -> }
 }
 
 @Composable
-@Preview(widthDp = 400, heightDp = 200)
+@Preview(widthDp = 400, heightDp = 250)
 private fun SmsViewWithData() {
     SmsView(totalSmsNumber = 1337) { _, _ -> }
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 150)
+private fun CallViewWithoutData() {
+    CallView(phoneCalls = null)
+}
+
+@Composable
+@Preview(widthDp = 400, heightDp = 150)
+private fun CallViewWithData() {
+    CallView(
+        phoneCalls = listOf(
+            PhoneCall("0123456789", PhoneCallStatus.EMITTED),
+            PhoneCall("0123456789", PhoneCallStatus.RECEIVED),
+            PhoneCall("0123456789", PhoneCallStatus.RECEIVED),
+            PhoneCall("0123456789", PhoneCallStatus.MISSED),
+            PhoneCall("0123456789", PhoneCallStatus.RECEIVED),
+            PhoneCall("0123456789", PhoneCallStatus.MISSED),
+        )
+    )
 }

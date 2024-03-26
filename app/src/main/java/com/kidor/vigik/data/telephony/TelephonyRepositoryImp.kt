@@ -1,6 +1,7 @@
 package com.kidor.vigik.data.telephony
 
 import android.content.ContentResolver
+import android.provider.CallLog.Calls
 import android.provider.ContactsContract
 import android.provider.Telephony
 import android.telephony.SmsManager
@@ -24,8 +25,12 @@ class TelephonyRepositoryImp(
         contentResolver.query(ContactsContract.Data.CONTENT_URI, projection, null, null, null)?.let { contacts ->
             while (contacts.moveToNext()) {
                 try {
-                    val contactId: Long = contacts.getLong(contacts.getColumnIndexOrThrow(ContactsContract.Contacts._ID))
-                    val type: Int = contacts.getInt(contacts.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE))
+                    val contactId: Long = contacts.getLong(
+                        contacts.getColumnIndexOrThrow(ContactsContract.Contacts._ID)
+                    )
+                    val type: Int = contacts.getInt(
+                        contacts.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE)
+                    )
                     result.add(Contact(id = contactId, type = type))
                 } catch (exception: IllegalArgumentException) {
                     Timber.e(exception, "Error when query for all contacts")
@@ -40,6 +45,7 @@ class TelephonyRepositoryImp(
     override suspend fun getAllMobileContact(): List<Contact> =
         getAllContact().filter { contact -> contact.type == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE }
 
+    @Suppress("NestedBlockDepth")
     override suspend fun getSmsTotalNumber(): Int {
         var result = 0
         val projection = arrayOf(
@@ -68,5 +74,41 @@ class TelephonyRepositoryImp(
 
     override suspend fun sendSms(phoneNumber: String, message: String) {
         smsManager.sendTextMessage(phoneNumber, null, message, null, null)
+    }
+
+    @Suppress("NestedBlockDepth")
+    override suspend fun getAllPhoneCalls(): List<PhoneCall> {
+        val result = mutableListOf<PhoneCall>()
+        val projection = arrayOf(
+            Calls.NUMBER,
+            Calls.TYPE
+        )
+
+        contentResolver.query(Calls.CONTENT_URI, projection, null, null, null)?.let { phoneCalls ->
+            while (phoneCalls.moveToNext()) {
+                try {
+                    val number: String? = phoneCalls.getString(phoneCalls.getColumnIndexOrThrow(Calls.NUMBER))
+                    val type: Int = phoneCalls.getInt(phoneCalls.getColumnIndexOrThrow(Calls.TYPE))
+                    if (number != null) {
+                        val status = when (type) {
+                            Calls.INCOMING_TYPE -> PhoneCallStatus.RECEIVED
+                            Calls.OUTGOING_TYPE -> PhoneCallStatus.EMITTED
+                            Calls.MISSED_TYPE -> PhoneCallStatus.MISSED
+                            Calls.REJECTED_TYPE -> PhoneCallStatus.REJECTED
+                            else -> {
+                                // We ignore other types of call like VOICEMAIL and BLOCKED
+                                continue
+                            }
+                        }
+                        result.add(PhoneCall(phoneNumber = number, status = status))
+                    }
+                } catch (exception: IllegalArgumentException) {
+                    Timber.e(exception, "Error when query for all phone calls")
+                }
+            }
+            phoneCalls.close()
+        }
+
+        return result
     }
 }

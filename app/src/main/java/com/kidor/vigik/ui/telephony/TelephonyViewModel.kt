@@ -33,11 +33,13 @@ class TelephonyViewModel @Inject constructor(
                     val allContacts = telephonyRepository.getAllContact()
                     val mobileContacts = telephonyRepository.getAllMobileContact()
                     val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
+                    val allPhoneCalls = telephonyRepository.getAllPhoneCalls()
                     updateState {
                         it.copy(
                             totalContactNumber = allContacts.size,
                             mobileContactNumber = mobileContacts.size,
-                            totalSmsNumber = totalSmsNumber
+                            totalSmsNumber = totalSmsNumber,
+                            phoneCalls = allPhoneCalls
                         )
                     }
                 }

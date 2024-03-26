@@ -179,6 +179,11 @@
     <string name="telephony_sms_total_number_label">Total number of SMS: %s</string>
     <string name="telephony_sms_phone_number_hint">Phone number</string>
     <string name="telephony_sms_message_hint">Message…</string>
+    <string name="telephony_call_section_title">Calls</string>
+    <string name="telephony_call_emitted_label">Emitted: %s</string>
+    <string name="telephony_call_received_label">Received: %s</string>
+    <string name="telephony_call_ignored_label">Ignored: %s</string>
+    <string name="telephony_call_rejected_label">Rejected: %s</string>
 
     <!-- WIDGET -->
     <string name="widget_diablo_label">Diablo IV WB tracker</string>

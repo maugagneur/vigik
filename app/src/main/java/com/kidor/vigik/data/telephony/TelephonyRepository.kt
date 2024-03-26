@@ -27,4 +27,9 @@ interface TelephonyRepository {
      * @param message     The message to send.
      */
     suspend fun sendSms(phoneNumber: String, message: String)
+
+    /**
+     * Returns all phone calls saved on the device.
+     */
+    suspend fun getAllPhoneCalls(): List<PhoneCall>
 }
