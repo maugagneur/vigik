@@ -170,7 +170,8 @@
     <string name="telephony_contact_total_number_label">Nombre total de contacts : %s</string>
     <string name="telephony_contact_mobile_number_label">Nombre de contacts mobiles : %s</string>
     <string name="telephony_sms_section_title">SMS</string>
-    <string name="telephony_sms_total_number_label">Nombre total de SMS : %s</string>
+    <string name="telephony_sms_total_received_label">Reçus : %s</string>
+    <string name="telephony_sms_total_sent_label">Envoyés : %s</string>
     <string name="telephony_sms_phone_number_hint">Numéro de téléphone</string>
     <string name="telephony_sms_message_hint">Message…</string>
     <string name="telephony_call_section_title">Appels</string>

@@ -46,11 +46,12 @@ class TelephonyRepositoryImp(
         getAllContact().filter { contact -> contact.type == ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE }
 
     @Suppress("NestedBlockDepth")
-    override suspend fun getSmsTotalNumber(): Int {
-        var result = 0
+    override suspend fun getAllSms(): List<Sms> {
+        val result = mutableListOf<Sms>()
         val projection = arrayOf(
             Telephony.Sms.ADDRESS,
-            Telephony.Sms.BODY
+            Telephony.Sms.BODY,
+            Telephony.Sms.DATE_SENT
         )
 
         contentResolver.query(Telephony.Sms.CONTENT_URI, projection, null, null, null)?.let { messages ->
@@ -58,9 +59,15 @@ class TelephonyRepositoryImp(
                 try {
                     val address: String? = messages.getString(messages.getColumnIndexOrThrow(Telephony.Sms.ADDRESS))
                     val body: String? = messages.getString(messages.getColumnIndexOrThrow(Telephony.Sms.BODY))
+                    val dateSent: Long = messages.getLong(messages.getColumnIndexOrThrow(Telephony.Sms.DATE_SENT))
                     // We consider a SMS as valid if it has an address and a body
                     if (address != null && body != null) {
-                        result++
+                        val type = if (dateSent > 0) {
+                            SmsType.RECEIVED
+                        } else {
+                            SmsType.SENT
+                        }
+                        result.add(Sms(content = body, type = type))
                     }
                 } catch (exception: IllegalArgumentException) {
                     Timber.e(exception, "Error when query for all SMS")

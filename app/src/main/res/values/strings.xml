@@ -176,7 +176,8 @@
     <string name="telephony_contact_total_number_label">Total number of contacts: %s</string>
     <string name="telephony_contact_mobile_number_label">Number of mobile contacts: %s</string>
     <string name="telephony_sms_section_title">SMS</string>
-    <string name="telephony_sms_total_number_label">Total number of SMS: %s</string>
+    <string name="telephony_sms_total_received_label">Received: %s</string>
+    <string name="telephony_sms_total_sent_label">Sent: %s</string>
     <string name="telephony_sms_phone_number_hint">Phone number</string>
     <string name="telephony_sms_message_hint">Message…</string>
     <string name="telephony_call_section_title">Calls</string>

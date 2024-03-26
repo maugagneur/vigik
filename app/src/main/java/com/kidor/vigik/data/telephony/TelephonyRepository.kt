@@ -16,9 +16,9 @@ interface TelephonyRepository {
     suspend fun getAllMobileContact(): List<Contact>
 
     /**
-     * Returns the number of SMS stored on the device.
+     * Returns all SMS stored on the device.
      */
-    suspend fun getSmsTotalNumber(): Int
+    suspend fun getAllSms(): List<Sms>
 
     /**
      * Emits a [message] to a given [phoneNumber] as SMS.

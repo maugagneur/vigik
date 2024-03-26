@@ -32,13 +32,13 @@ class TelephonyViewModel @Inject constructor(
                 viewModelScope.launch(ioDispatcher) {
                     val allContacts = telephonyRepository.getAllContact()
                     val mobileContacts = telephonyRepository.getAllMobileContact()
-                    val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
+                    val allSms = telephonyRepository.getAllSms()
                     val allPhoneCalls = telephonyRepository.getAllPhoneCalls()
                     updateState {
                         it.copy(
                             totalContactNumber = allContacts.size,
                             mobileContactNumber = mobileContacts.size,
-                            totalSmsNumber = totalSmsNumber,
+                            sms = allSms,
                             phoneCalls = allPhoneCalls
                         )
                     }
@@ -54,8 +54,8 @@ class TelephonyViewModel @Inject constructor(
                         )
                         // Refresh number of SMS after a short delay
                         delay(DELAY_BEFORE_REFRESH_SMS_NUMBER)
-                        val totalSmsNumber = telephonyRepository.getSmsTotalNumber()
-                        updateState { it.copy(totalSmsNumber = totalSmsNumber) }
+                        val totalSmsNumber = telephonyRepository.getAllSms()
+                        updateState { it.copy(sms = totalSmsNumber) }
                     }
                 }
             }

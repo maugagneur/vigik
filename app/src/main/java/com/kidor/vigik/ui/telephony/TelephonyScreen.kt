@@ -44,6 +44,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.kidor.vigik.R
 import com.kidor.vigik.data.telephony.PhoneCall
 import com.kidor.vigik.data.telephony.PhoneCallStatus
+import com.kidor.vigik.data.telephony.Sms
+import com.kidor.vigik.data.telephony.SmsType
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
 
@@ -84,7 +86,7 @@ fun TelephonyScreen(
                             mobileContactNumber = state.mobileContactNumber
                         )
                         HorizontalDivider(modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium))
-                        SmsView(totalSmsNumber = state.totalSmsNumber) { phoneNumber, message ->
+                        SmsView(smsList = state.sms) { phoneNumber, message ->
                             viewModel.handleAction(TelephonyViewAction.SendSms(phoneNumber, message))
                         }
                         HorizontalDivider(modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium))
@@ -174,7 +176,7 @@ private fun ContactView(totalContactNumber: Int?, mobileContactNumber: Int?) {
 }
 
 @Composable
-private fun SmsView(totalSmsNumber: Int?, sendSms: (phoneNumber: String, message: String) -> Unit) {
+private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message: String) -> Unit) {
     val focusManager = LocalFocusManager.current
     var phoneNumber by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
@@ -191,8 +193,17 @@ private fun SmsView(totalSmsNumber: Int?, sendSms: (phoneNumber: String, message
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
-                id = R.string.telephony_sms_total_number_label,
-                totalSmsNumber ?: DATA_PLACEHOLDER
+                id = R.string.telephony_sms_total_received_label,
+                smsList?.filter { sms -> sms.type == SmsType.RECEIVED }?.size ?: DATA_PLACEHOLDER
+            ),
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = AppTheme.dimensions.textSizeMedium
+        )
+        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Text(
+            text = stringResource(
+                id = R.string.telephony_sms_total_sent_label,
+                smsList?.filter { sms -> sms.type == SmsType.SENT }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = AppTheme.dimensions.textSizeMedium
@@ -290,13 +301,25 @@ private fun ContactViewWithData() {
 @Composable
 @Preview(widthDp = 400, heightDp = 250)
 private fun SmsViewWithoutData() {
-    SmsView(totalSmsNumber = null) { _, _ -> }
+    SmsView(smsList = null) { _, _ -> }
 }
 
 @Composable
 @Preview(widthDp = 400, heightDp = 250)
+@Suppress("kotlin:S1192")
 private fun SmsViewWithData() {
-    SmsView(totalSmsNumber = 1337) { _, _ -> }
+    SmsView(
+        smsList = listOf(
+            Sms("SMS content", SmsType.SENT),
+            Sms("SMS content", SmsType.RECEIVED),
+            Sms("SMS content", SmsType.RECEIVED),
+            Sms("SMS content", SmsType.SENT),
+            Sms("SMS content", SmsType.RECEIVED),
+            Sms("SMS content", SmsType.SENT),
+            Sms("SMS content", SmsType.SENT),
+            Sms("SMS content", SmsType.SENT)
+        )
+    ) { _, _ -> }
 }
 
 @Composable
