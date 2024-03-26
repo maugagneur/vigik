@@ -3,6 +3,7 @@ package com.kidor.vigik.ui.telephony
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.data.telephony.TelephonyRepository
 import com.kidor.vigik.di.IoDispatcher
+import com.kidor.vigik.extensions.awaitAll
 import com.kidor.vigik.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -30,18 +31,12 @@ class TelephonyViewModel @Inject constructor(
         when (viewAction) {
             is TelephonyViewAction.PermissionsGranted -> {
                 viewModelScope.launch(ioDispatcher) {
-                    val allContacts = telephonyRepository.getAllContact()
-                    val mobileContacts = telephonyRepository.getAllMobileContact()
-                    val allSms = telephonyRepository.getAllSms()
-                    val allPhoneCalls = telephonyRepository.getAllPhoneCalls()
-                    updateState {
-                        it.copy(
-                            totalContactNumber = allContacts.size,
-                            mobileContactNumber = mobileContacts.size,
-                            sms = allSms,
-                            phoneCalls = allPhoneCalls
-                        )
-                    }
+                    awaitAll(
+                        ::refreshAllContactNumber,
+                        ::refreshMobileContactNumber,
+                        ::refreshAllSms,
+                        ::refreshAllPhoneCalls
+                    )
                 }
             }
 
@@ -54,8 +49,7 @@ class TelephonyViewModel @Inject constructor(
                         )
                         // Refresh number of SMS after a short delay
                         delay(DELAY_BEFORE_REFRESH_SMS_NUMBER)
-                        val totalSmsNumber = telephonyRepository.getAllSms()
-                        updateState { it.copy(sms = totalSmsNumber) }
+                        refreshAllSms()
                     }
                 }
             }
@@ -70,6 +64,30 @@ class TelephonyViewModel @Inject constructor(
                     else -> _viewState.value = update(TelephonyViewState.ShowData())
                 }
             }
+        }
+    }
+
+    private suspend fun refreshAllContactNumber() {
+        telephonyRepository.getAllContact().let { contacts ->
+            updateState { it.copy(totalContactNumber = contacts.size) }
+        }
+    }
+
+    private suspend fun refreshMobileContactNumber() {
+        telephonyRepository.getAllMobileContact().let { mobileContacts ->
+            updateState { it.copy(mobileContactNumber = mobileContacts.size) }
+        }
+    }
+
+    private suspend fun refreshAllSms() {
+        telephonyRepository.getAllSms().let { sms ->
+            updateState { it.copy(sms = sms) }
+        }
+    }
+
+    private suspend fun refreshAllPhoneCalls() {
+        telephonyRepository.getAllPhoneCalls().let { phoneCalls ->
+            updateState { it.copy(phoneCalls = phoneCalls) }
         }
     }
 }
