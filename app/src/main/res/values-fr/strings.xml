@@ -16,6 +16,7 @@
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_notification_button_label">Notification</string>
     <string name="home_rest_api_button_label">REST API</string>
+    <string name="home_telephony_button_label">Téléphonie</string>
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>
@@ -160,6 +161,24 @@
     <string name="diablo_tracker_source_label">Source : %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
+
+    <!-- Telephony -->
+    <string name="telephony_title">Téléphonie</string>
+    <string name="telephony_permission_status_label">Permission accordée :</string>
+    <string name="telephony_permission_request_button_label">Demander permission</string>
+    <string name="telephony_contact_section_title">Contact</string>
+    <string name="telephony_contact_total_number_label">Nombre total de contacts : %s</string>
+    <string name="telephony_contact_mobile_number_label">Nombre de contacts mobiles : %s</string>
+    <string name="telephony_sms_section_title">SMS</string>
+    <string name="telephony_sms_total_received_label">Reçus : %s</string>
+    <string name="telephony_sms_total_sent_label">Envoyés : %s</string>
+    <string name="telephony_sms_phone_number_hint">Numéro de téléphone</string>
+    <string name="telephony_sms_message_hint">Message…</string>
+    <string name="telephony_call_section_title">Appels</string>
+    <string name="telephony_call_emitted_label">Émis : %s</string>
+    <string name="telephony_call_received_label">Reçus : %s</string>
+    <string name="telephony_call_ignored_label">Ignorés : %s</string>
+    <string name="telephony_call_rejected_label">Refusés : %s</string>
 
     <!-- WIDGET -->
     <string name="widget_diablo_label">Diablo IV WB tracker</string>

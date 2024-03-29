@@ -31,7 +31,8 @@ fun HomeScreen(
     navigateToEmoji: () -> Unit = {},
     navigateToNfc: () -> Unit = {},
     navigateToNotification: () -> Unit = {},
-    navigateToRestApi: () -> Unit = {}
+    navigateToRestApi: () -> Unit = {},
+    navigateToTelephony: () -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -48,7 +49,8 @@ fun HomeScreen(
             HomeButtonData(textId = R.string.home_emoji_button_label, navigateToEmoji),
             HomeButtonData(textId = R.string.home_nfc_button_label, navigateToNfc),
             HomeButtonData(textId = R.string.home_notification_button_label, navigateToNotification),
-            HomeButtonData(textId = R.string.home_rest_api_button_label, navigateToRestApi)
+            HomeButtonData(textId = R.string.home_rest_api_button_label, navigateToRestApi),
+            HomeButtonData(textId = R.string.home_telephony_button_label, navigateToTelephony)
         )
         items(homeButtonDataList) { buttonData ->
             Button(

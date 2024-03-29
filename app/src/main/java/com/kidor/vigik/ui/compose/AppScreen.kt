@@ -160,7 +160,7 @@ enum class AppScreen(
     ),
 
     /**
-     * Metadata of 'notification" screen.
+     * Metadata of "notification" screen.
      */
     NotificationScreen(
         nameId = R.string.notification_title,
@@ -169,11 +169,19 @@ enum class AppScreen(
     ),
 
     /**
-     * Metadata of "REST API" screen
+     * Metadata of "REST API" screen.
      */
     RestApiScreen(
         nameId = R.string.rest_api_title,
         route = "rest_api"
+    ),
+
+    /**
+     * Metadata of "telephony" screen.
+     */
+    TelephonyScreen(
+        nameId = R.string.telephony_title,
+        route = "telephony"
     );
 
     /**
