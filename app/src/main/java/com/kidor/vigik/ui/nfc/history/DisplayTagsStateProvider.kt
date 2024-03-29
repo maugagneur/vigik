@@ -9,6 +9,7 @@ import java.util.Calendar
  * Provides a set of data for the preview of DisplayTagsState Composable.
  */
 @ExcludedFromKoverReport
+@Suppress("MagicNumber")
 class DisplayTagsStateProvider : PreviewParameterProvider<DisplayTagsStateData> {
     private val defaultTag = Tag(
         timestamp = Calendar.getInstance().timeInMillis,

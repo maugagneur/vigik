@@ -9,6 +9,7 @@ import java.util.Calendar
  * Provides a set of data for the preview of DisplayTagState Composable.
  */
 @ExcludedFromKoverReport
+@Suppress("MagicNumber")
 class DisplayTagStateDataProvider : PreviewParameterProvider<DisplayTagStateData> {
     override val values: Sequence<DisplayTagStateData> = sequenceOf(
         DisplayTagStateData(ScanViewState.DisplayTag(Tag(), false)),

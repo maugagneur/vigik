@@ -111,7 +111,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(USERNAME_TEXT_FIELD_TEST_TAG),
-            placeholder = { Text(text = stringResource(id = R.string.biometric_username_hint)) },
+            label = { Text(text = stringResource(id = R.string.biometric_username_hint)) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
         )
         Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
@@ -121,7 +121,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(PASSWORD_TEXT_FIELD_TEST_TAG),
-            placeholder = { Text(text = stringResource(id = R.string.biometric_password_hint)) },
+            label = { Text(text = stringResource(id = R.string.biometric_password_hint)) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(onDone = {
