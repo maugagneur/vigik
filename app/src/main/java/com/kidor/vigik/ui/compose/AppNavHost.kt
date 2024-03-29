@@ -35,6 +35,7 @@ import com.kidor.vigik.ui.nfc.history.HistoryScreen
 import com.kidor.vigik.ui.nfc.hub.HubScreen
 import com.kidor.vigik.ui.nfc.scan.ScanScreen
 import com.kidor.vigik.ui.notification.NotificationScreen
+import com.kidor.vigik.ui.paging.PagingScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
 import com.kidor.vigik.ui.telephony.TelephonyScreen
 
@@ -61,6 +62,7 @@ fun AppNavHost(
         addEmojiScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
+        addPagingScreens(navGraphBuilder = this)
         addRestApiScreens(navGraphBuilder = this)
         addTelephonyScreens(navGraphBuilder = this)
     }
@@ -83,6 +85,7 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
             navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
             navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
             navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
+            navigateToPaging = { navController.navigate(AppScreen.PagingScreen) },
             navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) },
             navigateToTelephony = { navController.navigate(AppScreen.TelephonyScreen) }
         )
@@ -223,6 +226,17 @@ private fun addNotificationScreens(navGraphBuilder: NavGraphBuilder) {
         deepLinks = listOf(navDeepLink { uriPattern = AppScreen.NotificationScreen.deeplinkPath })
     ) {
         NotificationScreen()
+    }
+}
+
+/**
+ * Add screens related to Paging into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addPagingScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.PagingScreen.route) {
+        PagingScreen()
     }
 }
 

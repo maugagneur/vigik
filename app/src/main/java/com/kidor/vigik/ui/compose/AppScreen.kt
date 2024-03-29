@@ -169,6 +169,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "paging" screen.
+     */
+    PagingScreen(
+        nameId = R.string.paging_title,
+        route = "paging"
+    ),
+
+    /**
      * Metadata of "REST API" screen.
      */
     RestApiScreen(

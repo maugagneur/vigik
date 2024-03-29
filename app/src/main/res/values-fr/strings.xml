@@ -15,6 +15,7 @@
     <string name="home_emoji_button_label">Emoji</string>
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_notification_button_label">Notification</string>
+    <string name="home_paging_button_label">Pagination</string>
     <string name="home_rest_api_button_label">REST API</string>
     <string name="home_telephony_button_label">Téléphonie</string>
 
@@ -161,6 +162,9 @@
     <string name="diablo_tracker_source_label">Source : %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
+
+    <!-- Paging -->
+    <string name="paging_title">Pagination</string>
 
     <!-- Telephony -->
     <string name="telephony_title">Téléphonie</string>
