@@ -10,14 +10,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
-private const val CONNECTION_TIMEOUT_IN_SECOND = 30L
-private const val READ_TIMEOUT_IN_SECOND = 10L
 
 /**
  * Dependency injection module related to Diablo IV features.
@@ -25,16 +20,6 @@ private const val READ_TIMEOUT_IN_SECOND = 10L
 @Module
 @InstallIn(SingletonComponent::class)
 object DiabloModule {
-
-    /**
-     * Provides instance of [OkHttpClient].
-     */
-    @Provides
-    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(CONNECTION_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
-        .readTimeout(READ_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
-        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-        .build()
 
     /**
      * Provides instance of [Diablo4API].
