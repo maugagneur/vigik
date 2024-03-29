@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kidor.vigik.data.midjourney.model.GeneratedImage
 import retrofit2.HttpException
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 import kotlin.math.min
@@ -26,29 +27,35 @@ class GeneratedImagesPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GeneratedImage> {
         val pageIndex = params.key ?: STARTING_PAGE_INDEX
-        return try {
+        var result: LoadResult<Int, GeneratedImage>
+
+        try {
             val response = service.getRandomGeneratedImages(pageIndex)
             val images = response.images
 
-            if (images == null || response.pageSize == null) {
-                return LoadResult.Invalid()
-            }
-
-            val nextKey = if (images.isEmpty()) {
-                null
+            result = if (images == null || response.pageSize == null) {
+                LoadResult.Invalid()
             } else {
-                min(pageIndex + 1, response.totalPages ?: 1)
-            }
+                val nextKey = if (images.isEmpty()) {
+                    null
+                } else {
+                    min(pageIndex + 1, response.totalPages ?: 1)
+                }
 
-            LoadResult.Page(
-                data = images,
-                prevKey = if (pageIndex == STARTING_PAGE_INDEX) null else pageIndex,
-                nextKey = nextKey
-            )
+                LoadResult.Page(
+                    data = images,
+                    prevKey = if (pageIndex == STARTING_PAGE_INDEX) null else pageIndex,
+                    nextKey = nextKey
+                )
+            }
         } catch (exception: IOException) {
-            return LoadResult.Error(exception)
+            Timber.e(exception, "Fail to get images")
+            result = LoadResult.Error(exception)
         } catch (exception: HttpException) {
-            return LoadResult.Error(exception)
+            Timber.e(exception, "HTTP error when requesting for images")
+            result = LoadResult.Error(exception)
         }
+
+        return result
     }
 }

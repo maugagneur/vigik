@@ -21,19 +21,8 @@ import com.kidor.vigik.ui.compose.AppTheme
  */
 @Composable
 @Preview(widthDp = 400, heightDp = 700)
-@Suppress("LongParameterList")
 fun HomeScreen(
-    navigateToAnimations: () -> Unit = {},
-    navigateToBiometric: () -> Unit = {},
-    navigateToBluetooth: () -> Unit = {},
-    navigateToBottomSheet: () -> Unit = {},
-    navigateToCamera: () -> Unit = {},
-    navigateToEmoji: () -> Unit = {},
-    navigateToNfc: () -> Unit = {},
-    navigateToNotification: () -> Unit = {},
-    navigateToPaging: () -> Unit = {},
-    navigateToRestApi: () -> Unit = {},
-    navigateToTelephony: () -> Unit = {}
+    navigateTo: (HomeNavigation) -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
@@ -42,17 +31,39 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val homeButtonDataList = listOf(
-            HomeButtonData(textId = R.string.home_animations_button_label, navigateToAnimations),
-            HomeButtonData(textId = R.string.home_biometric_button_label, navigateToBiometric),
-            HomeButtonData(textId = R.string.home_bluetooth_button_label, navigateToBluetooth),
-            HomeButtonData(textId = R.string.home_bottom_sheet_button_label, navigateToBottomSheet),
-            HomeButtonData(textId = R.string.home_camera_button_label, navigateToCamera),
-            HomeButtonData(textId = R.string.home_emoji_button_label, navigateToEmoji),
-            HomeButtonData(textId = R.string.home_nfc_button_label, navigateToNfc),
-            HomeButtonData(textId = R.string.home_notification_button_label, navigateToNotification),
-            HomeButtonData(textId = R.string.home_paging_button_label, navigateToPaging),
-            HomeButtonData(textId = R.string.home_rest_api_button_label, navigateToRestApi),
-            HomeButtonData(textId = R.string.home_telephony_button_label, navigateToTelephony)
+            HomeButtonData(
+                textId = R.string.home_animations_button_label
+            ) { navigateTo(HomeNavigation.NavigateToAnimations) },
+            HomeButtonData(
+                textId = R.string.home_biometric_button_label
+            ) { navigateTo(HomeNavigation.NavigateToBiometric) },
+            HomeButtonData(
+                textId = R.string.home_bluetooth_button_label
+            ) { navigateTo(HomeNavigation.NavigateToBluetooth) },
+            HomeButtonData(
+                textId = R.string.home_bottom_sheet_button_label
+            ) { navigateTo(HomeNavigation.NavigateToBottomSheet) },
+            HomeButtonData(
+                textId = R.string.home_camera_button_label
+            ) { navigateTo(HomeNavigation.NavigateToCamera) },
+            HomeButtonData(
+                textId = R.string.home_emoji_button_label
+            ) { navigateTo(HomeNavigation.NavigateToEmoji) },
+            HomeButtonData(
+                textId = R.string.home_nfc_button_label
+            ) { navigateTo(HomeNavigation.NavigateToNfc) },
+            HomeButtonData(
+                textId = R.string.home_notification_button_label
+            ) { navigateTo(HomeNavigation.NavigateToNotification) },
+            HomeButtonData(
+                textId = R.string.home_paging_button_label
+            ) { navigateTo(HomeNavigation.NavigateToPaging) },
+            HomeButtonData(
+                textId = R.string.home_rest_api_button_label
+            ) { navigateTo(HomeNavigation.NavigateToRestApi) },
+            HomeButtonData(
+                textId = R.string.home_telephony_button_label
+            ) { navigateTo(HomeNavigation.NavigateToTelephony) }
         )
         items(homeButtonDataList) { buttonData ->
             Button(

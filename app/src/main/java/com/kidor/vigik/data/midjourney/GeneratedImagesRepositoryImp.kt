@@ -13,7 +13,7 @@ private const val PAGE_SIZE = 20
  */
 class GeneratedImagesRepositoryImp(
     private val midJourneyApi: MidJourneyApi
-): GeneratedImagesRepository {
+) : GeneratedImagesRepository {
 
     override fun getGeneratedImages(): Flow<PagingData<GeneratedImage>> {
         return Pager(

@@ -28,6 +28,7 @@ import com.kidor.vigik.ui.bluetooth.BluetoothScreen
 import com.kidor.vigik.ui.bottomsheet.BottomSheetScreen
 import com.kidor.vigik.ui.camera.CameraScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
+import com.kidor.vigik.ui.home.HomeNavigation
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
 import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
@@ -77,17 +78,21 @@ fun AppNavHost(
 private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
     navGraphBuilder.composable(route = AppScreen.HomeScreen.route) {
         HomeScreen(
-            navigateToAnimations = { navController.navigate(AppScreen.AnimationsHubScreen) },
-            navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
-            navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
-            navigateToBottomSheet = { navController.navigate(AppScreen.BottomSheetScreen) },
-            navigateToCamera = { navController.navigate(AppScreen.CameraScreen) },
-            navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
-            navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
-            navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
-            navigateToPaging = { navController.navigate(AppScreen.PagingScreen) },
-            navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) },
-            navigateToTelephony = { navController.navigate(AppScreen.TelephonyScreen) }
+            navigateTo = { destination ->
+                when (destination) {
+                    HomeNavigation.NavigateToAnimations -> navController.navigate(AppScreen.AnimationsHubScreen)
+                    HomeNavigation.NavigateToBiometric -> navController.navigate(AppScreen.BiometricLoginScreen)
+                    HomeNavigation.NavigateToBluetooth -> navController.navigate(AppScreen.BluetoothScreen)
+                    HomeNavigation.NavigateToBottomSheet -> navController.navigate(AppScreen.BottomSheetScreen)
+                    HomeNavigation.NavigateToCamera -> navController.navigate(AppScreen.CameraScreen)
+                    HomeNavigation.NavigateToEmoji -> navController.navigate(AppScreen.EmojiScreen)
+                    HomeNavigation.NavigateToNfc -> navController.navigate(AppScreen.NfcCheckScreen)
+                    HomeNavigation.NavigateToNotification -> navController.navigate(AppScreen.NotificationScreen)
+                    HomeNavigation.NavigateToPaging -> navController.navigate(AppScreen.PagingScreen)
+                    HomeNavigation.NavigateToRestApi -> navController.navigate(AppScreen.RestApiScreen)
+                    HomeNavigation.NavigateToTelephony -> navController.navigate(AppScreen.TelephonyScreen)
+                }
+            }
         )
     }
 }
