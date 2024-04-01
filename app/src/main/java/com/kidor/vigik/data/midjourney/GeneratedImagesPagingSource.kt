@@ -36,7 +36,7 @@ class GeneratedImagesPagingSource @Inject constructor(
             result = if (images == null || response.pageSize == null) {
                 LoadResult.Invalid()
             } else {
-                val nextKey = if (images.isEmpty()) {
+                val nextKey = if (images.isEmpty() || pageIndex == response.totalPages) {
                     null
                 } else {
                     min(pageIndex + 1, response.totalPages ?: 1)
