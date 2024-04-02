@@ -159,7 +159,6 @@
 
     <!-- Paging -->
     <string name="paging_title">Paging</string>
-    <string name="paging_error_message">An error has occur</string>
 
     <!-- REST API -->
     <string name="rest_api_title">Diablo IV event tracker</string>

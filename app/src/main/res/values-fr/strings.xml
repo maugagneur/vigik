@@ -165,7 +165,6 @@
 
     <!-- Paging -->
     <string name="paging_title">Pagination</string>
-    <string name="paging_error_message">Une erreur est survenue</string>
 
     <!-- Telephony -->
     <string name="telephony_title">Téléphonie</string>
