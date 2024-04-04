@@ -18,7 +18,7 @@ class PagingViewModel @Inject constructor(
     /**
      * The paging flow of images to display.
      */
-    fun pagingDataFlow() = generatedImagesRepository
+    fun images() = generatedImagesRepository
         .getGeneratedImages()
         .cachedIn(viewModelScope)
 }

@@ -38,7 +38,7 @@ private const val IMAGE_HEIGHT_RATIO = 0.25f
 fun PagingScreen(
     viewModel: PagingViewModel = hiltViewModel()
 ) {
-    val images = viewModel.pagingDataFlow().collectAsLazyPagingItems()
+    val images = viewModel.images().collectAsLazyPagingItems()
     var screenSize by remember { mutableStateOf(Size.Zero) }
 
     LazyVerticalStaggeredGrid(
