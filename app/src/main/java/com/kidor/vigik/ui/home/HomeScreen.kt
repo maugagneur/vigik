@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.home
 
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kidor.vigik.R
@@ -66,8 +68,12 @@ fun HomeScreen(
             ) { navigateTo(HomeNavigation.NavigateToTelephony) }
         )
         items(homeButtonDataList) { buttonData ->
+            val view = LocalView.current
             Button(
-                onClick = buttonData.onClick,
+                onClick = {
+                    view.playSoundEffect(SoundEffectConstants.CLICK)
+                    buttonData.onClick()
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
