@@ -17,10 +17,15 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val SHARED_PREFERENCES_FILE_NAME = "app_shared_preferences"
+private const val CONNECTION_TIMEOUT_IN_SECOND = 30L
+private const val READ_TIMEOUT_IN_SECOND = 10L
 
 /**
  * Module to tell Hilt how to provide instances of types that cannot be constructor-injected.
@@ -74,6 +79,16 @@ object AppModule {
             AppDataBase::class.java,
             DATABASE_NAME
         ).build()
+
+    /**
+     * Provides instance of [OkHttpClient].
+     */
+    @Provides
+    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(CONNECTION_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
+        .readTimeout(READ_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
+        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+        .build()
 }
 
 /**

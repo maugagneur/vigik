@@ -18,6 +18,7 @@
     <string name="home_emoji_button_label">Emoji</string>
     <string name="home_nfc_button_label">NFC</string>
     <string name="home_notification_button_label">Notification</string>
+    <string name="home_paging_button_label">Paging</string>
     <string name="home_rest_api_button_label">REST API</string>
     <string name="home_telephony_button_label">Telephony</string>
 
@@ -155,6 +156,9 @@
     <string name="notification_action_button_3_label">DISABLE</string>
     <string name="notification_generate_notification_button_label">Generate notification</string>
     <string name="notification_remove_previous_notification_button_label">Remove previous</string>
+
+    <!-- Paging -->
+    <string name="paging_title">Paging</string>
 
     <!-- REST API -->
     <string name="rest_api_title">Diablo IV event tracker</string>

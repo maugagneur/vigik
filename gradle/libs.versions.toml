@@ -17,6 +17,7 @@ androidx-hilt = "1.2.0"
 androidx-lifecycle = "2.7.0"
 androidx-material3 = "1.2.1"
 androidx-navigation = "2.7.7"
+androidx-paging = "3.2.1"
 androidx-room = "2.6.1"
 androidx-splashscreen = "1.0.1"
 androidx-work = "2.9.0"
@@ -81,6 +82,9 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidx-navigation" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidx-paging" }
+androidx-paging-runtime-ktx = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "androidx-paging" }
+androidx-paging-testing = { group = "androidx.paging", name = "paging-testing", version.ref = "androidx-paging" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "androidx-room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
@@ -120,10 +124,11 @@ room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", vers
 [bundles]
 androidx-camera = ["androidx-camera-camera2", "androidx-camera-lifecycle", "androidx-camera-view"]
 androidx-car = ["androidx-car-app", "androidx-car-app-projected"]
-androidx-lifecycle = ["androidx-lifecycle-common-java8", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
-androidx-room = ["androidx-room-runtime", "androidx-room-ktx"]
 androidx-compose-navigation = ["androidx-hilt-navigation-compose", "androidx-navigation-compose"]
 androidx-compose-ui = ["androidx-compose-animation", "androidx-compose-foundation", "androidx-compose-material", "androidx-compose-material-icons", "androidx-compose-material3", "androidx-compose-runtime", "androidx-compose-runtime-livedata", "androidx-compose-ui", "androidx-compose-ui-tooling", "androidx-compose-ui-tooling-preview"]
+androidx-lifecycle = ["androidx-lifecycle-common-java8", "androidx-lifecycle-livedata-ktx", "androidx-lifecycle-runtime-compose", "androidx-lifecycle-runtime-ktx", "androidx-lifecycle-viewmodel-ktx"]
+androidx-room = ["androidx-room-runtime", "androidx-room-ktx"]
+androidx-paging = ["androidx-paging-runtime-ktx", "androidx-paging-compose", "androidx-paging-testing"]
 kotlinx-coroutines = ["kotlinx-coroutines-core", "kotlinx-coroutines-android"]
 retrofit = ["okhttp-logging-interceptor", "retrofit-core", "retrofit-converter-gson"]
 test-unit = ["junit", "androidx-core-testing", "mockk", "turbine"]

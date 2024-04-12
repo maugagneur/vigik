@@ -25,19 +25,7 @@ class HomeViewTest {
     private lateinit var closeable: AutoCloseable
 
     @Mock
-    private lateinit var navigateToAnimationsCallback: () -> Unit
-    @Mock
-    private lateinit var navigateToBiometricCallback: () -> Unit
-    @Mock
-    private lateinit var navigateToBluetoothCallback: () -> Unit
-    @Mock
-    private lateinit var navigateToEmojiCallback: () -> Unit
-    @Mock
-    private lateinit var navigateToNfcCallback: () -> Unit
-    @Mock
-    private lateinit var navigateToNotificationCallback: () -> Unit
-    @Mock
-    private lateinit var navigateToRestApiCallback: () -> Unit
+    private lateinit var navigateToCallback: (HomeNavigation) -> Unit
 
     @Before
     fun setUp() {
@@ -56,15 +44,7 @@ class HomeViewTest {
 
         runComposeUiTest {
             setContent {
-                HomeScreen(
-                    navigateToAnimations = navigateToAnimationsCallback,
-                    navigateToBiometric = navigateToBiometricCallback,
-                    navigateToBluetooth = navigateToBluetoothCallback,
-                    navigateToEmoji = navigateToEmojiCallback,
-                    navigateToNfc = navigateToNfcCallback,
-                    navigateToNotification = navigateToNotificationCallback,
-                    navigateToRestApi = navigateToRestApiCallback
-                )
+                HomeScreen(navigateTo = navigateToCallback)
             }
 
             // Check that animations button is visible
@@ -98,37 +78,37 @@ class HomeViewTest {
             // Check that a click on "Animations" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_animations_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToAnimationsCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToAnimations)
 
             // Check that a click on "Biometric" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_biometric_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToBiometricCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToBiometric)
 
             // Check that a click on "Bluetooth" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_bluetooth_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToBluetoothCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToBluetooth)
 
             // Check that a click on "Emoji" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_emoji_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToEmojiCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToEmoji)
 
             // Check that a click on "NFC" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_nfc_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToNfcCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToNfc)
 
             // Check that a click on "Notification" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_notification_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToNotificationCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToNotification)
 
             // Check that a click on "REST API" button triggers the associated callback
             onNodeWithText(stringResourceId = R.string.home_rest_api_button_label, ignoreCase = true)
                 .performClick()
-            verify(navigateToRestApiCallback).invoke()
+            verify(navigateToCallback).invoke(HomeNavigation.NavigateToRestApi)
         }
     }
 }

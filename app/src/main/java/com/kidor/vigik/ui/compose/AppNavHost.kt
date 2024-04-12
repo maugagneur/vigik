@@ -28,6 +28,7 @@ import com.kidor.vigik.ui.bluetooth.BluetoothScreen
 import com.kidor.vigik.ui.bottomsheet.BottomSheetScreen
 import com.kidor.vigik.ui.camera.CameraScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
+import com.kidor.vigik.ui.home.HomeNavigation
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
 import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
@@ -35,6 +36,7 @@ import com.kidor.vigik.ui.nfc.history.HistoryScreen
 import com.kidor.vigik.ui.nfc.hub.HubScreen
 import com.kidor.vigik.ui.nfc.scan.ScanScreen
 import com.kidor.vigik.ui.notification.NotificationScreen
+import com.kidor.vigik.ui.paging.PagingScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
 import com.kidor.vigik.ui.telephony.TelephonyScreen
 
@@ -61,6 +63,7 @@ fun AppNavHost(
         addEmojiScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
+        addPagingScreens(navGraphBuilder = this)
         addRestApiScreens(navGraphBuilder = this)
         addTelephonyScreens(navGraphBuilder = this)
     }
@@ -75,16 +78,21 @@ fun AppNavHost(
 private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
     navGraphBuilder.composable(route = AppScreen.HomeScreen.route) {
         HomeScreen(
-            navigateToAnimations = { navController.navigate(AppScreen.AnimationsHubScreen) },
-            navigateToBiometric = { navController.navigate(AppScreen.BiometricLoginScreen) },
-            navigateToBluetooth = { navController.navigate(AppScreen.BluetoothScreen) },
-            navigateToBottomSheet = { navController.navigate(AppScreen.BottomSheetScreen) },
-            navigateToCamera = { navController.navigate(AppScreen.CameraScreen) },
-            navigateToEmoji = { navController.navigate(AppScreen.EmojiScreen) },
-            navigateToNfc = { navController.navigate(AppScreen.NfcCheckScreen) },
-            navigateToNotification = { navController.navigate(AppScreen.NotificationScreen) },
-            navigateToRestApi = { navController.navigate(AppScreen.RestApiScreen) },
-            navigateToTelephony = { navController.navigate(AppScreen.TelephonyScreen) }
+            navigateTo = { destination ->
+                when (destination) {
+                    HomeNavigation.NavigateToAnimations -> navController.navigate(AppScreen.AnimationsHubScreen)
+                    HomeNavigation.NavigateToBiometric -> navController.navigate(AppScreen.BiometricLoginScreen)
+                    HomeNavigation.NavigateToBluetooth -> navController.navigate(AppScreen.BluetoothScreen)
+                    HomeNavigation.NavigateToBottomSheet -> navController.navigate(AppScreen.BottomSheetScreen)
+                    HomeNavigation.NavigateToCamera -> navController.navigate(AppScreen.CameraScreen)
+                    HomeNavigation.NavigateToEmoji -> navController.navigate(AppScreen.EmojiScreen)
+                    HomeNavigation.NavigateToNfc -> navController.navigate(AppScreen.NfcCheckScreen)
+                    HomeNavigation.NavigateToNotification -> navController.navigate(AppScreen.NotificationScreen)
+                    HomeNavigation.NavigateToPaging -> navController.navigate(AppScreen.PagingScreen)
+                    HomeNavigation.NavigateToRestApi -> navController.navigate(AppScreen.RestApiScreen)
+                    HomeNavigation.NavigateToTelephony -> navController.navigate(AppScreen.TelephonyScreen)
+                }
+            }
         )
     }
 }
@@ -223,6 +231,17 @@ private fun addNotificationScreens(navGraphBuilder: NavGraphBuilder) {
         deepLinks = listOf(navDeepLink { uriPattern = AppScreen.NotificationScreen.deeplinkPath })
     ) {
         NotificationScreen()
+    }
+}
+
+/**
+ * Add screens related to Paging into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addPagingScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.PagingScreen.route) {
+        PagingScreen()
     }
 }
 
