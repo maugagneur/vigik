@@ -1,6 +1,6 @@
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
-import kotlinx.kover.gradle.plugin.dsl.KoverReportExtension
-import kotlinx.kover.gradle.plugin.dsl.MetricType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -10,9 +10,9 @@ class KoverConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply("org.jetbrains.kotlinx.kover")
 
-            configure<KoverReportExtension> {
+            configure<KoverProjectExtension> {
                 // Report generation task can be run with "./gradlew koverHtmlReportDebug"
-                androidReports("debug") {
+                reports {
                     filters {
                         excludes {
                             annotatedBy(
@@ -36,17 +36,19 @@ class KoverConventionPlugin : Plugin<Project> {
                             )
                         }
                     }
-                    html {
-                        onCheck = true
+                    total {
+                        html {
+                            onCheck.set(true)
+                        }
                     }
                     // Verify task can be run with "./gradlew koverVerifyDebug"
                     verify {
                         rule("Minimal line coverage rate") {
-                            isEnabled = true
+                            disabled.set(false)
                             bound {
-                                aggregation = AggregationType.COVERED_PERCENTAGE
-                                metric = MetricType.LINE
-                                minValue = 60
+                                aggregationForGroup.set(AggregationType.COVERED_PERCENTAGE)
+                                coverageUnits.set(CoverageUnit.LINE)
+                                minValue.set(60)
                             }
                         }
                     }
