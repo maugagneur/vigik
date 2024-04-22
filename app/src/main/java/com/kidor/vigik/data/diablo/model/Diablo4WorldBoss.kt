@@ -21,7 +21,6 @@ enum class Diablo4WorldBoss(val description: String, @StringRes val resId: Int) 
          *
          * @param name The world boss's name.
          */
-        @OptIn(ExperimentalStdlibApi::class)
         fun fromName(name: String): Diablo4WorldBoss =
             entries.find { it.description.equals(other = name, ignoreCase = true) } ?: UNKNOWN
     }
