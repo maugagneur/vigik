@@ -7,12 +7,12 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * Possible states of telephony view.
  */
-sealed class TelephonyViewState : ViewState {
+sealed interface TelephonyViewState : ViewState {
 
     /**
      * State that displays only permission request view.
      */
-    data object CheckPermission : TelephonyViewState()
+    data object CheckPermission : TelephonyViewState
 
     /**
      * State that display the telephony data of the device.
@@ -27,5 +27,5 @@ sealed class TelephonyViewState : ViewState {
         val mobileContactNumber: Int? = null,
         val sms: List<Sms>? = null,
         val phoneCalls: List<PhoneCall>? = null
-    ) : TelephonyViewState()
+    ) : TelephonyViewState
 }

@@ -5,17 +5,17 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * Possible states of Emoji view.
  */
-sealed class EmojiViewState : ViewState {
+sealed interface EmojiViewState : ViewState {
 
     /**
      * State when the selected Emoji is shown.
      *
      * @param emoji The Emoji selected.
      */
-    data class SelectedEmoji(val emoji: String) : EmojiViewState()
+    data class SelectedEmoji(val emoji: String) : EmojiViewState
 
     /**
      * State to select a new Emoji.
      */
-    data object EmojiPicker : EmojiViewState()
+    data object EmojiPicker : EmojiViewState
 }

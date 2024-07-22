@@ -7,43 +7,43 @@ import com.kidor.vigik.ui.base.ViewAction
 /**
  * Available actions from biometric login view.
  */
-sealed class BiometricLoginViewAction : ViewAction {
+sealed interface BiometricLoginViewAction : ViewAction {
 
     /**
      * Updates username.
      *
      * @param username The new value of the username.
      */
-    data class UpdateUsername(val username: String) : BiometricLoginViewAction()
+    data class UpdateUsername(val username: String) : BiometricLoginViewAction
 
     /**
      * Updates password.
      *
      * @param password The new value of the password.
      */
-    data class UpdatePassword(val password: String) : BiometricLoginViewAction()
+    data class UpdatePassword(val password: String) : BiometricLoginViewAction
 
     /**
      * Action to log in.
      */
-    data object Login : BiometricLoginViewAction()
+    data object Login : BiometricLoginViewAction
 
     /**
      * Action to log in with biometric.
      */
-    data object LoginWithBiometric : BiometricLoginViewAction()
+    data object LoginWithBiometric : BiometricLoginViewAction
 
     /**
      * Hides biometric prompt.
      */
-    data object HideBiometricPrompt : BiometricLoginViewAction()
+    data object HideBiometricPrompt : BiometricLoginViewAction
 
     /**
      * Notify an error during biometric authentication.
      *
      * @param purpose The purpose of the authentication.
      */
-    data class OnBiometricAuthError(val purpose: CryptoPurpose) : BiometricLoginViewAction()
+    data class OnBiometricAuthError(val purpose: CryptoPurpose) : BiometricLoginViewAction
 
     /**
      * Notifies the success of biometric authentication.
@@ -54,5 +54,5 @@ sealed class BiometricLoginViewAction : ViewAction {
     data class OnBiometricAuthSuccess(
         val cryptoObject: CryptoObject,
         val purpose: CryptoPurpose
-    ) : BiometricLoginViewAction()
+    ) : BiometricLoginViewAction
 }

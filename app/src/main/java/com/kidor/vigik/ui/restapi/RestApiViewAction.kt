@@ -5,10 +5,10 @@ import com.kidor.vigik.ui.base.ViewAction
 /**
  * Available actions from REST API view.
  */
-sealed class RestApiViewAction : ViewAction {
+sealed interface RestApiViewAction : ViewAction {
 
     /**
      * Action to refresh tracker's data.
      */
-    data object RefreshData : RestApiViewAction()
+    data object RefreshData : RestApiViewAction
 }

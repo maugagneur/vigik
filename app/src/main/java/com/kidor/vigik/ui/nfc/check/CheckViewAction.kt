@@ -5,15 +5,15 @@ import com.kidor.vigik.ui.base.ViewAction
 /**
  * Available actions from check view.
  */
-sealed class CheckViewAction : ViewAction {
+sealed interface CheckViewAction : ViewAction {
 
     /**
      * Refresh NFC status.
      */
-    data object RefreshNfcStatus : CheckViewAction()
+    data object RefreshNfcStatus : CheckViewAction
 
     /**
      * Display device's NFC settings screen.
      */
-    data object DisplayNfcSettings : CheckViewAction()
+    data object DisplayNfcSettings : CheckViewAction
 }

@@ -6,12 +6,12 @@ import com.kidor.vigik.ui.base.ViewState
 /**
  * Possible states of scan view.
  */
-sealed class ScanViewState : ViewState {
+sealed interface ScanViewState : ViewState {
 
     /**
      * Initial state when the NFC sensor is looking for tag.
      */
-    data object Loading : ScanViewState()
+    data object Loading : ScanViewState
 
     /**
      * State when the view displays a tag.
@@ -19,5 +19,5 @@ sealed class ScanViewState : ViewState {
      * @param tag        The tag to display.
      * @param canBeSaved Indicate if the tag can be save in local database.
      */
-    data class DisplayTag(val tag: Tag, val canBeSaved: Boolean) : ScanViewState()
+    data class DisplayTag(val tag: Tag, val canBeSaved: Boolean) : ScanViewState
 }

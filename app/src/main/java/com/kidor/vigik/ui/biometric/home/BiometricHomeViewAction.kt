@@ -5,15 +5,15 @@ import com.kidor.vigik.ui.base.ViewAction
 /**
  * Available actions from biometric home view.
  */
-sealed class BiometricHomeViewAction : ViewAction {
+sealed interface BiometricHomeViewAction : ViewAction {
 
     /**
      * Action to remove biometric credentials.
      */
-    data object RemoveCredentials : BiometricHomeViewAction()
+    data object RemoveCredentials : BiometricHomeViewAction
 
     /**
      * Action to log out.
      */
-    data object Logout : BiometricHomeViewAction()
+    data object Logout : BiometricHomeViewAction
 }
