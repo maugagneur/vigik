@@ -21,15 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.kidor.vigik.ui.compose.AppTheme
+import timber.log.Timber
 
-private const val IMAGE_HEIGHT_RATIO = 0.25f
+private const val IMAGE_HEIGHT_RATIO = 0.5f
 
 /**
  * View that display the section dedicated to Paging.
@@ -38,6 +41,7 @@ private const val IMAGE_HEIGHT_RATIO = 0.25f
 fun PagingScreen(
     viewModel: PagingViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val images = viewModel.images().collectAsLazyPagingItems()
     var screenSize by remember { mutableStateOf(Size.Zero) }
 
@@ -49,7 +53,17 @@ fun PagingScreen(
     ) {
         items(images.itemCount) { index ->
             val url = images[index]?.imageUrl
-            val painter = rememberAsyncImagePainter(model = url)
+            val painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(context)
+                    .data(url)
+                    .size(coil.size.Size.ORIGINAL)
+                    .build(),
+                onState = { state ->
+                    if (state is AsyncImagePainter.State.Error) {
+                        Timber.e(state.result.throwable, "Error when loading image")
+                    }
+                }
+            )
 
             var isImageLoading by remember { mutableStateOf(false) }
             isImageLoading = painter.state is AsyncImagePainter.State.Loading
