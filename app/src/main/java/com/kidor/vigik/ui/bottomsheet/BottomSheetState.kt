@@ -31,7 +31,7 @@ class BottomSheetState(
     /**
      * The state of ongoing drag or animation of the bottom sheet.
      */
-    val draggableState = AnchoredDraggableState(
+    val draggableState: AnchoredDraggableState<BottomSheetStateValue> = AnchoredDraggableState(
         initialValue = initialValue,
         animationSpec = animationSpec,
         positionalThreshold = { distance: Float -> distance * 0.5f },
@@ -113,7 +113,7 @@ class BottomSheetState(
     /**
      * Requires the current offset.
      */
-    fun requireOffset() = draggableState.requireOffset()
+    fun requireOffset(): Float = draggableState.requireOffset()
 
     @VisibleForTesting
     internal suspend fun animateTo(

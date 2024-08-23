@@ -7,7 +7,7 @@ import retrofit2.http.Query
 /**
  * Base URL for the MidJourney API remote server.
  */
-const val MID_JOURNEY_API_BASE_URL = "https://mj.akgns.com/"
+const val MID_JOURNEY_API_BASE_URL: String = "https://mj.akgns.com/"
 
 /**
  * MidJourney HTTP API used by Retrofit.

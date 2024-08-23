@@ -14,4 +14,4 @@ import com.kidor.vigik.utils.ExcludedFromKoverReport
 data class AnimationButtonData(
     @StringRes override val textId: Int,
     override val onClick: () -> Unit
-) : AbsButtonData()
+) : AbsButtonData

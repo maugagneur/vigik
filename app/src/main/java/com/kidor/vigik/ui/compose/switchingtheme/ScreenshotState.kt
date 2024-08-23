@@ -44,6 +44,6 @@ class ScreenshotState {
  * Remember then return a [ScreenshotState] bound to this point in the composition.
  */
 @Composable
-fun rememberScreenshotState() = remember {
+fun rememberScreenshotState(): ScreenshotState = remember {
     ScreenshotState()
 }
