@@ -103,14 +103,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
                     val warningsAsErrors: String? by project
                     allWarningsAsErrors.set(warningsAsErrors.toBoolean())
-                    optIn.set(
-                        listOf(
-                            "-opt-in=kotlin.RequiresOptIn",
-                            // Enable experimental coroutines APIs, including Flow
-                            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                            "-opt-in=kotlinx.coroutines.FlowPreview",
-                        )
-                    )
                     // FIXME: Detekt 1.23.6 works with Kotlin 2.0 but not with language version higher than 1.9
                     languageVersion.set(KotlinVersion.KOTLIN_1_9)
                 }
