@@ -55,6 +55,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Shape" animation screen.
+     */
+    AnimationShapeScreen(
+        nameId = R.string.animation_shape_title,
+        route = "animation_shape"
+    ),
+
+    /**
      * Metadata of "Snowfall" animation screen.
      */
     AnimationSnowfallScreen(

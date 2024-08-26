@@ -13,6 +13,7 @@ androidx-datastore = "1.1.1"
 androidx-emoji2 = "1.4.0"
 androidx-fragment = "1.8.2"
 androidx-glance = "1.1.0"
+androidx-graphics = "1.0.0"
 androidx-hilt = "1.2.0"
 androidx-lifecycle = "2.8.4"
 androidx-material3 = "1.2.1"
@@ -72,6 +73,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-emoji2-emojipicker = {group = "androidx.emoji2", name = "emoji2-emojipicker", version.ref = "androidx-emoji2" }
 androidx-fragment-testing = { group = "androidx.fragment", name = "fragment-testing", version.ref = "androidx-fragment" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "androidx-glance" }
+androidx-graphics-shapes = { group = "androidx.graphics", name = "graphics-shapes", version.ref = "androidx-graphics" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "androidx-hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidx-hilt" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "androidx-hilt" }
