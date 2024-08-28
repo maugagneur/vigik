@@ -10,6 +10,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
@@ -34,7 +35,7 @@ import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.circle
 import androidx.graphics.shapes.star
 import androidx.graphics.shapes.toPath
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 private const val VERTICES_NUMBER = 12
 private const val STAR_INNER_RADIUS = 0.4f
@@ -91,7 +92,7 @@ fun ShapeScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = AppTheme.dimensions.commonSpaceMedium)
+            .padding(all = MaterialTheme.dimensions.commonSpaceMedium)
             .drawWithCache {
                 androidPath = morph.toPath(progress.value, androidPath)
                 val polygonPath = androidPath.asComposePath()

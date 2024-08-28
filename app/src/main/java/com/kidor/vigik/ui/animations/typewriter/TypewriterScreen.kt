@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.kidor.vigik.extensions.getBoundingBoxesForRange
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import kotlinx.coroutines.delay
 import kotlin.math.min
 
@@ -39,7 +39,7 @@ fun TypewriterScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(all = AppTheme.dimensions.commonSpaceXLarge),
+            .padding(all = MaterialTheme.dimensions.commonSpaceXLarge),
         contentAlignment = Alignment.CenterStart
     ) {
         TypewriterText(

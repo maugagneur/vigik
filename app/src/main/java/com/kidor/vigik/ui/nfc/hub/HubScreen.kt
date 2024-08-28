@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 /**
  * View that display all sub-sections of NFC.
@@ -28,7 +29,7 @@ fun HubScreen(
     Column(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge),
+            .padding(horizontal = MaterialTheme.dimensions.commonSpaceXLarge),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -38,7 +39,7 @@ fun HubScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.nfc_scan_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
         }
         Button(
@@ -47,7 +48,7 @@ fun HubScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.nfc_history_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
         }
         Button(
@@ -56,7 +57,7 @@ fun HubScreen(
         ) {
             Text(
                 text = stringResource(id = R.string.nfc_emulate_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
         }
     }

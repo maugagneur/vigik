@@ -59,6 +59,7 @@ import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 internal const val BLUETOOTH_ICON_ENABLE_TEST_TAG = "bluetooth_icon_enable"
 internal const val BLUETOOTH_ICON_DISABLE_TEST_TAG = "bluetooth_icon_disable"
@@ -77,25 +78,25 @@ fun BluetoothScreen(
     viewModel: BluetoothViewModel = hiltViewModel()
 ) {
     Column(
-        modifier = Modifier.padding(AppTheme.dimensions.commonSpaceMedium),
+        modifier = Modifier.padding(MaterialTheme.dimensions.commonSpaceMedium),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PermissionView()
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
         ObserveViewState(viewModel) { state ->
             BluetoothAdapterStatus(isEnable = state.isBluetoothEnable)
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             LocationStatus(isEnable = state.isLocationEnable)
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceMedium))
             LowEnergyStatus(
                 checked = state.leScanSelected,
                 enabled = state.isBluetoothEnable && state.isLocationEnable && !state.isScanning,
                 onLeScanStateChanged = { viewModel.handleAction(BluetoothViewAction.ChangeLeScanState(it)) }
             )
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
             BluetoothScanStatus(
                 scanInProgress = state.isScanning,
                 onRefreshDevicesClick = { viewModel.handleAction(BluetoothViewAction.StartBluetoothScan) }
@@ -133,9 +134,9 @@ private fun PermissionView() {
             Text(
                 text = stringResource(id = R.string.bluetooth_permission_status_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
             if (locationPermissionsState.allPermissionsGranted) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -151,11 +152,11 @@ private fun PermissionView() {
             }
         }
         if (!locationPermissionsState.allPermissionsGranted) {
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
             Button(onClick = { locationPermissionsState.launchMultiplePermissionRequest() }) {
                 Text(
                     text = stringResource(id = R.string.bluetooth_permission_request_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeLarge
+                    fontSize = MaterialTheme.dimensions.textSizeLarge
                 )
             }
         }
@@ -169,9 +170,9 @@ internal fun BluetoothAdapterStatus(isEnable: Boolean) {
         Text(
             text = stringResource(id = R.string.bluetooth_adapter_status_label),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
         if (isEnable) {
             Icon(
                 imageVector = Icons.Default.Check,
@@ -197,9 +198,9 @@ internal fun LocationStatus(isEnable: Boolean) {
         Text(
             text = stringResource(id = R.string.bluetooth_location_status_label),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
         if (isEnable) {
             Icon(
                 imageVector = Icons.Default.Check,
@@ -232,9 +233,9 @@ private fun LowEnergyStatus(checked: Boolean, enabled: Boolean, onLeScanStateCha
         Text(
             text = stringResource(id = R.string.bluetooth_low_energy_scan_status_label),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceMedium))
+        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceMedium))
         Switch(
             checked = checked,
             onCheckedChange = null,
@@ -267,7 +268,7 @@ internal fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick:
         Text(
             text = stringResource(id = R.string.bluetooth_detected_devices_label),
             color = MaterialTheme.colorScheme.secondary,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
         Box(contentAlignment = Alignment.Center) {
             if (scanInProgress) {
@@ -303,7 +304,7 @@ internal fun ErrorMessage(errorMessage: String) {
             text = errorMessage,
             modifier = Modifier.testTag(SCAN_ERROR_MESSAGE_TEST_TAG),
             color = MaterialTheme.colorScheme.error,
-            fontSize = AppTheme.dimensions.textSizeLarge,
+            fontSize = MaterialTheme.dimensions.textSizeLarge,
             textAlign = TextAlign.Center
         )
     }
@@ -324,7 +325,7 @@ private fun LowEnergyStatusPreview(@PreviewParameter(LowEnergyStatusDataProvider
 private fun BluetoothScanStatusPreview() {
     AppTheme {
         Column(
-            modifier = Modifier.padding(AppTheme.dimensions.commonSpaceMedium),
+            modifier = Modifier.padding(MaterialTheme.dimensions.commonSpaceMedium),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -361,8 +362,8 @@ internal fun DetectedBluetoothDeviceList(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(
-                                horizontal = AppTheme.dimensions.commonSpaceMedium,
-                                vertical = AppTheme.dimensions.commonSpaceSmall
+                                horizontal = MaterialTheme.dimensions.commonSpaceMedium,
+                                vertical = MaterialTheme.dimensions.commonSpaceSmall
                             ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -371,17 +372,17 @@ internal fun DetectedBluetoothDeviceList(
                             contentDescription = "Device icon",
                             tint = MaterialTheme.colorScheme.onBackground
                         )
-                        Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceMedium))
+                        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceMedium))
                         Column {
                             Text(
                                 text = device.name,
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = AppTheme.dimensions.textSizeMedium
+                                fontSize = MaterialTheme.dimensions.textSizeMedium
                             )
                             Text(
                                 text = device.hardwareAddress,
                                 color = MaterialTheme.colorScheme.onBackground,
-                                fontSize = AppTheme.dimensions.textSizeSmall
+                                fontSize = MaterialTheme.dimensions.textSizeSmall
                             )
                         }
                     }

@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 /**
  * View that emulate a NFC tag.
@@ -35,14 +35,14 @@ internal fun DisplayLogLineState(@PreviewParameter(LogProvider::class) logLines:
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(AppTheme.dimensions.commonSpaceSmall),
+            .padding(MaterialTheme.dimensions.commonSpaceSmall),
         contentAlignment = Alignment.BottomStart
     ) {
         Text(
             text = logLines,
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
     }
 }

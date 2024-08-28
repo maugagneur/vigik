@@ -29,7 +29,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import timber.log.Timber
 
 private const val IMAGE_HEIGHT_RATIO = 0.5f
@@ -85,7 +85,7 @@ fun PagingScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .apply { if (imageHeight > 0) height(imageHeight.dp) }
-                        .padding(AppTheme.dimensions.commonSpaceMedium),
+                        .padding(MaterialTheme.dimensions.commonSpaceMedium),
                     contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator(

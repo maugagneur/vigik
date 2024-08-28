@@ -33,7 +33,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.DIABLO4_API_BASE_URL
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 internal const val WORLD_BOSS_ICON_TEST_TAG = "world_boss_icon"
 internal const val WORLD_BOSS_NAME_TEST_TAG = "world_boss_name"
@@ -74,14 +74,14 @@ fun RestApiScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = AppTheme.dimensions.commonSpaceMedium),
+                .padding(bottom = MaterialTheme.dimensions.commonSpaceMedium),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = stringResource(id = R.string.diablo_tracker_source_label, DIABLO4_API_BASE_URL),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeSmall
+                fontSize = MaterialTheme.dimensions.textSizeSmall
             )
         }
     }
@@ -94,7 +94,7 @@ internal fun Diablo4Tracker(
     @PreviewParameter(Diablo4TrackerDataProvider::class) diablo4TrackerData: Diablo4TrackerData
 ) {
     Column(
-        modifier = Modifier.padding(horizontal = AppTheme.dimensions.commonSpaceXLarge),
+        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.commonSpaceXLarge),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -138,13 +138,13 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
 
     if (worldBoss == null) return
 
-    Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+    Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
 
     Text(
         text = stringResource(id = worldBoss.resId),
         modifier = Modifier.testTag(WORLD_BOSS_NAME_TEST_TAG),
         color = MaterialTheme.colorScheme.onBackground,
-        fontSize = AppTheme.dimensions.textSizeMedium,
+        fontSize = MaterialTheme.dimensions.textSizeMedium,
         textAlign = TextAlign.Center
     )
 
@@ -153,7 +153,7 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
         text = stringResource(id = R.string.diablo_boss_next_spawn_label, readableTime),
         modifier = Modifier.testTag(WORLD_BOSS_TIME_TEST_TAG),
         color = MaterialTheme.colorScheme.onBackground,
-        fontSize = AppTheme.dimensions.textSizeMedium,
+        fontSize = MaterialTheme.dimensions.textSizeMedium,
         textAlign = TextAlign.Center
     )
 }
@@ -161,18 +161,18 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
 @Composable
 private fun Diablo4HellTideTracker(timeToWait: String?) {
     timeToWait?.let {
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceXXLarge))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXXLarge))
         Image(
             painter = painterResource(id = R.drawable.d4_helltide),
             contentDescription = "Hell tide",
             modifier = Modifier.testTag(HELL_TIDE_ICON_TEST_TAG)
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(id = R.string.diablo_hell_tide_next_rise_label, it),
             modifier = Modifier.testTag(HELL_TIDE_TIME_TEST_TAG),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium,
+            fontSize = MaterialTheme.dimensions.textSizeMedium,
             textAlign = TextAlign.Center
         )
     }

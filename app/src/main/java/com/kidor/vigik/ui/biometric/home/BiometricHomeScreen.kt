@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 internal const val BIOMETRIC_CREDENTIALS_STATUS_ICON_TEST_TAG = "biometric_credentials_status_icon"
 
@@ -72,9 +72,9 @@ internal fun BiometricHome(
             Text(
                 text = stringResource(id = R.string.biometric_home_credential_status_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
             if (biometricHomeStateData.isBiometricCredentialSaved) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -92,25 +92,25 @@ internal fun BiometricHome(
             }
         }
         if (biometricHomeStateData.isBiometricCredentialSaved) {
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             Button(onClick = biometricHomeStateData.onRemoveCredentialClick) {
                 Text(
                     text = stringResource(id = R.string.biometric_home_credential_remove_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeLarge
+                    fontSize = MaterialTheme.dimensions.textSizeLarge
                 )
             }
         }
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceXXLarge))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXXLarge))
         Text(
             text = stringResource(id = R.string.biometric_home_login_success_label),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
         Button(onClick = biometricHomeStateData.onLogoutClick) {
             Text(
                 text = stringResource(id = R.string.biometric_home_logout_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeLarge
+                fontSize = MaterialTheme.dimensions.textSizeLarge
             )
         }
     }

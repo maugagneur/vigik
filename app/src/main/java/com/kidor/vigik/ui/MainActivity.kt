@@ -60,6 +60,7 @@ import com.kidor.vigik.data.nfc.api.NfcApi
 import com.kidor.vigik.ui.compose.AppNavHost
 import com.kidor.vigik.ui.compose.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import com.kidor.vigik.ui.compose.switchingtheme.RemovableDiagonalRectShape
 import com.kidor.vigik.ui.compose.switchingtheme.ScreenshotScope
 import com.kidor.vigik.ui.compose.switchingtheme.ShapeDirection
@@ -201,7 +202,7 @@ private fun AppActionBar(currentScreen: AppScreen?, navController: NavHostContro
         title = {
             Text(
                 text = currentScreen?.name() ?: "",
-                fontSize = AppTheme.dimensions.textSizeXLarge,
+                fontSize = MaterialTheme.dimensions.textSizeXLarge,
                 color = MaterialTheme.colorScheme.onPrimary
             )
         },
@@ -273,19 +274,19 @@ private fun AboutAppPopup(onDismissRequest: () -> Unit) {
         )
     ) {
         Surface(
-            modifier = Modifier.padding(horizontal = AppTheme.dimensions.commonSpaceLarge),
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.commonSpaceLarge),
             shape = RoundedCornerShape(8.dp),
             border = BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
         ) {
             Column(
-                modifier = Modifier.padding(AppTheme.dimensions.commonSpaceXLarge),
+                modifier = Modifier.padding(MaterialTheme.dimensions.commonSpaceXLarge),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
                     imageVector = Icons.Default.Info,
                     contentDescription = stringResource(id = R.string.menu_action_app_info)
                 )
-                Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
                 Text(
                     text = stringResource(id = R.string.app_about_popup_text, BuildConfig.VERSION_NAME),
                     textAlign = TextAlign.Center

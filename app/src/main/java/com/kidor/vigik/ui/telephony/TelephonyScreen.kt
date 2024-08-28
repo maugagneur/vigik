@@ -48,6 +48,7 @@ import com.kidor.vigik.data.telephony.Sms
 import com.kidor.vigik.data.telephony.SmsType
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 private const val DATA_PLACEHOLDER = "-"
 
@@ -78,18 +79,18 @@ fun TelephonyScreen(
                         modifier = Modifier
                             .fillMaxHeight()
                             .verticalScroll(rememberScrollState())
-                            .padding(all = AppTheme.dimensions.commonSpaceLarge),
+                            .padding(all = MaterialTheme.dimensions.commonSpaceLarge),
                         verticalArrangement = Arrangement.Center
                     ) {
                         ContactView(
                             totalContactNumber = state.totalContactNumber,
                             mobileContactNumber = state.mobileContactNumber
                         )
-                        HorizontalDivider(modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium))
                         SmsView(smsList = state.sms) { phoneNumber, message ->
                             viewModel.handleAction(TelephonyViewAction.SendSms(phoneNumber, message))
                         }
-                        HorizontalDivider(modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium))
+                        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium))
                         CallView(phoneCalls = state.phoneCalls)
                     }
                 }
@@ -118,27 +119,27 @@ private fun PermissionView(onPermissionsGranted: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(all = AppTheme.dimensions.commonSpaceLarge),
+            .padding(all = MaterialTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(id = R.string.telephony_permission_status_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Permissions not granted",
                 tint = MaterialTheme.colorScheme.error
             )
         }
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Button(onClick = { permissionsState.launchMultiplePermissionRequest() }) {
             Text(
                 text = stringResource(id = R.string.telephony_permission_request_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeLarge
+                fontSize = MaterialTheme.dimensions.textSizeLarge
             )
         }
     }
@@ -153,16 +154,16 @@ private fun ContactView(totalContactNumber: Int?, mobileContactNumber: Int?) {
         Text(
             text = stringResource(id = R.string.telephony_contact_section_title),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeXLarge
+            fontSize = MaterialTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_contact_total_number_label,
                 totalContactNumber ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
         Text(
             text = stringResource(
@@ -170,7 +171,7 @@ private fun ContactView(totalContactNumber: Int?, mobileContactNumber: Int?) {
                 mobileContactNumber ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
     }
 }
@@ -188,27 +189,27 @@ private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message:
         Text(
             text = stringResource(id = R.string.telephony_sms_section_title),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeXLarge
+            fontSize = MaterialTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_sms_total_received_label,
                 smsList?.filter { sms -> sms.type == SmsType.RECEIVED }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_sms_total_sent_label,
                 smsList?.filter { sms -> sms.type == SmsType.SENT }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
@@ -218,7 +219,7 @@ private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message:
                 imeAction = ImeAction.Next
             )
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         OutlinedTextField(
             value = message,
             onValueChange = { message = it },
@@ -245,43 +246,43 @@ private fun CallView(phoneCalls: List<PhoneCall>?) {
         Text(
             text = stringResource(id = R.string.telephony_call_section_title),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeXLarge
+            fontSize = MaterialTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_emitted_label,
                 phoneCalls?.filter { call -> call.status == PhoneCallStatus.EMITTED }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_received_label,
                 phoneCalls?.filter { call -> call.status == PhoneCallStatus.RECEIVED }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_ignored_label,
                 phoneCalls?.filter { call -> call.status == PhoneCallStatus.MISSED }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_rejected_label,
                 phoneCalls?.filter { call -> call.status == PhoneCallStatus.REJECTED }?.size ?: DATA_PLACEHOLDER
             ),
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
     }
 }

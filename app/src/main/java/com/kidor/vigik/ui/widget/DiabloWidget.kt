@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.widget
 
 import android.content.Context
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -34,7 +35,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import timber.log.Timber
 
 /**
@@ -76,7 +77,7 @@ class DiabloWidget : GlanceAppWidget() {
 @Composable
 private fun NoData(context: Context, isLoading: Boolean) {
     Column(
-        modifier = GlanceModifier.fillMaxSize().padding(AppTheme.dimensions.commonSpaceSmall),
+        modifier = GlanceModifier.fillMaxSize().padding(MaterialTheme.dimensions.commonSpaceSmall),
         verticalAlignment = Alignment.CenterVertically,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -97,7 +98,7 @@ private fun NoData(context: Context, isLoading: Boolean) {
     Row(
         modifier = GlanceModifier
             .fillMaxSize()
-            .padding(AppTheme.dimensions.commonSpaceSmall),
+            .padding(MaterialTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.End
     ) {
         LoadingImage(isLoading = isLoading, color = Color.Black)
@@ -109,7 +110,7 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .padding(AppTheme.dimensions.commonSpaceSmall)
+            .padding(MaterialTheme.dimensions.commonSpaceSmall)
     ) {
         Row(modifier = GlanceModifier.fillMaxWidth()) {
             Text(
@@ -117,7 +118,7 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .defaultWeight()
-                    .padding(end = AppTheme.dimensions.commonSpaceSmall),
+                    .padding(end = MaterialTheme.dimensions.commonSpaceSmall),
                 style = TextStyle(
                     color = ColorProvider(color = Color.White),
                     fontSize = 14.sp,

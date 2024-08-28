@@ -45,7 +45,7 @@ import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import timber.log.Timber
 
 internal const val USERNAME_TEXT_FIELD_TEST_TAG = "username_text_field"
@@ -101,7 +101,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge),
+            .padding(horizontal = MaterialTheme.dimensions.commonSpaceXLarge),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -114,7 +114,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
             label = { Text(text = stringResource(id = R.string.biometric_username_hint)) },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceMedium))
         OutlinedTextField(
             value = loginStateData.loginState.passwordField,
             onValueChange = loginStateData.onUpdatePassword,
@@ -133,17 +133,17 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
             onClick = loginStateData.onLoginClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = AppTheme.dimensions.commonSpaceLarge)
+                .padding(top = MaterialTheme.dimensions.commonSpaceLarge)
         ) {
             Text(
                 text = stringResource(id = R.string.biometric_login_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeLarge
+                fontSize = MaterialTheme.dimensions.textSizeLarge
             )
         }
         BiometricLoginButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = AppTheme.dimensions.commonSpaceSmall),
+                .padding(top = MaterialTheme.dimensions.commonSpaceSmall),
             visible = loginStateData.loginState.isBiometricLoginAvailable,
             onClick = loginStateData.onBiometricLoginClick
         )
@@ -172,7 +172,7 @@ private fun BiometricLoginButton(
             Spacer(modifier = Modifier.width(ButtonDefaults.IconSpacing))
             Text(
                 text = stringResource(id = R.string.biometric_login_with_biometric_button_label).uppercase(),
-                fontSize = AppTheme.dimensions.textSizeLarge
+                fontSize = MaterialTheme.dimensions.textSizeLarge
             )
         }
     }
@@ -181,7 +181,7 @@ private fun BiometricLoginButton(
 @Composable
 private fun InvalidUsernamePasswordView() {
     Row(
-        modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceLarge),
+        modifier = Modifier.padding(top = MaterialTheme.dimensions.commonSpaceLarge),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -189,7 +189,7 @@ private fun InvalidUsernamePasswordView() {
             contentDescription = "Error",
             tint = MaterialTheme.colorScheme.error
         )
-        Spacer(Modifier.width(AppTheme.dimensions.commonSpaceSmall))
+        Spacer(Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
         Text(
             text = stringResource(id = R.string.biometric_login_error_label),
             color = MaterialTheme.colorScheme.error

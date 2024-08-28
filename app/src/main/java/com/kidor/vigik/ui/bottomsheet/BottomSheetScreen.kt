@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -56,8 +56,8 @@ fun BottomSheetScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = AppTheme.dimensions.commonSpaceMedium)
-                .padding(top = AppTheme.dimensions.commonSpaceMedium),
+                .padding(horizontal = MaterialTheme.dimensions.commonSpaceMedium)
+                .padding(top = MaterialTheme.dimensions.commonSpaceMedium),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -68,7 +68,7 @@ fun BottomSheetScreen() {
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceMedium))
             Text(
                 text = stringResource(
                     id = R.string.bottom_sheet_target_state,
@@ -77,7 +77,7 @@ fun BottomSheetScreen() {
                 color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             Button(
                 onClick = {
                     coroutineScope.launch {
@@ -95,7 +95,7 @@ fun BottomSheetScreen() {
                     } else {
                         stringResource(id = R.string.bottom_sheet_switch_button_show_label).uppercase()
                     },
-                    fontSize = AppTheme.dimensions.textSizeLarge
+                    fontSize = MaterialTheme.dimensions.textSizeLarge
                 )
             }
         }
@@ -117,7 +117,7 @@ private fun CustomBottomSheet(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = AppTheme.dimensions.commonSpaceLarge)
+            .padding(horizontal = MaterialTheme.dimensions.commonSpaceLarge)
             .onSizeChanged { size ->
                 layoutHeight = size.height
                 bottomSheetState.updateAnchors(layoutHeight, sheetHeight)
@@ -139,7 +139,7 @@ private fun CustomBottomSheet(
     ) {
         Column(
             modifier = Modifier
-                .padding(vertical = AppTheme.dimensions.commonSpaceMedium)
+                .padding(vertical = MaterialTheme.dimensions.commonSpaceMedium)
                 .onSizeChanged { size ->
                     sheetHeight = size.height
                     bottomSheetState.updateAnchors(layoutHeight, sheetHeight)
@@ -154,7 +154,7 @@ private fun CustomBottomSheet(
             ) {
                 Box(
                     modifier = Modifier
-                        .width(AppTheme.dimensions.commonSpaceXLarge)
+                        .width(MaterialTheme.dimensions.commonSpaceXLarge)
                         .height(3.dp)
                         .clip(shape = RoundedCornerShape(size = 8.dp))
                         .background(color = MaterialTheme.colorScheme.onPrimaryContainer)
@@ -178,7 +178,7 @@ private fun BottomSheetContent(coroutineScope: CoroutineScope, bottomSheetState:
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineLarge
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceMedium))
         Button(
             onClick = {
                 coroutineScope.launch {
@@ -196,15 +196,15 @@ private fun BottomSheetContent(coroutineScope: CoroutineScope, bottomSheetState:
                 } else {
                     stringResource(id = R.string.bottom_sheet_switch_button_expand_label).uppercase()
                 },
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
         }
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceMedium))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceMedium))
         AsyncImage(
             model = R.drawable.notification_big_picture,
             contentDescription = "Bottom sheet content",
-            modifier = Modifier.padding(horizontal = AppTheme.dimensions.commonSpaceMedium)
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.commonSpaceMedium)
         )
-        Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceXLarge))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXLarge))
     }
 }

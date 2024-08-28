@@ -67,7 +67,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.getCameraProvider
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import timber.log.Timber
 import java.io.File
 import java.util.concurrent.Executor
@@ -120,18 +120,18 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
     }
 
     Column(
-        modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceMedium),
-        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
+        modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(id = R.string.camera_permission_status_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
             if (permissionGranted) {
                 Icon(
@@ -151,7 +151,7 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
             Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
                 Text(
                     text = stringResource(id = R.string.camera_permission_request_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeLarge
+                    fontSize = MaterialTheme.dimensions.textSizeLarge
                 )
             }
         }
@@ -238,7 +238,7 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
                     "Height: ${imageHeight.intValue} / Width: ${imageWidth.intValue}",
             modifier = Modifier.fillMaxWidth(),
             color = Color.Yellow,
-            fontSize = AppTheme.dimensions.textSizeSmall
+            fontSize = MaterialTheme.dimensions.textSizeSmall
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -246,7 +246,7 @@ private fun CameraView(executor: Executor, onImageCaptured: (Uri) -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
-                modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceMedium)
+                modifier = Modifier.padding(top = MaterialTheme.dimensions.commonSpaceMedium)
             ) {
                 SettingsLensButton(lensFacing = lensFacing)
                 SettingsZoomOutButton(camera = camera)
@@ -352,7 +352,7 @@ private fun TakePhotoButton(
         },
         modifier = Modifier
             .size(120.dp)
-            .padding(bottom = AppTheme.dimensions.commonSpaceXLarge)
+            .padding(bottom = MaterialTheme.dimensions.commonSpaceXLarge)
     ) {
         Icon(
             imageVector = Icons.Default.Lens,
@@ -421,18 +421,18 @@ private fun DisplayPhotoView(imageUri: Uri, retry: () -> Unit) {
 
     Button(
         onClick = retry,
-        modifier = Modifier.padding(vertical = AppTheme.dimensions.commonSpaceSmall)
+        modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceSmall)
     ) {
         Text(
             text = stringResource(id = R.string.camera_retry_capture_button_label).uppercase(),
-            fontSize = AppTheme.dimensions.textSizeSmall
+            fontSize = MaterialTheme.dimensions.textSizeSmall
         )
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = AppTheme.dimensions.commonSpaceMedium)
+            .padding(bottom = MaterialTheme.dimensions.commonSpaceMedium)
             .pointerInput(true) {
                 detectDragGestures(
                     // Show the magnifier in the initial position

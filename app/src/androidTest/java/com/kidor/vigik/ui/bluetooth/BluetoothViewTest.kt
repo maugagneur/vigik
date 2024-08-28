@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +22,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.extensions.onNodeWithText
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.After
 import org.junit.Before
@@ -53,18 +54,18 @@ class BluetoothViewTest {
     }
 
     @Composable
-    private fun BluetoohViewForTest(viewState: BluetoothViewState) {
+    private fun BluetoothViewForTest(viewState: BluetoothViewState) {
         Column(
-            modifier = Modifier.padding(AppTheme.dimensions.commonSpaceMedium),
+            modifier = Modifier.padding(MaterialTheme.dimensions.commonSpaceMedium),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BluetoothAdapterStatus(isEnable = viewState.isBluetoothEnable)
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             LocationStatus(isEnable = viewState.isLocationEnable)
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceLarge))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(AppTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
             BluetoothScanStatus(
                 scanInProgress = viewState.isScanning,
                 onRefreshDevicesClick = startBluetoothScanCallback
@@ -85,7 +86,7 @@ class BluetoothViewTest {
 
         runComposeUiTest {
             setContent {
-                BluetoohViewForTest(
+                BluetoothViewForTest(
                     viewState = BluetoothViewState(
                         isBluetoothEnable = false,
                         isLocationEnable = false,
@@ -121,7 +122,7 @@ class BluetoothViewTest {
 
         runComposeUiTest {
             setContent {
-                BluetoohViewForTest(
+                BluetoothViewForTest(
                     viewState = BluetoothViewState(
                         isBluetoothEnable = true,
                         isLocationEnable = false,
@@ -157,7 +158,7 @@ class BluetoothViewTest {
 
         runComposeUiTest {
             setContent {
-                BluetoohViewForTest(
+                BluetoothViewForTest(
                     viewState = BluetoothViewState(
                         isBluetoothEnable = false,
                         isLocationEnable = true,
@@ -193,7 +194,7 @@ class BluetoothViewTest {
 
         runComposeUiTest {
             setContent {
-                BluetoohViewForTest(
+                BluetoothViewForTest(
                     viewState = BluetoothViewState(
                         isBluetoothEnable = false,
                         isLocationEnable = false,
@@ -230,7 +231,7 @@ class BluetoothViewTest {
 
         runComposeUiTest {
             setContent {
-                BluetoohViewForTest(
+                BluetoothViewForTest(
                     viewState = BluetoothViewState(
                         isBluetoothEnable = false,
                         isLocationEnable = false,
@@ -283,7 +284,7 @@ class BluetoothViewTest {
 
         runComposeUiTest {
             setContent {
-                BluetoohViewForTest(
+                BluetoothViewForTest(
                     viewState = BluetoothViewState(
                         isBluetoothEnable = false,
                         isLocationEnable = false,

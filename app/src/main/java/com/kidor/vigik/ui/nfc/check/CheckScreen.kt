@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
 
@@ -92,7 +92,7 @@ internal fun NfcIsDisableState(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge)
+            .padding(horizontal = MaterialTheme.dimensions.commonSpaceXLarge)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -104,7 +104,7 @@ internal fun NfcIsDisableState(
             Text(
                 text = stringResource(id = R.string.nfc_refresh_button_label).uppercase(),
                 modifier = Modifier.weight(1f),
-                fontSize = AppTheme.dimensions.textSizeMedium,
+                fontSize = MaterialTheme.dimensions.textSizeMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(ButtonDefaults.IconSize))
@@ -120,7 +120,7 @@ internal fun NfcIsDisableState(
             Text(
                 text = stringResource(id = R.string.nfc_settings_button_label).uppercase(),
                 modifier = Modifier.weight(1f),
-                fontSize = AppTheme.dimensions.textSizeMedium,
+                fontSize = MaterialTheme.dimensions.textSizeMedium,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.size(ButtonDefaults.IconSize))

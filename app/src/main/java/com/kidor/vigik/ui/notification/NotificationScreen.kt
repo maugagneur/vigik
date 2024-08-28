@@ -34,7 +34,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.kidor.vigik.R
 import com.kidor.vigik.data.notification.NotificationIcon
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 /**
  * View that display the section dedicated to notifications.
@@ -46,9 +46,9 @@ fun NotificationScreen(
 ) {
     Column(
         modifier = Modifier
-            .padding(horizontal = AppTheme.dimensions.commonSpaceXLarge)
+            .padding(horizontal = MaterialTheme.dimensions.commonSpaceXLarge)
             .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         PermissionView()
@@ -57,7 +57,7 @@ fun NotificationScreen(
                 selectedIcon = state.notificationIcon,
                 onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
             )
-            Column(verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall)) {
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)) {
                 ToggleableRow(
                     text = stringResource(id = R.string.notification_add_text_content_label),
                     value = state.addTextContentSelected,
@@ -110,18 +110,18 @@ private fun PermissionView() {
     )
 
     Column(
-        modifier = Modifier.padding(top = AppTheme.dimensions.commonSpaceMedium),
-        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
+        modifier = Modifier.padding(top = MaterialTheme.dimensions.commonSpaceMedium),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceSmall),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = stringResource(id = R.string.notification_permission_status_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
             if (notificationPermissionState.allPermissionsGranted) {
                 Icon(
@@ -141,7 +141,7 @@ private fun PermissionView() {
             Button(onClick = { notificationPermissionState.launchMultiplePermissionRequest() }) {
                 Text(
                     text = stringResource(id = R.string.notification_permission_request_button_label).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeLarge
+                    fontSize = MaterialTheme.dimensions.textSizeLarge
                 )
             }
         }
@@ -195,7 +195,7 @@ private fun ToggleableRow(
         Text(
             text = text,
             color = MaterialTheme.colorScheme.onBackground,
-            fontSize = AppTheme.dimensions.textSizeMedium
+            fontSize = MaterialTheme.dimensions.textSizeMedium
         )
         Switch(
             checked = value,
@@ -213,7 +213,7 @@ private fun GenerateNotificationButton(onClick: () -> Unit) {
     ) {
         Text(
             text = stringResource(id = R.string.notification_generate_notification_button_label).uppercase(),
-            fontSize = AppTheme.dimensions.textSizeLarge
+            fontSize = MaterialTheme.dimensions.textSizeLarge
         )
     }
 }
@@ -224,11 +224,11 @@ private fun RemovePreviousNotificationButton(onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = AppTheme.dimensions.commonSpaceMedium)
+            .padding(bottom = MaterialTheme.dimensions.commonSpaceMedium)
     ) {
         Text(
             text = stringResource(id = R.string.notification_remove_previous_notification_button_label).uppercase(),
-            fontSize = AppTheme.dimensions.textSizeLarge,
+            fontSize = MaterialTheme.dimensions.textSizeLarge,
             textAlign = TextAlign.Center
         )
     }

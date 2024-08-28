@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import kotlin.math.roundToInt
 
 private const val COLOR_DARK_VIOLET = 0xFF660099
@@ -73,9 +73,9 @@ fun GlitterRainbowScreen(
                 )
                 Text(
                     text = stringResource(id = R.string.animation_glitter_rainbow_source_label),
-                    modifier = Modifier.padding(all = AppTheme.dimensions.commonSpaceMedium),
+                    modifier = Modifier.padding(all = MaterialTheme.dimensions.commonSpaceMedium),
                     color = MaterialTheme.colorScheme.onBackground,
-                    fontSize = AppTheme.dimensions.textSizeXSmall,
+                    fontSize = MaterialTheme.dimensions.textSizeXSmall,
                     textAlign = TextAlign.Center
                 )
             }
@@ -91,24 +91,24 @@ private fun SettingsPanel(
 ) {
     Row(
         modifier = Modifier
-            .padding(all = AppTheme.dimensions.commonSpaceMedium)
+            .padding(all = MaterialTheme.dimensions.commonSpaceMedium)
             .height(intrinsicSize = IntrinsicSize.Min)
     ) {
         Column(
             modifier = Modifier
-                .padding(end = AppTheme.dimensions.commonSpaceMedium)
+                .padding(end = MaterialTheme.dimensions.commonSpaceMedium)
                 .fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
                 text = stringResource(id = R.string.animation_glitter_rainbow_speed_coefficient_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
             Text(
                 text = stringResource(id = R.string.animation_glitter_rainbow_life_time_label),
                 color = MaterialTheme.colorScheme.onBackground,
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
         }
         var speedCoefficientValue by remember { mutableFloatStateOf(viewState.speedCoefficient) }

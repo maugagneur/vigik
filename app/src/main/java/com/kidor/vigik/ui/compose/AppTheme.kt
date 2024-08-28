@@ -3,21 +3,16 @@ package com.kidor.vigik.ui.compose
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 
 /**
- * Utility class used to access to common app's dimensions.
+ * Access to application's dimension metrics.
  */
-object AppTheme {
-
-    /**
-     * Access to application's dimension metrics.
-     */
-    val dimensions: AppDimensions
-        @Composable
-        @ReadOnlyComposable
-        get() = LocalDimensions.current
-}
+val MaterialTheme.dimensions: AppDimensions
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalDimensions.current
 
 /**
  * Theme of the application based on [MaterialTheme].
@@ -28,8 +23,12 @@ fun AppTheme(
     content: @Composable () -> Unit
 ) {
     val isDarkTheme: Boolean = isSystemInDarkTheme()
-    MaterialTheme(
-        colorScheme = if (isDarkTheme xor inverseTheme) LocalDarkColors.current else LocalLightColors.current,
-        content = content
-    )
+    CompositionLocalProvider(
+        LocalDimensions provides AppDimensions()
+    ) {
+        MaterialTheme(
+            colorScheme = if (isDarkTheme xor inverseTheme) LocalDarkColors.current else LocalLightColors.current,
+            content = content
+        )
+    }
 }

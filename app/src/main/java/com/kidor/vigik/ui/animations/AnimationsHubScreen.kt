@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 
 /**
  * View that display all animation sections.
@@ -30,8 +31,8 @@ fun AnimationsHubScreen(
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxHeight(),
-        contentPadding = PaddingValues(all = AppTheme.dimensions.commonSpaceXLarge),
-        verticalArrangement = Arrangement.spacedBy(AppTheme.dimensions.commonSpaceLarge),
+        contentPadding = PaddingValues(all = MaterialTheme.dimensions.commonSpaceXLarge),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceLarge),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val animationButtonDataList = listOf(
@@ -48,7 +49,7 @@ fun AnimationsHubScreen(
             ) {
                 Text(
                     text = stringResource(id = buttonData.textId).uppercase(),
-                    fontSize = AppTheme.dimensions.textSizeMedium
+                    fontSize = MaterialTheme.dimensions.textSizeMedium
                 )
             }
         }

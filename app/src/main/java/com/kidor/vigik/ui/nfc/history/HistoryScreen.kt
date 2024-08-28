@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.toHex
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
+import com.kidor.vigik.ui.compose.dimensions
 import com.kidor.vigik.ui.usecases.FormatDateUseCase
 
 internal const val DELETE_ICON_TEST_TAG_PREFIX = "Delete tag "
@@ -85,7 +85,7 @@ internal fun DisplayTags(
         ) {
             Text(
                 text = stringResource(id = R.string.nfc_history_no_data_label),
-                fontSize = AppTheme.dimensions.textSizeMedium
+                fontSize = MaterialTheme.dimensions.textSizeMedium
             )
         }
     } else {
@@ -106,14 +106,14 @@ internal fun DisplayTags(
                         text = FormatDateUseCase().invoke(tag.timestamp),
                         modifier = Modifier.weight(TAG_ROW_TIMESTAMP_WEIGHT),
                         color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = AppTheme.dimensions.textSizeMedium,
+                        fontSize = MaterialTheme.dimensions.textSizeMedium,
                         textAlign = TextAlign.Center
                     )
                     Text(
                         text = tag.uid?.toHex() ?: "",
                         modifier = Modifier.weight(TAG_ROW_UID_WEIGHT),
                         color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = AppTheme.dimensions.textSizeMedium,
+                        fontSize = MaterialTheme.dimensions.textSizeMedium,
                         textAlign = TextAlign.Center
                     )
                     IconButton(
