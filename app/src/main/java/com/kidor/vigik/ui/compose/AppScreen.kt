@@ -55,6 +55,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Lookahead" animation screen.
+     */
+    AnimationLookaheadScreen(
+        nameId = R.string.animation_lookahead_title,
+        route = "animation_lookahead"
+    ),
+
+    /**
      * Metadata of "Shape" animation screen.
      */
     AnimationShapeScreen(
