@@ -60,7 +60,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import coil.compose.rememberAsyncImagePainter
+import coil3.SingletonImageLoader
+import coil3.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -453,7 +454,10 @@ private fun DisplayPhotoView(imageUri: Uri, retry: () -> Unit) {
             )
     ) {
         Image(
-            painter = rememberAsyncImagePainter(model = imageUri),
+            painter = rememberAsyncImagePainter(
+                model = imageUri,
+                imageLoader = SingletonImageLoader.get(LocalContext.current)
+            ),
             contentDescription = "Photo",
             modifier = Modifier.fillMaxSize()
         )

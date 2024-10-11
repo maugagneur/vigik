@@ -84,7 +84,7 @@ class Glitter private constructor(
     fun draw(canvas: Canvas) {
         if (lifeCount > 0) {
             when (shape) {
-                GeometricShape.Circle -> {
+                GeometricShape.CIRCLE -> {
                     canvas.drawCircle(
                         radius = drawRadius,
                         center = position,
@@ -92,7 +92,7 @@ class Glitter private constructor(
                     )
                 }
 
-                GeometricShape.Triangle -> {
+                GeometricShape.TRIANGLE -> {
                     val path = Path()
                     path.moveTo(position.x, position.y)
                     path.lineTo(position.x + drawRadius, position.y + 2 * drawRadius)
@@ -104,7 +104,7 @@ class Glitter private constructor(
                     )
                 }
 
-                GeometricShape.Rectangle -> {
+                GeometricShape.RECTANGLE -> {
                     val rect = Rect(
                         position.x,
                         position.y,

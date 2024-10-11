@@ -28,12 +28,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil3.SingletonImageLoader
+import coil3.compose.AsyncImage
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.compose.dimensions
 import kotlinx.coroutines.CoroutineScope
@@ -203,6 +205,7 @@ private fun BottomSheetContent(coroutineScope: CoroutineScope, bottomSheetState:
         AsyncImage(
             model = R.drawable.notification_big_picture,
             contentDescription = "Bottom sheet content",
+            imageLoader = SingletonImageLoader.get(LocalContext.current),
             modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.commonSpaceMedium)
         )
         Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXLarge))

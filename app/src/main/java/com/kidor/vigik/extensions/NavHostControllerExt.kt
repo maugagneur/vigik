@@ -33,7 +33,7 @@ fun NavHostController.navigateSingleTopTo(destination: AppScreen): Unit =
  * @param destination The destination.
  * @param popUpTo     If set to true, pop up screens until the destination.
  */
-fun NavHostController.navigate(destination: AppScreen, popUpTo: Boolean = false): Unit = this.navigate(
+fun NavHostController.navigateTo(destination: AppScreen, popUpTo: Boolean = false): Unit = this.navigate(
     route = destination.route,
     navOptions = if (popUpTo) {
         NavOptions.Builder()

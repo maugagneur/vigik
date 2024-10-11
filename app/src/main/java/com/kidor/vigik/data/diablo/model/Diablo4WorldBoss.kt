@@ -10,9 +10,13 @@ import com.kidor.vigik.R
  * @param resId       The resource ID associated with the world boss.
  */
 enum class Diablo4WorldBoss(val description: String, @StringRes val resId: Int) {
+    /** Ashava **/
     ASHAVA("ashava", R.string.diablo_boss_name_ashava),
+    /** Avarice **/
     AVARICE("avarice", R.string.diablo_boss_name_avarice),
+    /** Wandering death **/
     WANDERING_DEATH("wandering death", R.string.diablo_boss_name_wandering_death),
+    /** Unknown boss **/
     UNKNOWN("", R.string.diablo_boss_name_unknown);
 
     companion object {

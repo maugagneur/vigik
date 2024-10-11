@@ -47,7 +47,6 @@ import com.kidor.vigik.data.telephony.PhoneCallStatus
 import com.kidor.vigik.data.telephony.Sms
 import com.kidor.vigik.data.telephony.SmsType
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
 import com.kidor.vigik.ui.compose.dimensions
 
 private const val DATA_PLACEHOLDER = "-"
@@ -86,11 +85,15 @@ fun TelephonyScreen(
                             totalContactNumber = state.totalContactNumber,
                             mobileContactNumber = state.mobileContactNumber
                         )
-                        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium))
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium)
+                        )
                         SmsView(smsList = state.sms) { phoneNumber, message ->
                             viewModel.handleAction(TelephonyViewAction.SendSms(phoneNumber, message))
                         }
-                        HorizontalDivider(modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium))
+                        HorizontalDivider(
+                            modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium)
+                        )
                         CallView(phoneCalls = state.phoneCalls)
                     }
                 }

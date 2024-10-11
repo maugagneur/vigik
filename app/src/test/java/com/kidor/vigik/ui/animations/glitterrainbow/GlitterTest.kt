@@ -31,7 +31,7 @@ class GlitterTest {
 
         var lifeTime = 100
         // Try creating triangle
-        var glitter = Glitter.create(color = Color.Blue, glitterShape = GeometricShape.Triangle, source = Offset.Zero, lifeTime = lifeTime)
+        var glitter = Glitter.create(color = Color.Blue, glitterShape = GeometricShape.TRIANGLE, source = Offset.Zero, lifeTime = lifeTime)
 
         assertEquals(lifeTime, glitter.lifeCount, "Time to live")
 
@@ -64,7 +64,7 @@ class GlitterTest {
         val source = Offset(x = 200f, y = 350f)
 
         // Draw a circle
-        Glitter.create(color, GeometricShape.Circle, source, 100).draw(canvas)
+        Glitter.create(color, GeometricShape.CIRCLE, source, 100).draw(canvas)
 
         verify { canvas.drawCircle(source, any(), any()) }
     }
@@ -77,7 +77,7 @@ class GlitterTest {
         val source = Offset(x = 200f, y = 350f)
 
         // Draw a triangle
-        Glitter.create(color, GeometricShape.Triangle, source, 100).draw(canvas)
+        Glitter.create(color, GeometricShape.TRIANGLE, source, 100).draw(canvas)
 
         verify { canvas.drawPath(any(), any()) }
     }
@@ -90,7 +90,7 @@ class GlitterTest {
         val source = Offset(x = 200f, y = 350f)
 
         // Draw a rectangle
-        Glitter.create(color, GeometricShape.Rectangle, source, 100).draw(canvas)
+        Glitter.create(color, GeometricShape.RECTANGLE, source, 100).draw(canvas)
 
         verify { canvas.drawRect(any(), any()) }
     }

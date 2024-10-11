@@ -2,12 +2,12 @@ package com.kidor.vigik.extensions
 
 import android.app.Activity
 import android.graphics.Bitmap
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.view.PixelCopy
 import android.view.View
 import androidx.compose.ui.geometry.Rect
+import com.kidor.vigik.utils.BuildVersionWrapper
 import timber.log.Timber
 
 /**
@@ -17,7 +17,7 @@ import timber.log.Timber
  * @param bitmapCallback The callback to retrieve the [Bitmap].
  */
 fun View.screenshot(bounds: Rect, bitmapCallback: (Bitmap?) -> Unit) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (BuildVersionWrapper.isOOrAbove()) {
         try {
             val bitmap = Bitmap.createBitmap(
                 bounds.width.toInt(),

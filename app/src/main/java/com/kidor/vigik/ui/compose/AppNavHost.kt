@@ -15,8 +15,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.kidor.vigik.extensions.findActivity
-import com.kidor.vigik.extensions.navigate
 import com.kidor.vigik.extensions.navigateSingleTopTo
+import com.kidor.vigik.extensions.navigateTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
 import com.kidor.vigik.ui.animations.followingarrows.FollowingArrowsScreen
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
@@ -82,17 +82,17 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
         HomeScreen(
             navigateTo = { destination ->
                 when (destination) {
-                    HomeNavigation.NavigateToAnimations -> navController.navigate(AppScreen.AnimationsHubScreen)
-                    HomeNavigation.NavigateToBiometric -> navController.navigate(AppScreen.BiometricLoginScreen)
-                    HomeNavigation.NavigateToBluetooth -> navController.navigate(AppScreen.BluetoothScreen)
-                    HomeNavigation.NavigateToBottomSheet -> navController.navigate(AppScreen.BottomSheetScreen)
-                    HomeNavigation.NavigateToCamera -> navController.navigate(AppScreen.CameraScreen)
-                    HomeNavigation.NavigateToEmoji -> navController.navigate(AppScreen.EmojiScreen)
-                    HomeNavigation.NavigateToNfc -> navController.navigate(AppScreen.NfcCheckScreen)
-                    HomeNavigation.NavigateToNotification -> navController.navigate(AppScreen.NotificationScreen)
-                    HomeNavigation.NavigateToPaging -> navController.navigate(AppScreen.PagingScreen)
-                    HomeNavigation.NavigateToRestApi -> navController.navigate(AppScreen.RestApiScreen)
-                    HomeNavigation.NavigateToTelephony -> navController.navigate(AppScreen.TelephonyScreen)
+                    HomeNavigation.NavigateToAnimations -> navController.navigateTo(AppScreen.AnimationsHubScreen)
+                    HomeNavigation.NavigateToBiometric -> navController.navigateTo(AppScreen.BiometricLoginScreen)
+                    HomeNavigation.NavigateToBluetooth -> navController.navigateTo(AppScreen.BluetoothScreen)
+                    HomeNavigation.NavigateToBottomSheet -> navController.navigateTo(AppScreen.BottomSheetScreen)
+                    HomeNavigation.NavigateToCamera -> navController.navigateTo(AppScreen.CameraScreen)
+                    HomeNavigation.NavigateToEmoji -> navController.navigateTo(AppScreen.EmojiScreen)
+                    HomeNavigation.NavigateToNfc -> navController.navigateTo(AppScreen.NfcCheckScreen)
+                    HomeNavigation.NavigateToNotification -> navController.navigateTo(AppScreen.NotificationScreen)
+                    HomeNavigation.NavigateToPaging -> navController.navigateTo(AppScreen.PagingScreen)
+                    HomeNavigation.NavigateToRestApi -> navController.navigateTo(AppScreen.RestApiScreen)
+                    HomeNavigation.NavigateToTelephony -> navController.navigateTo(AppScreen.TelephonyScreen)
                 }
             }
         )
@@ -108,12 +108,12 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
     navGraphBuilder.let {
         it.composable(route = AppScreen.AnimationsHubScreen.route) {
             AnimationsHubScreen(
-                navigateToFollowingArrows = { navController.navigate(AppScreen.AnimationFollowingArrowsScreen) },
-                navigateToGlitterRainbow = { navController.navigate(AppScreen.AnimationGlitterRainbowScreen) },
-                navigateToLookahead = { navController.navigate(AppScreen.AnimationLookaheadScreen) },
-                navigateToShape = { navController.navigate(AppScreen.AnimationShapeScreen) },
-                navigateToSnowfall = { navController.navigate(AppScreen.AnimationSnowfallScreen) },
-                navigateToTypewriter = { navController.navigate(AppScreen.AnimationTypewriterScreen) }
+                navigateToFollowingArrows = { navController.navigateTo(AppScreen.AnimationFollowingArrowsScreen) },
+                navigateToGlitterRainbow = { navController.navigateTo(AppScreen.AnimationGlitterRainbowScreen) },
+                navigateToLookahead = { navController.navigateTo(AppScreen.AnimationLookaheadScreen) },
+                navigateToShape = { navController.navigateTo(AppScreen.AnimationShapeScreen) },
+                navigateToSnowfall = { navController.navigateTo(AppScreen.AnimationSnowfallScreen) },
+                navigateToTypewriter = { navController.navigateTo(AppScreen.AnimationTypewriterScreen) }
             )
         }
         it.composable(route = AppScreen.AnimationFollowingArrowsScreen.route) { FollowingArrowsScreen() }
@@ -136,14 +136,14 @@ private fun addBiometricScreens(navGraphBuilder: NavGraphBuilder, navController:
     navGraphBuilder.composable(route = AppScreen.BiometricLoginScreen.route) {
         BiometricLoginScreen(
             startBiometricEnrollment = { enrollIntent -> context.startActivity(enrollIntent) },
-            navigateToBiometricHome = { navController.navigate(AppScreen.BiometricHomeScreen) }
+            navigateToBiometricHome = { navController.navigateTo(AppScreen.BiometricHomeScreen) }
         )
     }
     navGraphBuilder.composable(route = AppScreen.BiometricHomeScreen.route) {
         BackHandler(enabled = true) { }
         BiometricHomeScreen(
             navigateToBiometricLogin = {
-                navController.navigate(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
+                navController.navigateTo(destination = AppScreen.BiometricLoginScreen, popUpTo = true)
             }
         )
     }
@@ -210,9 +210,9 @@ private fun addNfcScreens(navGraphBuilder: NavGraphBuilder, navController: NavHo
     }
     navGraphBuilder.composable(route = AppScreen.NfcHubScreen.route) {
         HubScreen(
-            navigateToScanTag = { navController.navigate(AppScreen.NfcScanScreen) },
-            navigateToTagHistory = { navController.navigate(AppScreen.NfcHistoryScreen) },
-            navigateToEmulateTag = { navController.navigate(AppScreen.NfcEmulateScreen) }
+            navigateToScanTag = { navController.navigateTo(AppScreen.NfcScanScreen) },
+            navigateToTagHistory = { navController.navigateTo(AppScreen.NfcHistoryScreen) },
+            navigateToEmulateTag = { navController.navigateTo(AppScreen.NfcEmulateScreen) }
         )
     }
     navGraphBuilder.composable(route = AppScreen.NfcScanScreen.route) {

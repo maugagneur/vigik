@@ -11,6 +11,10 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import coil3.ImageLoader
+import coil3.PlatformContext
+import coil3.SingletonImageLoader
+import coil3.request.crossfade
 import com.kidor.vigik.data.bluetooth.BluetoothApi
 import com.kidor.vigik.receivers.BluetoothStateReceiver
 import com.kidor.vigik.receivers.LocationStateChangeReceiver
@@ -23,7 +27,7 @@ import javax.inject.Inject
  * Implementation of [Application].
  */
 @HiltAndroidApp
-class VigikApplication : Application(), Configuration.Provider {
+class VigikApplication : Application(), Configuration.Provider, SingletonImageLoader.Factory {
 
     /**
      * Worker Factory for the Hilt Extension.
@@ -47,6 +51,12 @@ class VigikApplication : Application(), Configuration.Provider {
         registerReceivers()
 
         createNotificationChannel()
+    }
+
+    override fun newImageLoader(context: PlatformContext): ImageLoader {
+        return ImageLoader.Builder(context)
+            .crossfade(true)
+            .build()
     }
 
     override val workManagerConfiguration: Configuration by lazy {

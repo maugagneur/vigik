@@ -6,12 +6,19 @@ import android.bluetooth.BluetoothClass
  * Types of Bluetooth devices.
  */
 enum class BluetoothDeviceType {
+    /** Computer device. **/
     COMPUTER,
+    /** Headphone device. **/
     HEADPHONE,
+    /** Headset device. **/
     HEADSET,
+    /** Imaging device. **/
     IMAGING,
+    /** Phone device. **/
     PHONE,
+    /** Peripheral device. **/
     PERIPHERAL,
+    /** Unknown device. **/
     UNKNOWN;
 
     companion object {

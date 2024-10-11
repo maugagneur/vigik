@@ -14,7 +14,10 @@ data object Mixed : GlitterShape
  * Geometric shape for glitters.
  */
 enum class GeometricShape : GlitterShape {
-    Rectangle,
-    Circle,
-    Triangle
+    /** Rectangle shape. **/
+    RECTANGLE,
+    /** Circle shape. **/
+    CIRCLE,
+    /** Triangle shape. **/
+    TRIANGLE
 }

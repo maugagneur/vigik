@@ -6,13 +6,21 @@ import android.bluetooth.le.ScanCallback
  * Potential scan errors.
  */
 enum class BluetoothScanError {
+    /** Failed to start. **/
     SCAN_FAILED_TO_START,
+    /** Already started. **/
     SCAN_FAILED_ALREADY_STARTED,
+    /** Application registration failure. **/
     SCAN_FAILED_APPLICATION_REGISTRATION_FAILED,
+    /** Internal error. **/
     SCAN_FAILED_INTERNAL_ERROR,
+    /** Unsupported feature. **/
     SCAN_FAILED_FEATURE_UNSUPPORTED,
+    /** Out of hardware resources. **/
     SCAN_FAILED_OUT_OF_HARDWARE_RESOURCES,
+    /** Scanning too frequently error. **/
     SCAN_FAILED_SCANNING_TOO_FREQUENTLY,
+    /** Unknown error. **/
     SCAN_FAILED_UNKNOWN_REASON;
 
     companion object {

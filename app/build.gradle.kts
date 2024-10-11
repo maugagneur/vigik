@@ -38,7 +38,7 @@ dependencies {
     }
 
     // Image loader
-    implementation(libs.coil.compose)
+    implementation(libs.bundles.coil)
 
     // Kotlin
     implementation(libs.bundles.kotlinx.coroutines)
