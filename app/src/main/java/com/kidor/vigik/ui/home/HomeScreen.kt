@@ -50,6 +50,9 @@ fun HomeScreen(
                 textId = R.string.home_camera_button_label
             ) { navigateTo(HomeNavigation.NavigateToCamera) },
             HomeButtonData(
+                textId = R.string.home_compass_button_label
+            ) { navigateTo(HomeNavigation.NavigateToCompass) },
+            HomeButtonData(
                 textId = R.string.home_emoji_button_label
             ) { navigateTo(HomeNavigation.NavigateToEmoji) },
             HomeButtonData(

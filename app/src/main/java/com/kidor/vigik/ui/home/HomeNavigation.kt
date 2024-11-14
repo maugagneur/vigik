@@ -30,6 +30,11 @@ sealed interface HomeNavigation {
     data object NavigateToCamera : HomeNavigation
 
     /**
+     * Navigation action to compass section.
+     */
+    data object NavigateToCompass : HomeNavigation
+
+    /**
      * Navigation action to emoji section.
      */
     data object NavigateToEmoji : HomeNavigation

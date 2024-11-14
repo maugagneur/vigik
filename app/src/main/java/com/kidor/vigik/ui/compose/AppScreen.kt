@@ -128,6 +128,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "compass" screen.
+     */
+    CompassScreen(
+        nameId = R.string.compass_title,
+        route = "compass"
+    ),
+
+    /**
      * Metadata of "Emoji" screen.
      */
     EmojiScreen(

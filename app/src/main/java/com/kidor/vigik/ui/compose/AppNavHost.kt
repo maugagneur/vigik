@@ -29,6 +29,7 @@ import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
 import com.kidor.vigik.ui.bottomsheet.BottomSheetScreen
 import com.kidor.vigik.ui.camera.CameraScreen
+import com.kidor.vigik.ui.compass.CompassScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
 import com.kidor.vigik.ui.home.HomeNavigation
 import com.kidor.vigik.ui.home.HomeScreen
@@ -62,6 +63,7 @@ fun AppNavHost(
         addBluetoothScreens(navGraphBuilder = this)
         addBottomSheetScreens(navGraphBuilder = this)
         addCameraScreens(navGraphBuilder = this)
+        addCompassScreens(navGraphBuilder = this)
         addEmojiScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
@@ -87,6 +89,7 @@ private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavH
                     HomeNavigation.NavigateToBluetooth -> navController.navigateTo(AppScreen.BluetoothScreen)
                     HomeNavigation.NavigateToBottomSheet -> navController.navigateTo(AppScreen.BottomSheetScreen)
                     HomeNavigation.NavigateToCamera -> navController.navigateTo(AppScreen.CameraScreen)
+                    HomeNavigation.NavigateToCompass -> navController.navigateTo(AppScreen.CompassScreen)
                     HomeNavigation.NavigateToEmoji -> navController.navigateTo(AppScreen.EmojiScreen)
                     HomeNavigation.NavigateToNfc -> navController.navigateTo(AppScreen.NfcCheckScreen)
                     HomeNavigation.NavigateToNotification -> navController.navigateTo(AppScreen.NotificationScreen)
@@ -180,6 +183,17 @@ private fun addBottomSheetScreens(navGraphBuilder: NavGraphBuilder) {
 private fun addCameraScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.CameraScreen.route) {
         CameraScreen()
+    }
+}
+
+/**
+ * Add screens related to Compass into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addCompassScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.CompassScreen.route) {
+        CompassScreen()
     }
 }
 
