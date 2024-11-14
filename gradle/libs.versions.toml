@@ -28,6 +28,7 @@ detekt = "1.23.8"
 dokka = "2.0.0"
 espresso = "3.6.1"
 google-hilt = "2.55"
+google-maps-compose = "6.2.1"
 google-material = "1.12.0"
 google-play-services-location = "21.3.0"
 jacoco = "0.8.11"
@@ -110,6 +111,7 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 ksp-api = { group = "com.google.devtools.ksp", name = "symbol-processing-api", version.ref = "ksp" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "google-maps-compose" }
 mockito-android = { group = "org.mockito", name = "mockito-android", version.ref = "mockito-android" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
