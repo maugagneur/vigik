@@ -34,6 +34,7 @@ import com.kidor.vigik.ui.biometric.login.BiometricLoginScreen
 import com.kidor.vigik.ui.bluetooth.BluetoothScreen
 import com.kidor.vigik.ui.bottomsheet.BottomSheetScreen
 import com.kidor.vigik.ui.camera.CameraScreen
+import com.kidor.vigik.ui.compass.CompassScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
@@ -67,6 +68,7 @@ fun AppNavHost(
         addBluetoothScreens(navGraphBuilder = this)
         addBottomSheetScreens(navGraphBuilder = this)
         addCameraScreens(navGraphBuilder = this)
+        addCompassScreens(navGraphBuilder = this)
         addEmojiScreens(navGraphBuilder = this)
         addNfcScreens(navGraphBuilder = this, navController = navController, context = context)
         addNotificationScreens(navGraphBuilder = this)
@@ -172,6 +174,17 @@ private fun addBottomSheetScreens(navGraphBuilder: NavGraphBuilder) {
 private fun addCameraScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.CameraScreen.route) {
         CameraScreen()
+    }
+}
+
+/**
+ * Add screens related to Compass into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addCompassScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.CompassScreen.route) {
+        CompassScreen()
     }
 }
 

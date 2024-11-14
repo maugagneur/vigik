@@ -36,6 +36,7 @@ fun HomeScreen(
             AppScreen.BluetoothScreen,
             AppScreen.BottomSheetScreen,
             AppScreen.CameraScreen,
+            AppScreen.CompassScreen,
             AppScreen.EmojiScreen,
             AppScreen.NfcCheckScreen,
             AppScreen.NotificationScreen,
