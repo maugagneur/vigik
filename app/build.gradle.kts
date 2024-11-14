@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.conscrypt)
 
+    // Play services
+    implementation(libs.play.services.location)
+
     // Shared preferences
     implementation(libs.androidx.datastore.preferences)
 
