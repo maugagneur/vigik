@@ -54,6 +54,9 @@ dependencies {
     // Network calls
     implementation(libs.bundles.retrofit)
 
+    // Play services
+    implementation(libs.play.services.location)
+
     // Shared preferences
     implementation(libs.androidx.datastore.preferences)
 
