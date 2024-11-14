@@ -50,6 +50,9 @@ dependencies {
     // Log
     implementation(libs.timber)
 
+    // Map
+    implementation(libs.maps.compose)
+
     // Network calls
     implementation(libs.bundles.retrofit)
     implementation(libs.conscrypt)
