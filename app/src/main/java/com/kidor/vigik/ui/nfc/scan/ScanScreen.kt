@@ -29,7 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 
 internal const val FLOATING_ACTION_BUTTON_TEST_TAG = "Floating action button"
 internal const val TAG_DATA_TEXT_TEST_TAG = "Tag data text"

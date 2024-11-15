@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose.switchingtheme
+package com.kidor.vigik.ui.theme.switchingtheme
 
 /**
  * Directions of removable effect used with [RemovableDiagonalRectShape].

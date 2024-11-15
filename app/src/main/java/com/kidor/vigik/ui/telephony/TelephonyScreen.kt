@@ -47,7 +47,7 @@ import com.kidor.vigik.data.telephony.PhoneCallStatus
 import com.kidor.vigik.data.telephony.Sms
 import com.kidor.vigik.data.telephony.SmsType
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 
 private const val DATA_PLACEHOLDER = "-"
 

@@ -30,7 +30,7 @@ import coil3.SingletonImageLoader
 import coil3.compose.AsyncImagePainter
 import coil3.compose.rememberAsyncImagePainter
 import coil3.request.ImageRequest
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import timber.log.Timber
 
 private const val COLUMN_ITEM_COUNT = 2f

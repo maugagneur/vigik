@@ -35,7 +35,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import timber.log.Timber
 
 /**

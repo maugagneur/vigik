@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 
 internal const val PROGRESS_BAR_TEST_TAG = "Progress bar"
 

@@ -58,8 +58,8 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.AppTheme
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.AppTheme
+import com.kidor.vigik.ui.theme.dimensions
 
 internal const val BLUETOOTH_ICON_ENABLE_TEST_TAG = "bluetooth_icon_enable"
 internal const val BLUETOOTH_ICON_DISABLE_TEST_TAG = "bluetooth_icon_disable"

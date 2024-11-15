@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import com.kidor.vigik.R
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
