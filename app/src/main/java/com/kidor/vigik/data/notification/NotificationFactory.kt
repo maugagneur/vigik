@@ -11,9 +11,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import androidx.core.net.toUri
 import com.kidor.vigik.R
+import com.kidor.vigik.navigation.AppScreen
 import com.kidor.vigik.receivers.NotificationReceiver
 import com.kidor.vigik.ui.MainActivity
-import com.kidor.vigik.ui.compose.AppScreen
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

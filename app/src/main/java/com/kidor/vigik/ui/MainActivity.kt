@@ -57,8 +57,8 @@ import androidx.navigation.compose.rememberNavController
 import com.kidor.vigik.BuildConfig
 import com.kidor.vigik.R
 import com.kidor.vigik.data.nfc.api.NfcApi
-import com.kidor.vigik.ui.compose.AppNavHost
-import com.kidor.vigik.ui.compose.AppScreen
+import com.kidor.vigik.navigation.AppNavHost
+import com.kidor.vigik.navigation.AppScreen
 import com.kidor.vigik.ui.compose.AppTheme
 import com.kidor.vigik.ui.compose.dimensions
 import com.kidor.vigik.ui.compose.switchingtheme.RemovableDiagonalRectShape

@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose
+package com.kidor.vigik.navigation
 
 import android.content.Context
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose
+package com.kidor.vigik.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -181,7 +181,7 @@ enum class AppScreen(
     NotificationScreen(
         nameId = R.string.notification_title,
         route = "notification",
-        deeplinkPath = "${APP_BASE_URI}/notification"
+        deeplinkPath = "$APP_BASE_URI/notification"
     ),
 
     /**
