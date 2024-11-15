@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.kover) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
+    alias(libs.plugins.secret) apply false
 }
 
 tasks.register("clean", Delete::class) {

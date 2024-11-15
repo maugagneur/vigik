@@ -29,6 +29,7 @@ dependencies {
     compileOnly(libs.kover.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
+    compileOnly(libs.secret.gradlePlugin)
 }
 
 gradlePlugin {
@@ -64,6 +65,10 @@ gradlePlugin {
         register("kover") {
             id = "vigik.kover"
             implementationClass = "KoverConventionPlugin"
+        }
+        register("secret") {
+            id = "vigik.secret"
+            implementationClass = "SecretConventionPlugin"
         }
     }
 }
