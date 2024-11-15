@@ -7,6 +7,7 @@ plugins {
     id("vigik.detekt")
     id("vigik.diktat")
     id("vigik.kover")
+    id("vigik.secret")
 }
 
 dependencies {
