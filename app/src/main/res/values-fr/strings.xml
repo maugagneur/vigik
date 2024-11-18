@@ -7,17 +7,6 @@
 
     <!-- HOME -->
     <string name="home_title">Accueil</string>
-    <string name="home_animations_button_label">Animations</string>
-    <string name="home_biometric_button_label">Biometrique</string>
-    <string name="home_bluetooth_button_label">Bluetooth</string>
-    <string name="home_bottom_sheet_button_label">Bottom Sheet</string>
-    <string name="home_camera_button_label">Caméra</string>
-    <string name="home_emoji_button_label">Emoji</string>
-    <string name="home_nfc_button_label">NFC</string>
-    <string name="home_notification_button_label">Notification</string>
-    <string name="home_paging_button_label">Pagination</string>
-    <string name="home_rest_api_button_label">REST API</string>
-    <string name="home_telephony_button_label">Téléphonie</string>
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>

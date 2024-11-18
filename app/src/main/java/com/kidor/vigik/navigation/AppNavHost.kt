@@ -30,7 +30,6 @@ import com.kidor.vigik.ui.bluetooth.BluetoothScreen
 import com.kidor.vigik.ui.bottomsheet.BottomSheetScreen
 import com.kidor.vigik.ui.camera.CameraScreen
 import com.kidor.vigik.ui.emoji.EmojiScreen
-import com.kidor.vigik.ui.home.HomeNavigation
 import com.kidor.vigik.ui.home.HomeScreen
 import com.kidor.vigik.ui.nfc.check.CheckScreen
 import com.kidor.vigik.ui.nfc.emulate.EmulateScreen
@@ -80,21 +79,7 @@ fun AppNavHost(
 private fun addHomeScreens(navGraphBuilder: NavGraphBuilder, navController: NavHostController) {
     navGraphBuilder.composable(route = AppScreen.HomeScreen.route) {
         HomeScreen(
-            navigateTo = { destination ->
-                when (destination) {
-                    HomeNavigation.NavigateToAnimations -> navController.navigateTo(AppScreen.AnimationsHubScreen)
-                    HomeNavigation.NavigateToBiometric -> navController.navigateTo(AppScreen.BiometricLoginScreen)
-                    HomeNavigation.NavigateToBluetooth -> navController.navigateTo(AppScreen.BluetoothScreen)
-                    HomeNavigation.NavigateToBottomSheet -> navController.navigateTo(AppScreen.BottomSheetScreen)
-                    HomeNavigation.NavigateToCamera -> navController.navigateTo(AppScreen.CameraScreen)
-                    HomeNavigation.NavigateToEmoji -> navController.navigateTo(AppScreen.EmojiScreen)
-                    HomeNavigation.NavigateToNfc -> navController.navigateTo(AppScreen.NfcCheckScreen)
-                    HomeNavigation.NavigateToNotification -> navController.navigateTo(AppScreen.NotificationScreen)
-                    HomeNavigation.NavigateToPaging -> navController.navigateTo(AppScreen.PagingScreen)
-                    HomeNavigation.NavigateToRestApi -> navController.navigateTo(AppScreen.RestApiScreen)
-                    HomeNavigation.NavigateToTelephony -> navController.navigateTo(AppScreen.TelephonyScreen)
-                }
-            }
+            navigateTo = { destination -> navController.navigateTo(destination) }
         )
     }
 }
