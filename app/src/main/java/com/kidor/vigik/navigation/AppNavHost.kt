@@ -93,12 +93,7 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
     navGraphBuilder.let {
         it.composable(route = AppScreen.AnimationsHubScreen.route) {
             AnimationsHubScreen(
-                navigateToFollowingArrows = { navController.navigateTo(AppScreen.AnimationFollowingArrowsScreen) },
-                navigateToGlitterRainbow = { navController.navigateTo(AppScreen.AnimationGlitterRainbowScreen) },
-                navigateToLookahead = { navController.navigateTo(AppScreen.AnimationLookaheadScreen) },
-                navigateToShape = { navController.navigateTo(AppScreen.AnimationShapeScreen) },
-                navigateToSnowfall = { navController.navigateTo(AppScreen.AnimationSnowfallScreen) },
-                navigateToTypewriter = { navController.navigateTo(AppScreen.AnimationTypewriterScreen) }
+                navigateTo = { destination -> navController.navigateTo(destination) }
             )
         }
         it.composable(route = AppScreen.AnimationFollowingArrowsScreen.route) { FollowingArrowsScreen() }
