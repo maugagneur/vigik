@@ -112,6 +112,7 @@
     <string name="emoji_title">Emoji</string>
 
     <!-- NFC -->
+    <string name="nfc_title">NFC</string>
     <string name="nfc_check_title">Check NFC</string>
     <string name="nfc_refresh_button_label">Refresh</string>
     <string name="nfc_settings_button_label">Settings</string>
@@ -154,7 +155,7 @@
     <string name="paging_title">Paging</string>
 
     <!-- REST API -->
-    <string name="rest_api_title">Diablo IV event tracker</string>
+    <string name="rest_api_title">REST API</string>
     <string name="diablo_boss_name_ashava">Ashava, the Pestilent</string>
     <string name="diablo_boss_name_avarice">Avarice, the God Cursed</string>
     <string name="diablo_boss_name_wandering_death">Wandering Death, the Death Given Life</string>

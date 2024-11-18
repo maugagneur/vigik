@@ -109,6 +109,7 @@
     <string name="emoji_title">Emoji</string>
 
     <!-- NFC -->
+    <string name="nfc_title">NFC</string>
     <string name="nfc_check_title">Vérification NFC</string>
     <string name="nfc_refresh_button_label">Actualiser</string>
     <string name="nfc_settings_button_label">Réglages</string>
@@ -145,7 +146,7 @@
     <string name="notification_remove_previous_notification_button_label">Supprimer la précédente</string>
 
     <!-- REST API -->
-    <string name="rest_api_title">Diablo IV tracker d\'évènements</string>
+    <string name="rest_api_title">REST API</string>
     <string name="diablo_boss_name_ashava">Ashava, la Pestilentielle</string>
     <string name="diablo_boss_name_avarice">Avarice, la Malédiction d\'or</string>
     <string name="diablo_boss_name_wandering_death">Mort vagabonde, la Mort éveillée</string>

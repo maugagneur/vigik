@@ -17,10 +17,12 @@ import com.kidor.vigik.ui.theme.dimensions
  *
  * @param destination The destination associated with the button.
  * @param onClick     Called when the button is clicked.
+ * @param label       The label to display. If null, the destination's title will be shown.
  */
 @Composable
 fun NavigationButton(
     destination: AppScreen,
+    label: String? = null,
     onClick: (AppScreen) -> Unit
 ) {
     val view = LocalView.current
@@ -32,7 +34,7 @@ fun NavigationButton(
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(
-            text = destination.name().uppercase(),
+            text = (label ?: destination.name()).uppercase(),
             fontSize = MaterialTheme.dimensions.textSizeMedium,
             textAlign = TextAlign.Center
         )

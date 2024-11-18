@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.kidor.vigik.R
 import com.kidor.vigik.navigation.AppScreen
 import com.kidor.vigik.ui.common.NavigationButton
 import com.kidor.vigik.ui.theme.dimensions
@@ -42,7 +44,14 @@ fun HomeScreen(
             AppScreen.TelephonyScreen
         )
         items(screens) { screen ->
-            NavigationButton(destination = screen) { navigateTo(it) }
+            val alternativeTitle = when (screen) {
+                AppScreen.NfcCheckScreen -> stringResource(id = R.string.nfc_title)
+                else -> null
+            }
+            NavigationButton(
+                destination = screen,
+                label = alternativeTitle
+            ) { navigateTo(it) }
         }
     }
 }
