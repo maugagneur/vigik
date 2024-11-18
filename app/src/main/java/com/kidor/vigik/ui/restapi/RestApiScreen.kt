@@ -33,7 +33,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.DIABLO4_API_BASE_URL
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 
 internal const val WORLD_BOSS_ICON_TEST_TAG = "world_boss_icon"
 internal const val WORLD_BOSS_NAME_TEST_TAG = "world_boss_name"

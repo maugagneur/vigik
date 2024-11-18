@@ -22,7 +22,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.bluetooth.model.BluetoothDevice
 import com.kidor.vigik.data.bluetooth.model.BluetoothDeviceType
 import com.kidor.vigik.extensions.onNodeWithText
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import com.kidor.vigik.utils.TestUtils.logTestName
 import org.junit.After
 import org.junit.Before

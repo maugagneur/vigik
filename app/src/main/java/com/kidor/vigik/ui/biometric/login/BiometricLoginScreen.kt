@@ -45,7 +45,7 @@ import com.kidor.vigik.data.crypto.model.CryptoPurpose
 import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.ui.base.CollectViewEvent
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import timber.log.Timber
 
 internal const val USERNAME_TEXT_FIELD_TEST_TAG = "username_text_field"

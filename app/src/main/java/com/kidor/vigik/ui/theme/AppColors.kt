@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose
+package com.kidor.vigik.ui.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme

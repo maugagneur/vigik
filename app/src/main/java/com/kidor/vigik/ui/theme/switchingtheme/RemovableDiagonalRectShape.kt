@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose.switchingtheme
+package com.kidor.vigik.ui.theme.switchingtheme
 
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Outline

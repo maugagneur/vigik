@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import kotlin.math.roundToInt
 
 private const val COLOR_DARK_VIOLET = 0xFF660099

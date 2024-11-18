@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose
+package com.kidor.vigik.navigation
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -35,7 +35,7 @@ enum class AppScreen(
      */
     AnimationsHubScreen(
         nameId = R.string.animations_hub_title,
-        route = "animations_hub"
+        route = "animations/hub"
     ),
 
     /**
@@ -43,7 +43,7 @@ enum class AppScreen(
      */
     AnimationFollowingArrowsScreen(
         nameId = R.string.animation_following_arrows_title,
-        route = "animation_following_arrows"
+        route = "animation/following_arrows"
     ),
 
     /**
@@ -51,7 +51,7 @@ enum class AppScreen(
      */
     AnimationGlitterRainbowScreen(
         nameId = R.string.animation_glitter_rainbow_title,
-        route = "animation_glitter_rainbow"
+        route = "animation/glitter_rainbow"
     ),
 
     /**
@@ -59,7 +59,7 @@ enum class AppScreen(
      */
     AnimationLookaheadScreen(
         nameId = R.string.animation_lookahead_title,
-        route = "animation_lookahead"
+        route = "animation/lookahead"
     ),
 
     /**
@@ -67,7 +67,7 @@ enum class AppScreen(
      */
     AnimationShapeScreen(
         nameId = R.string.animation_shape_title,
-        route = "animation_shape"
+        route = "animation/shape"
     ),
 
     /**
@@ -75,7 +75,7 @@ enum class AppScreen(
      */
     AnimationSnowfallScreen(
         nameId = R.string.animation_snowfall_title,
-        route = "animation_snowfall"
+        route = "animation/snowfall"
     ),
 
     /**
@@ -83,7 +83,7 @@ enum class AppScreen(
      */
     AnimationTypewriterScreen(
         nameId = R.string.animation_typewriter_title,
-        route = "animation_typewriter"
+        route = "animation/typewriter"
     ),
 
     /**
@@ -91,7 +91,7 @@ enum class AppScreen(
      */
     BiometricLoginScreen(
         nameId = R.string.biometric_title,
-        route = "biometric_login"
+        route = "biometric/login"
     ),
 
     /**
@@ -99,7 +99,7 @@ enum class AppScreen(
      */
     BiometricHomeScreen(
         nameId = R.string.biometric_title,
-        route = "biometric_home",
+        route = "biometric/home",
         showNavigateBack = false
     ),
 
@@ -140,7 +140,7 @@ enum class AppScreen(
      */
     NfcCheckScreen(
         nameId = R.string.nfc_check_title,
-        route = "check"
+        route = "nfc/check"
     ),
 
     /**
@@ -148,7 +148,7 @@ enum class AppScreen(
      */
     NfcHubScreen(
         nameId = R.string.nfc_hub_title,
-        route = "hub"
+        route = "nfc/hub"
     ),
 
     /**
@@ -156,7 +156,7 @@ enum class AppScreen(
      */
     NfcScanScreen(
         nameId = R.string.nfc_scan_title,
-        route = "scan"
+        route = "nfc/scan"
     ),
 
     /**
@@ -164,7 +164,7 @@ enum class AppScreen(
      */
     NfcHistoryScreen(
         nameId = R.string.nfc_tag_history_title,
-        route = "history"
+        route = "nfc/history"
     ),
 
     /**
@@ -172,7 +172,7 @@ enum class AppScreen(
      */
     NfcEmulateScreen(
         nameId = R.string.nfc_emulate_title,
-        route = "emulate"
+        route = "nfc/emulate"
     ),
 
     /**
@@ -181,7 +181,7 @@ enum class AppScreen(
     NotificationScreen(
         nameId = R.string.notification_title,
         route = "notification",
-        deeplinkPath = "${APP_BASE_URI}/notification"
+        deeplinkPath = "$APP_BASE_URI/notification"
     ),
 
     /**

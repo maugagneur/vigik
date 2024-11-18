@@ -35,7 +35,7 @@ import androidx.graphics.shapes.RoundedPolygon
 import androidx.graphics.shapes.circle
 import androidx.graphics.shapes.star
 import androidx.graphics.shapes.toPath
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 
 private const val VERTICES_NUMBER = 12
 private const val STAR_INNER_RADIUS = 0.4f

@@ -7,17 +7,6 @@
 
     <!-- HOME -->
     <string name="home_title">Accueil</string>
-    <string name="home_animations_button_label">Animations</string>
-    <string name="home_biometric_button_label">Biometrique</string>
-    <string name="home_bluetooth_button_label">Bluetooth</string>
-    <string name="home_bottom_sheet_button_label">Bottom Sheet</string>
-    <string name="home_camera_button_label">Caméra</string>
-    <string name="home_emoji_button_label">Emoji</string>
-    <string name="home_nfc_button_label">NFC</string>
-    <string name="home_notification_button_label">Notification</string>
-    <string name="home_paging_button_label">Pagination</string>
-    <string name="home_rest_api_button_label">REST API</string>
-    <string name="home_telephony_button_label">Téléphonie</string>
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>
@@ -120,6 +109,7 @@
     <string name="emoji_title">Emoji</string>
 
     <!-- NFC -->
+    <string name="nfc_title">NFC</string>
     <string name="nfc_check_title">Vérification NFC</string>
     <string name="nfc_refresh_button_label">Actualiser</string>
     <string name="nfc_settings_button_label">Réglages</string>
@@ -156,7 +146,7 @@
     <string name="notification_remove_previous_notification_button_label">Supprimer la précédente</string>
 
     <!-- REST API -->
-    <string name="rest_api_title">Diablo IV tracker d\'évènements</string>
+    <string name="rest_api_title">REST API</string>
     <string name="diablo_boss_name_ashava">Ashava, la Pestilentielle</string>
     <string name="diablo_boss_name_avarice">Avarice, la Malédiction d\'or</string>
     <string name="diablo_boss_name_wandering_death">Mort vagabonde, la Mort éveillée</string>

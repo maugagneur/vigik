@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.round
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 
 private const val OFFSET_ANIMATION_DURATION = 1000
 private const val SIZE_ANIMATION_DURATION = 500

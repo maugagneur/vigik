@@ -3,7 +3,7 @@ package com.kidor.vigik.extensions
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
-import com.kidor.vigik.ui.compose.AppScreen
+import com.kidor.vigik.navigation.AppScreen
 
 /**
  * Navigate to a destination in the current NavGraph as single-top and poping up the start destination.

@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose
+package com.kidor.vigik.ui.theme
 
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp

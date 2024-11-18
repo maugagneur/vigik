@@ -27,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.toHex
 import com.kidor.vigik.ui.base.ObserveViewState
-import com.kidor.vigik.ui.compose.dimensions
+import com.kidor.vigik.ui.theme.dimensions
 import com.kidor.vigik.ui.usecases.FormatDateUseCase
 
 internal const val DELETE_ICON_TEST_TAG_PREFIX = "Delete tag "

@@ -12,8 +12,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.kidor.vigik.HiltTestActivity
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.onNodeWithText
-import com.kidor.vigik.ui.compose.AppNavHost
-import com.kidor.vigik.ui.compose.AppScreen
+import com.kidor.vigik.navigation.AppNavHost
+import com.kidor.vigik.navigation.AppScreen
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.TestUtils.logTestName
 import dagger.hilt.android.testing.HiltAndroidRule

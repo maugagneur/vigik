@@ -1,4 +1,4 @@
-package com.kidor.vigik.ui.compose.switchingtheme
+package com.kidor.vigik.ui.theme.switchingtheme
 
 import android.graphics.Bitmap
 import androidx.compose.runtime.Composable
