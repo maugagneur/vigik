@@ -32,7 +32,7 @@ fun HomeScreen(
     ) {
         val screens = listOf(
             AppScreen.AnimationsHubScreen,
-            AppScreen.BiometricHomeScreen,
+            AppScreen.BiometricLoginScreen,
             AppScreen.BluetoothScreen,
             AppScreen.BottomSheetScreen,
             AppScreen.CameraScreen,
