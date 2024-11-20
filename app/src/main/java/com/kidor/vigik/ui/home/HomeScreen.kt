@@ -41,6 +41,7 @@ fun HomeScreen(
             AppScreen.NotificationScreen,
             AppScreen.PagingScreen,
             AppScreen.RestApiScreen,
+            AppScreen.SnackBarScreen,
             AppScreen.TelephonyScreen
         )
         items(screens) { screen ->

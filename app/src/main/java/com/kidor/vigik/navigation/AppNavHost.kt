@@ -39,6 +39,7 @@ import com.kidor.vigik.ui.nfc.scan.ScanScreen
 import com.kidor.vigik.ui.notification.NotificationScreen
 import com.kidor.vigik.ui.paging.PagingScreen
 import com.kidor.vigik.ui.restapi.RestApiScreen
+import com.kidor.vigik.ui.snackbar.SnackBarScreen
 import com.kidor.vigik.ui.telephony.TelephonyScreen
 
 /**
@@ -66,6 +67,7 @@ fun AppNavHost(
         addNotificationScreens(navGraphBuilder = this)
         addPagingScreens(navGraphBuilder = this)
         addRestApiScreens(navGraphBuilder = this)
+        addSnackBarScreens(navGraphBuilder = this)
         addTelephonyScreens(navGraphBuilder = this)
     }
 }
@@ -239,6 +241,17 @@ private fun addPagingScreens(navGraphBuilder: NavGraphBuilder) {
 private fun addRestApiScreens(navGraphBuilder: NavGraphBuilder) {
     navGraphBuilder.composable(route = AppScreen.RestApiScreen.route) {
         RestApiScreen()
+    }
+}
+
+/**
+ * Add screens related to SnackBar into the graph.
+ *
+ * @param navGraphBuilder The builder used to construct the graph.
+ */
+private fun addSnackBarScreens(navGraphBuilder: NavGraphBuilder) {
+    navGraphBuilder.composable(route = AppScreen.SnackBarScreen.route) {
+        SnackBarScreen()
     }
 }
 

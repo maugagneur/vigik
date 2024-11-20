@@ -166,6 +166,9 @@
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
 
+    <!-- SnackBar -->
+    <string name="snackbar_title">SnackBar</string>
+
     <!-- Telephony -->
     <string name="telephony_title">Telephony</string>
     <string name="telephony_permission_status_label">Permissions granted:</string>

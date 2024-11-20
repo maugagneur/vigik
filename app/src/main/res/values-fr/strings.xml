@@ -160,6 +160,9 @@
     <!-- Paging -->
     <string name="paging_title">Pagination</string>
 
+    <!-- SnackBar -->
+    <string name="snackbar_title">SnackBar</string>
+
     <!-- Telephony -->
     <string name="telephony_title">Téléphonie</string>
     <string name="telephony_permission_status_label">Permission accordée :</string>
