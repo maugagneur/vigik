@@ -50,6 +50,7 @@ private const val REFRESH_PERIOD = 40L // 40ms means 25 FPS which is quite smoot
  * @param contentColor     The preferred color for content inside this snackbar.
  * @param actionColor      The preferred content color for the optional action inside this snackbar.
  */
+@Suppress("LongParameterList")
 @Composable
 fun CountdownSnackbar(
     snackbarData: SnackbarData,
@@ -72,7 +73,7 @@ fun CountdownSnackbar(
     }
 
     val actionLabel = snackbarData.visuals.actionLabel
-    val actionComposable: (@Composable () -> Unit)? = if (actionLabel != null) {
+    val actionComposable: (@Composable () -> Unit)? = actionLabel?.let {
         {
             TextButton(onClick = { snackbarData.performAction() }) {
                 Text(
@@ -81,8 +82,6 @@ fun CountdownSnackbar(
                 )
             }
         }
-    } else {
-        null
     }
     val dismissActionComposable: (@Composable () -> Unit)? = if (snackbarData.visuals.withDismissAction) {
         {
