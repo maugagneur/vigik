@@ -201,6 +201,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "snackbar screen".
+     */
+    SnackBarScreen(
+        nameId = R.string.snackbar_title,
+        route = "snackbar"
+    ),
+
+    /**
      * Metadata of "telephony" screen.
      */
     TelephonyScreen(

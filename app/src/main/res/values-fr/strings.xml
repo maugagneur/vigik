@@ -160,6 +160,14 @@
     <!-- Paging -->
     <string name="paging_title">Pagination</string>
 
+    <!-- SnackBar -->
+    <string name="snackbar_title">SnackBar</string>
+    <string name="snackbar_dummy_action_button_label">Faire quelque chose</string>
+    <string name="snackbar_message">Action effectuée</string>
+    <string name="snackbar_action_button_label">Annuler</string>
+    <string name="snackbar_action_confirmed">Action validée</string>
+    <string name="snackbar_action_canceled">Action annulée</string>
+
     <!-- Telephony -->
     <string name="telephony_title">Téléphonie</string>
     <string name="telephony_permission_status_label">Permission accordée :</string>

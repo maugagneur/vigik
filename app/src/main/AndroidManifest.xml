@@ -6,7 +6,9 @@
         android:name="android.hardware.bluetooth"
         android:required="true" />
     <uses-feature android:name="android.hardware.camera.any"/>
-    <uses-feature android:name="android.hardware.nfc.hce" />
+    <uses-feature
+        android:name="android.hardware.nfc.hce"
+        android:required="false" />
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
