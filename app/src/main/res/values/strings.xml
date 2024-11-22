@@ -168,6 +168,11 @@
 
     <!-- SnackBar -->
     <string name="snackbar_title">SnackBar</string>
+    <string name="snackbar_dummy_action_button_label">Do something</string>
+    <string name="snackbar_message">Action done</string>
+    <string name="snackbar_action_button_label">Undo</string>
+    <string name="snackbar_action_confirmed">Action done permanently</string>
+    <string name="snackbar_action_canceled">Action canceled</string>
 
     <!-- Telephony -->
     <string name="telephony_title">Telephony</string>
