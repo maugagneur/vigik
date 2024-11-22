@@ -39,6 +39,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Circle loader" animation screen.
+     */
+    AnimationCircleLoaderScreen(
+        nameId = R.string.animation_circle_loader_title,
+        route = "animation/circle_loader"
+    ),
+
+    /**
      * Metadata of "Following arrows" animation screen.
      */
     AnimationFollowingArrowsScreen(

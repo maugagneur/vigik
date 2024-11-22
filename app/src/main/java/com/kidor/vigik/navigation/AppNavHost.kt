@@ -18,6 +18,7 @@ import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.extensions.navigateTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
+import com.kidor.vigik.ui.animations.circleloader.CircleLoaderScreen
 import com.kidor.vigik.ui.animations.followingarrows.FollowingArrowsScreen
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
 import com.kidor.vigik.ui.animations.lookahead.LookaheadScreen
@@ -98,6 +99,7 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
                 navigateTo = { destination -> navController.navigateTo(destination) }
             )
         }
+        it.composable(route = AppScreen.AnimationCircleLoaderScreen.route) { CircleLoaderScreen() }
         it.composable(route = AppScreen.AnimationFollowingArrowsScreen.route) { FollowingArrowsScreen() }
         it.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
         it.composable(route = AppScreen.AnimationLookaheadScreen.route) { LookaheadScreen() }
