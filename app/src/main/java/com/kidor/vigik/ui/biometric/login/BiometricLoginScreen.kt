@@ -143,7 +143,7 @@ internal fun LoginState(@PreviewParameter(LoginStateProvider::class) loginStateD
         BiometricLoginButton(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = MaterialTheme.dimensions.commonSpaceSmall),
+                .padding(top = MaterialTheme.dimensions.commonSpaceXSmall),
             visible = loginStateData.loginState.isBiometricLoginAvailable,
             onClick = loginStateData.onBiometricLoginClick
         )
@@ -189,7 +189,7 @@ private fun InvalidUsernamePasswordView() {
             contentDescription = "Error",
             tint = MaterialTheme.colorScheme.error
         )
-        Spacer(Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(id = R.string.biometric_login_error_label),
             color = MaterialTheme.colorScheme.error

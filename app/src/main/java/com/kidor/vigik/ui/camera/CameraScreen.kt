@@ -122,11 +122,11 @@ private fun PermissionView(onPermissionGranted: () -> Unit) {
 
     Column(
         modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceMedium),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -422,7 +422,7 @@ private fun DisplayPhotoView(imageUri: Uri, retry: () -> Unit) {
 
     Button(
         onClick = retry,
-        modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceSmall)
+        modifier = Modifier.padding(vertical = MaterialTheme.dimensions.commonSpaceXSmall)
     ) {
         Text(
             text = stringResource(id = R.string.camera_retry_capture_button_label).uppercase(),

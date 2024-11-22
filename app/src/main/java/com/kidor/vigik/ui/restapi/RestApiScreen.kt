@@ -138,7 +138,7 @@ private fun Diablo4WorldBossTracker(worldBoss: Diablo4WorldBoss?, timeToWait: St
 
     if (worldBoss == null) return
 
-    Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+    Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
 
     Text(
         text = stringResource(id = worldBoss.resId),
@@ -167,7 +167,7 @@ private fun Diablo4HellTideTracker(timeToWait: String?) {
             contentDescription = "Hell tide",
             modifier = Modifier.testTag(HELL_TIDE_ICON_TEST_TAG)
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(id = R.string.diablo_hell_tide_next_rise_label, it),
             modifier = Modifier.testTag(HELL_TIDE_TIME_TEST_TAG),

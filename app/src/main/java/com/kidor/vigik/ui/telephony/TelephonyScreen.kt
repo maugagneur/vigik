@@ -131,14 +131,14 @@ private fun PermissionView(onPermissionsGranted: () -> Unit) {
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = MaterialTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Permissions not granted",
                 tint = MaterialTheme.colorScheme.error
             )
         }
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Button(onClick = { permissionsState.launchMultiplePermissionRequest() }) {
             Text(
                 text = stringResource(id = R.string.telephony_permission_request_button_label).uppercase(),
@@ -159,7 +159,7 @@ private fun ContactView(totalContactNumber: Int?, mobileContactNumber: Int?) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_contact_total_number_label,
@@ -194,7 +194,7 @@ private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message:
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_sms_total_received_label,
@@ -203,7 +203,7 @@ private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message:
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_sms_total_sent_label,
@@ -212,7 +212,7 @@ private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message:
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         OutlinedTextField(
             value = phoneNumber,
             onValueChange = { phoneNumber = it },
@@ -222,7 +222,7 @@ private fun SmsView(smsList: List<Sms>?, sendSms: (phoneNumber: String, message:
                 imeAction = ImeAction.Next
             )
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         OutlinedTextField(
             value = message,
             onValueChange = { message = it },
@@ -251,7 +251,7 @@ private fun CallView(phoneCalls: List<PhoneCall>?) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeXLarge
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_emitted_label,
@@ -260,7 +260,7 @@ private fun CallView(phoneCalls: List<PhoneCall>?) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_received_label,
@@ -269,7 +269,7 @@ private fun CallView(phoneCalls: List<PhoneCall>?) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_ignored_label,
@@ -278,7 +278,7 @@ private fun CallView(phoneCalls: List<PhoneCall>?) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
         Text(
             text = stringResource(
                 id = R.string.telephony_call_rejected_label,

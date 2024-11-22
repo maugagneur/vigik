@@ -74,7 +74,7 @@ internal fun BiometricHome(
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = MaterialTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
             if (biometricHomeStateData.isBiometricCredentialSaved) {
                 Icon(
                     imageVector = Icons.Default.Check,

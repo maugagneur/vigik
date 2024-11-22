@@ -35,7 +35,7 @@ internal fun DisplayLogLineState(@PreviewParameter(LogProvider::class) logLines:
     Box(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(MaterialTheme.dimensions.commonSpaceSmall),
+            .padding(MaterialTheme.dimensions.commonSpaceXSmall),
         contentAlignment = Alignment.BottomStart
     ) {
         Text(
