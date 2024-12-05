@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
 import kotlin.math.roundToInt
 
+private const val FULL_CIRCLE_DEGREES = 360f
+private const val HALF_CIRCLE_DEGREES = FULL_CIRCLE_DEGREES / 2
+
 /**
  * Custom circle loader.
  *
@@ -36,6 +39,7 @@ import kotlin.math.roundToInt
  * @param strokeStyle   Style of the stroke used in drawing the loader.
  * @param cycleDuration Loader’s animation cycle duration, measured in milliseconds.
  */
+@Suppress("LongParameterList")
 @Composable
 fun CircleLoader(
     modifier: Modifier,
@@ -87,11 +91,11 @@ fun CircleLoader(
         // Iterate over non-null colors
         listOfNotNull(color, secondColor).forEachIndexed { index, color ->
             // If it's not a primary color we rotate the canvas for 180 degrees
-            rotate(if (index == 0) 0f else 180f) {
+            rotate(if (index == 0) 0f else HALF_CIRCLE_DEGREES) {
                 // Create a sweep gradient brush for the loader
                 val brush = Brush.sweepGradient(
                     0f to Color.Transparent,
-                    tailToDisplay.value / 360f to color,
+                    tailToDisplay.value / FULL_CIRCLE_DEGREES to color,
                     1f to Color.Transparent
                 )
 
@@ -134,10 +138,10 @@ private fun DrawScope.setupPaint(strokeStyle: StrokeStyle, brush: Brush): Paint 
 
     strokeStyle.glowRadius?.let { radius ->
         paint.asFrameworkPaint().setShadowLayer(
-            /* radius = */ radius.toPx(),
-            /* dx = */ 0f,
-            /* dy = */ 0f,
-            /* shadowColor = */ android.graphics.Color.WHITE
+            radius.toPx(),
+            0f,
+            0f,
+            android.graphics.Color.WHITE
         )
     }
 
