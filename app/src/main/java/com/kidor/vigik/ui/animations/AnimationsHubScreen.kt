@@ -29,6 +29,7 @@ fun AnimationsHubScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val screens = listOf(
+            AppScreen.AnimationCircleLoaderScreen,
             AppScreen.AnimationFollowingArrowsScreen,
             AppScreen.AnimationGlitterRainbowScreen,
             AppScreen.AnimationLookaheadScreen,

@@ -57,10 +57,13 @@ fun LookaheadScreen() {
             colors.forEach { color ->
                 Box(
                     modifier = Modifier
-                        .padding(all = MaterialTheme.dimensions.commonSpaceSmall)
+                        .padding(all = MaterialTheme.dimensions.commonSpaceXSmall)
                         .size(if (isInColumn) 80.dp else 20.dp)
                         .animateBounds()
-                        .background(color = color, shape = RoundedCornerShape(16.dp))
+                        .background(
+                            color = color,
+                            shape = RoundedCornerShape(MaterialTheme.dimensions.commonSpaceMedium)
+                        )
                 )
             }
         }

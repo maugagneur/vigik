@@ -96,7 +96,7 @@ fun BluetoothScreen(
             )
             Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
             BluetoothScanStatus(
                 scanInProgress = state.isScanning,
                 onRefreshDevicesClick = { viewModel.handleAction(BluetoothViewAction.StartBluetoothScan) }
@@ -136,7 +136,7 @@ private fun PermissionView() {
                 color = MaterialTheme.colorScheme.onBackground,
                 fontSize = MaterialTheme.dimensions.textSizeMedium
             )
-            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
             if (locationPermissionsState.allPermissionsGranted) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -152,7 +152,7 @@ private fun PermissionView() {
             }
         }
         if (!locationPermissionsState.allPermissionsGranted) {
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
             Button(onClick = { locationPermissionsState.launchMultiplePermissionRequest() }) {
                 Text(
                     text = stringResource(id = R.string.bluetooth_permission_request_button_label).uppercase(),
@@ -172,7 +172,7 @@ internal fun BluetoothAdapterStatus(isEnable: Boolean) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
         if (isEnable) {
             Icon(
                 imageVector = Icons.Default.Check,
@@ -200,7 +200,7 @@ internal fun LocationStatus(isEnable: Boolean) {
             color = MaterialTheme.colorScheme.onBackground,
             fontSize = MaterialTheme.dimensions.textSizeMedium
         )
-        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
+        Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
         if (isEnable) {
             Icon(
                 imageVector = Icons.Default.Check,
@@ -261,7 +261,7 @@ internal fun BluetoothScanStatus(scanInProgress: Boolean, onRefreshDevicesClick:
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(24.dp),
+            .height(MaterialTheme.dimensions.commonSpaceLarge),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -363,7 +363,7 @@ internal fun DetectedBluetoothDeviceList(
                             .fillMaxWidth()
                             .padding(
                                 horizontal = MaterialTheme.dimensions.commonSpaceMedium,
-                                vertical = MaterialTheme.dimensions.commonSpaceSmall
+                                vertical = MaterialTheme.dimensions.commonSpaceXSmall
                             ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {

@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -77,7 +75,7 @@ class DiabloWidget : GlanceAppWidget() {
 @Composable
 private fun NoData(context: Context, isLoading: Boolean) {
     Column(
-        modifier = GlanceModifier.fillMaxSize().padding(MaterialTheme.dimensions.commonSpaceSmall),
+        modifier = GlanceModifier.fillMaxSize().padding(MaterialTheme.dimensions.commonSpaceXSmall),
         verticalAlignment = Alignment.CenterVertically,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -90,7 +88,7 @@ private fun NoData(context: Context, isLoading: Boolean) {
             text = context.getString(Diablo4WorldBoss.UNKNOWN.resId),
             style = TextStyle(
                 color = ColorProvider(color = Color.Black),
-                fontSize = 14.sp
+                fontSize = MaterialTheme.dimensions.textSizeSmall
             ),
             maxLines = 1
         )
@@ -98,7 +96,7 @@ private fun NoData(context: Context, isLoading: Boolean) {
     Row(
         modifier = GlanceModifier
             .fillMaxSize()
-            .padding(MaterialTheme.dimensions.commonSpaceSmall),
+            .padding(MaterialTheme.dimensions.commonSpaceXSmall),
         horizontalAlignment = Alignment.End
     ) {
         LoadingImage(isLoading = isLoading, color = Color.Black)
@@ -110,7 +108,7 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .padding(MaterialTheme.dimensions.commonSpaceSmall)
+            .padding(MaterialTheme.dimensions.commonSpaceXSmall)
     ) {
         Row(modifier = GlanceModifier.fillMaxWidth()) {
             Text(
@@ -118,10 +116,10 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
                 modifier = GlanceModifier
                     .fillMaxWidth()
                     .defaultWeight()
-                    .padding(end = MaterialTheme.dimensions.commonSpaceSmall),
+                    .padding(end = MaterialTheme.dimensions.commonSpaceXSmall),
                 style = TextStyle(
                     color = ColorProvider(color = Color.White),
-                    fontSize = 14.sp,
+                    fontSize = MaterialTheme.dimensions.textSizeSmall,
                     textAlign = TextAlign.Start
                 ),
                 maxLines = 2
@@ -133,7 +131,7 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
             text = context.getString(R.string.widget_diablo_boos_spawn_label),
             style = TextStyle(
                 color = ColorProvider(color = Color.White),
-                fontSize = 10.sp,
+                fontSize = MaterialTheme.dimensions.textSizeXXSmall,
                 textAlign = TextAlign.Start
             ),
             maxLines = 1
@@ -142,7 +140,7 @@ private fun WidgetBody(context: Context, state: DiabloWidgetState) {
             text = state.data.spawnDate,
             style = TextStyle(
                 color = ColorProvider(color = Color.White),
-                fontSize = 14.sp,
+                fontSize = MaterialTheme.dimensions.textSizeSmall,
                 textAlign = TextAlign.Start
             ),
             maxLines = 1
@@ -155,7 +153,7 @@ private fun LoadingImage(isLoading: Boolean, color: Color) {
     if (isLoading) {
         Box(contentAlignment = Alignment.Center) {
             CircularProgressIndicator(
-                modifier = GlanceModifier.size(24.dp),
+                modifier = GlanceModifier.size(MaterialTheme.dimensions.commonSpaceLarge),
                 color = ColorProvider(color = color)
             )
         }
@@ -163,7 +161,7 @@ private fun LoadingImage(isLoading: Boolean, color: Color) {
         Image(
             provider = ImageProvider(resId = R.drawable.ic_refresh),
             contentDescription = "Refresh",
-            modifier = GlanceModifier.size(24.dp),
+            modifier = GlanceModifier.size(MaterialTheme.dimensions.commonSpaceLarge),
             colorFilter = ColorFilter.tint(colorProvider = ColorProvider(color = color))
         )
     }

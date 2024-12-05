@@ -65,7 +65,7 @@ class BluetoothViewTest {
             LocationStatus(isEnable = viewState.isLocationEnable)
             Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
             HorizontalDivider()
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
             BluetoothScanStatus(
                 scanInProgress = viewState.isScanning,
                 onRefreshDevicesClick = startBluetoothScanCallback

@@ -94,7 +94,7 @@ internal fun DisplayTagState(
                     text = displayTagStateData.state.tag.toString(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(MaterialTheme.dimensions.commonSpaceSmall)
+                        .padding(MaterialTheme.dimensions.commonSpaceXSmall)
                         .testTag(TAG_DATA_TEXT_TEST_TAG),
                     fontSize = MaterialTheme.dimensions.textSizeMedium
                 )

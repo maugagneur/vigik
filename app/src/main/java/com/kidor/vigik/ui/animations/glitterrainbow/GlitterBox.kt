@@ -32,6 +32,7 @@ import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.si
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.updateLifeTime
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.updateSourceOffset
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterBoxState.Companion.updateSpeedCoefficient
+import com.kidor.vigik.ui.theme.dimensions
 import kotlinx.coroutines.isActive
 
 private const val CURSOR_HORIZONTAL_OFFSET_RATIO = 2f
@@ -101,8 +102,8 @@ fun GlitterBox(colors: List<Color>, speedCoefficient: Float, lifeTime: Int) {
 @Composable
 private fun GlitterSource(size: Size, updateSourceOffset: (Offset) -> Unit) {
     val sourceColor = MaterialTheme.colorScheme.secondary
-    val sourceRadius = 16.dp
-    val sourceStrokeWidth = 4.dp
+    val sourceRadius = MaterialTheme.dimensions.commonSpaceMedium
+    val sourceStrokeWidth = MaterialTheme.dimensions.commonSpaceXXSmall
     val configuration = LocalConfiguration.current
     val density = LocalDensity.current
     val initialXOffset = with(density) {

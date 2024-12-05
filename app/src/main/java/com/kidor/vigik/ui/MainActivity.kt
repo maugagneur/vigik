@@ -275,7 +275,7 @@ private fun AboutAppPopup(onDismissRequest: () -> Unit) {
     ) {
         Surface(
             modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.commonSpaceLarge),
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(MaterialTheme.dimensions.commonSpaceXSmall),
             border = BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
         ) {
             Column(

@@ -10,6 +10,8 @@
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>
+    <!-- Animation - Circle loader -->
+    <string name="animation_circle_loader_title">Cercle de chargement</string>
     <!-- Animation - Following arrows -->
     <string name="animation_following_arrows_title">Flèches suiveuses</string>
     <!-- Animation - Glitter rainbow -->

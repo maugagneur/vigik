@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -57,7 +56,7 @@ fun NotificationScreen(
                 selectedIcon = state.notificationIcon,
                 onIconClicked = { viewModel.handleAction(NotificationViewAction.ChangeNotificationIcon(it)) }
             )
-            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)) {
+            Column(verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall)) {
                 ToggleableRow(
                     text = stringResource(id = R.string.notification_add_text_content_label),
                     value = state.addTextContentSelected,
@@ -111,11 +110,11 @@ private fun PermissionView() {
 
     Column(
         modifier = Modifier.padding(top = MaterialTheme.dimensions.commonSpaceMedium),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -165,7 +164,7 @@ private fun IconSelection(selectedIcon: NotificationIcon, onIconClicked: (icon: 
                 imageVector = icon.vectorImage,
                 contentDescription = "",
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(MaterialTheme.dimensions.commonSpaceXXLarge)
                     .clickable { onIconClicked(icon) },
                 tint = iconTint
             )

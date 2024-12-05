@@ -136,7 +136,10 @@ private fun CustomBottomSheet(
             )
             .background(
                 color = MaterialTheme.colorScheme.primaryContainer,
-                shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                shape = RoundedCornerShape(
+                    topStart = MaterialTheme.dimensions.commonSpaceMedium,
+                    topEnd = MaterialTheme.dimensions.commonSpaceMedium
+                )
             )
     ) {
         Column(
@@ -151,14 +154,14 @@ private fun CustomBottomSheet(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 4.dp),
+                    .padding(bottom = MaterialTheme.dimensions.commonSpaceXXSmall),
                 contentAlignment = Alignment.Center
             ) {
                 Box(
                     modifier = Modifier
                         .width(MaterialTheme.dimensions.commonSpaceXLarge)
                         .height(3.dp)
-                        .clip(shape = RoundedCornerShape(size = 8.dp))
+                        .clip(shape = RoundedCornerShape(size = MaterialTheme.dimensions.commonSpaceXSmall))
                         .background(color = MaterialTheme.colorScheme.onPrimaryContainer)
                 )
             }
