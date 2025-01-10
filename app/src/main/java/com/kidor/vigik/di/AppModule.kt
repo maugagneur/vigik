@@ -1,6 +1,7 @@
 package com.kidor.vigik.di
 
 import android.content.Context
+import android.os.Build
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -19,9 +20,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.conscrypt.Conscrypt
+import java.security.Security
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
+import javax.net.ssl.SSLContext
 
 private const val SHARED_PREFERENCES_FILE_NAME = "app_shared_preferences"
 private const val CONNECTION_TIMEOUT_IN_SECOND = 30L
@@ -84,11 +88,23 @@ object AppModule {
      * Provides instance of [OkHttpClient].
      */
     @Provides
-    fun providesOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(CONNECTION_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
-        .readTimeout(READ_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
-        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-        .build()
+    fun providesOkHttpClient(): OkHttpClient {
+        val builder = OkHttpClient.Builder()
+        // Bring TLSv1.3 support if the system is older than Android Q
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            val conscryptProvider = Conscrypt.newProvider()
+            val trustManager = Conscrypt.getDefaultX509TrustManager()
+            Security.insertProviderAt(conscryptProvider, 1)
+            val sslContext = SSLContext.getInstance("TLS", conscryptProvider)
+            sslContext.init(null, arrayOf(trustManager), null)
+            builder.sslSocketFactory(sslContext.socketFactory, trustManager)
+        }
+        return builder
+            .connectTimeout(CONNECTION_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
+            .readTimeout(READ_TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .build()
+    }
 }
 
 /**

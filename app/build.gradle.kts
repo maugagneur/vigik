@@ -53,6 +53,7 @@ dependencies {
 
     // Network calls
     implementation(libs.bundles.retrofit)
+    implementation(libs.conscrypt)
 
     // Shared preferences
     implementation(libs.androidx.datastore.preferences)
