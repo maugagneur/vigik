@@ -14,7 +14,6 @@ plugins {
     alias(libs.plugins.dokka) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kotlin) apply false
-    alias(libs.plugins.kover) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.secret) apply false

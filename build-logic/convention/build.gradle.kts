@@ -24,7 +24,6 @@ dependencies {
     compileOnly(libs.dokka.gradlePlugin)
     compileOnly(libs.hilt.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
-    compileOnly(libs.kover.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.room.gradlePlugin)
     compileOnly(libs.secret.gradlePlugin)
@@ -59,10 +58,6 @@ gradlePlugin {
         register("dokka") {
             id = "vigik.dokka"
             implementationClass = "DokkaConventionPlugin"
-        }
-        register("kover") {
-            id = "vigik.kover"
-            implementationClass = "KoverConventionPlugin"
         }
         register("secret") {
             id = "vigik.secret"
