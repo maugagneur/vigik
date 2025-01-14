@@ -5,7 +5,6 @@ plugins {
     id("vigik.android.hilt")
     id("vigik.android.room")
     id("vigik.detekt")
-    id("vigik.diktat")
     id("vigik.kover")
     id("vigik.secret")
 }
