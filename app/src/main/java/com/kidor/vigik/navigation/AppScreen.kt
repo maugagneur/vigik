@@ -71,6 +71,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Pulse" animation screen.
+     */
+    AnimationPulseScreen(
+        nameId = R.string.animation_pulse_title,
+        route = "animation/pulse"
+    ),
+
+    /**
      * Metadata of "Shape" animation screen.
      */
     AnimationShapeScreen(

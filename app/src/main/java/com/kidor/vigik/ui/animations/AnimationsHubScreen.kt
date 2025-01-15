@@ -33,6 +33,7 @@ fun AnimationsHubScreen(
             AppScreen.AnimationFollowingArrowsScreen,
             AppScreen.AnimationGlitterRainbowScreen,
             AppScreen.AnimationLookaheadScreen,
+            AppScreen.AnimationPulseScreen,
             AppScreen.AnimationShapeScreen,
             AppScreen.AnimationSnowfallScreen,
             AppScreen.AnimationTypewriterScreen

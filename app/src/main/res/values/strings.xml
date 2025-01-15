@@ -24,6 +24,8 @@
     <string name="animation_glitter_rainbow_source_label">Source: https://github.com/maiatoday/GrooveIsInTheHeart</string>
     <!-- Animation - Lookahead -->
     <string name="animation_lookahead_title">Lookahead</string>
+    <!-- Animation - Pulse -->
+    <string name="animation_pulse_title">Pulse</string>
     <!-- Animation - Shape -->
     <string name="animation_shape_title">Shape</string>
     <!-- Animation - Snowfall -->
