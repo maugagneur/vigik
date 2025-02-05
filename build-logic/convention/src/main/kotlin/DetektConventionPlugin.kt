@@ -12,7 +12,8 @@ class DetektConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("io.gitlab.arturbosch.detekt")
-                apply("io.github.detekt.gradle.compiler-plugin")
+                // FIXME: Detekt compiler plugin 1.23.6 does not works with Kotlin 2.1 but only with Kotlin 2.0 and language version 1.9
+                //apply("io.github.detekt.gradle.compiler-plugin")
             }
 
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")

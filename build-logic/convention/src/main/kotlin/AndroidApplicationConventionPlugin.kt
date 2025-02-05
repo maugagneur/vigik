@@ -9,7 +9,6 @@ import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 private const val COMPILE_SDK_VER = 35
@@ -109,8 +108,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                             "-Xcontext-receivers"
                         )
                     )
-                    // FIXME: Detekt 1.23.6 works with Kotlin 2.0 but not with language version higher than 1.9
-                    languageVersion.set(KotlinVersion.KOTLIN_1_9)
+                    // Deprecations and bug fixes for unstable code take effect immediately
+                    progressiveMode.set(true)
                 }
             }
 
