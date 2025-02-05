@@ -64,13 +64,28 @@ class Glitter private constructor(
         val borderBottom = borders.height
         val borderRight = borders.width
 
-        position = Offset(
+        // Compute next position
+        var nextPosition = Offset(
             x = position.x + (speed.x / 1000f * durationMillis),
             y = position.y + (speed.y / 1000f * durationMillis),
         )
-        val vx = if (position.x < borderLeft || position.x > borderRight) -vector.x else vector.x
-        val vy = if (position.y < borderTop || position.y > borderBottom) -vector.y else vector.y
 
+        // If the next position is out of border, inverse vector and actualize the next position
+        val vx = if ((nextPosition.x - drawRadius) < borderLeft || (nextPosition.x + drawRadius) > borderRight) {
+            nextPosition = nextPosition.copy(x = position.x - (speed.x / 1000f * durationMillis))
+            -vector.x
+        } else {
+            vector.x
+        }
+        val vy = if ((nextPosition.y - drawRadius) < borderTop || (nextPosition.y + drawRadius) > borderBottom) {
+            nextPosition = nextPosition.copy(y = position.y - (speed.y / 1000f * durationMillis))
+            -vector.y
+        } else {
+            vector.y
+        }
+
+        // Update position and vector if needed
+        position = nextPosition
         if (vx != vector.x || vy != vector.y) {
             vector = Offset(vx, vy)
         }
