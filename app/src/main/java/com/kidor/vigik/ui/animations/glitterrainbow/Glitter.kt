@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.Path
+import kotlin.math.sqrt
 
 /**
  * Class that represents a glitter.
@@ -64,13 +65,28 @@ class Glitter private constructor(
         val borderBottom = borders.height
         val borderRight = borders.width
 
-        position = Offset(
+        // Compute next position
+        var nextPosition = Offset(
             x = position.x + (speed.x / 1000f * durationMillis),
             y = position.y + (speed.y / 1000f * durationMillis),
         )
-        val vx = if (position.x < borderLeft || position.x > borderRight) -vector.x else vector.x
-        val vy = if (position.y < borderTop || position.y > borderBottom) -vector.y else vector.y
 
+        // If the next position is out of border, inverse vector and actualize the next position
+        val vx = if ((nextPosition.x - drawRadius) < borderLeft || (nextPosition.x + drawRadius) > borderRight) {
+            nextPosition = nextPosition.copy(x = position.x - (speed.x / 1000f * durationMillis))
+            -vector.x
+        } else {
+            vector.x
+        }
+        val vy = if ((nextPosition.y - drawRadius) < borderTop || (nextPosition.y + drawRadius) > borderBottom) {
+            nextPosition = nextPosition.copy(y = position.y - (speed.y / 1000f * durationMillis))
+            -vector.y
+        } else {
+            vector.y
+        }
+
+        // Update position and vector if needed
+        position = nextPosition
         if (vx != vector.x || vy != vector.y) {
             vector = Offset(vx, vy)
         }
@@ -94,9 +110,9 @@ class Glitter private constructor(
 
                 GeometricShape.TRIANGLE -> {
                     val path = Path()
-                    path.moveTo(position.x, position.y)
-                    path.lineTo(position.x + drawRadius, position.y + 2 * drawRadius)
-                    path.lineTo(position.x + 2 * drawRadius, position.y)
+                    path.moveTo(position.x - drawRadius * cos30, position.y - drawRadius / 2f)
+                    path.lineTo(position.x + drawRadius * cos30, position.y - drawRadius / 2f)
+                    path.lineTo(position.x, position.y + drawRadius)
                     path.close()
                     canvas.drawPath(
                         path = path,
@@ -105,11 +121,12 @@ class Glitter private constructor(
                 }
 
                 GeometricShape.RECTANGLE -> {
+                    val offset: Float = drawRadius / sqrt(2f)
                     val rect = Rect(
-                        position.x,
-                        position.y,
-                        position.x + drawRadius,
-                        position.y + drawRadius
+                        position.x - offset,
+                        position.y - offset,
+                        position.x + offset,
+                        position.y + offset
                     )
                     canvas.drawRect(
                         rect = rect,
@@ -124,6 +141,7 @@ class Glitter private constructor(
         private val xVectorRange: IntRange = -100..100
         private val yVectorRange: IntRange = 0..500
         private val radiusRange = (5..25)
+        private val cos30: Float = sqrt(3f) / 2f // cos(π/6) value
 
         /**
          * Creates a glitter with given parameters.
