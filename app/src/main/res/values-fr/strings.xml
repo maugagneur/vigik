@@ -14,6 +14,8 @@
     <string name="animation_circle_loader_title">Cercle de chargement</string>
     <!-- Animation - Following arrows -->
     <string name="animation_following_arrows_title">Flèches suiveuses</string>
+    <!-- Animation - Gauge -->
+    <string name="animation_gauge_title">Jauge</string>
     <!-- Animation - Glitter rainbow -->
     <string name="animation_glitter_rainbow_title">Pluie de pailettes</string>
     <string name="animation_glitter_rainbow_speed_coefficient_label">Vitesse</string>

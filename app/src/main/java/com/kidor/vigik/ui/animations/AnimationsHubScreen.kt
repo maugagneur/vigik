@@ -31,6 +31,7 @@ fun AnimationsHubScreen(
         val screens = listOf(
             AppScreen.AnimationCircleLoaderScreen,
             AppScreen.AnimationFollowingArrowsScreen,
+            AppScreen.AnimationGaugeScreen,
             AppScreen.AnimationGlitterRainbowScreen,
             AppScreen.AnimationLookaheadScreen,
             AppScreen.AnimationPulseScreen,

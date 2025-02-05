@@ -20,6 +20,7 @@ import com.kidor.vigik.extensions.navigateTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
 import com.kidor.vigik.ui.animations.circleloader.CircleLoaderScreen
 import com.kidor.vigik.ui.animations.followingarrows.FollowingArrowsScreen
+import com.kidor.vigik.ui.animations.gauge.GaugeScreen
 import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
 import com.kidor.vigik.ui.animations.lookahead.LookaheadScreen
 import com.kidor.vigik.ui.animations.pulse.PulseScreen
@@ -102,6 +103,7 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
         }
         it.composable(route = AppScreen.AnimationCircleLoaderScreen.route) { CircleLoaderScreen() }
         it.composable(route = AppScreen.AnimationFollowingArrowsScreen.route) { FollowingArrowsScreen() }
+        it.composable(route = AppScreen.AnimationGaugeScreen.route) { GaugeScreen() }
         it.composable(route = AppScreen.AnimationGlitterRainbowScreen.route) { GlitterRainbowScreen() }
         it.composable(route = AppScreen.AnimationLookaheadScreen.route) { LookaheadScreen() }
         it.composable(route = AppScreen.AnimationPulseScreen.route) { PulseScreen() }
