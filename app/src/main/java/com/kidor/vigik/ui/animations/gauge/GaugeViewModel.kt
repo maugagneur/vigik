@@ -7,7 +7,7 @@ import javax.inject.Inject
 private const val GAUGE_INITIAL_VALUE = 50f
 private const val GAUGE_MIN_RANGE_VALUE = 0f
 private const val GAUGE_MAX_RANGE_VALUE = 100f
-private const val DELTA = 10f
+private const val DELTA = 2f
 private val GAUGE_VALUE_RANGE = GAUGE_MIN_RANGE_VALUE..GAUGE_MAX_RANGE_VALUE
 
 /**

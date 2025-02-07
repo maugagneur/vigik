@@ -1,5 +1,8 @@
 package com.kidor.vigik.ui.animations.gauge
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,15 +40,23 @@ fun GaugeScreen(
             Column(
                 modifier = Modifier.width(intrinsicSize = IntrinsicSize.Min)
             ) {
+                val animateGaugeValue = animateFloatAsState(
+                    targetValue = viewState.gaugeValue,
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessVeryLow,
+                        dampingRatio = Spring.DampingRatioMediumBouncy
+                    ),
+                    label = "Gauge animation"
+                )
                 Gauge(
                     modifier = Modifier.size(200.dp),
-                    value = viewState.gaugeValue
+                    value = animateGaugeValue.value
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    FilledIconButton(
+                    RepeatableFilledIconButton(
                         onClick = { viewModel.handleAction(GaugeViewAction.DecreaseValue) }
                     ) {
                         Icon(
@@ -54,7 +64,7 @@ fun GaugeScreen(
                             contentDescription = null
                         )
                     }
-                    FilledIconButton(
+                    RepeatableFilledIconButton(
                         onClick = { viewModel.handleAction(GaugeViewAction.IncreaseValue) }
                     ) {
                         Icon(
