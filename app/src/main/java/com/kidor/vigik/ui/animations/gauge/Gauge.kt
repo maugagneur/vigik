@@ -19,6 +19,11 @@ import kotlin.math.sin
 
 private const val START_ANGLE = 150f
 private const val SWEEP_ANGLE = 240f
+private const val NEEDLE_LENGTH_RATIO = 0.35f
+private const val NEEDLE_BASE_WIDTH_RATIO = 0.04f
+private const val DEFAULT_MIN_RANGE_VALUE = 0f
+private const val DEFAULT_MAX_RANGE_VALUE = 100f
+private const val QUARTER_CIRCLE_ANGLE = 90f
 
 /**
  * Custom component that display a gauge.
@@ -30,7 +35,7 @@ private const val SWEEP_ANGLE = 240f
 fun Gauge(
     modifier: Modifier = Modifier,
     value: Float,
-    range: ClosedFloatingPointRange<Float> = 0f..100f
+    range: ClosedFloatingPointRange<Float> = DEFAULT_MIN_RANGE_VALUE..DEFAULT_MAX_RANGE_VALUE
 ) {
     val needleColor = MaterialTheme.colorScheme.onBackground
     val auraColor = MaterialTheme.colorScheme.secondary
@@ -44,7 +49,6 @@ fun Gauge(
     Canvas(modifier = modifier) {
         val gaugeValue = value.fastCoerceIn(range.start, range.endInclusive)
         val fillSwipeAngle = ((gaugeValue - range.start) / (range.endInclusive - range.start)) * SWEEP_ANGLE
-
 
         // Track
         drawArc(
@@ -83,11 +87,11 @@ fun Gauge(
 /**
  * Draws the needle of the gauge.
  *
- * @param scope           The [DrawScope] that will perform drawing.
- * @param size            The size of the gauge.
- * @param needleColor     The color of the needle.
- * @param auraColor       The color of the aura in background.
- * @param angle           The angle of the needle.
+ * @param scope       The [DrawScope] that will perform drawing.
+ * @param size        The size of the gauge.
+ * @param needleColor The color of the needle.
+ * @param auraColor   The color of the aura in background.
+ * @param angle       The angle of the needle.
  */
 private fun drawNeedle(
     scope: DrawScope,
@@ -122,7 +126,7 @@ private fun drawNeedle(
     )
 
     val needleAngle = angle + START_ANGLE
-    val needleLength = size.minDimension * 0.35f
+    val needleLength = size.minDimension * NEEDLE_LENGTH_RATIO
 
     val needlePath = Path().apply {
         // Calculate the top point of the needle
@@ -130,11 +134,11 @@ private fun drawNeedle(
         val topY = centerOffset.y + needleLength * sin(Math.toRadians(needleAngle.toDouble())).toFloat()
 
         // Calculate the base points of the needle
-        val needleBaseWidth = size.minDimension * 0.04f
-        val baseLeftX = centerOffset.x + needleBaseWidth * cos(Math.toRadians((needleAngle - 90).toDouble())).toFloat()
-        val baseLeftY = centerOffset.y + needleBaseWidth * sin(Math.toRadians((needleAngle - 90).toDouble())).toFloat()
-        val baseRightX = centerOffset.x + needleBaseWidth * cos(Math.toRadians((needleAngle + 90).toDouble())).toFloat()
-        val baseRightY = centerOffset.y + needleBaseWidth * sin(Math.toRadians((needleAngle + 90).toDouble())).toFloat()
+        val needleBaseWidth = size.minDimension * NEEDLE_BASE_WIDTH_RATIO
+        val baseLeftX = centerOffset.x + needleBaseWidth * cosFromDegrees(angle = needleAngle - QUARTER_CIRCLE_ANGLE)
+        val baseLeftY = centerOffset.y + needleBaseWidth * sinFromDegrees(angle = needleAngle - QUARTER_CIRCLE_ANGLE)
+        val baseRightX = centerOffset.x + needleBaseWidth * cosFromDegrees(angle = needleAngle + QUARTER_CIRCLE_ANGLE)
+        val baseRightY = centerOffset.y + needleBaseWidth * sinFromDegrees(angle = needleAngle + QUARTER_CIRCLE_ANGLE)
 
         moveTo(x = topX, y = topY)
         lineTo(x = baseLeftX, y = baseLeftY)
@@ -147,3 +151,13 @@ private fun drawNeedle(
         color = needleColor
     )
 }
+
+/**
+ * Computes the cosine of the angle given in degrees.
+ */
+private fun cosFromDegrees(angle: Float): Float = cos(Math.toRadians(angle.toDouble())).toFloat()
+
+/**
+ * Computes the sine of the angle given in degrees.
+ */
+private fun sinFromDegrees(angle: Float): Float = sin(Math.toRadians(angle.toDouble())).toFloat()
