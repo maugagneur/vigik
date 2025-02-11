@@ -37,7 +37,7 @@ fun RepeatableFilledIconButton(
     val scope = rememberCoroutineScope()
 
     FilledIconButton(
-        onClick = { },
+        onClick = clickAction,
         modifier = modifier
             .size(MaterialTheme.dimensions.commonSpaceXXLarge)
             .pointerInput(Unit) {
@@ -47,8 +47,8 @@ fun RepeatableFilledIconButton(
                         val heldButtonJob = launch {
                             var currentDelay = MAX_DELAY_MILLIS
                             while (down.pressed) {
-                                clickAction()
                                 delay(currentDelay)
+                                clickAction()
                                 val nextDelay = currentDelay - (currentDelay * DELAY_FACTOR)
                                 currentDelay = nextDelay.toLong().coerceAtLeast(MIN_DELAY_MILLIS)
                             }
