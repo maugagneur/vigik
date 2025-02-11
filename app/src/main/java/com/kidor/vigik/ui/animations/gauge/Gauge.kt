@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.util.fastCoerceIn
 import com.kidor.vigik.ui.theme.dimensions
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -93,6 +94,7 @@ fun Gauge(
  * @param auraColor   The color of the aura in background.
  * @param angle       The angle of the needle.
  */
+@ExcludedFromKoverReport
 private fun drawNeedle(
     scope: DrawScope,
     size: Size,
@@ -155,9 +157,11 @@ private fun drawNeedle(
 /**
  * Computes the cosine of the angle given in degrees.
  */
+@ExcludedFromKoverReport
 private fun cosFromDegrees(angle: Float): Float = cos(Math.toRadians(angle.toDouble())).toFloat()
 
 /**
  * Computes the sine of the angle given in degrees.
  */
+@ExcludedFromKoverReport
 private fun sinFromDegrees(angle: Float): Float = sin(Math.toRadians(angle.toDouble())).toFloat()
