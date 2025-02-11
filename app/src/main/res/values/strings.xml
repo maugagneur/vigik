@@ -17,6 +17,8 @@
     <string name="animation_circle_loader_title">Circle loader</string>
     <!-- Animation - Following arrows -->
     <string name="animation_following_arrows_title">Following Arrows</string>
+    <!-- Animation - Gauge -->
+    <string name="animation_gauge_title">Gauge</string>
     <!-- Animation - Glitter rainbow -->
     <string name="animation_glitter_rainbow_title">Glitter Rainbow</string>
     <string name="animation_glitter_rainbow_speed_coefficient_label">Speed</string>

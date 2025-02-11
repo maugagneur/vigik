@@ -55,6 +55,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Gauge" animation screen
+     */
+    AnimationGaugeScreen(
+        nameId = R.string.animation_gauge_title,
+        route = "animation/gauge"
+    ),
+
+    /**
      * Metadata of "Glitter Rainbow" animation screen.
      */
     AnimationGlitterRainbowScreen(
