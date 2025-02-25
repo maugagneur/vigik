@@ -25,6 +25,7 @@ import com.kidor.vigik.ui.animations.glitterrainbow.GlitterRainbowScreen
 import com.kidor.vigik.ui.animations.lookahead.LookaheadScreen
 import com.kidor.vigik.ui.animations.pulse.PulseScreen
 import com.kidor.vigik.ui.animations.shape.ShapeScreen
+import com.kidor.vigik.ui.animations.shimmer.ShimmerScreen
 import com.kidor.vigik.ui.animations.snowfall.SnowfallScreen
 import com.kidor.vigik.ui.animations.typewriter.TypewriterScreen
 import com.kidor.vigik.ui.biometric.home.BiometricHomeScreen
@@ -108,6 +109,7 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
         it.composable(route = AppScreen.AnimationLookaheadScreen.route) { LookaheadScreen() }
         it.composable(route = AppScreen.AnimationPulseScreen.route) { PulseScreen() }
         it.composable(route = AppScreen.AnimationShapeScreen.route) { ShapeScreen() }
+        it.composable(route = AppScreen.AnimationShimmerScreen.route) { ShimmerScreen() }
         it.composable(route = AppScreen.AnimationSnowfallScreen.route) { SnowfallScreen() }
         it.composable(route = AppScreen.AnimationTypewriterScreen.route) { TypewriterScreen() }
     }

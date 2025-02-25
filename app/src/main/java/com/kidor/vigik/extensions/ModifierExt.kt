@@ -3,6 +3,7 @@ package com.kidor.vigik.extensions
 import androidx.compose.animation.core.DurationBasedAnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -13,7 +14,9 @@ import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
@@ -56,7 +59,7 @@ fun Modifier.pulseEffect(
         animationSpec = infiniteRepeatable(animationSpec),
         label = "PulseAlpha"
     )
-    return this.drawBehind {
+    return drawBehind {
         // Convert the shape into an Outline
         minimumInteractiveComponentSize()
         val outline = shape.createOutline(
@@ -111,3 +114,57 @@ fun Modifier.doublePulseEffect(
             easing = LinearEasing
         )
     )
+
+/**
+ * Draw a brush line on the background from start to end. This could be use as placeholder.
+ *
+ * @param widthOfShadowBrush Width of the brush line.
+ * @param durationMillis     The duration of the shimmer animation.
+ * @param velocity           Velocity of the shimmer animation.
+ */
+fun Modifier.shimmerAnimation(
+    widthOfShadowBrush: Float = 100f,
+    durationMillis: Int = 1000,
+    velocity: Float = 400f
+): Modifier {
+    return composed {
+        val baseColor = MaterialTheme.colorScheme.background
+        val shimmerColors = listOf(
+            baseColor.copy(alpha = 0.2f),
+            baseColor.copy(alpha = 0.5f),
+            baseColor.copy(alpha = 1.0f),
+            baseColor.copy(alpha = 0.5f),
+            baseColor.copy(alpha = 0.2f)
+        )
+        val transition = rememberInfiniteTransition(label = "")
+
+        val translateAnimation by transition.animateFloat(
+            initialValue = 0f,
+            targetValue = velocity,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = durationMillis,
+                    easing = LinearEasing,
+                ),
+                repeatMode = RepeatMode.Restart,
+            ),
+            label = "Shimmer animation"
+        )
+
+        drawBehind {
+            drawRect(
+                brush = Brush.linearGradient(
+                    colors = shimmerColors,
+                    start = Offset(
+                        x = translateAnimation - widthOfShadowBrush,
+                        y = translateAnimation - widthOfShadowBrush
+                    ),
+                    end = Offset(
+                        x = translateAnimation,
+                        y = translateAnimation
+                    )
+                )
+            )
+        }
+    }
+}

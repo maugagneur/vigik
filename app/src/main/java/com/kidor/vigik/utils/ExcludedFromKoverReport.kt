@@ -5,6 +5,7 @@ package com.kidor.vigik.utils
  */
 @Retention(AnnotationRetention.BINARY)
 @Target(
+    AnnotationTarget.FILE,
     AnnotationTarget.CLASS,
     AnnotationTarget.FUNCTION
 )

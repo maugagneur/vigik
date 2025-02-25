@@ -28,6 +28,8 @@
     <string name="animation_pulse_button_label">Boutton</string>
     <!-- Animation - Shape -->
     <string name="animation_shape_title">Forme</string>
+    <!-- Animation - Shimmer -->
+    <string name="animation_shimmer_title">Miroir</string>
     <!-- Animation - Snowfall -->
     <string name="animation_snowfall_title">Chute de neige</string>
     <!-- Animation - Typewriter -->

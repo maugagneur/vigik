@@ -36,6 +36,7 @@ fun AnimationsHubScreen(
             AppScreen.AnimationLookaheadScreen,
             AppScreen.AnimationPulseScreen,
             AppScreen.AnimationShapeScreen,
+            AppScreen.AnimationShimmerScreen,
             AppScreen.AnimationSnowfallScreen,
             AppScreen.AnimationTypewriterScreen
         )

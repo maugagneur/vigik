@@ -1,9 +1,12 @@
+@file:ExcludedFromKoverReport
+
 package com.kidor.vigik.ui.theme
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 
 private const val COLOR_AMBER = 0xFFFFC107
 private const val COLOR_AMBER_DARK = 0xFFFFA000
