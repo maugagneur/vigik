@@ -95,6 +95,14 @@ enum class AppScreen(
     ),
 
     /**
+     * Metadata of "Shimmer" animation screen.
+     */
+    AnimationShimmerScreen(
+        nameId = R.string.animation_shimmer_title,
+        route = "animation/shimmer"
+    ),
+
+    /**
      * Metadata of "Snowfall" animation screen.
      */
     AnimationSnowfallScreen(

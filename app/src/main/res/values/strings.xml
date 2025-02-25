@@ -31,6 +31,8 @@
     <string name="animation_pulse_button_label">Button</string>
     <!-- Animation - Shape -->
     <string name="animation_shape_title">Shape</string>
+    <!-- Animation - Shimmer -->
+    <string name="animation_shimmer_title">Shimmer</string>
     <!-- Animation - Snowfall -->
     <string name="animation_snowfall_title">Snowfall</string>
     <!-- Animation - Typewriter -->
