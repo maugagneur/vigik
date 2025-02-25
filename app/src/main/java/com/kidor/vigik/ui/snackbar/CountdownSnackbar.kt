@@ -1,3 +1,5 @@
+@file:ExcludedFromKoverReport
+
 package com.kidor.vigik.ui.snackbar
 
 import androidx.compose.foundation.Canvas
@@ -34,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kidor.vigik.ui.theme.AppTheme
 import com.kidor.vigik.ui.theme.dimensions
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 import kotlinx.coroutines.delay
 
 private const val REFRESH_PERIOD = 40L // 40ms means 25 FPS which is quite smooth for the human eye

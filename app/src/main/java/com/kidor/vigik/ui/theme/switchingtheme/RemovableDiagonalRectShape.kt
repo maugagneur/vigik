@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 
 /**
  * Rectangular [Shape] with a removal visual effect.
@@ -13,6 +14,7 @@ import androidx.compose.ui.unit.LayoutDirection
  * @param offset    The offset of the removal effect.
  * @param direction The direction of the removal effect.
  */
+@ExcludedFromKoverReport
 class RemovableDiagonalRectShape(private val offset: Float, private val direction: ShapeDirection) : Shape {
 
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {

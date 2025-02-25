@@ -1,3 +1,5 @@
+@file:ExcludedFromKoverReport
+
 package com.kidor.vigik.ui.animations.circleloader
 
 import androidx.compose.animation.core.LinearEasing
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.rotate
+import com.kidor.vigik.utils.ExcludedFromKoverReport
 import kotlin.math.roundToInt
 
 private const val FULL_CIRCLE_DEGREES = 360f
