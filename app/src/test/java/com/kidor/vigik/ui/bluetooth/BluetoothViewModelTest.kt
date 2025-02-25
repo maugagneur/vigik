@@ -52,6 +52,7 @@ class BluetoothViewModelTest {
     @MockK
     private lateinit var localization: Localization
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)

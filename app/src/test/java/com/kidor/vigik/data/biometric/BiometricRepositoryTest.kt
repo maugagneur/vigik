@@ -61,6 +61,7 @@ class BiometricRepositoryTest {
     @MockK
     private lateinit var preferences: Preferences
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockKAnnotations.init(this)

@@ -41,6 +41,7 @@ class TelephonyViewModelTest {
     @MockK
     private lateinit var telephonyRepository: TelephonyRepository
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxUnitFun = true)

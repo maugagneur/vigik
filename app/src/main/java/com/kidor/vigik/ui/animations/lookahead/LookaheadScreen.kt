@@ -91,7 +91,7 @@ private fun Modifier.animateBounds(): Modifier = composed {
     val offsetAnim = remember { DeferredTargetAnimation(IntOffset.VectorConverter) }
     val sizeAnim = remember { DeferredTargetAnimation(IntSize.VectorConverter) }
     val scope = rememberCoroutineScope()
-    this.approachLayout(
+    approachLayout(
         isMeasurementApproachInProgress = {
             sizeAnim.updateTarget(it, scope, tween(durationMillis = SIZE_ANIMATION_DURATION))
             !sizeAnim.isIdle

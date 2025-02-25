@@ -61,11 +61,16 @@ class RestApiViewModelTest {
         every { localization.getString(R.string.duration_unit_minute, 42) } returns "42 min"
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun buildViewModel() {
+        viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+    }
+
     @Test
     fun `test emitted state at start`() {
         logTestName()
 
-        viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+        buildViewModel()
 
         // At start view state should have no valid data
         val initialState = viewModel.viewState.value
@@ -87,7 +92,7 @@ class RestApiViewModelTest {
         coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 42))
 
         runTest {
-            viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+            buildViewModel()
 
             // Check UI state
             val state = viewModel.viewState.value
@@ -120,7 +125,7 @@ class RestApiViewModelTest {
         coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 42))
 
         runTest {
-            viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+            buildViewModel()
 
             // Check UI state
             val state = viewModel.viewState.value
@@ -145,7 +150,7 @@ class RestApiViewModelTest {
         )
 
         runTest {
-            viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+            buildViewModel()
 
             // Check UI state
             val state = viewModel.viewState.value
@@ -167,7 +172,7 @@ class RestApiViewModelTest {
             coEvery { diablo4API.getNextWorldBoss() } returns Response.success(GetNextWorldBossResponse(name = "ashava", time = 1337))
             coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 101))
 
-            viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+            buildViewModel()
 
             viewModel.viewState.asFlow().test {
                 // Check that network calls are made at start
