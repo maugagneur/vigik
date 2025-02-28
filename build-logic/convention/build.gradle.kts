@@ -21,6 +21,7 @@ kotlin {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.detekt.gradlePlugin)
+    compileOnly(libs.dokka.gradlePlugin)
     compileOnly(libs.hilt.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.kover.gradlePlugin)
@@ -54,6 +55,10 @@ gradlePlugin {
         register("detekt") {
             id = "vigik.detekt"
             implementationClass = "DetektConventionPlugin"
+        }
+        register("dokka") {
+            id = "vigik.dokka"
+            implementationClass = "DokkaConventionPlugin"
         }
         register("kover") {
             id = "vigik.kover"
