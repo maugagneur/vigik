@@ -18,6 +18,7 @@ import com.kidor.vigik.extensions.findActivity
 import com.kidor.vigik.extensions.navigateSingleTopTo
 import com.kidor.vigik.extensions.navigateTo
 import com.kidor.vigik.ui.animations.AnimationsHubScreen
+import com.kidor.vigik.ui.animations.carousel.CarouselScreen
 import com.kidor.vigik.ui.animations.circleloader.CircleLoaderScreen
 import com.kidor.vigik.ui.animations.followingarrows.FollowingArrowsScreen
 import com.kidor.vigik.ui.animations.gauge.GaugeScreen
@@ -102,6 +103,7 @@ private fun addAnimationScreens(navGraphBuilder: NavGraphBuilder, navController:
                 navigateTo = { destination -> navController.navigateTo(destination) }
             )
         }
+        it.composable(route = AppScreen.AnimationCarouselScreen.route) { CarouselScreen() }
         it.composable(route = AppScreen.AnimationCircleLoaderScreen.route) { CircleLoaderScreen() }
         it.composable(route = AppScreen.AnimationFollowingArrowsScreen.route) { FollowingArrowsScreen() }
         it.composable(route = AppScreen.AnimationGaugeScreen.route) { GaugeScreen() }
