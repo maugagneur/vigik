@@ -31,5 +31,5 @@ enum class CarouselMode(val displayNameId: Int) {
     /**
      * Add some parallax with a blur effect.
      */
-    BLUR_DECAL(R.string.carousel_mode_blur_decal)
+    DECAL(R.string.carousel_mode_decal)
 }

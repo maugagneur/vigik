@@ -19,7 +19,7 @@
     <string name="carousel_mode_zoom">Zoom</string>
     <string name="carousel_mode_cube">3D Cube</string>
     <string name="carousel_mode_circle_reveal">Circle Reveal</string>
-    <string name="carousel_mode_blur_decal">Blur Decal</string>
+    <string name="carousel_mode_decal">Decal</string>
     <!-- Animation - Circle loader -->
     <string name="animation_circle_loader_title">Circle loader</string>
     <!-- Animation - Following arrows -->

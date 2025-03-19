@@ -1,5 +1,7 @@
 package com.kidor.vigik.ui.animations.carousel
 
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.os.Build
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.foundation.background
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -41,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
@@ -49,6 +53,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
@@ -150,6 +155,14 @@ private fun Carousel(
         }
 
         var offsetY by remember { mutableFloatStateOf(0f) }
+        val contentPadding = if (mode == CarouselMode.ZOOM) {
+            PaddingValues(horizontal = MaterialTheme.dimensions.commonSpaceXLarge)
+        } else {
+            PaddingValues(all = 0.dp)
+        }
+        val beyondViewportPageCount = if (mode == CarouselMode.DECAL) 2 else PagerDefaults.BeyondViewportPageCount
+        val pageSpacing = if (mode == CarouselMode.ZOOM) MaterialTheme.dimensions.commonSpaceMedium else 0.dp
+
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -159,8 +172,9 @@ private fun Carousel(
                     false
                 }
                 .clip(RectangleShape),
-            contentPadding = if (mode == CarouselMode.ZOOM) PaddingValues(horizontal = MaterialTheme.dimensions.commonSpaceXLarge) else PaddingValues(all = 0.dp),
-            pageSpacing = if (mode == CarouselMode.ZOOM) MaterialTheme.dimensions.commonSpaceMedium else 0.dp
+            contentPadding = contentPadding,
+            beyondViewportPageCount = beyondViewportPageCount,
+            pageSpacing = pageSpacing
         ) { page ->
             AsyncImage(
                 model = IMAGES[page],
@@ -168,6 +182,15 @@ private fun Carousel(
                 imageLoader = SingletonImageLoader.get(LocalContext.current),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .apply {
+                        if (mode == CarouselMode.DECAL) {
+                            zIndex(page * 10f)
+                            padding(
+                                start = MaterialTheme.dimensions.commonSpaceXLarge * 2,
+                                end = MaterialTheme.dimensions.commonSpaceXLarge
+                            )
+                        }
+                    }
                     .graphicsLayer {
                         when (mode) {
                             CarouselMode.ZOOM -> {
@@ -195,11 +218,11 @@ private fun Carousel(
                             }
 
                             CarouselMode.CIRCLE_REVEAL -> {
-                                // Make the page not move
+                                // Make the left page not move
                                 val offset = pagerState.offsetForPage(page)
                                 translationX = size.width * offset
 
-                                // Add a circular clipping shape
+                                // Add a circular clipping shape on right page
                                 val endOffset = pagerState.endOffsetForPage(page)
                                 shape = CirclePath(
                                     progress = 1f - endOffset.absoluteValue,
@@ -215,12 +238,34 @@ private fun Carousel(
                                 scaleX = scale
                                 scaleY = scale
 
-                                // Fade away
+                                // Fade the left page away
                                 val startOffset = pagerState.startOffsetForPage(page)
                                 alpha = (2f - startOffset) / 2f
                             }
 
-                            else -> { /* Do nothing */ }
+                            CarouselMode.DECAL -> {
+                                // Make the left page not move
+                                val startOffset = pagerState.startOffsetForPage(page)
+                                translationX = size.width * startOffset
+
+                                // Fade the left page away
+                                alpha = (2f - startOffset) / 2f
+
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                    val blur = (startOffset * 20f).coerceAtLeast(0.1f)
+                                    renderEffect = RenderEffect
+                                        .createBlurEffect(blur, blur, Shader.TileMode.DECAL)
+                                        .asComposeRenderEffect()
+                                }
+
+                                // Add a parallax effect on the left page
+                                val scale = 1f - (startOffset * 0.2f)
+                                scaleX = scale
+                                scaleY = scale
+                            }
+
+                            else -> { /* Do nothing */
+                            }
                         }
                     }
                     .drawWithContent {
@@ -261,6 +306,15 @@ private fun CubeCarouselPreview() {
 private fun CircleRevealCarouselPreview() {
     Carousel(
         mode = CarouselMode.CIRCLE_REVEAL,
+        pagerState = rememberPagerState { IMAGES.size }
+    )
+}
+
+@Preview(widthDp = 400, heightDp = 700)
+@Composable
+private fun DecalCarouselPreview() {
+    Carousel(
+        mode = CarouselMode.DECAL,
         pagerState = rememberPagerState { IMAGES.size }
     )
 }
