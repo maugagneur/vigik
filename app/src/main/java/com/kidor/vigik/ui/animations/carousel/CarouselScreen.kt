@@ -25,16 +25,25 @@ import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -44,17 +53,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.SingletonImageLoader
 import coil3.compose.AsyncImage
 import com.kidor.vigik.R
+import com.kidor.vigik.extensions.endOffsetForPage
 import com.kidor.vigik.extensions.offsetForPage
+import com.kidor.vigik.extensions.startOffsetForPage
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.theme.dimensions
 import kotlin.math.absoluteValue
 import kotlin.math.min
 
 private val IMAGES = listOf(
+    R.drawable.aker,
+    R.drawable.balloons,
     R.drawable.notification_big_picture,
-    R.drawable.notification_big_picture,
-    R.drawable.notification_big_picture,
-    R.drawable.notification_big_picture
+    R.drawable.road
 )
 
 /**
@@ -102,6 +113,7 @@ fun CarouselScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun Carousel(
     modifier: Modifier = Modifier,
@@ -128,9 +140,17 @@ private fun Carousel(
                     .background(color = Color.Black.copy(alpha = 0.5f))
             )
         }
+
+        var offsetY by remember { mutableFloatStateOf(0f) }
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .pointerInteropFilter { event ->
+                    offsetY = event.y
+                    false
+                }
+                .clip(RectangleShape),
             contentPadding = if (mode == CarouselMode.ZOOM) PaddingValues(horizontal = MaterialTheme.dimensions.commonSpaceXLarge) else PaddingValues(all = 0.dp),
             pageSpacing = if (mode == CarouselMode.ZOOM) MaterialTheme.dimensions.commonSpaceMedium else 0.dp
         ) { page ->
@@ -141,26 +161,58 @@ private fun Carousel(
                 modifier = Modifier
                     .fillMaxWidth()
                     .graphicsLayer {
-                        if (mode == CarouselMode.ZOOM) {
-                            val offset = pagerState.offsetForPage(page).absoluteValue
-                            lerp(
-                                start = 0.75f,
-                                stop = 1f,
-                                fraction = 1f - offset.coerceIn(0f, 1f)
-                            ).let { scale ->
-                                scaleY = scale
+                        when (mode) {
+                            CarouselMode.ZOOM -> {
+                                val offset = pagerState.offsetForPage(page).absoluteValue
+                                lerp(
+                                    start = 0.75f,
+                                    stop = 1f,
+                                    fraction = 1f - offset.coerceIn(0f, 1f)
+                                ).let { scale ->
+                                    scaleY = scale
+                                }
                             }
-                        } else if (mode == CarouselMode.CUBE) {
-                            val offset = pagerState.offsetForPage(page)
-                            val isOnTheRight = offset < 0f
-                            val degrees = 105f
-                            val interpolated = FastOutLinearInEasing.transform(offset.absoluteValue)
-                            rotationY = min(interpolated * if (isOnTheRight) degrees else -degrees, 90f)
 
-                            transformOrigin = TransformOrigin(
-                                pivotFractionX = if (isOnTheRight) 0f else 1f,
-                                pivotFractionY = 0.5f
-                            )
+                            CarouselMode.CUBE -> {
+                                val offset = pagerState.offsetForPage(page)
+                                val isOnTheRight = offset < 0f
+                                val degrees = 105f
+                                val interpolated = FastOutLinearInEasing.transform(offset.absoluteValue)
+                                rotationY = min(interpolated * if (isOnTheRight) degrees else -degrees, 90f)
+
+                                transformOrigin = TransformOrigin(
+                                    pivotFractionX = if (isOnTheRight) 0f else 1f,
+                                    pivotFractionY = 0.5f
+                                )
+                            }
+
+                            CarouselMode.CIRCLE_REVEAL -> {
+                                // Make the page not move
+                                val offset = pagerState.offsetForPage(page)
+                                translationX = size.width * offset
+
+                                // Add a circular clipping shape
+                                val endOffset = pagerState.endOffsetForPage(page)
+                                shape = CirclePath(
+                                    progress = 1f - endOffset.absoluteValue,
+                                    origin = Offset(
+                                        x = size.width,
+                                        y = offsetY
+                                    )
+                                )
+                                clip = true
+
+                                // Add a parallax effect
+                                val scale = 1f + (offset.absoluteValue * 0.4f)
+                                scaleX = scale
+                                scaleY = scale
+
+                                // Fade away
+                                val startOffset = pagerState.startOffsetForPage(page)
+                                alpha = (2f - startOffset) / 2f
+                            }
+
+                            else -> {/* Do nothing */ }
                         }
                     }
                     .drawWithContent {
@@ -192,6 +244,15 @@ private fun ZoomCarouselPreview() {
 private fun CubeCarouselPreview() {
     Carousel(
         mode = CarouselMode.CUBE,
+        pagerState = rememberPagerState { IMAGES.size }
+    )
+}
+
+@Preview(widthDp = 400, heightDp = 700)
+@Composable
+private fun CircleRevealCarouselPreview() {
+    Carousel(
+        mode = CarouselMode.CIRCLE_REVEAL,
         pagerState = rememberPagerState { IMAGES.size }
     )
 }
