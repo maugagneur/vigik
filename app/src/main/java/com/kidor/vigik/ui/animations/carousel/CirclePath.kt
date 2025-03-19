@@ -24,7 +24,7 @@ class CirclePath(private val progress: Float, private val origin: Offset = Offse
             x = size.center.x - ((size.center.x - origin.x) * (1f - progress)),
             y = size.center.y - ((size.center.y - origin.y) * (1f - progress))
         )
-        val radius = (sqrt(size.height * size.height + size.width * size.width) * .5f) * progress
+        val radius = (sqrt(size.height * size.height + size.width * size.width) / 2f) * progress
 
         return Outline.Generic(
             Path().apply {

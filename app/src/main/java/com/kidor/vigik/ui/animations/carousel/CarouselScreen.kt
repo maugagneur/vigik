@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -24,6 +22,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -45,6 +44,7 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -67,6 +67,9 @@ private val IMAGES = listOf(
     R.drawable.notification_big_picture,
     R.drawable.road
 )
+private const val PARALLAX_COEFFICIENT = 0.4f
+private const val RIGHT_ANGLE = 90f
+private const val CUBE_VISUAL_ANGLE = 105f // Having an angle upper than 90° make a better perspective render
 
 /**
  * View that display the section dedicated to the custom carousel animation.
@@ -76,38 +79,43 @@ fun CarouselScreen(
     viewModel: CarouselViewModel = hiltViewModel()
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize()
     ) {
         ObserveViewState(viewModel) { viewState ->
             Carousel(
+                modifier = Modifier.weight(1f),
                 mode = viewState.carouselMode,
                 pagerState = rememberPagerState { IMAGES.size }
             )
-        }
 
-        Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceLarge))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            FilledIconButton(
-                onClick = { viewModel.handleAction(CarouselViewAction.SelectPreviousMode) }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = MaterialTheme.dimensions.commonSpaceLarge),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
+                FilledIconButton(
+                    onClick = { viewModel.handleAction(CarouselViewAction.SelectPreviousMode) }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+                Text(
+                    text = stringResource(id = viewState.carouselMode.displayNameId),
+                    fontSize = MaterialTheme.dimensions.textSizeLarge,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
-            }
-            Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceLarge))
-            FilledIconButton(
-                onClick = { viewModel.handleAction(CarouselViewAction.SelectNextMode) }
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                    contentDescription = "Forward"
-                )
+                FilledIconButton(
+                    onClick = { viewModel.handleAction(CarouselViewAction.SelectNextMode) }
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                        contentDescription = "Forward"
+                    )
+                }
             }
         }
     }
@@ -132,7 +140,7 @@ private fun Carousel(
                     .aspectRatio(1f)
                     .offset { IntOffset(x = 0, y = 100.dp.roundToPx()) }
                     .scale(scaleX = 0.6f, scaleY = 0.24f)
-                    .rotate(degrees = offsetFromStart * 90f)
+                    .rotate(degrees = offsetFromStart * RIGHT_ANGLE)
                     .blur(
                         radius = 110.dp,
                         edgeTreatment = BlurredEdgeTreatment.Unbounded
@@ -176,9 +184,9 @@ private fun Carousel(
                             CarouselMode.CUBE -> {
                                 val offset = pagerState.offsetForPage(page)
                                 val isOnTheRight = offset < 0f
-                                val degrees = 105f
+                                val degrees = CUBE_VISUAL_ANGLE
                                 val interpolated = FastOutLinearInEasing.transform(offset.absoluteValue)
-                                rotationY = min(interpolated * if (isOnTheRight) degrees else -degrees, 90f)
+                                rotationY = min(interpolated * if (isOnTheRight) degrees else -degrees, RIGHT_ANGLE)
 
                                 transformOrigin = TransformOrigin(
                                     pivotFractionX = if (isOnTheRight) 0f else 1f,
@@ -203,7 +211,7 @@ private fun Carousel(
                                 clip = true
 
                                 // Add a parallax effect
-                                val scale = 1f + (offset.absoluteValue * 0.4f)
+                                val scale = 1f + (offset.absoluteValue * PARALLAX_COEFFICIENT)
                                 scaleX = scale
                                 scaleY = scale
 
@@ -212,7 +220,7 @@ private fun Carousel(
                                 alpha = (2f - startOffset) / 2f
                             }
 
-                            else -> {/* Do nothing */ }
+                            else -> { /* Do nothing */ }
                         }
                     }
                     .drawWithContent {

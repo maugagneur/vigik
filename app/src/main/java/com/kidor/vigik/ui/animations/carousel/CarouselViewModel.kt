@@ -11,7 +11,7 @@ import javax.inject.Inject
 class CarouselViewModel @Inject constructor() : BaseViewModel<CarouselViewAction, CarouselViewState, Nothing>() {
 
     init {
-        _viewState.value = CarouselViewState(carouselMode = CarouselMode.ZOOM)
+        _viewState.value = CarouselViewState(carouselMode = CarouselMode.CLASSIC)
     }
 
     override fun handleAction(viewAction: CarouselViewAction) {
