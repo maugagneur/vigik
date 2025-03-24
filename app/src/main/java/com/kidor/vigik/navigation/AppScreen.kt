@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import com.kidor.vigik.R
+import com.kidor.vigik.navigation.AppScreen.entries
 
 private const val APP_BASE_URI = "myapp://navigation"
 
@@ -36,6 +37,14 @@ enum class AppScreen(
     AnimationsHubScreen(
         nameId = R.string.animations_hub_title,
         route = "animations/hub"
+    ),
+
+    /**
+     * Metadata of "Carousel" animation screen.
+     */
+    AnimationCarouselScreen(
+        nameId = R.string.animation_carousel_title,
+        route = "animation/carousel"
     ),
 
     /**

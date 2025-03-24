@@ -10,6 +10,13 @@
 
     <!-- Animations -->
     <string name="animations_hub_title">Animations</string>
+    <!-- Animation - Carousel -->
+    <string name="animation_carousel_title">Carrousel</string>
+    <string name="carousel_mode_classic">Classique</string>
+    <string name="carousel_mode_zoom">Zoom</string>
+    <string name="carousel_mode_cube">Cube 3D</string>
+    <string name="carousel_mode_circle_reveal">Cercle Révélateur</string>
+    <string name="carousel_mode_decal">Décalage</string>
     <!-- Animation - Circle loader -->
     <string name="animation_circle_loader_title">Cercle de chargement</string>
     <!-- Animation - Following arrows -->
