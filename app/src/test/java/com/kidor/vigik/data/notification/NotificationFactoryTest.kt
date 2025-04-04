@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
 import com.kidor.vigik.R
@@ -65,7 +66,8 @@ class NotificationFactoryTest {
         every { notificationBuilder.setProgress(any(), any(), any()) } returns notificationBuilder
         every { notificationBuilder.addAction(any()) } returns notificationBuilder
         every { notificationBuilder.build() } returns notification
-        mockkStatic(TaskStackBuilder::class, BitmapFactory::class, PendingIntent::class)
+        mockkStatic(TaskStackBuilder::class, BitmapFactory::class, PendingIntent::class, Uri::class)
+        every { Uri.parse(any()) } returns mockk()
         every { TaskStackBuilder.create(context) } returns taskStackBuilder
         every { taskStackBuilder.addNextIntentWithParentStack(any()) } returns taskStackBuilder
         every { taskStackBuilder.getPendingIntent(any(), any()) } returns pendingIntent

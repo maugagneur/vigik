@@ -17,7 +17,7 @@ import org.junit.runner.Description
  *
  * ```
  * @get:Rule
- * var mainCoroutineRule = MainCoroutineRule()
+ * val mainCoroutineRule = MainCoroutineRule()
  * ```
  */
 @ExperimentalCoroutinesApi

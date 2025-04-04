@@ -67,7 +67,7 @@ class MainViewTest {
         runAndroidComposeUiTest(HiltTestActivity::class.java) {
             setContent {
                 navController = rememberNavController()
-                AppNavHost(navController = navController!!)
+                AppNavHost(navController = navController)
             }
 
             Thread.sleep(3000)

@@ -6,6 +6,9 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.dokka.gradle.DokkaExtension
 
+/**
+ * Allows to generate HTML documentation with the following command `./gradlew dokkaGenerateHtml`
+ */
 class DokkaConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -20,9 +23,6 @@ class DokkaConventionPlugin : Plugin<Project> {
 
             extensions.configure<DokkaExtension> {
                 moduleName.set("Vigik")
-                dokkaSourceSets.named("main") {
-                    suppressGeneratedFiles.set(true)
-                }
                 dokkaPublications.named("html") {
                     outputDirectory.set(layout.buildDirectory.dir("reports/dokka"))
                 }

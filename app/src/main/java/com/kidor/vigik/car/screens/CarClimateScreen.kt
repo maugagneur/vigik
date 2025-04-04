@@ -11,6 +11,7 @@ import androidx.car.app.hardware.climate.ClimateProfileRequest
 import androidx.car.app.hardware.climate.FanSpeedLevelProfile
 import androidx.car.app.hardware.common.CarZone
 import androidx.car.app.model.Action
+import androidx.car.app.model.Header
 import androidx.car.app.model.Pane
 import androidx.car.app.model.PaneTemplate
 import androidx.car.app.model.Row
@@ -22,6 +23,7 @@ import java.util.concurrent.Executor
 /**
  * Screens that displays information about climate.
  */
+@ExperimentalCarApi
 class CarClimateScreen(carContext: CarContext) : HardwareDataCarScreen(carContext) {
 
     private var cabinTemperature: CabinTemperatureProfile? = null
@@ -68,8 +70,12 @@ class CarClimateScreen(carContext: CarContext) : HardwareDataCarScreen(carContex
                     .setLoading(true)
                     .build()
             )
-            .setTitle(carContext.getString(R.string.car_car_climate_label))
-            .setHeaderAction(Action.BACK)
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_climate_label))
+                    .setStartHeaderAction(Action.BACK)
+                    .build()
+            )
             .build()
     }
 
@@ -93,8 +99,12 @@ class CarClimateScreen(carContext: CarContext) : HardwareDataCarScreen(carContex
                     .setLoading(false)
                     .build()
             )
-            .setTitle(carContext.getString(R.string.car_car_climate_label))
-            .setHeaderAction(Action.BACK)
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_climate_label))
+                    .setStartHeaderAction(Action.BACK)
+                    .build()
+            )
             .build()
     }
 

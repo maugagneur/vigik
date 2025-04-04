@@ -11,9 +11,9 @@ import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-private const val COMPILE_SDK_VER = 35
-private const val TARGET_SDK_VER = 35
-private const val MIN_SDK_VER = 23
+private const val COMPILE_SDK_VER = 37
+private const val TARGET_SDK_VER = 37
+private const val MIN_SDK_VER = 24
 
 private const val APP_MAJOR_VERSION = 2
 private const val APP_MINOR_VERSION = 23
@@ -24,7 +24,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
             }
 
             extensions.configure<ApplicationExtension> {
@@ -102,12 +101,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
                     val warningsAsErrors: String? by project
                     allWarningsAsErrors.set(warningsAsErrors.toBoolean())
-                    // Enable experimental Context Receivers
-                    freeCompilerArgs.set(
-                        freeCompilerArgs.get() + listOf(
-                            "-Xcontext-receivers"
-                        )
-                    )
                     // Deprecations and bug fixes for unstable code take effect immediately
                     progressiveMode.set(true)
                 }

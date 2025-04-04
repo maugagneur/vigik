@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.kidor.vigik.R
 import com.kidor.vigik.data.diablo.DIABLO4_API_BASE_URL
 import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss

@@ -5,8 +5,8 @@ import android.content.ContextWrapper
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 /**
  * Looks for the top [FragmentActivity] of the application.
@@ -27,7 +27,7 @@ fun Context.findActivity(): FragmentActivity? {
 /**
  * Asynchronous getter for [ProcessCameraProvider].
  */
-suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCoroutine { continuation ->
+suspend fun Context.getCameraProvider(): ProcessCameraProvider = suspendCancellableCoroutine { continuation ->
     ProcessCameraProvider.getInstance(this).also { cameraProvider ->
         cameraProvider.addListener(
             { continuation.resume(cameraProvider.get()) },

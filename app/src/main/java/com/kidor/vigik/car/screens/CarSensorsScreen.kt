@@ -7,6 +7,7 @@ import androidx.car.app.hardware.CarHardwareManager
 import androidx.car.app.hardware.common.CarValue
 import androidx.car.app.hardware.info.CarSensors
 import androidx.car.app.model.Action
+import androidx.car.app.model.Header
 import androidx.car.app.model.Pane
 import androidx.car.app.model.PaneTemplate
 import androidx.car.app.model.Row
@@ -71,8 +72,12 @@ class CarSensorsScreen(carContext: CarContext) : HardwareDataCarScreen(carContex
                     .setLoading(true)
                     .build()
             )
-            .setTitle(carContext.getString(R.string.car_car_sensors_label))
-            .setHeaderAction(Action.BACK)
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_sensors_label))
+                    .setStartHeaderAction(Action.BACK)
+                    .build()
+            )
             .build()
     }
 
@@ -108,8 +113,12 @@ class CarSensorsScreen(carContext: CarContext) : HardwareDataCarScreen(carContex
                     .setLoading(false)
                     .build()
             )
-            .setTitle(carContext.getString(R.string.car_car_sensors_label))
-            .setHeaderAction(Action.BACK)
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_sensors_label))
+                    .setStartHeaderAction(Action.BACK)
+                    .build()
+            )
             .build()
     }
 

@@ -95,7 +95,7 @@ class Glitter private constructor(
     /**
      * Draw glitter.
      *
-     * @param canvas The [Canvas] where the shape of the glitter will be draw.
+     * @param canvas The [Canvas] where the shape of the glitter will be drawn.
      */
     fun draw(canvas: Canvas) {
         if (lifeCount > 0) {
@@ -152,10 +152,9 @@ class Glitter private constructor(
          * @param lifeTime     The life time of the glitter.
          */
         fun create(color: Color, glitterShape: GlitterShape, source: Offset, lifeTime: Int): Glitter {
-            val shape: GeometricShape = if (glitterShape is GeometricShape) {
-                glitterShape
-            } else {
-                GeometricShape.entries.random()
+            val shape = when (glitterShape) {
+                is GeometricShape -> glitterShape
+                Mixed -> GeometricShape.entries.random()
             }
             return Glitter(
                 position = source,

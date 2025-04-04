@@ -110,7 +110,7 @@ class BluetoothAdapterTest {
             adapter.startScan(false, bluetoothScanCallback)
 
             // Check that LE scan is not started
-            verify(inverse = true) { bluetoothAdapter.bluetoothLeScanner.startScan(any()) }
+            verify(inverse = true) { bluetoothAdapter.bluetoothLeScanner?.startScan(any()) }
             // Check that receiver is registered and configured
             verify { bluetoothDiscoveryReceiver.registerCallbacks(bluetoothApiCallback, bluetoothScanCallback) }
             verify { ContextCompat.registerReceiver(context, bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER, ContextCompat.RECEIVER_EXPORTED) }
@@ -132,7 +132,7 @@ class BluetoothAdapterTest {
             adapter.startScan(false, bluetoothScanCallback)
 
             // Check that LE scan is not started
-            verify(inverse = true) { bluetoothAdapter.bluetoothLeScanner.startScan(any()) }
+            verify(inverse = true) { bluetoothAdapter.bluetoothLeScanner?.startScan(any()) }
             // Check that receiver is registered and configured
             verify { bluetoothDiscoveryReceiver.registerCallbacks(bluetoothApiCallback, bluetoothScanCallback) }
             verify { ContextCompat.registerReceiver(context, bluetoothDiscoveryReceiver, BluetoothDiscoveryReceiver.INTENT_FILTER, ContextCompat.RECEIVER_EXPORTED) }

@@ -62,7 +62,7 @@ class LocalizationTest {
         logTestName()
 
         val testResId = Random.nextInt()
-        val testArgs = arrayOf(1, "a")
+        val testArgs = arrayOf<Any>(1, "a")
         val testTranslation = "Translation for test"
         every { resources.getString(testResId, testArgs) } returns testTranslation
 
@@ -76,7 +76,7 @@ class LocalizationTest {
         logTestName()
 
         val testResId = Random.nextInt()
-        val testArgs = arrayOf(1, "a")
+        val testArgs = arrayOf<Any>(1, "a")
         every { resources.getString(testResId, testArgs) } throws NotFoundException()
 
         val result = localization.getString(testResId, testArgs)

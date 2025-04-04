@@ -14,6 +14,7 @@ import androidx.car.app.hardware.info.Mileage
 import androidx.car.app.hardware.info.Model
 import androidx.car.app.hardware.info.Speed
 import androidx.car.app.model.Action
+import androidx.car.app.model.Header
 import androidx.car.app.model.Pane
 import androidx.car.app.model.PaneTemplate
 import androidx.car.app.model.Row
@@ -80,8 +81,12 @@ class CarInfoScreen(carContext: CarContext) : HardwareDataCarScreen(carContext) 
                     .setLoading(true)
                     .build()
             )
-            .setTitle(carContext.getString(R.string.car_car_info_label))
-            .setHeaderAction(Action.BACK)
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_info_label))
+                    .setStartHeaderAction(Action.BACK)
+                    .build()
+            )
             .build()
     }
 
@@ -118,8 +123,12 @@ class CarInfoScreen(carContext: CarContext) : HardwareDataCarScreen(carContext) 
                     .setLoading(false)
                     .build()
             )
-            .setTitle(carContext.getString(R.string.car_car_info_label))
-            .setHeaderAction(Action.BACK)
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_info_label))
+                    .setStartHeaderAction(Action.BACK)
+                    .build()
+            )
             .build()
     }
 

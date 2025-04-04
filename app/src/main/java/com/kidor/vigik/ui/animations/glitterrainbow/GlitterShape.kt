@@ -3,7 +3,7 @@ package com.kidor.vigik.ui.animations.glitterrainbow
 /**
  * A shape configuration for glitters.
  */
-interface GlitterShape
+sealed interface GlitterShape
 
 /**
  * Undefined shape for glitters.

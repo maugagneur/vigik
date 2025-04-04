@@ -79,7 +79,7 @@ class BluetoothAdapter @Inject constructor(
             // Notify the start of scan
             apiCallback.onScanningStateChanged(isScanning = true)
             // Start LE scan
-            bluetoothAdapter.bluetoothLeScanner.startScan(this)
+            bluetoothAdapter.bluetoothLeScanner?.startScan(this)
             // Stop scan after 10 sec
             coroutineScope.launch {
                 delay(LE_SCAN_DURATION_IN_MS)
@@ -124,7 +124,7 @@ class BluetoothAdapter @Inject constructor(
     @SuppressLint("MissingPermission")
     private fun stopLeScan() {
         // Stop LE scan
-        bluetoothAdapter.bluetoothLeScanner.stopScan(this)
+        bluetoothAdapter.bluetoothLeScanner?.stopScan(this)
         // Notify the end of scan
         apiCallback.onScanningStateChanged(isScanning = false)
         // Remove callback

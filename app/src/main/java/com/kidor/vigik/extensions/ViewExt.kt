@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.PixelCopy
 import android.view.View
 import androidx.compose.ui.geometry.Rect
+import androidx.core.graphics.createBitmap
 import com.kidor.vigik.utils.BuildVersionWrapper
 import timber.log.Timber
 
@@ -19,11 +20,7 @@ import timber.log.Timber
 fun View.screenshot(bounds: Rect, bitmapCallback: (Bitmap?) -> Unit) {
     if (BuildVersionWrapper.isOOrAbove()) {
         try {
-            val bitmap = Bitmap.createBitmap(
-                bounds.width.toInt(),
-                bounds.height.toInt(),
-                Bitmap.Config.ARGB_8888
-            )
+            val bitmap = createBitmap(bounds.width.toInt(), bounds.height.toInt())
             PixelCopy.request(
                 (context as Activity).window,
                 android.graphics.Rect(

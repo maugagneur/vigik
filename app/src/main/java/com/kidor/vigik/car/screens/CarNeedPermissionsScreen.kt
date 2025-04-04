@@ -4,6 +4,7 @@ import androidx.car.app.CarContext
 import androidx.car.app.Screen
 import androidx.car.app.model.Action
 import androidx.car.app.model.CarIcon
+import androidx.car.app.model.Header
 import androidx.car.app.model.MessageTemplate
 import androidx.car.app.model.Template
 import com.kidor.vigik.R
@@ -15,7 +16,11 @@ class CarNeedPermissionsScreen(carContext: CarContext) : Screen(carContext) {
 
     override fun onGetTemplate(): Template {
         return MessageTemplate.Builder(carContext.getString(R.string.car_need_permissions_message))
-            .setTitle(carContext.getString(R.string.car_need_permissions_title))
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_need_permissions_title))
+                    .build()
+            )
             .setIcon(CarIcon.ALERT)
             .addAction(
                 Action.Builder()

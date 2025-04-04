@@ -1,7 +1,6 @@
 package com.kidor.vigik.ui.animations.lookahead
 
 import androidx.compose.animation.core.DeferredTargetAnimation
-import androidx.compose.animation.core.ExperimentalAnimatableApi
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -28,6 +27,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.LookaheadScope
 import androidx.compose.ui.layout.approachLayout
+import androidx.compose.ui.layout.lookaheadScopeCoordinates
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntOffset
@@ -59,7 +59,7 @@ fun LookaheadScreen() {
                     modifier = Modifier
                         .padding(all = MaterialTheme.dimensions.commonSpaceXSmall)
                         .size(if (isInColumn) 80.dp else 20.dp)
-                        .animateBounds()
+                        .customAnimateBounds()
                         .background(
                             color = color,
                             shape = RoundedCornerShape(MaterialTheme.dimensions.commonSpaceMedium)
@@ -85,9 +85,8 @@ fun LookaheadScreen() {
     }
 }
 
-context(LookaheadScope)
-@OptIn(ExperimentalAnimatableApi::class)
-private fun Modifier.animateBounds(): Modifier = composed {
+context(lookaheadScope: LookaheadScope)
+private fun Modifier.customAnimateBounds(): Modifier = composed {
     val offsetAnim = remember { DeferredTargetAnimation(IntOffset.VectorConverter) }
     val sizeAnim = remember { DeferredTargetAnimation(IntSize.VectorConverter) }
     val scope = rememberCoroutineScope()
@@ -97,8 +96,6 @@ private fun Modifier.animateBounds(): Modifier = composed {
             !sizeAnim.isIdle
         },
         isPlacementApproachInProgress = {
-            val target = lookaheadScopeCoordinates.localLookaheadPositionOf(it)
-            offsetAnim.updateTarget(target.round(), scope, tween(durationMillis = OFFSET_ANIMATION_DURATION))
             !offsetAnim.isIdle
         }
     ) { measurable, _ ->
@@ -106,10 +103,10 @@ private fun Modifier.animateBounds(): Modifier = composed {
         measurable.measure(Constraints.fixed(animWidth, animHeight))
             .run {
                 layout(width, height) {
-                    coordinates?.let {
-                        val target = lookaheadScopeCoordinates.localLookaheadPositionOf(it).round()
-                        val animOffset = offsetAnim.updateTarget(target, scope)
-                        val current = lookaheadScopeCoordinates.localPositionOf(it, Offset.Zero).round()
+                    coordinates?.let { coordinates ->
+                        val target = lookaheadScope.lookaheadScopeCoordinates(coordinates).localPositionOf(coordinates).round()
+                        val animOffset = offsetAnim.updateTarget(target, scope, tween(durationMillis = OFFSET_ANIMATION_DURATION))
+                        val current = lookaheadScope.lookaheadScopeCoordinates(coordinates).localPositionOf(coordinates, Offset.Zero).round()
                         val (x, y) = animOffset - current
                         place(x, y)
                     } ?: place(0, 0)

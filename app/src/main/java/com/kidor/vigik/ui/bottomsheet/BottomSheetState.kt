@@ -75,7 +75,7 @@ class BottomSheetState(
         get() = currentValue == BottomSheetStateValue.HALF_EXPANDED
 
     private val hasHalfExpandedState: Boolean
-        get() = draggableState.anchors.hasAnchorFor(BottomSheetStateValue.HALF_EXPANDED)
+        get() = draggableState.anchors.hasPositionFor(BottomSheetStateValue.HALF_EXPANDED)
 
     /**
      * Show the bottom sheet with animation and suspend until it's shown.
@@ -94,7 +94,7 @@ class BottomSheetState(
      * Expands the bottom sheet with an animation and suspend it until the animation finishes or is cancelled.
      */
     suspend fun expand() {
-        if (draggableState.anchors.hasAnchorFor(BottomSheetStateValue.EXPANDED)) {
+        if (draggableState.anchors.hasPositionFor(BottomSheetStateValue.EXPANDED)) {
             animateTo(BottomSheetStateValue.EXPANDED)
         }
     }
@@ -103,7 +103,7 @@ class BottomSheetState(
      * Half expands the bottom sheet with an animation and suspend it until the animation finishes or is cancelled.
      */
     suspend fun halfExpand() {
-        if (draggableState.anchors.hasAnchorFor(BottomSheetStateValue.HALF_EXPANDED)) {
+        if (draggableState.anchors.hasPositionFor(BottomSheetStateValue.HALF_EXPANDED)) {
             animateTo(BottomSheetStateValue.HALF_EXPANDED)
         }
     }

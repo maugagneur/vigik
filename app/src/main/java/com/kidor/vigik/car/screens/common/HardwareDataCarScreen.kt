@@ -6,6 +6,7 @@ import androidx.car.app.constraints.ConstraintManager
 import androidx.car.app.hardware.CarHardwareManager
 import androidx.car.app.model.Action
 import androidx.car.app.model.CarIcon
+import androidx.car.app.model.Header
 import androidx.car.app.model.MessageTemplate
 import androidx.car.app.model.Template
 import androidx.core.content.ContextCompat
@@ -83,7 +84,11 @@ abstract class HardwareDataCarScreen(carContext: CarContext) : Screen(carContext
      */
     private fun getErrorTemplate(): MessageTemplate =
         MessageTemplate.Builder(carContext.getString(R.string.car_hardware_data_error_message))
-            .setTitle(carContext.getString(R.string.car_hardware_data_error_title))
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_hardware_data_error_title))
+                    .build()
+            )
             .setIcon(CarIcon.ALERT)
             .addAction(
                 Action.Builder()

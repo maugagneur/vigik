@@ -40,8 +40,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -98,7 +98,7 @@ class MainActivity : FragmentActivity() {
             val scope = rememberCoroutineScope()
             val screenshotState = rememberScreenshotState()
             val offset = remember { mutableFloatStateOf(0f) }
-            val screenWidth = LocalConfiguration.current.screenWidthDp
+            val screenWidth = LocalWindowInfo.current.containerSize.width
             val screenWishPx = with(LocalDensity.current) { screenWidth.dp.toPx() }
             val animationOffset = animateFloatAsState(
                 targetValue = offset.floatValue,

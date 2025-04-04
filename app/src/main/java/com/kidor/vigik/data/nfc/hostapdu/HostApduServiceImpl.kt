@@ -3,26 +3,18 @@ package com.kidor.vigik.data.nfc.hostapdu
 import android.content.Intent
 import android.nfc.cardemulation.HostApduService
 import android.os.Bundle
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 /**
  * Implementation of [HostApduService].
  */
 class HostApduServiceImpl : HostApduService() {
 
-    private lateinit var localBroadcastManager: LocalBroadcastManager
-
-    override fun onCreate() {
-        super.onCreate()
-        localBroadcastManager = LocalBroadcastManager.getInstance(applicationContext)
-    }
-
     override fun processCommandApdu(commandApdu: ByteArray?, extras: Bundle?): ByteArray? {
         val intent = Intent(APDU_SERVICE_ACTION_NEW_MESSAGE).apply {
             putExtra(KEY_MESSAGE_TYPE, TYPE_APDU_COMMAND)
             putExtra(KEY_APDU_COMMAND, commandApdu)
         }
-        localBroadcastManager.sendBroadcast(intent)
+        sendBroadcast(intent)
         return null
     }
 
@@ -31,7 +23,7 @@ class HostApduServiceImpl : HostApduService() {
             putExtra(KEY_MESSAGE_TYPE, TYPE_DEACTIVATED)
             putExtra(KEY_DEACTIVATED_REASON, reason)
         }
-        localBroadcastManager.sendBroadcast(intent)
+        sendBroadcast(intent)
     }
 
     companion object {

@@ -10,7 +10,8 @@ import android.os.Bundle
 import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,7 +24,6 @@ import javax.inject.Singleton
 class HostApduManager @Inject constructor(@ApplicationContext context: Context) {
 
     private var messenger: Messenger? = null
-    private val localBroadcastManager: LocalBroadcastManager = LocalBroadcastManager.getInstance(context)
     private val listeners = mutableListOf<HostApduListener>()
 
     private val serviceConnection = object : ServiceConnection {
@@ -59,7 +59,12 @@ class HostApduManager @Inject constructor(@ApplicationContext context: Context) 
     init {
         // Register to the local broadcast forwarding messages from the host APDU service
         val intentFilter = IntentFilter(HostApduServiceImpl.APDU_SERVICE_ACTION_NEW_MESSAGE)
-        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
+        registerReceiver(
+            context,
+            broadcastReceiver,
+            intentFilter,
+            ContextCompat.RECEIVER_EXPORTED
+        )
 
         // Connect to the custom host APDU service
         context.bindService(

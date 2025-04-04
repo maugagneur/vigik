@@ -1,13 +1,15 @@
 package com.kidor.vigik.car.screens
 
+import androidx.annotation.OptIn
 import androidx.car.app.CarContext
 import androidx.car.app.CarToast
 import androidx.car.app.Screen
+import androidx.car.app.annotations.ExperimentalCarApi
 import androidx.car.app.model.Action
-import androidx.car.app.model.ActionStrip
 import androidx.car.app.model.CarColor
 import androidx.car.app.model.GridItem
 import androidx.car.app.model.GridTemplate
+import androidx.car.app.model.Header
 import androidx.car.app.model.ItemList
 import com.kidor.vigik.R
 import com.kidor.vigik.extensions.setImageFromDrawable
@@ -17,26 +19,29 @@ import com.kidor.vigik.extensions.setImageFromDrawable
  */
 class CarMainScreen(carContext: CarContext) : Screen(carContext) {
 
+    @OptIn(ExperimentalCarApi::class)
     override fun onGetTemplate(): GridTemplate {
         return GridTemplate.Builder()
-            .setTitle(carContext.getString(R.string.car_app_name))
-            .setHeaderAction(Action.APP_ICON)
-            .setActionStrip(
-                ActionStrip.Builder()
-                    .addAction(
-                        Action.Builder()
-                            .setTitle(carContext.getString(R.string.car_car_api_level_action_label))
-                            .setOnClickListener {
-                                CarToast.makeText(
-                                    carContext,
-                                    carContext.getString(
-                                        R.string.car_car_api_level_toast_message,
-                                        carContext.carAppApiLevel
-                                    ),
-                                    CarToast.LENGTH_SHORT
-                                ).show()
-                            }.build()
-                    ).build()
+            .setHeader(
+                Header.Builder()
+                    .setTitle(carContext.getString(R.string.car_app_name))
+                    .setStartHeaderAction(Action.APP_ICON)
+                    .build()
+            )
+            .addAction(
+                Action.Builder()
+                    .setTitle(carContext.getString(R.string.car_car_api_level_action_label))
+                    .setOnClickListener {
+                        CarToast.makeText(
+                            carContext,
+                            carContext.getString(
+                                R.string.car_car_api_level_toast_message,
+                                carContext.carAppApiLevel
+                            ),
+                            CarToast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .build()
             )
             .setSingleList(
                 ItemList.Builder()
