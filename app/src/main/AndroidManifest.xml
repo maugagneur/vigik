@@ -90,15 +90,15 @@
         </activity>
 
         <receiver
-            android:name=".receivers.DiabloWidgetReceiver"
+            android:name=".receivers.ApesWidgetReceiver"
             android:exported="false"
-            android:label="@string/widget_diablo_label">
+            android:label="@string/widget_apes_label">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/diablo_widget_provider" />
+                android:resource="@xml/apes_widget_provider" />
         </receiver>
 
         <service

@@ -1,14 +1,39 @@
 package com.kidor.vigik.ui.restapi
 
+import com.kidor.vigik.data.apes.DispoPreset
 import com.kidor.vigik.ui.base.ViewAction
 
 /**
- * Available actions from REST API view.
+ * User actions on the REST API (APES) screen.
  */
-sealed interface RestApiViewAction : ViewAction {
+sealed class RestApiViewAction : ViewAction {
 
     /**
-     * Action to refresh tracker's data.
+     * Refreshes all APES data (voice, availability, status now, me).
      */
-    data object RefreshData : RestApiViewAction
+    data object RefreshData : RestApiViewAction()
+
+    /**
+     * Saves a new user API Bearer token.
+     *
+     * @param token The Bearer token.
+     */
+    data class SaveUserToken(val token: String) : RestApiViewAction()
+
+    /**
+     * Clears the stored user API token.
+     */
+    data object ClearUserToken : RestApiViewAction()
+
+    /**
+     * Applies a quick availability preset for tonight.
+     *
+     * @param preset The chosen preset.
+     */
+    data class ApplyPreset(val preset: DispoPreset) : RestApiViewAction()
+
+    /**
+     * Dismisses displayed snackbar/message.
+     */
+    data object DismissMessage : RestApiViewAction()
 }

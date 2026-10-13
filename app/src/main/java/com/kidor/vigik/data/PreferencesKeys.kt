@@ -2,6 +2,7 @@ package com.kidor.vigik.data
 
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 /**
@@ -29,18 +30,27 @@ object PreferencesKeys {
     val USER_TOKEN: Preferences.Key<String> = stringPreferencesKey("user_token_key")
 
     /**
-     * Diablo IV widget preference to indicate if the widget is currently refreshing its data.
+     * APES user Bearer token used for writing availability.
      */
-    val WIDGET_DIABLO_IS_LOADING: Preferences.Key<Boolean> = booleanPreferencesKey("widget_diablo_is_loading_key")
+    val APES_USER_TOKEN: Preferences.Key<String> = stringPreferencesKey("apes_user_token_key")
 
     /**
-     * Diablo IV widget preference of the next world boss name.
+     * APES widget preference to indicate if the widget is currently refreshing its data.
      */
-    val WIDGET_DIABLO_BOSS_NAME: Preferences.Key<String> = stringPreferencesKey("widget_diablo_boss_name_key")
+    val WIDGET_APES_IS_LOADING: Preferences.Key<Boolean> = booleanPreferencesKey("widget_apes_is_loading_key")
 
     /**
-     * Diablo IV widget preference of the readable world boss next spawn date.
+     * APES widget preference of count of members in voice.
      */
-    val WIDGET_DIABLO_BOSS_SPAWN_DATE: Preferences.Key<String> =
-        stringPreferencesKey("widget_diablo_boss_spawn_date_key")
+    val WIDGET_APES_VOICE_COUNT: Preferences.Key<Int> = intPreferencesKey("widget_apes_voice_count_key")
+
+    /**
+     * APES widget preference of formatted names of members in voice.
+     */
+    val WIDGET_APES_VOICE_MEMBERS: Preferences.Key<String> = stringPreferencesKey("widget_apes_voice_members_key")
+
+    /**
+     * APES widget preference of evening availability summary.
+     */
+    val WIDGET_APES_EVENING_SUMMARY: Preferences.Key<String> = stringPreferencesKey("widget_apes_evening_summary_key")
 }

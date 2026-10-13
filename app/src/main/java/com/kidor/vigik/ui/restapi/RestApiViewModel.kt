@@ -3,67 +3,49 @@ package com.kidor.vigik.ui.restapi
 import androidx.lifecycle.viewModelScope
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
-import com.kidor.vigik.data.diablo.Diablo4API
-import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
+import com.kidor.vigik.data.apes.ApesDateHelper
+import com.kidor.vigik.data.apes.ApesRepository
+import com.kidor.vigik.data.apes.DispoPreset
 import com.kidor.vigik.di.IoDispatcher
-import com.kidor.vigik.extensions.awaitAll
 import com.kidor.vigik.ui.base.BaseViewModel
-import com.kidor.vigik.utils.NetworkHelper
 import com.kidor.vigik.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
-
-private const val MINUTES_PER_HOUR = 60
-private const val DELAY_THRESHOLD = 60
-private const val SHORT_DELAY_BETWEEN_REFRESH: Long = 1 * 60 * 1000 // 1 minute
-private const val LONG_DELAY_BETWEEN_REFRESH: Long = 5 * 60 * 1000 // 5 minute
 
 /**
- * Business logic of REST API screen.
+ * Business logic of REST API (APES) screen.
  */
 @HiltViewModel
 class RestApiViewModel @Inject constructor(
-    private val diablo4API: Diablo4API,
+    private val apesRepository: ApesRepository,
     private val localization: Localization,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : BaseViewModel<RestApiViewAction, RestApiViewState, Nothing>() {
 
-    private val trackerData = AtomicReference(Diablo4TrackerData())
-
     init {
-        _viewState.value = RestApiViewState(diablo4TrackerData = trackerData.get())
+        _viewState.value = RestApiViewState(isLoading = true)
 
-        // World boss
-        viewModelScope.launch(context = ioDispatcher) {
-            while (true) {
-                val remainingTime = refreshWorldBoss()
-                val delay = if (remainingTime > DELAY_THRESHOLD) {
-                    LONG_DELAY_BETWEEN_REFRESH
+        // Observe user token
+        viewModelScope.launch(ioDispatcher) {
+            apesRepository.getUserToken().collectLatest { token ->
+                _viewState.postValue(viewState.value?.copy(userToken = token))
+                if (!token.isNullOrBlank()) {
+                    fetchMe(token)
                 } else {
-                    SHORT_DELAY_BETWEEN_REFRESH
+                    _viewState.postValue(viewState.value?.copy(meData = null))
                 }
-                delay(delay)
             }
         }
 
-        // Hell tide
-        viewModelScope.launch(context = ioDispatcher) {
-            while (true) {
-                val remainingTime = refreshHellTide()
-                val delay = if (remainingTime > DELAY_THRESHOLD) {
-                    LONG_DELAY_BETWEEN_REFRESH
-                } else {
-                    SHORT_DELAY_BETWEEN_REFRESH
-                }
-                delay(delay)
-            }
+        // Initial fetch
+        viewModelScope.launch(ioDispatcher) {
+            fetchData()
+            _viewState.postValue(viewState.value?.copy(isLoading = false))
         }
     }
 
@@ -71,103 +53,135 @@ class RestApiViewModel @Inject constructor(
         when (viewAction) {
             RestApiViewAction.RefreshData -> {
                 viewModelScope.launch(ioDispatcher) {
-                    // Notify refresh starts
                     _viewState.postValue(viewState.value?.copy(isRefreshing = true))
-
-                    // Refresh all tracker data
-                    awaitAll(
-                        ::refreshWorldBoss,
-                        ::refreshHellTide
-                    )
-
-                    // Notify refresh ends
+                    fetchData()
+                    viewState.value?.userToken?.let { token ->
+                        if (token.isNotBlank()) fetchMe(token)
+                    }
                     _viewState.postValue(viewState.value?.copy(isRefreshing = false))
                 }
             }
+
+            is RestApiViewAction.SaveUserToken -> {
+                viewModelScope.launch(ioDispatcher) {
+                    apesRepository.saveUserToken(viewAction.token)
+                    fetchMe(viewAction.token)
+                }
+            }
+
+            RestApiViewAction.ClearUserToken -> {
+                viewModelScope.launch(ioDispatcher) {
+                    apesRepository.clearUserToken()
+                    _viewState.postValue(viewState.value?.copy(userToken = null, meData = null))
+                }
+            }
+
+            is RestApiViewAction.ApplyPreset -> {
+                applyPreset(viewAction.preset)
+            }
+
+            RestApiViewAction.DismissMessage -> {
+                _viewState.postValue(viewState.value?.copy(userMessage = null, errorMessage = null))
+            }
         }
     }
 
-    /**
-     * Fetch next world boss data from API then refresh UI state with it.
-     *
-     * @return Return the remaining time until next boss spawn or a negative value if an error occurred.
-     */
-    private suspend fun refreshWorldBoss(): Int {
-        var remainingTime: Int? = null
-        NetworkHelper.handleApi { diablo4API.getNextWorldBoss() }.let { response ->
-            when (response) {
+    private suspend fun fetchData() {
+        val eveningDate = ApesDateHelper.getCurrentEveningDate()
+        val fromDate = ApesDateHelper.formatDate(eveningDate)
+        val toDate = ApesDateHelper.formatDate(eveningDate.plusDays(2))
+
+        val voiceDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getVoice() }
+        val nowDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getStatusNow() }
+        val availDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getAvailability(fromDate, toDate) }
+
+        val voiceResult = voiceDeferred.await()
+        val nowResult = nowDeferred.await()
+        val availResult = availDeferred.await()
+
+        val voice = when (voiceResult) {
+            is NetworkResult.Success -> voiceResult.data
+            else -> viewState.value?.voiceData
+        }
+
+        val now = when (nowResult) {
+            is NetworkResult.Success -> nowResult.data
+            else -> viewState.value?.nowData
+        }
+
+        val avail = when (availResult) {
+            is NetworkResult.Success -> availResult.data
+            else -> viewState.value?.availabilityData
+        }
+
+        _viewState.postValue(
+            viewState.value?.copy(
+                voiceData = voice,
+                nowData = now,
+                availabilityData = avail
+            )
+        )
+    }
+
+    private suspend fun fetchMe(token: String) {
+        when (val result = apesRepository.getMe(token)) {
+            is NetworkResult.Success -> {
+                _viewState.postValue(viewState.value?.copy(meData = result.data))
+            }
+            is NetworkResult.Error -> {
+                Timber.w("Failed to get me: ${result.errorMessage}")
+                _viewState.postValue(viewState.value?.copy(meData = null))
+            }
+            is NetworkResult.Exception -> {
+                Timber.e(result.throwable, "Exception getting me")
+                _viewState.postValue(viewState.value?.copy(meData = null))
+            }
+        }
+    }
+
+    private fun applyPreset(preset: DispoPreset) {
+        viewModelScope.launch(ioDispatcher) {
+            _viewState.postValue(viewState.value?.copy(isSubmittingPreset = true))
+            val eveningDate = ApesDateHelper.formatDate(ApesDateHelper.getCurrentEveningDate())
+
+            when (val result = apesRepository.applyPreset(eveningDate, preset)) {
                 is NetworkResult.Success -> {
-                    val worldBoss = getWorldBossFromName(response.data?.name)
-                    remainingTime = response.data?.time
+                    val successMsg = localization.getString(R.string.apes_dispo_updated_success)
                     _viewState.postValue(
-                        RestApiViewState(
-                            diablo4TrackerData = trackerData.updateAndGet { previousData ->
-                                previousData.copy(
-                                    nextBoss = worldBoss,
-                                    timeUntilNextBoss = formatDurationToReadableTime(remainingTime)
-                                )
-                            }
+                        viewState.value?.copy(
+                            userMessage = successMsg,
+                            errorMessage = null
+                        )
+                    )
+                    // Immediate refresh of availability to reflect changes
+                    fetchData()
+                }
+                is NetworkResult.Error -> {
+                    val errorMsg = localization.getString(
+                        R.string.apes_dispo_update_error,
+                        result.errorMessage ?: "Erreur ${result.code}"
+                    )
+                    _viewState.postValue(
+                        viewState.value?.copy(
+                            errorMessage = errorMsg,
+                            userMessage = null
                         )
                     )
                 }
-                is NetworkResult.Error -> Timber.w("Fail to get next world boss data: ${response.errorMessage}")
-                is NetworkResult.Exception -> Timber.e(response.throwable, "Error when refreshing world boss data")
-            }
-        }
-        return remainingTime ?: -1
-    }
-
-    /**
-     * Returns the [Diablo4WorldBoss] matching given name, or null if name is null.
-     */
-    private fun getWorldBossFromName(name: String?): Diablo4WorldBoss? = name?.let { Diablo4WorldBoss.fromName(it) }
-
-    /**
-     * Fetch next hell tide data from API then refresh UI state with it.
-     *
-     * Return the remaining time until next hell tide rise or a negative value if an error occurred.
-     */
-    private suspend fun refreshHellTide(): Int {
-        var remainingTime: Int? = null
-        NetworkHelper.handleApi { diablo4API.getNextHellTide() }.let { response ->
-            when (response) {
-                is NetworkResult.Success -> {
-                    remainingTime = response.data?.time
+                is NetworkResult.Exception -> {
+                    val errorMsg = localization.getString(
+                        R.string.apes_dispo_update_error,
+                        result.throwable.localizedMessage ?: "Erreur réseau"
+                    )
                     _viewState.postValue(
-                        RestApiViewState(
-                            diablo4TrackerData = trackerData.updateAndGet { previousData ->
-                                previousData.copy(
-                                    timeUntilNextHellTide = formatDurationToReadableTime(remainingTime)
-                                )
-                            }
+                        viewState.value?.copy(
+                            errorMessage = errorMsg,
+                            userMessage = null
                         )
                     )
                 }
-                is NetworkResult.Error -> Timber.w("Fail to get next hell tide data: ${response.errorMessage}")
-                is NetworkResult.Exception -> Timber.e(response.throwable, "Error when refreshing hell tide data")
             }
+            _viewState.postValue(viewState.value?.copy(isSubmittingPreset = false))
         }
-        return remainingTime ?: -1
-    }
-
-    /**
-     * Formats and returns the duration as a String in format "XX h XX min".
-     *
-     * @param duration The duration to format.
-     */
-    private fun formatDurationToReadableTime(duration: Int?): String? {
-        if (duration == null) return null
-
-        val durationInMinutes = duration.toDuration(DurationUnit.MINUTES)
-        val hours = durationInMinutes.inWholeHours
-        val minutes = duration % MINUTES_PER_HOUR
-
-        var formattedDuration = ""
-        if (hours > 0) {
-            formattedDuration = localization.getString(R.string.duration_unit_hour, hours) + " "
-        }
-        formattedDuration += localization.getString(R.string.duration_unit_minute, minutes)
-
-        return formattedDuration
     }
 }

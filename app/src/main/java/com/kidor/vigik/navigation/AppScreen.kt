@@ -238,7 +238,8 @@ enum class AppScreen(
      */
     RestApiScreen(
         nameId = R.string.rest_api_title,
-        route = "rest_api"
+        route = "rest_api",
+        deeplinkPath = "$APP_BASE_URI/rest_api"
     ),
 
     /**

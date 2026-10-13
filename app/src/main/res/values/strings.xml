@@ -172,13 +172,31 @@
 
     <!-- REST API -->
     <string name="rest_api_title">REST API</string>
-    <string name="diablo_boss_name_ashava">Ashava, the Pestilent</string>
-    <string name="diablo_boss_name_avarice">Avarice, the God Cursed</string>
-    <string name="diablo_boss_name_wandering_death">Wandering Death, the Death Given Life</string>
-    <string name="diablo_boss_name_unknown">Unknown boss</string>
-    <string name="diablo_boss_next_spawn_label">Next possible spawn in %s</string>
-    <string name="diablo_hell_tide_next_rise_label">Next Hell tide in %s</string>
-    <string name="diablo_tracker_source_label">Source: %s</string>
+    <string name="rest_api_source_label">Source: %s</string>
+    <string name="apes_voice_section_title">Live voice</string>
+    <string name="apes_voice_empty_label">Voice channel is empty</string>
+    <string name="apes_voice_active_label">%d member(s) in voice</string>
+    <string name="apes_voice_since_label">Since %s</string>
+    <string name="apes_evening_title">Tonight (from 8:00 PM)</string>
+    <string name="apes_evening_peak_label">Peak: %1$d player(s) at %2$s</string>
+    <string name="apes_evening_no_slots">No availability declared yet</string>
+    <string name="apes_members_section_title">Group members</string>
+    <string name="apes_status_available">Available (100%)</string>
+    <string name="apes_status_probable">Probable (66%)</string>
+    <string name="apes_status_possible">Possible (33%)</string>
+    <string name="apes_status_unavailable">Unavailable (0%)</string>
+    <string name="apes_status_unknown">Unknown</string>
+    <string name="apes_dispo_section_title">My availability tonight</string>
+    <string name="apes_token_label">Personal API Token</string>
+    <string name="apes_token_hint">Paste your token (sj_...)</string>
+    <string name="apes_token_save_button">Save token</string>
+    <string name="apes_token_connected_as">Connected as: %s</string>
+    <string name="apes_token_help_text">Get your personal token from the Discord bot via private message: \"donne-moi un token pour l\'API\"</string>
+    <string name="apes_preset_present_button">Available tonight (9:30 PM - 1:00 AM · 100%)</string>
+    <string name="apes_preset_absent_button">Unavailable tonight (0%)</string>
+    <string name="apes_preset_clear_button">Clear</string>
+    <string name="apes_dispo_updated_success">Availability successfully updated!</string>
+    <string name="apes_dispo_update_error">Failed to update availability: %s</string>
     <string name="duration_unit_minute">%s min</string>
     <string name="duration_unit_hour">%s h</string>
 
@@ -209,8 +227,6 @@
     <string name="telephony_call_rejected_label">Rejected: %s</string>
 
     <!-- WIDGET -->
-    <string name="widget_diablo_label">Diablo IV WB tracker</string>
-    <string name="widget_diablo_loading_data">Loading data…</string>
-    <string name="widget_diablo_boos_spawn_label">Next possible spawn</string>
-    <string name="widget_diablo_boss_spawn_date_pattern">EEE d MMM \'at\' h:mm a</string>
+    <string name="widget_apes_label">APES — Sync Jeux</string>
+    <string name="widget_apes_loading_data">Loading data…</string>
 </resources>

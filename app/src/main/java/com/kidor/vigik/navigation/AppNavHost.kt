@@ -249,7 +249,10 @@ private fun addPagingScreens(navGraphBuilder: NavGraphBuilder) {
  * @param navGraphBuilder The builder used to construct the graph.
  */
 private fun addRestApiScreens(navGraphBuilder: NavGraphBuilder) {
-    navGraphBuilder.composable(route = AppScreen.RestApiScreen.route) {
+    navGraphBuilder.composable(
+        route = AppScreen.RestApiScreen.route,
+        deepLinks = listOf(navDeepLink { uriPattern = AppScreen.RestApiScreen.deeplinkPath })
+    ) {
         RestApiScreen()
     }
 }

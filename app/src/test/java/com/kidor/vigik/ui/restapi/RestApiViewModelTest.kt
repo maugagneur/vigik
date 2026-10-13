@@ -2,19 +2,23 @@ package com.kidor.vigik.ui.restapi
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
-import com.kidor.vigik.data.diablo.Diablo4API
-import com.kidor.vigik.data.diablo.model.Diablo4WorldBoss
-import com.kidor.vigik.data.diablo.model.GetNextHellTideResponse
-import com.kidor.vigik.data.diablo.model.GetNextWorldBossResponse
+import com.kidor.vigik.data.apes.ApesRepository
+import com.kidor.vigik.data.apes.DispoPreset
+import com.kidor.vigik.data.apes.model.AvailabilityOut
+import com.kidor.vigik.data.apes.model.DayOut
+import com.kidor.vigik.data.apes.model.MeOut
+import com.kidor.vigik.data.apes.model.NowOut
+import com.kidor.vigik.data.apes.model.VoiceOut
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.AssertUtils.assertFalse
+import com.kidor.vigik.utils.AssertUtils.assertNotNull
 import com.kidor.vigik.utils.AssertUtils.assertNull
 import com.kidor.vigik.utils.AssertUtils.assertTrue
+import com.kidor.vigik.utils.NetworkResult
 import com.kidor.vigik.utils.TestUtils.logTestName
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -22,15 +26,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import retrofit2.Response
 
 /**
  * Unit tests for [RestApiViewModel].
@@ -47,177 +47,188 @@ class RestApiViewModelTest {
     private lateinit var viewModel: RestApiViewModel
 
     @MockK
-    private lateinit var diablo4API: Diablo4API
+    private lateinit var apesRepository: ApesRepository
     @MockK
     private lateinit var localization: Localization
+
+    private val userTokenFlow = MutableStateFlow<String?>(null)
+
+    private val dummyVoice = VoiceOut(now = "2026-10-13T20:00:00Z", members = emptyList())
+    private val dummyNow = NowOut(now = "2026-10-13T20:00:00Z", timezone = "Europe/Paris", members = emptyList())
+    private val dummyAvail = AvailabilityOut(
+        fromDate = "2026-10-13",
+        toDate = "2026-10-15",
+        timezone = "Europe/Paris",
+        slots = emptyList(),
+        members = emptyList()
+    )
+    private val dummyMe = MeOut(id = "user123", displayName = "Arthur")
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { localization.getString(R.string.duration_unit_hour, 1L) } returns "1 h"
-        every { localization.getString(R.string.duration_unit_hour, 22L) } returns "22 h"
-        every { localization.getString(R.string.duration_unit_minute, 17) } returns "17 min"
-        every { localization.getString(R.string.duration_unit_minute, 41) } returns "41 min"
-        every { localization.getString(R.string.duration_unit_minute, 42) } returns "42 min"
+        every { apesRepository.getUserToken() } returns userTokenFlow
+        coEvery { apesRepository.getVoice() } returns NetworkResult.Success(200, dummyVoice)
+        coEvery { apesRepository.getStatusNow() } returns NetworkResult.Success(200, dummyNow)
+        coEvery { apesRepository.getAvailability(any(), any()) } returns NetworkResult.Success(200, dummyAvail)
+        coEvery { apesRepository.getMe(any()) } returns NetworkResult.Success(200, dummyMe)
+        coEvery { apesRepository.saveUserToken(any()) } returns Unit
+        coEvery { apesRepository.clearUserToken() } returns Unit
+        every { localization.getString(R.string.apes_dispo_updated_success) } returns "Dispos mises à jour !"
+        every { localization.getString(R.string.apes_dispo_update_error, any()) } returns "Erreur dispo"
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun buildViewModel() {
-        viewModel = RestApiViewModel(diablo4API, localization, mainCoroutineRule.testDispatcher)
+        viewModel = RestApiViewModel(
+            apesRepository = apesRepository,
+            localization = localization,
+            ioDispatcher = mainCoroutineRule.testDispatcher
+        )
     }
 
     @Test
-    fun `test emitted state at start`() {
+    fun `test initial state and fetch data`() = runTest {
         logTestName()
 
         buildViewModel()
 
-        // At start view state should have no valid data
-        val initialState = viewModel.viewState.value
-        assertNull(initialState?.diablo4TrackerData?.nextBoss, "Next boss")
-        assertNull(initialState?.diablo4TrackerData?.timeUntilNextBoss, "Time until next boss")
-        assertNull(initialState?.diablo4TrackerData?.timeUntilNextHellTide, "Time until next hell tide")
+        val state = viewModel.viewState.value
+        assertNotNull(state, "ViewState")
+        assertEquals(dummyVoice, state?.voiceData, "Voice data")
+        assertEquals(dummyNow, state?.nowData, "Now data")
+        assertEquals(dummyAvail, state?.availabilityData, "Availability data")
+        assertFalse(state?.isLoading == true, "Is loading should be false after init")
 
-        // Check that network calls are made at start
-        coVerify { diablo4API.getNextWorldBoss() }
-        coVerify { diablo4API.getNextHellTide() }
+        coVerify { apesRepository.getVoice() }
+        coVerify { apesRepository.getStatusNow() }
+        coVerify { apesRepository.getAvailability(any(), any()) }
     }
 
     @Test
-    fun `test tracker data refresh frequency`() {
+    fun `test user token observation fetches profile`() = runTest {
         logTestName()
 
-        // Mock network calls
-        coEvery { diablo4API.getNextWorldBoss() } returns Response.success(GetNextWorldBossResponse(name = "ashava", time = 1337))
-        coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 42))
+        userTokenFlow.value = "sj_test_token"
+        buildViewModel()
 
-        runTest {
-            buildViewModel()
+        val state = viewModel.viewState.value
+        assertEquals("sj_test_token", state?.userToken, "User token")
+        assertEquals(dummyMe, state?.meData, "Me data")
 
-            // Check UI state
-            val state = viewModel.viewState.value
-            assertEquals(Diablo4WorldBoss.ASHAVA, state?.diablo4TrackerData?.nextBoss, "Next boss")
-            assertEquals("22 h 17 min", state?.diablo4TrackerData?.timeUntilNextBoss, "Time until next boss")
-            assertEquals("42 min", state?.diablo4TrackerData?.timeUntilNextHellTide, "Time until next hell tide")
+        coVerify { apesRepository.getMe("sj_test_token") }
+    }
 
-            // Wait 5 minutes and 10 ms
-            delay(5 * 60 * 1000 + 10)
+    @Test
+    fun `test refresh action`() = runTest {
+        logTestName()
 
-            // World boss data should be fetched twice (every 5 minutes)
-            coVerify(exactly = 2) { diablo4API.getNextWorldBoss() }
-            // Hell tide data should be fetched 6 times (every minutes)
-            coVerify(exactly = 6) { diablo4API.getNextHellTide() }
+        buildViewModel()
 
-            // Manually stop refresh jobs
-            viewModel.viewModelScope.cancel()
+        viewModel.viewState.asFlow().test {
+            awaitItem() // initial state
+
+            viewModel.handleAction(RestApiViewAction.RefreshData)
+
+            val refreshingState = awaitItem()
+            assertTrue(refreshingState.isRefreshing, "Should be refreshing")
+
+            val dataUpdatedState = awaitItem()
+            assertTrue(dataUpdatedState.isRefreshing, "Should still be refreshing")
+
+            val completedState = awaitItem()
+            assertFalse(completedState.isRefreshing, "Should not be refreshing")
+
+            coVerify(atLeast = 2) { apesRepository.getVoice() }
+            coVerify(atLeast = 2) { apesRepository.getStatusNow() }
+            coVerify(atLeast = 2) { apesRepository.getAvailability(any(), any()) }
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `test view state when getting world boss data returns an error`() {
+    fun `test save user token`() = runTest {
         logTestName()
 
-        // Mock network calls
-        coEvery { diablo4API.getNextWorldBoss() } returns Response.error(
-            500,
-            "{\"message\": \"internal error\"}".toResponseBody("application/json".toMediaTypeOrNull())
+        buildViewModel()
+
+        viewModel.handleAction(RestApiViewAction.SaveUserToken("sj_new_token"))
+
+        coVerify { apesRepository.saveUserToken("sj_new_token") }
+        coVerify { apesRepository.getMe("sj_new_token") }
+    }
+
+    @Test
+    fun `test clear user token`() = runTest {
+        logTestName()
+
+        userTokenFlow.value = "sj_token"
+        buildViewModel()
+
+        viewModel.handleAction(RestApiViewAction.ClearUserToken)
+
+        coVerify { apesRepository.clearUserToken() }
+        assertNull(viewModel.viewState.value?.userToken, "User token should be cleared")
+        assertNull(viewModel.viewState.value?.meData, "Me data should be cleared")
+    }
+
+    @Test
+    fun `test apply preset success refreshes data and shows success message`() = runTest {
+        logTestName()
+
+        coEvery { apesRepository.applyPreset(any(), DispoPreset.PRESENT_TONIGHT) } returns NetworkResult.Success(
+            200,
+            DayOut(date = "2026-10-13", ranges = emptyList())
         )
-        coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 42))
 
-        runTest {
-            buildViewModel()
+        buildViewModel()
 
-            // Check UI state
-            val state = viewModel.viewState.value
-            assertNull(state?.diablo4TrackerData?.nextBoss, "Next boss")
-            assertNull(state?.diablo4TrackerData?.timeUntilNextBoss, "Time until next boss")
-            assertEquals("42 min", state?.diablo4TrackerData?.timeUntilNextHellTide, "Time until next hell tide")
+        viewModel.handleAction(RestApiViewAction.ApplyPreset(DispoPreset.PRESENT_TONIGHT))
 
-            // Manually stop refresh jobs
-            viewModel.viewModelScope.cancel()
-        }
+        val state = viewModel.viewState.value
+        assertEquals("Dispos mises à jour !", state?.userMessage, "User message")
+        assertNull(state?.errorMessage, "Error message")
+        assertFalse(state?.isSubmittingPreset == true, "Is submitting preset")
+
+        // Verify data was fetched again after preset
+        coVerify(atLeast = 2) { apesRepository.getAvailability(any(), any()) }
     }
 
     @Test
-    fun `test view state when getting hell tide data returns an error`() {
+    fun `test apply preset error sets error message`() = runTest {
         logTestName()
 
-        // Mock network calls
-        coEvery { diablo4API.getNextWorldBoss() } returns Response.success(GetNextWorldBossResponse(name = "ashava", time = 1337))
-        coEvery { diablo4API.getNextHellTide() } returns Response.error(
-            401,
-            "{\"message\": \"unauthorized\"}".toResponseBody("application/json".toMediaTypeOrNull())
+        coEvery { apesRepository.applyPreset(any(), DispoPreset.ABSENT_TONIGHT) } returns NetworkResult.Error(
+            code = 400,
+            errorMessage = "Invalid range"
         )
 
-        runTest {
-            buildViewModel()
+        buildViewModel()
 
-            // Check UI state
-            val state = viewModel.viewState.value
-            assertEquals(Diablo4WorldBoss.ASHAVA, state?.diablo4TrackerData?.nextBoss, "Next boss")
-            assertEquals("22 h 17 min", state?.diablo4TrackerData?.timeUntilNextBoss, "Time until next boss")
-            assertNull(state?.diablo4TrackerData?.timeUntilNextHellTide, "Time until next hell tide")
+        viewModel.handleAction(RestApiViewAction.ApplyPreset(DispoPreset.ABSENT_TONIGHT))
 
-            // Manually stop refresh jobs
-            viewModel.viewModelScope.cancel()
-        }
+        val state = viewModel.viewState.value
+        assertEquals("Erreur dispo", state?.errorMessage, "Error message")
+        assertNull(state?.userMessage, "User message")
+        assertFalse(state?.isSubmittingPreset == true, "Is submitting preset")
     }
 
     @Test
-    fun `test refresh behavior`() {
+    fun `test dismiss message clears messages`() = runTest {
         logTestName()
 
-        runTest {
-            // Mock network calls
-            coEvery { diablo4API.getNextWorldBoss() } returns Response.success(GetNextWorldBossResponse(name = "ashava", time = 1337))
-            coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 101))
+        coEvery { apesRepository.applyPreset(any(), DispoPreset.PRESENT_TONIGHT) } returns NetworkResult.Success(
+            200,
+            DayOut(date = "2026-10-13", ranges = emptyList())
+        )
 
-            buildViewModel()
+        buildViewModel()
+        viewModel.handleAction(RestApiViewAction.ApplyPreset(DispoPreset.PRESENT_TONIGHT))
+        assertNotNull(viewModel.viewState.value?.userMessage, "User message present")
 
-            viewModel.viewState.asFlow().test {
-                // Check that network calls are made at start
-                coVerify { diablo4API.getNextWorldBoss() }
-                coVerify { diablo4API.getNextHellTide() }
-
-                // Check UI state
-                awaitItem().let { state ->
-                    assertEquals(Diablo4WorldBoss.ASHAVA, state.diablo4TrackerData.nextBoss, "Next boss")
-                    assertEquals("22 h 17 min", state.diablo4TrackerData.timeUntilNextBoss, "Time until next boss")
-                    assertEquals("1 h 41 min", state.diablo4TrackerData.timeUntilNextHellTide, "Time until next hell tide")
-                    assertFalse(state.isRefreshing, "Is refreshing")
-                }
-
-                // Wait 30 sec -> nothing should happen
-                delay(30_000)
-                expectNoEvents()
-
-                // Mock network calls
-                coEvery { diablo4API.getNextWorldBoss() } returns Response.success(GetNextWorldBossResponse(name = "avarice", time = 42))
-                coEvery { diablo4API.getNextHellTide() } returns Response.success(GetNextHellTideResponse(time = 1337))
-
-                // Trigger refresh
-                viewModel.handleAction(RestApiViewAction.RefreshData)
-
-                // Check that next UI state is "refreshing"
-                assertTrue(awaitItem().isRefreshing, "Is refreshing")
-
-                // Check that next UI state is not "refreshing" anymore
-                expectMostRecentItem().let { state ->
-                    assertEquals(Diablo4WorldBoss.AVARICE, state.diablo4TrackerData.nextBoss, "Next boss")
-                    assertEquals("42 min", state.diablo4TrackerData.timeUntilNextBoss, "Time until next boss")
-                    assertEquals("22 h 17 min", state.diablo4TrackerData.timeUntilNextHellTide, "Time until next hell tide")
-                    assertFalse(state.isRefreshing, "Is refreshing")
-                }
-
-                // World boss and hell tide data should be fetched one more time
-                coVerify(exactly = 2) { diablo4API.getNextWorldBoss() }
-                coVerify(exactly = 2) { diablo4API.getNextHellTide() }
-
-                // Manually stop refresh jobs
-                viewModel.viewModelScope.cancel()
-
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
+        viewModel.handleAction(RestApiViewAction.DismissMessage)
+        assertNull(viewModel.viewState.value?.userMessage, "User message cleared")
+        assertNull(viewModel.viewState.value?.errorMessage, "Error message cleared")
     }
 }

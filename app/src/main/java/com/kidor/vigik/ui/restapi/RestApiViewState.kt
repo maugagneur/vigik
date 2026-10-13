@@ -1,14 +1,34 @@
 package com.kidor.vigik.ui.restapi
 
+import com.kidor.vigik.data.apes.model.AvailabilityOut
+import com.kidor.vigik.data.apes.model.MeOut
+import com.kidor.vigik.data.apes.model.NowOut
+import com.kidor.vigik.data.apes.model.VoiceOut
 import com.kidor.vigik.ui.base.ViewState
 
 /**
- * State that display the Diablo IV tracker data.
+ * View state for REST API (APES) screen.
  *
- * @param diablo4TrackerData The tracker's data.
- * @param isRefreshing       Pull-refresh 'isRefreshing' state.
+ * @param isRefreshing       True if pull-to-refresh is in progress.
+ * @param isLoading          True if initial load is in progress.
+ * @param voiceData          Voice channel members data.
+ * @param availabilityData   Group availability slots and statuses.
+ * @param nowData            Members status right now.
+ * @param userToken          Stored personal API token.
+ * @param meData             Authenticated user profile info.
+ * @param isSubmittingPreset True if preset update is in progress.
+ * @param userMessage        Informational message (e.g. success).
+ * @param errorMessage       Error message to display.
  */
 data class RestApiViewState(
-    val diablo4TrackerData: Diablo4TrackerData,
-    val isRefreshing: Boolean = false
+    val isRefreshing: Boolean = false,
+    val isLoading: Boolean = false,
+    val voiceData: VoiceOut? = null,
+    val availabilityData: AvailabilityOut? = null,
+    val nowData: NowOut? = null,
+    val userToken: String? = null,
+    val meData: MeOut? = null,
+    val isSubmittingPreset: Boolean = false,
+    val userMessage: String? = null,
+    val errorMessage: String? = null
 ) : ViewState
