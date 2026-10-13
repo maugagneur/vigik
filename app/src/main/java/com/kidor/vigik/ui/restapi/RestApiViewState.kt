@@ -1,5 +1,6 @@
 package com.kidor.vigik.ui.restapi
 
+import androidx.compose.runtime.Stable
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.MeOut
 import com.kidor.vigik.data.apes.model.NowOut
@@ -20,6 +21,7 @@ import com.kidor.vigik.ui.base.ViewState
  * @param userMessage        Informational message (e.g. success).
  * @param errorMessage       Error message to display.
  */
+@Stable
 data class RestApiViewState(
     val isRefreshing: Boolean = false,
     val isLoading: Boolean = false,

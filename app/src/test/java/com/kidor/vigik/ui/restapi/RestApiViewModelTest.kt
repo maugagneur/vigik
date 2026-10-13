@@ -7,7 +7,7 @@ import com.kidor.vigik.MainCoroutineRule
 import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.apes.ApesRepository
-import com.kidor.vigik.data.apes.DispoPreset
+import com.kidor.vigik.data.apes.AvailabilityPreset
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.DayOut
 import com.kidor.vigik.data.apes.model.MeOut
@@ -72,8 +72,12 @@ class RestApiViewModelTest {
         coEvery { apesRepository.getStatusNow() } returns NetworkResult.Success(200, dummyNow)
         coEvery { apesRepository.getAvailability(any(), any()) } returns NetworkResult.Success(200, dummyAvail)
         coEvery { apesRepository.getMe(any()) } returns NetworkResult.Success(200, dummyMe)
-        coEvery { apesRepository.saveUserToken(any()) } returns Unit
-        coEvery { apesRepository.clearUserToken() } returns Unit
+        coEvery { apesRepository.saveUserToken(any()) } answers {
+            userTokenFlow.value = firstArg()
+        }
+        coEvery { apesRepository.clearUserToken() } answers {
+            userTokenFlow.value = null
+        }
         every { localization.getString(R.string.apes_dispo_updated_success) } returns "Dispos mises à jour !"
         every { localization.getString(R.string.apes_dispo_update_error, any()) } returns "Erreur dispo"
     }
@@ -133,11 +137,11 @@ class RestApiViewModelTest {
             val refreshingState = awaitItem()
             assertTrue(refreshingState.isRefreshing, "Should be refreshing")
 
-            val dataUpdatedState = awaitItem()
-            assertTrue(dataUpdatedState.isRefreshing, "Should still be refreshing")
-
             val completedState = awaitItem()
             assertFalse(completedState.isRefreshing, "Should not be refreshing")
+            assertEquals(dummyVoice, completedState.voiceData, "Voice data")
+            assertEquals(dummyNow, completedState.nowData, "Now data")
+            assertEquals(dummyAvail, completedState.availabilityData, "Availability data")
 
             coVerify(atLeast = 2) { apesRepository.getVoice() }
             coVerify(atLeast = 2) { apesRepository.getStatusNow() }
@@ -177,14 +181,14 @@ class RestApiViewModelTest {
     fun `test apply preset success refreshes data and shows success message`() = runTest {
         logTestName()
 
-        coEvery { apesRepository.applyPreset(any(), DispoPreset.PRESENT_TONIGHT) } returns NetworkResult.Success(
+        coEvery { apesRepository.applyPreset(any(), AvailabilityPreset.PRESENT_TONIGHT) } returns NetworkResult.Success(
             200,
             DayOut(date = "2026-10-13", ranges = emptyList())
         )
 
         buildViewModel()
 
-        viewModel.handleAction(RestApiViewAction.ApplyPreset(DispoPreset.PRESENT_TONIGHT))
+        viewModel.handleAction(RestApiViewAction.ApplyPreset(AvailabilityPreset.PRESENT_TONIGHT))
 
         val state = viewModel.viewState.value
         assertEquals("Dispos mises à jour !", state?.userMessage, "User message")
@@ -199,14 +203,14 @@ class RestApiViewModelTest {
     fun `test apply preset error sets error message`() = runTest {
         logTestName()
 
-        coEvery { apesRepository.applyPreset(any(), DispoPreset.ABSENT_TONIGHT) } returns NetworkResult.Error(
+        coEvery { apesRepository.applyPreset(any(), AvailabilityPreset.ABSENT_TONIGHT) } returns NetworkResult.Error(
             code = 400,
             errorMessage = "Invalid range"
         )
 
         buildViewModel()
 
-        viewModel.handleAction(RestApiViewAction.ApplyPreset(DispoPreset.ABSENT_TONIGHT))
+        viewModel.handleAction(RestApiViewAction.ApplyPreset(AvailabilityPreset.ABSENT_TONIGHT))
 
         val state = viewModel.viewState.value
         assertEquals("Erreur dispo", state?.errorMessage, "Error message")
@@ -218,13 +222,13 @@ class RestApiViewModelTest {
     fun `test dismiss message clears messages`() = runTest {
         logTestName()
 
-        coEvery { apesRepository.applyPreset(any(), DispoPreset.PRESENT_TONIGHT) } returns NetworkResult.Success(
+        coEvery { apesRepository.applyPreset(any(), AvailabilityPreset.PRESENT_TONIGHT) } returns NetworkResult.Success(
             200,
             DayOut(date = "2026-10-13", ranges = emptyList())
         )
 
         buildViewModel()
-        viewModel.handleAction(RestApiViewAction.ApplyPreset(DispoPreset.PRESENT_TONIGHT))
+        viewModel.handleAction(RestApiViewAction.ApplyPreset(AvailabilityPreset.PRESENT_TONIGHT))
         assertNotNull(viewModel.viewState.value?.userMessage, "User message present")
 
         viewModel.handleAction(RestApiViewAction.DismissMessage)

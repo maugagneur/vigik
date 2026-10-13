@@ -179,7 +179,7 @@
     <string name="apes_status_unknown">Inconnu</string>
     <string name="apes_dispo_section_title">Mes disponibilités ce soir</string>
     <string name="apes_token_label">Token API personnel</string>
-    <string name="apes_token_hint">Colle ton token (sj_...)</string>
+    <string name="apes_token_hint">Colle ton token (sj_…)</string>
     <string name="apes_token_save_button">Enregistrer</string>
     <string name="apes_token_connected_as">Connecté en tant que : %s</string>
     <string name="apes_token_help_text">Obtiens ton token auprès du bot Discord en message privé : « donne-moi un token pour l\'API »</string>
@@ -221,6 +221,18 @@
     <string name="telephony_call_rejected_label">Refusés : %s</string>
 
     <!-- WIDGET -->
-    <string name="widget_apes_label">APES — Sync Jeux</string>
+    <string name="widget_apes_label">APES</string>
     <string name="widget_apes_loading_data">Chargement…</string>
+    <string name="widget_apes_voice_channel_content_description">Salon vocal</string>
+    <string name="widget_apes_voice_count">%d en vocal</string>
+    <string name="widget_apes_voice_empty">Vocal vide</string>
+    <string name="widget_apes_evening_schedule_content_description">Planning ce soir</string>
+    <string name="widget_apes_evening_title">Ce soir</string>
+    <string name="widget_apes_evening_action_check">Consulter</string>
+    <string name="widget_apes_refresh_content_description">Rafraîchir</string>
+    <string name="widget_apes_schedule_unavailable">Planning non disponible</string>
+    <string name="widget_apes_no_availability_tonight">Pas de dispos ce soir</string>
+    <string name="widget_apes_peak_players_at_time">Pic à %1$d joueurs à %2$s</string>
+    <string name="widget_apes_peak_players_tonight">Pic à %d joueurs ce soir</string>
+    <string name="widget_apes_no_confirmed_availability">Aucune dispo confirmée</string>
 </resources>

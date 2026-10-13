@@ -11,9 +11,9 @@ import com.google.gson.annotations.SerializedName
  */
 data class NowOut(
     @SerializedName("now")
-    val now: String,
+    val now: String? = null,
     @SerializedName("timezone")
-    val timezone: String,
+    val timezone: String? = null,
     @SerializedName("members")
-    val members: List<NowMember> = emptyList()
+    val members: List<NowMember>? = null
 )

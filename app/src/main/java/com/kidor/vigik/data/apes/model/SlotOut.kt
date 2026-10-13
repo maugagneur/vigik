@@ -11,9 +11,9 @@ import com.google.gson.annotations.SerializedName
  */
 data class SlotOut(
     @SerializedName("local")
-    val local: String,
+    val local: String? = null,
     @SerializedName("start_utc")
-    val startUtc: String,
+    val startUtc: String? = null,
     @SerializedName("end_utc")
-    val endUtc: String
+    val endUtc: String? = null
 )

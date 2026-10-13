@@ -11,9 +11,9 @@ import com.google.gson.annotations.SerializedName
  */
 data class RangeOut(
     @SerializedName("start")
-    val start: String,
+    val start: String? = null,
     @SerializedName("end")
-    val end: String,
+    val end: String? = null,
     @SerializedName("status")
     val status: Int? = null
 )

@@ -55,6 +55,25 @@ class ApesDateHelperTest {
 
         assertEquals("45 min", ApesDateHelper.formatDurationSince(since45Min, now), "Duration 45 min")
         assertEquals("1h 30", ApesDateHelper.formatDurationSince(since1h30, now), "Duration 1h 30")
+        assertEquals("", ApesDateHelper.formatDurationSince(null, now), "Null since returns empty")
+    }
+
+    @Test
+    fun `test parseInstant`() {
+        logTestName()
+
+        val validIso = "2026-10-13T22:13:30.460056Z"
+        val parsed = ApesDateHelper.parseInstant(validIso)
+        assertEquals(Instant.parse(validIso), parsed, "Parsed instant matches")
+
+        val nullParsed = ApesDateHelper.parseInstant(null)
+        assertEquals(null, nullParsed, "Null ISO returns null")
+
+        val blankParsed = ApesDateHelper.parseInstant("  ")
+        assertEquals(null, blankParsed, "Blank ISO returns null")
+
+        val invalidParsed = ApesDateHelper.parseInstant("not-a-date")
+        assertEquals(null, invalidParsed, "Invalid ISO returns null")
     }
 
     @Test
@@ -72,6 +91,7 @@ class ApesDateHelperTest {
         assertFalse(ApesDateHelper.isSlotInEvening("2026-10-13T18:00", eveningDate), "18h00 is before evening")
         assertFalse(ApesDateHelper.isSlotInEvening("2026-10-14T03:30", eveningDate), "03h30 next day is past evening")
         assertFalse(ApesDateHelper.isSlotInEvening("2026-10-15T21:00", eveningDate), "Two days later is not tonight")
+        assertFalse(ApesDateHelper.isSlotInEvening(null, eveningDate), "Null slot returns false")
     }
 
     @Test
@@ -81,5 +101,6 @@ class ApesDateHelperTest {
         assertEquals("21h30", ApesDateHelper.formatSlotHour("2026-10-13T21:30"), "21h30 formatted")
         assertEquals("20h00", ApesDateHelper.formatSlotHour("2026-10-13T20:00"), "20h00 formatted")
         assertEquals("0h15", ApesDateHelper.formatSlotHour("2026-10-14T00:15"), "0h15 formatted")
+        assertEquals("", ApesDateHelper.formatSlotHour(null), "Null slot returns empty")
     }
 }

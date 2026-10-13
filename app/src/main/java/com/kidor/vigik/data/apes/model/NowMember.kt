@@ -12,9 +12,9 @@ import com.google.gson.annotations.SerializedName
  */
 data class NowMember(
     @SerializedName("id")
-    val id: String,
+    val id: String? = null,
     @SerializedName("display_name")
-    val displayName: String,
+    val displayName: String? = null,
     @SerializedName("avatar_url")
     val avatarUrl: String? = null,
     @SerializedName("status")

@@ -19,11 +19,9 @@ class UpdateApesWidgetStateUseCase @Inject constructor() {
      * @param update   The operation to perform on preferences state.
      */
     suspend fun execute(context: Context, glanceId: GlanceId, update: (MutablePreferences) -> Unit) {
-        ApesWidget().apply {
-            updateAppWidgetState(context, glanceId) { preferences ->
-                update(preferences)
-            }
-            update(context, glanceId)
+        updateAppWidgetState(context, glanceId) { preferences ->
+            update(preferences)
         }
+        ApesWidget().update(context, glanceId)
     }
 }

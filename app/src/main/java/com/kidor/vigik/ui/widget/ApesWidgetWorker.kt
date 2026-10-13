@@ -5,6 +5,7 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.kidor.vigik.R
 import com.kidor.vigik.data.apes.ApesApi
 import com.kidor.vigik.data.apes.ApesDateHelper
 import com.kidor.vigik.data.apes.model.AvailabilityOut
@@ -44,9 +45,10 @@ class ApesWidgetWorker @AssistedInject constructor(
         var voiceMembersStr = ""
         when (val voiceResult = NetworkHelper.handleApi { apesApi.getVoice() }) {
             is NetworkResult.Success -> {
-                val members = voiceResult.data?.members ?: emptyList()
+                val members = voiceResult.data?.members.orEmpty()
                 voiceCount = members.size
-                voiceMembersStr = members.joinToString(separator = ", ") { it.displayName }
+                voiceMembersStr = members.mapNotNull { it.displayName?.takeIf { name -> name.isNotBlank() } }
+                    .joinToString(separator = ", ")
             }
             is NetworkResult.Error -> Timber.w("Fail to get voice data: ${voiceResult.errorMessage}")
             is NetworkResult.Exception -> Timber.e(voiceResult.throwable, "Exception getting voice data")
@@ -57,7 +59,7 @@ class ApesWidgetWorker @AssistedInject constructor(
         val fromDate = ApesDateHelper.formatDate(eveningDate)
         val toDate = ApesDateHelper.formatDate(eveningDate.plusDays(2))
 
-        var eveningSummary = "Planning non disponible"
+        var eveningSummary = context.getString(R.string.widget_apes_schedule_unavailable)
         when (val availResult = NetworkHelper.handleApi { apesApi.getAvailability(fromDate, toDate) }) {
             is NetworkResult.Success -> {
                 eveningSummary = buildEveningSummary(availResult.data)
@@ -79,18 +81,20 @@ class ApesWidgetWorker @AssistedInject constructor(
     }
 
     private fun buildEveningSummary(data: AvailabilityOut?): String {
-        if (data == null || data.slots.isEmpty() || data.members.isEmpty()) {
-            return "Pas de dispos ce soir"
+        val slots = data?.slots.orEmpty()
+        val members = data?.members.orEmpty()
+        if (data == null || slots.isEmpty() || members.isEmpty()) {
+            return context.getString(R.string.widget_apes_no_availability_tonight)
         }
 
         val eveningDate = ApesDateHelper.getCurrentEveningDate()
         var maxPlayers = 0
         var peakTimeLabel = ""
 
-        data.slots.forEachIndexed { index, slot ->
+        slots.forEachIndexed { index, slot ->
             if (ApesDateHelper.isSlotInEvening(slot.local, eveningDate)) {
-                val count = data.members.count { member ->
-                    val status = member.statuses.getOrNull(index)
+                val count = members.count { member ->
+                    val status = member.statuses?.getOrNull(index)
                     status != null && status >= STATUS_PROBABLE_THRESHOLD
                 }
                 if (count > maxPlayers) {
@@ -102,12 +106,12 @@ class ApesWidgetWorker @AssistedInject constructor(
 
         return if (maxPlayers > 0) {
             if (peakTimeLabel.isNotEmpty()) {
-                "Pic à $maxPlayers joueurs à $peakTimeLabel"
+                context.getString(R.string.widget_apes_peak_players_at_time, maxPlayers, peakTimeLabel)
             } else {
-                "Pic à $maxPlayers joueurs ce soir"
+                context.getString(R.string.widget_apes_peak_players_tonight, maxPlayers)
             }
         } else {
-            "Aucune dispo confirmée"
+            context.getString(R.string.widget_apes_no_confirmed_availability)
         }
     }
 }

@@ -63,6 +63,8 @@ class ApesWidgetWorkerTest {
             update.captured.invoke(preferences)
         }
         mockkObject(ApesWidgetStateHelper)
+        every { context.getString(any()) } returns ""
+        every { context.getString(any(), *anyVararg()) } returns ""
         every { ApesWidgetStateHelper.setLoading(preferences, any()) } returns Unit
         every { ApesWidgetStateHelper.setData(preferences, any(), any(), any()) } returns Unit
 

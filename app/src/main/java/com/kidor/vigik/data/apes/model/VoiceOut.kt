@@ -1,5 +1,6 @@
 package com.kidor.vigik.data.apes.model
 
+import androidx.compose.runtime.Stable
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -8,9 +9,10 @@ import com.google.gson.annotations.SerializedName
  * @param now     Current timestamp (UTC).
  * @param members Members in voice channel.
  */
+@Stable
 data class VoiceOut(
     @SerializedName("now")
-    val now: String,
+    val now: String? = null,
     @SerializedName("members")
-    val members: List<VoiceMember> = emptyList()
+    val members: List<VoiceMember>? = null
 )

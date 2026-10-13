@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName
  */
 data class DayOut(
     @SerializedName("date")
-    val date: String,
+    val date: String? = null,
     @SerializedName("ranges")
-    val ranges: List<RangeOut> = emptyList()
+    val ranges: List<RangeOut>? = null
 )

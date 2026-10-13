@@ -5,7 +5,7 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.apes.ApesDateHelper
 import com.kidor.vigik.data.apes.ApesRepository
-import com.kidor.vigik.data.apes.DispoPreset
+import com.kidor.vigik.data.apes.AvailabilityPreset
 import com.kidor.vigik.di.IoDispatcher
 import com.kidor.vigik.ui.base.BaseViewModel
 import com.kidor.vigik.utils.NetworkResult
@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -31,48 +32,44 @@ class RestApiViewModel @Inject constructor(
         _viewState.value = RestApiViewState(isLoading = true)
 
         // Observe user token
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             apesRepository.getUserToken().collectLatest { token ->
-                _viewState.postValue(viewState.value?.copy(userToken = token))
+                updateViewState { it.copy(userToken = token) }
                 if (!token.isNullOrBlank()) {
                     fetchMe(token)
                 } else {
-                    _viewState.postValue(viewState.value?.copy(meData = null))
+                    updateViewState { it.copy(meData = null) }
                 }
             }
         }
 
         // Initial fetch
-        viewModelScope.launch(ioDispatcher) {
+        viewModelScope.launch {
             fetchData()
-            _viewState.postValue(viewState.value?.copy(isLoading = false))
         }
     }
 
     override fun handleAction(viewAction: RestApiViewAction) {
         when (viewAction) {
             RestApiViewAction.RefreshData -> {
-                viewModelScope.launch(ioDispatcher) {
-                    _viewState.postValue(viewState.value?.copy(isRefreshing = true))
+                viewModelScope.launch {
+                    updateViewState { it.copy(isRefreshing = true) }
                     fetchData()
-                    viewState.value?.userToken?.let { token ->
-                        if (token.isNotBlank()) fetchMe(token)
+                    viewState.value?.userToken?.takeIf { it.isNotBlank() }?.let { token ->
+                        fetchMe(token)
                     }
-                    _viewState.postValue(viewState.value?.copy(isRefreshing = false))
                 }
             }
 
             is RestApiViewAction.SaveUserToken -> {
                 viewModelScope.launch(ioDispatcher) {
                     apesRepository.saveUserToken(viewAction.token)
-                    fetchMe(viewAction.token)
                 }
             }
 
             RestApiViewAction.ClearUserToken -> {
                 viewModelScope.launch(ioDispatcher) {
                     apesRepository.clearUserToken()
-                    _viewState.postValue(viewState.value?.copy(userToken = null, meData = null))
                 }
             }
 
@@ -81,7 +78,7 @@ class RestApiViewModel @Inject constructor(
             }
 
             RestApiViewAction.DismissMessage -> {
-                _viewState.postValue(viewState.value?.copy(userMessage = null, errorMessage = null))
+                updateViewState { it.copy(userMessage = null, errorMessage = null) }
             }
         }
     }
@@ -92,67 +89,70 @@ class RestApiViewModel @Inject constructor(
         val toDate = ApesDateHelper.formatDate(eveningDate.plusDays(2))
 
         val voiceDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getVoice() }
-        val nowDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getStatusNow() }
-        val availDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getAvailability(fromDate, toDate) }
+        val statusNowDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getStatusNow() }
+        val availabilityDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getAvailability(fromDate, toDate) }
 
         val voiceResult = voiceDeferred.await()
-        val nowResult = nowDeferred.await()
-        val availResult = availDeferred.await()
+        val statusNowResult = statusNowDeferred.await()
+        val availabilityResult = availabilityDeferred.await()
 
         val voice = when (voiceResult) {
             is NetworkResult.Success -> voiceResult.data
-            else -> viewState.value?.voiceData
+            else -> null
         }
 
-        val now = when (nowResult) {
-            is NetworkResult.Success -> nowResult.data
-            else -> viewState.value?.nowData
+        val statusNow = when (statusNowResult) {
+            is NetworkResult.Success -> statusNowResult.data
+            else -> null
         }
 
-        val avail = when (availResult) {
-            is NetworkResult.Success -> availResult.data
-            else -> viewState.value?.availabilityData
+        val availability = when (availabilityResult) {
+            is NetworkResult.Success -> availabilityResult.data
+            else -> null
         }
 
-        _viewState.postValue(
-            viewState.value?.copy(
-                voiceData = voice,
-                nowData = now,
-                availabilityData = avail
+        updateViewState { current ->
+            current.copy(
+                isLoading = false,
+                isRefreshing = false,
+                voiceData = voice ?: current.voiceData,
+                nowData = statusNow ?: current.nowData,
+                availabilityData = availability ?: current.availabilityData
             )
-        )
+        }
     }
 
     private suspend fun fetchMe(token: String) {
-        when (val result = apesRepository.getMe(token)) {
+        when (val result = withContext(ioDispatcher) { apesRepository.getMe(token) }) {
             is NetworkResult.Success -> {
-                _viewState.postValue(viewState.value?.copy(meData = result.data))
+                updateViewState { it.copy(meData = result.data) }
             }
             is NetworkResult.Error -> {
                 Timber.w("Failed to get me: ${result.errorMessage}")
-                _viewState.postValue(viewState.value?.copy(meData = null))
+                updateViewState { it.copy(meData = null) }
             }
             is NetworkResult.Exception -> {
                 Timber.e(result.throwable, "Exception getting me")
-                _viewState.postValue(viewState.value?.copy(meData = null))
+                updateViewState { it.copy(meData = null) }
             }
         }
     }
 
-    private fun applyPreset(preset: DispoPreset) {
-        viewModelScope.launch(ioDispatcher) {
-            _viewState.postValue(viewState.value?.copy(isSubmittingPreset = true))
+    private fun applyPreset(preset: AvailabilityPreset) {
+        viewModelScope.launch {
+            updateViewState { it.copy(isSubmittingPreset = true) }
             val eveningDate = ApesDateHelper.formatDate(ApesDateHelper.getCurrentEveningDate())
 
-            when (val result = apesRepository.applyPreset(eveningDate, preset)) {
+            when (val result = withContext(ioDispatcher) { apesRepository.applyPreset(eveningDate, preset) }) {
                 is NetworkResult.Success -> {
                     val successMsg = localization.getString(R.string.apes_dispo_updated_success)
-                    _viewState.postValue(
-                        viewState.value?.copy(
+                    updateViewState {
+                        it.copy(
                             userMessage = successMsg,
-                            errorMessage = null
+                            errorMessage = null,
+                            isSubmittingPreset = false
                         )
-                    )
+                    }
                     // Immediate refresh of availability to reflect changes
                     fetchData()
                 }
@@ -161,27 +161,28 @@ class RestApiViewModel @Inject constructor(
                         R.string.apes_dispo_update_error,
                         result.errorMessage ?: "Erreur ${result.code}"
                     )
-                    _viewState.postValue(
-                        viewState.value?.copy(
+                    updateViewState {
+                        it.copy(
                             errorMessage = errorMsg,
-                            userMessage = null
+                            userMessage = null,
+                            isSubmittingPreset = false
                         )
-                    )
+                    }
                 }
                 is NetworkResult.Exception -> {
                     val errorMsg = localization.getString(
                         R.string.apes_dispo_update_error,
                         result.throwable.localizedMessage ?: "Erreur réseau"
                     )
-                    _viewState.postValue(
-                        viewState.value?.copy(
+                    updateViewState {
+                        it.copy(
                             errorMessage = errorMsg,
-                            userMessage = null
+                            userMessage = null,
+                            isSubmittingPreset = false
                         )
-                    )
+                    }
                 }
             }
-            _viewState.postValue(viewState.value?.copy(isSubmittingPreset = false))
         }
     }
 }

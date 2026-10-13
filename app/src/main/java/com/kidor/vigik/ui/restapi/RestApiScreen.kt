@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -36,7 +37,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -45,6 +45,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -59,14 +60,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.kidor.vigik.R
 import com.kidor.vigik.data.apes.APES_API_BASE_URL
 import com.kidor.vigik.data.apes.ApesDateHelper
-import com.kidor.vigik.data.apes.DispoPreset
+import com.kidor.vigik.data.apes.AvailabilityPreset
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.MeOut
 import com.kidor.vigik.data.apes.model.MemberAvailability
@@ -75,6 +75,7 @@ import com.kidor.vigik.data.apes.model.VoiceMember
 import com.kidor.vigik.data.apes.model.VoiceOut
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.theme.dimensions
+import java.time.Instant
 
 internal const val VOICE_CARD_TEST_TAG = "voice_card"
 internal const val VOICE_EMPTY_TEST_TAG = "voice_empty"
@@ -92,10 +93,24 @@ internal const val PRESET_ABSENT_BUTTON_TEST_TAG = "preset_absent_button"
 internal const val PRESET_CLEAR_BUTTON_TEST_TAG = "preset_clear_button"
 internal const val SOURCE_LABEL_TEST_TAG = "source_label"
 
+private const val STATUS_CONFIRMED = 100
+private const val STATUS_PROBABLE_THRESHOLD = 66
+private const val STATUS_POSSIBLE_THRESHOLD = 33
+private const val STATUS_UNAVAILABLE = 0
+private const val HIGH_QUORUM_THRESHOLD = 2
+
 private val LiveGreenColor = Color(0xFF22C55E)
+
+// Quorum colors (for evening slot chips)
 private val HighQuorumColor = Color(0xFF16A34A)
 private val MediumQuorumColor = Color(0xFFEAB308)
-private val LowQuorumColor = Color(0xFF94A3B8)
+private val ZeroQuorumColor = Color(0xFF94A3B8)
+
+// Member availability status colors
+private val StatusAvailableColor = Color(0xFF16A34A)
+private val StatusProbableColor = Color(0xFFEAB308)
+private val StatusPossibleColor = Color(0xFFF97316)
+private val StatusUnknownColor = Color(0xFF94A3B8)
 
 /**
  * View displaying the section dedicated to REST API (APES - Sync Jeux).
@@ -123,6 +138,7 @@ fun RestApiScreen(
         )
 
         Scaffold(
+            contentWindowInsets = WindowInsets(0.dp),
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
         ) { paddingValues ->
             Box(
@@ -131,50 +147,14 @@ fun RestApiScreen(
                     .padding(paddingValues)
                     .pullRefresh(pullRefreshState)
             ) {
-                Column(
+                ApesContent(
+                    state = state,
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(rememberScrollState())
-                        .padding(horizontal = MaterialTheme.dimensions.commonSpaceMedium)
-                        .padding(vertical = MaterialTheme.dimensions.commonSpaceSmall),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceMedium)
-                ) {
-                    // Header Title
-                    Text(
-                        text = stringResource(id = R.string.rest_api_title),
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
-                    )
-
-                    // 1. Live Voice Section
-                    LiveVoiceCard(voiceData = state.voiceData)
-
-                    // 2. Evening Radar / Timeline Section
-                    EveningTimelineCard(availabilityData = state.availabilityData)
-
-                    // 3. User Quick Availability Declaration
-                    UserAvailabilityCard(
-                        userToken = state.userToken,
-                        meData = state.meData,
-                        isSubmitting = state.isSubmittingPreset,
-                        onSaveToken = { token -> viewModel.handleAction(RestApiViewAction.SaveUserToken(token)) },
-                        onClearToken = { viewModel.handleAction(RestApiViewAction.ClearUserToken) },
-                        onApplyPreset = { preset -> viewModel.handleAction(RestApiViewAction.ApplyPreset(preset)) }
-                    )
-
-                    // Footer Source
-                    Text(
-                        text = stringResource(id = R.string.rest_api_source_label, APES_API_BASE_URL),
-                        color = MaterialTheme.colorScheme.outline,
-                        fontSize = MaterialTheme.dimensions.textSizeSmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = MaterialTheme.dimensions.commonSpaceMedium)
-                            .testTag(SOURCE_LABEL_TEST_TAG)
-                    )
-                }
+                        .padding(all = MaterialTheme.dimensions.commonSpaceSmall),
+                    onAction = viewModel::handleAction
+                )
 
                 PullRefreshIndicator(
                     refreshing = state.isRefreshing,
@@ -183,6 +163,47 @@ fun RestApiScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ApesContent(
+    state: RestApiViewState,
+    modifier: Modifier = Modifier,
+    onAction: (RestApiViewAction) -> Unit = {}
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceMedium)
+    ) {
+        // Live Voice Section
+        LiveVoiceCard(voiceData = state.voiceData)
+
+        // Evening Radar / Timeline Section
+        EveningTimelineCard(availabilityData = state.availabilityData)
+
+        // User Quick Availability Declaration
+        UserAvailabilityCard(
+            userToken = state.userToken,
+            meData = state.meData,
+            isSubmitting = state.isSubmittingPreset,
+            onSaveToken = { token -> onAction(RestApiViewAction.SaveUserToken(token)) },
+            onClearToken = { onAction(RestApiViewAction.ClearUserToken) },
+            onApplyPreset = { preset -> onAction(RestApiViewAction.ApplyPreset(preset)) }
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Footer Source
+        Text(
+            text = stringResource(id = R.string.rest_api_source_label, APES_API_BASE_URL),
+            color = MaterialTheme.colorScheme.outline,
+            fontSize = MaterialTheme.dimensions.textSizeSmall,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(SOURCE_LABEL_TEST_TAG)
+        )
     }
 }
 
@@ -202,40 +223,36 @@ internal fun LiveVoiceCard(voiceData: VoiceOut?) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.dimensions.commonSpaceMedium)
+                .padding(MaterialTheme.dimensions.commonSpaceMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)
         ) {
+            val members = voiceData?.members.orEmpty()
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.Headset,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
-                    Text(
-                        text = stringResource(id = R.string.apes_voice_section_title),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                val hasMembers = !voiceData?.members.isNullOrEmpty()
+                Icon(
+                    imageVector = Icons.Default.Headset,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = stringResource(id = R.string.apes_voice_section_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                val hasMembers = members.isNotEmpty()
                 Box(
                     modifier = Modifier
-                        .size(10.dp)
+                        .size(12.dp)
                         .clip(CircleShape)
                         .background(if (hasMembers) LiveGreenColor else MaterialTheme.colorScheme.outline)
                 )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
-
-            val members = voiceData?.members.orEmpty()
             if (members.isEmpty()) {
                 Text(
                     text = stringResource(id = R.string.apes_voice_empty_label),
@@ -251,14 +268,18 @@ internal fun LiveVoiceCard(voiceData: VoiceOut?) {
                     fontWeight = FontWeight.SemiBold
                 )
 
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
+                val referenceInstant = remember(voiceData) {
+                    ApesDateHelper.parseInstant(voiceData?.now) ?: Instant.now()
+                }
 
                 Column(
                     modifier = Modifier.testTag(VOICE_MEMBERS_TEST_TAG),
                     verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall)
                 ) {
                     members.forEach { member ->
-                        VoiceMemberRow(member = member)
+                        key(member.id ?: member.displayName) {
+                            VoiceMemberRow(member = member, referenceInstant = referenceInstant)
+                        }
                     }
                 }
             }
@@ -267,23 +288,26 @@ internal fun LiveVoiceCard(voiceData: VoiceOut?) {
 }
 
 @Composable
-private fun VoiceMemberRow(member: VoiceMember) {
+private fun VoiceMemberRow(member: VoiceMember, referenceInstant: Instant) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        MemberAvatar(name = member.displayName, avatarUrl = member.avatarUrl, size = 32.dp)
+        MemberAvatar(
+            name = member.displayName,
+            avatarUrl = member.avatarUrl
+        )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
 
         Text(
-            text = member.displayName,
+            text = member.displayName.orEmpty(),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.weight(1f)
         )
 
-        val durationStr = ApesDateHelper.formatDurationSince(member.since)
+        val durationStr = ApesDateHelper.formatDurationSince(member.since, referenceInstant)
         if (durationStr.isNotEmpty()) {
             Text(
                 text = stringResource(id = R.string.apes_voice_since_label, durationStr),
@@ -310,24 +334,24 @@ internal fun EveningTimelineCard(availabilityData: AvailabilityOut?) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.dimensions.commonSpaceMedium)
+                .padding(MaterialTheme.dimensions.commonSpaceMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
                     imageVector = Icons.Default.Schedule,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
+                    tint = MaterialTheme.colorScheme.primary
                 )
-                Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
                 Text(
                     text = stringResource(id = R.string.apes_evening_title),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
             }
-
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
 
             val eveningDate = remember { ApesDateHelper.getCurrentEveningDate() }
             val slots = availabilityData?.slots.orEmpty()
@@ -338,98 +362,130 @@ internal fun EveningTimelineCard(availabilityData: AvailabilityOut?) {
                     .filter { (_, slot) -> ApesDateHelper.isSlotInEvening(slot.local, eveningDate) }
             }
 
-            // Calculate peak
-            var peakCount = 0
-            var peakSlotHour = ""
-            eveningSlots.forEach { (index, slot) ->
-                val count = members.count { member ->
-                    val status = member.statuses.getOrNull(index)
-                    status != null && status >= 66
-                }
-                if (count > peakCount) {
-                    peakCount = count
-                    peakSlotHour = ApesDateHelper.formatSlotHour(slot.local)
-                }
+            val (peakCount, peakSlotHour) = remember(eveningSlots, members) {
+                findPeakEveningSlot(eveningSlots, members)
             }
 
-            if (peakCount > 0) {
-                Text(
-                    text = stringResource(id = R.string.apes_evening_peak_label, peakCount, peakSlotHour),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = HighQuorumColor,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.testTag(EVENING_PEAK_TEST_TAG)
-                )
-            } else {
-                Text(
-                    text = stringResource(id = R.string.apes_evening_no_slots),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.outline,
-                    modifier = Modifier.testTag(EVENING_PEAK_TEST_TAG)
-                )
-            }
+            EveningPeakSection(peakCount = peakCount, peakSlotHour = peakSlotHour)
 
-            // Horizontal Slots Bar
             if (eveningSlots.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .horizontalScroll(rememberScrollState())
-                        .testTag(EVENING_SLOTS_TEST_TAG),
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXXSmall)
-                ) {
-                    eveningSlots.forEach { (index, slot) ->
-                        val count = members.count { member ->
-                            val status = member.statuses.getOrNull(index)
-                            status != null && status >= 66
-                        }
-                        EveningSlotChip(
-                            hourLabel = ApesDateHelper.formatSlotHour(slot.local),
-                            playerCount = count
-                        )
-                    }
-                }
+                EveningSlotsBar(eveningSlots = eveningSlots, members = members)
             }
 
-            // Group Members List
             if (members.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceMedium))
-                Text(
-                    text = stringResource(id = R.string.apes_members_section_title),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXSmall))
-
-                Column(
-                    modifier = Modifier.testTag(MEMBERS_AVAILABILITY_TEST_TAG),
-                    verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall)
-                ) {
-                    members.forEach { member ->
-                        MemberAvailabilityRow(
-                            member = member,
-                            eveningSlots = eveningSlots
-                        )
-                    }
-                }
+                MembersAvailabilitySection(members = members, eveningSlots = eveningSlots)
             }
         }
     }
 }
 
 @Composable
+private fun EveningPeakSection(peakCount: Int, peakSlotHour: String) {
+    if (peakCount > 0) {
+        Text(
+            text = stringResource(id = R.string.apes_evening_peak_label, peakCount, peakSlotHour),
+            style = MaterialTheme.typography.bodyMedium,
+            color = HighQuorumColor,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.testTag(EVENING_PEAK_TEST_TAG)
+        )
+    } else {
+        Text(
+            text = stringResource(id = R.string.apes_evening_no_slots),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.outline,
+            modifier = Modifier.testTag(EVENING_PEAK_TEST_TAG)
+        )
+    }
+}
+
+@Composable
+private fun EveningSlotsBar(
+    eveningSlots: List<Pair<Int, SlotOut>>,
+    members: List<MemberAvailability>
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .testTag(EVENING_SLOTS_TEST_TAG),
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXXSmall)
+    ) {
+        eveningSlots.forEach { (index, slot) ->
+            EveningSlotChip(
+                hourLabel = ApesDateHelper.formatSlotHour(slot.local),
+                playerCount = countAvailableMembers(members, index)
+            )
+        }
+    }
+}
+
+@Composable
+private fun MembersAvailabilitySection(
+    members: List<MemberAvailability>,
+    eveningSlots: List<Pair<Int, SlotOut>>
+) {
+    Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceXXSmall))
+    Text(
+        text = stringResource(id = R.string.apes_members_section_title),
+        style = MaterialTheme.typography.titleSmall,
+        fontWeight = FontWeight.SemiBold
+    )
+
+    Column(
+        modifier = Modifier.testTag(MEMBERS_AVAILABILITY_TEST_TAG),
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall)
+    ) {
+        members.forEach { member ->
+            MemberAvailabilityRow(
+                member = member,
+                eveningSlots = eveningSlots
+            )
+        }
+    }
+}
+
+/**
+ * Finds the peak evening slot with the highest number of available members.
+ *
+ * @param eveningSlots The list of evening slot indexes and their metadata.
+ * @param members      The list of members and their availability statuses.
+ * @return A pair containing the maximum count of available members and the formatted hour of the peak slot.
+ */
+private fun findPeakEveningSlot(
+    eveningSlots: List<Pair<Int, SlotOut>>,
+    members: List<MemberAvailability>
+): Pair<Int, String> {
+    var peakCount = 0
+    var peakSlotHour = ""
+    eveningSlots.forEach { (index, slot) ->
+        val count = countAvailableMembers(members, index)
+        if (count > peakCount) {
+            peakCount = count
+            peakSlotHour = ApesDateHelper.formatSlotHour(slot.local)
+        }
+    }
+    return peakCount to peakSlotHour
+}
+
+private fun countAvailableMembers(members: List<MemberAvailability>, slotIndex: Int): Int {
+    return members.count { member ->
+        val status = member.statuses?.getOrNull(slotIndex)
+        status != null && status >= STATUS_PROBABLE_THRESHOLD
+    }
+}
+
+@Composable
 private fun EveningSlotChip(hourLabel: String, playerCount: Int) {
     val bgColor = when {
-        playerCount >= 3 -> HighQuorumColor.copy(alpha = 0.2f)
+        playerCount >= HIGH_QUORUM_THRESHOLD -> HighQuorumColor.copy(alpha = 0.2f)
         playerCount > 0 -> MediumQuorumColor.copy(alpha = 0.2f)
         else -> MaterialTheme.colorScheme.surfaceVariant
     }
     val contentColor = when {
-        playerCount >= 3 -> HighQuorumColor
+        playerCount >= HIGH_QUORUM_THRESHOLD -> HighQuorumColor
         playerCount > 0 -> MediumQuorumColor
-        else -> LowQuorumColor
+        else -> ZeroQuorumColor
     }
 
     Column(
@@ -462,12 +518,15 @@ private fun MemberAvailabilityRow(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        MemberAvatar(name = member.displayName, avatarUrl = member.avatarUrl, size = 28.dp)
+        MemberAvatar(
+            name = member.displayName,
+            avatarUrl = member.avatarUrl
+        )
 
         Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceSmall))
 
         Text(
-            text = member.displayName,
+            text = member.displayName.orEmpty(),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Normal,
             maxLines = 1,
@@ -477,15 +536,15 @@ private fun MemberAvailabilityRow(
 
         // Availability indicator for this evening
         val maxStatusInEvening = eveningSlots.maxOfOrNull { (index, _) ->
-            member.statuses.getOrNull(index) ?: -1
+            member.statuses?.getOrNull(index) ?: -1
         } ?: -1
 
         val (statusTextRes, statusColor) = when {
-            maxStatusInEvening == 100 -> R.string.apes_status_available to HighQuorumColor
-            maxStatusInEvening >= 66 -> R.string.apes_status_probable to MediumQuorumColor
-            maxStatusInEvening >= 33 -> R.string.apes_status_possible to MediumQuorumColor
-            maxStatusInEvening == 0 -> R.string.apes_status_unavailable to MaterialTheme.colorScheme.error
-            else -> R.string.apes_status_unknown to LowQuorumColor
+            maxStatusInEvening == STATUS_CONFIRMED -> R.string.apes_status_available to StatusAvailableColor
+            maxStatusInEvening >= STATUS_PROBABLE_THRESHOLD -> R.string.apes_status_probable to StatusProbableColor
+            maxStatusInEvening >= STATUS_POSSIBLE_THRESHOLD -> R.string.apes_status_possible to StatusPossibleColor
+            maxStatusInEvening == STATUS_UNAVAILABLE -> R.string.apes_status_unavailable to MaterialTheme.colorScheme.error
+            else -> R.string.apes_status_unknown to StatusUnknownColor
         }
 
         Box(
@@ -505,7 +564,7 @@ private fun MemberAvailabilityRow(
 }
 
 /**
- * Card for personal API token input and quick presets (2.C).
+ * Card for personal API token input and quick presets.
  */
 @Composable
 @VisibleForTesting
@@ -515,7 +574,7 @@ internal fun UserAvailabilityCard(
     isSubmitting: Boolean,
     onSaveToken: (String) -> Unit,
     onClearToken: () -> Unit,
-    onApplyPreset: (DispoPreset) -> Unit
+    onApplyPreset: (AvailabilityPreset) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -527,16 +586,18 @@ internal fun UserAvailabilityCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(MaterialTheme.dimensions.commonSpaceMedium)
+                .padding(MaterialTheme.dimensions.commonSpaceMedium),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
                     imageVector = Icons.Default.CheckCircle,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.size(20.dp)
+                    tint = MaterialTheme.colorScheme.primary
                 )
-                Spacer(modifier = Modifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
                 Text(
                     text = stringResource(id = R.string.apes_dispo_section_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -544,45 +605,9 @@ internal fun UserAvailabilityCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
-
             val isConnected = !userToken.isNullOrBlank() && meData != null
 
-            if (!isConnected) {
-                // Token entry section
-                var tokenInput by remember { mutableStateOf("") }
-
-                Text(
-                    text = stringResource(id = R.string.apes_token_help_text),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.outline
-                )
-
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
-
-                OutlinedTextField(
-                    value = tokenInput,
-                    onValueChange = { tokenInput = it },
-                    label = { Text(stringResource(id = R.string.apes_token_label)) },
-                    placeholder = { Text(stringResource(id = R.string.apes_token_hint)) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TOKEN_INPUT_TEST_TAG),
-                    singleLine = true
-                )
-
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
-
-                Button(
-                    onClick = { onSaveToken(tokenInput.trim()) },
-                    enabled = tokenInput.isNotBlank(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(TOKEN_SAVE_BUTTON_TEST_TAG)
-                ) {
-                    Text(text = stringResource(id = R.string.apes_token_save_button))
-                }
-            } else {
+            if (isConnected) {
                 // Authenticated state
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -590,10 +615,10 @@ internal fun UserAvailabilityCard(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = stringResource(id = R.string.apes_token_connected_as, meData.displayName),
+                        text = stringResource(id = R.string.apes_token_connected_as, meData.displayName.orEmpty()),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = HighQuorumColor,
+                        color = StatusAvailableColor,
                         modifier = Modifier.weight(1f)
                     )
 
@@ -608,8 +633,6 @@ internal fun UserAvailabilityCard(
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.height(MaterialTheme.dimensions.commonSpaceSmall))
 
                 // The 3 user presets
                 if (isSubmitting) {
@@ -626,41 +649,89 @@ internal fun UserAvailabilityCard(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)
                     ) {
-                        // Preset 1: Présent ce soir
-                        Button(
-                            onClick = { onApplyPreset(DispoPreset.PRESENT_TONIGHT) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag(PRESET_PRESENT_BUTTON_TEST_TAG),
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-                        ) {
-                            Text(text = stringResource(id = R.string.apes_preset_present_button))
-                        }
+                        // Preset 1: Available tonight
+                        PresetButton(
+                            text = stringResource(id = R.string.apes_preset_present_button),
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            testTag = PRESET_PRESENT_BUTTON_TEST_TAG,
+                            onClick = { onApplyPreset(AvailabilityPreset.PRESENT_TONIGHT) }
+                        )
 
-                        // Preset 2: Absent ce soir
-                        OutlinedButton(
-                            onClick = { onApplyPreset(DispoPreset.ABSENT_TONIGHT) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag(PRESET_ABSENT_BUTTON_TEST_TAG)
-                        ) {
-                            Text(text = stringResource(id = R.string.apes_preset_absent_button))
-                        }
+                        // Preset 2: Not available tonight
+                        PresetButton(
+                            text = stringResource(id = R.string.apes_preset_absent_button),
+                            containerColor = MaterialTheme.colorScheme.secondary,
+                            contentColor = MaterialTheme.colorScheme.onSecondary,
+                            testTag = PRESET_ABSENT_BUTTON_TEST_TAG,
+                            onClick = { onApplyPreset(AvailabilityPreset.ABSENT_TONIGHT) }
+                        )
 
-                        // Preset 3: Effacer
-                        OutlinedButton(
-                            onClick = { onApplyPreset(DispoPreset.CLEAR) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .testTag(PRESET_CLEAR_BUTTON_TEST_TAG),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
-                        ) {
-                            Text(text = stringResource(id = R.string.apes_preset_clear_button))
-                        }
+                        // Preset 3: Remove availability
+                        PresetButton(
+                            text = stringResource(id = R.string.apes_preset_clear_button),
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            testTag = PRESET_CLEAR_BUTTON_TEST_TAG,
+                            onClick = { onApplyPreset(AvailabilityPreset.CLEAR) }
+                        )
                     }
+                }
+            } else {
+                // Token entry section
+                var tokenInput by remember { mutableStateOf("") }
+
+                Text(
+                    text = stringResource(id = R.string.apes_token_help_text),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline
+                )
+
+                OutlinedTextField(
+                    value = tokenInput,
+                    onValueChange = { tokenInput = it },
+                    label = { Text(stringResource(id = R.string.apes_token_label)) },
+                    placeholder = { Text(stringResource(id = R.string.apes_token_hint)) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TOKEN_INPUT_TEST_TAG),
+                    singleLine = true
+                )
+
+                Button(
+                    onClick = { onSaveToken(tokenInput.trim()) },
+                    enabled = tokenInput.isNotBlank(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag(TOKEN_SAVE_BUTTON_TEST_TAG)
+                ) {
+                    Text(text = stringResource(id = R.string.apes_token_save_button))
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PresetButton(
+    text: String,
+    containerColor: Color,
+    contentColor: Color,
+    testTag: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag(testTag),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = containerColor,
+            contentColor = contentColor
+        )
+    ) {
+        Text(text = text)
     }
 }
 
@@ -669,9 +740,8 @@ internal fun UserAvailabilityCard(
  */
 @Composable
 private fun MemberAvatar(
-    name: String,
+    name: String?,
     avatarUrl: String?,
-    size: Dp = 32.dp,
     modifier: Modifier = Modifier
 ) {
     val fullUrl = remember(avatarUrl) {
@@ -684,11 +754,11 @@ private fun MemberAvatar(
             "${APES_API_BASE_URL.removeSuffix("/")}$normalized"
         }
     }
-    val initials = remember(name) { name.trim().take(2).uppercase() }
+    val initials = remember(name) { name?.trim()?.take(2)?.uppercase().orEmpty() }
 
     Box(
         modifier = modifier
-            .size(size)
+            .size(32.dp)
             .clip(CircleShape)
             .background(MaterialTheme.colorScheme.primaryContainer)
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape),
@@ -712,8 +782,83 @@ private fun MemberAvatar(
     }
 }
 
-@Preview
+@Preview(widthDp = 400, heightDp = 700)
 @Composable
-private fun RestApiScreenPreview() {
-    RestApiScreen()
+private fun ApesContentWithoutTokenPreview() {
+    ApesContent(
+        state = RestApiViewState()
+    )
+}
+
+@Preview(widthDp = 400, heightDp = 700)
+@Composable
+private fun ApesContentWithTokenPreview() {
+    ApesContent(
+        state = RestApiViewState(
+            userToken = "dummy_token",
+            meData = MeOut(
+                id = "user_1",
+                displayName = "Player One"
+            )
+        )
+    )
+}
+
+@Preview(widthDp = 400, heightDp = 700)
+@Composable
+private fun ApesContentWithLiveVoiceAndEveningPreview() {
+    val eveningDate = ApesDateHelper.getCurrentEveningDate()
+    val eveningDateStr = ApesDateHelper.formatDate(eveningDate)
+    val slots = listOf(
+        SlotOut(local = "${eveningDateStr}T20:30"),
+        SlotOut(local = "${eveningDateStr}T21:00"),
+        SlotOut(local = "${eveningDateStr}T21:30"),
+        SlotOut(local = "${eveningDateStr}T22:00")
+    )
+    val members = listOf(
+        MemberAvailability(
+            id = "1",
+            displayName = "Alice",
+            statuses = listOf(STATUS_CONFIRMED, STATUS_CONFIRMED, STATUS_CONFIRMED, STATUS_PROBABLE_THRESHOLD)
+        ),
+        MemberAvailability(
+            id = "2",
+            displayName = "Bob",
+            statuses = listOf(
+                STATUS_PROBABLE_THRESHOLD,
+                STATUS_PROBABLE_THRESHOLD,
+                STATUS_POSSIBLE_THRESHOLD,
+                STATUS_UNAVAILABLE
+            )
+        ),
+        MemberAvailability(
+            id = "3",
+            displayName = "Charlie",
+            statuses = listOf(STATUS_POSSIBLE_THRESHOLD, STATUS_POSSIBLE_THRESHOLD, STATUS_UNAVAILABLE, STATUS_UNAVAILABLE)
+        )
+    )
+    val voiceMembers = listOf(
+        VoiceMember(
+            id = "1",
+            displayName = "Alice",
+            since = Instant.now().minusSeconds(2700).toString()
+        ),
+        VoiceMember(
+            id = "2",
+            displayName = "Bob",
+            since = Instant.now().minusSeconds(900).toString()
+        )
+    )
+
+    ApesContent(
+        state = RestApiViewState(
+            voiceData = VoiceOut(members = voiceMembers),
+            availabilityData = AvailabilityOut(slots = slots, members = members),
+            userToken = "dummy_token",
+            meData = MeOut(
+                id = "1",
+                displayName = "Alice"
+            )
+        )
+    )
 }

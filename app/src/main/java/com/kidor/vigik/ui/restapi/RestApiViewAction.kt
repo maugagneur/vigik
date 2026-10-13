@@ -1,6 +1,6 @@
 package com.kidor.vigik.ui.restapi
 
-import com.kidor.vigik.data.apes.DispoPreset
+import com.kidor.vigik.data.apes.AvailabilityPreset
 import com.kidor.vigik.ui.base.ViewAction
 
 /**
@@ -30,7 +30,7 @@ sealed class RestApiViewAction : ViewAction {
      *
      * @param preset The chosen preset.
      */
-    data class ApplyPreset(val preset: DispoPreset) : RestApiViewAction()
+    data class ApplyPreset(val preset: AvailabilityPreset) : RestApiViewAction()
 
     /**
      * Dismisses displayed snackbar/message.

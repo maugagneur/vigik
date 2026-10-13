@@ -188,7 +188,7 @@
     <string name="apes_status_unknown">Unknown</string>
     <string name="apes_dispo_section_title">My availability tonight</string>
     <string name="apes_token_label">Personal API Token</string>
-    <string name="apes_token_hint">Paste your token (sj_...)</string>
+    <string name="apes_token_hint">Paste your token (sj_…)</string>
     <string name="apes_token_save_button">Save token</string>
     <string name="apes_token_connected_as">Connected as: %s</string>
     <string name="apes_token_help_text">Get your personal token from the Discord bot via private message: \"donne-moi un token pour l\'API\"</string>
@@ -227,6 +227,18 @@
     <string name="telephony_call_rejected_label">Rejected: %s</string>
 
     <!-- WIDGET -->
-    <string name="widget_apes_label">APES — Sync Jeux</string>
+    <string name="widget_apes_label">APES</string>
     <string name="widget_apes_loading_data">Loading data…</string>
+    <string name="widget_apes_voice_channel_content_description">Voice channel</string>
+    <string name="widget_apes_voice_count">%d in voice</string>
+    <string name="widget_apes_voice_empty">Voice empty</string>
+    <string name="widget_apes_evening_schedule_content_description">Tonight\'s schedule</string>
+    <string name="widget_apes_evening_title">Tonight</string>
+    <string name="widget_apes_evening_action_check">Check</string>
+    <string name="widget_apes_refresh_content_description">Refresh</string>
+    <string name="widget_apes_schedule_unavailable">Schedule unavailable</string>
+    <string name="widget_apes_no_availability_tonight">No availability tonight</string>
+    <string name="widget_apes_peak_players_at_time">Peak at %1$d players at %2$s</string>
+    <string name="widget_apes_peak_players_tonight">Peak at %d players tonight</string>
+    <string name="widget_apes_no_confirmed_availability">No confirmed availability</string>
 </resources>

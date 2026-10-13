@@ -1,5 +1,3 @@
-@file:Suppress("MagicNumber")
-
 package com.kidor.vigik.ui.widget
 
 import android.content.Context
@@ -13,6 +11,7 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
@@ -50,7 +49,7 @@ private val TEXT_SECONDARY_COLOR = Color(0xFFB9BBBE)
 private val ACCENT_GREEN_COLOR = Color(0xFF57F287)
 
 /**
- * 4x1 consultative widget for APES (Sync Jeux).
+ * 4x1 consultative widget for APES.
  */
 class ApesWidget : GlanceAppWidget() {
 
@@ -113,13 +112,14 @@ private fun VoiceSection(
     voiceMembers: String,
     modifier: GlanceModifier = GlanceModifier
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier.fillMaxHeight(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             provider = ImageProvider(resId = R.drawable.ic_headset),
-            contentDescription = "Salon vocal",
+            contentDescription = context.getString(R.string.widget_apes_voice_channel_content_description),
             modifier = GlanceModifier.size(MaterialTheme.dimensions.commonSpaceLarge),
             colorFilter = ColorFilter.tint(
                 ColorProvider(if (voiceCount > 0) ACCENT_GREEN_COLOR else TEXT_SECONDARY_COLOR)
@@ -131,13 +131,17 @@ private fun VoiceSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (voiceCount > 0) "$voiceCount en vocal" else "Vocal vide",
+                text = if (voiceCount > 0) {
+                    context.getString(R.string.widget_apes_voice_count, voiceCount)
+                } else {
+                    context.getString(R.string.widget_apes_voice_empty)
+                },
                 style = TextStyle(
                     color = ColorProvider(if (voiceCount > 0) ACCENT_GREEN_COLOR else TEXT_PRIMARY_COLOR),
                     fontSize = MaterialTheme.dimensions.textSizeSmall,
                     fontWeight = FontWeight.Bold
                 ),
-                maxLines = 1
+                maxLines = 2
             )
             if (voiceMembers.isNotEmpty()) {
                 Text(
@@ -146,7 +150,7 @@ private fun VoiceSection(
                         color = ColorProvider(TEXT_SECONDARY_COLOR),
                         fontSize = MaterialTheme.dimensions.textSizeXXSmall
                     ),
-                    maxLines = 1
+                    maxLines = 2
                 )
             }
         }
@@ -158,13 +162,14 @@ private fun EveningSection(
     summary: String,
     modifier: GlanceModifier = GlanceModifier
 ) {
+    val context = LocalContext.current
     Row(
         modifier = modifier.fillMaxHeight(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             provider = ImageProvider(resId = R.drawable.ic_calendar),
-            contentDescription = "Planning ce soir",
+            contentDescription = context.getString(R.string.widget_apes_evening_schedule_content_description),
             modifier = GlanceModifier.size(MaterialTheme.dimensions.commonSpaceLarge),
             colorFilter = ColorFilter.tint(ColorProvider(TEXT_SECONDARY_COLOR))
         )
@@ -174,22 +179,22 @@ private fun EveningSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Ce soir",
+                text = context.getString(R.string.widget_apes_evening_title),
                 style = TextStyle(
                     color = ColorProvider(TEXT_PRIMARY_COLOR),
                     fontSize = MaterialTheme.dimensions.textSizeSmall,
                     fontWeight = FontWeight.Bold
                 ),
-                maxLines = 1
+                maxLines = 2
             )
             Text(
-                text = summary.ifEmpty { "Consulter" },
+                text = summary.ifEmpty { context.getString(R.string.widget_apes_evening_action_check) },
                 style = TextStyle(
                     color = ColorProvider(TEXT_SECONDARY_COLOR),
                     fontSize = MaterialTheme.dimensions.textSizeXXSmall,
                     textAlign = TextAlign.Start
                 ),
-                maxLines = 1
+                maxLines = 2
             )
         }
     }
@@ -197,6 +202,7 @@ private fun EveningSection(
 
 @Composable
 private fun RefreshButton(isLoading: Boolean) {
+    val context = LocalContext.current
     Box(
         modifier = GlanceModifier
             .size(MaterialTheme.dimensions.commonSpaceXXLarge)
@@ -211,7 +217,7 @@ private fun RefreshButton(isLoading: Boolean) {
         } else {
             Image(
                 provider = ImageProvider(resId = R.drawable.ic_refresh),
-                contentDescription = "Actualiser",
+                contentDescription = context.getString(R.string.widget_apes_refresh_content_description),
                 modifier = GlanceModifier.size(MaterialTheme.dimensions.commonSpaceLarge),
                 colorFilter = ColorFilter.tint(ColorProvider(TEXT_PRIMARY_COLOR))
             )

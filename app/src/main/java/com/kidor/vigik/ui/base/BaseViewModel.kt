@@ -62,14 +62,10 @@ open class BaseViewModel<VIEW_ACTION : ViewAction, VIEW_STATE : ViewState, VIEW_
      * @param update The operation to perform on view state.
      */
     protected fun updateViewState(update: (VIEW_STATE) -> VIEW_STATE) {
-        viewState.value.let { currentViewState ->
-            if (currentViewState == null) {
-                Timber.w("Current view state is null, please initialize it before trying to update it")
-            } else {
-                viewModelScope.launch {
-                    _viewState.value = update(currentViewState)
-                }
-            }
+        viewModelScope.launch {
+            _viewState.value?.let { currentViewState ->
+                _viewState.value = update(currentViewState)
+            } ?: Timber.w("Current view state is null, please initialize it before trying to update it")
         }
     }
 }

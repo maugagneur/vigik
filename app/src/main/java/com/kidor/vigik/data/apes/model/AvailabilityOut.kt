@@ -1,5 +1,6 @@
 package com.kidor.vigik.data.apes.model
 
+import androidx.compose.runtime.Stable
 import com.google.gson.annotations.SerializedName
 
 /**
@@ -11,15 +12,16 @@ import com.google.gson.annotations.SerializedName
  * @param slots    List of slots.
  * @param members  List of member availabilities.
  */
+@Stable
 data class AvailabilityOut(
     @SerializedName("from_date")
-    val fromDate: String,
+    val fromDate: String? = null,
     @SerializedName("to_date")
-    val toDate: String,
+    val toDate: String? = null,
     @SerializedName("timezone")
-    val timezone: String,
+    val timezone: String? = null,
     @SerializedName("slots")
-    val slots: List<SlotOut> = emptyList(),
+    val slots: List<SlotOut>? = null,
     @SerializedName("members")
-    val members: List<MemberAvailability> = emptyList()
+    val members: List<MemberAvailability>? = null
 )
