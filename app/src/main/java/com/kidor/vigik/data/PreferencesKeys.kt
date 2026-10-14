@@ -35,6 +35,16 @@ object PreferencesKeys {
     val APES_USER_TOKEN: Preferences.Key<String> = stringPreferencesKey("apes_user_token_key")
 
     /**
+     * APES preset start time for PRESENT_TONIGHT preset (format "HH:mm").
+     */
+    val APES_PRESET_START_TIME: Preferences.Key<String> = stringPreferencesKey("apes_preset_start_time_key")
+
+    /**
+     * APES preset end time for PRESENT_TONIGHT preset (format "HH:mm").
+     */
+    val APES_PRESET_END_TIME: Preferences.Key<String> = stringPreferencesKey("apes_preset_end_time_key")
+
+    /**
      * APES widget preference to indicate if the widget is currently refreshing its data.
      */
     val WIDGET_APES_IS_LOADING: Preferences.Key<Boolean> = booleanPreferencesKey("widget_apes_is_loading_key")

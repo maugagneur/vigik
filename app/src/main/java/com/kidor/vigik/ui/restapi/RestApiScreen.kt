@@ -26,26 +26,37 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Headset
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,6 +66,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -67,6 +79,8 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.apes.APES_API_BASE_URL
 import com.kidor.vigik.data.apes.ApesDateHelper
 import com.kidor.vigik.data.apes.AvailabilityPreset
+import com.kidor.vigik.data.apes.DEFAULT_PRESET_END_TIME
+import com.kidor.vigik.data.apes.DEFAULT_PRESET_START_TIME
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.MeOut
 import com.kidor.vigik.data.apes.model.MemberAvailability
@@ -76,6 +90,7 @@ import com.kidor.vigik.data.apes.model.VoiceOut
 import com.kidor.vigik.ui.base.ObserveViewState
 import com.kidor.vigik.ui.theme.dimensions
 import java.time.Instant
+import java.util.Locale
 
 internal const val VOICE_CARD_TEST_TAG = "voice_card"
 internal const val VOICE_EMPTY_TEST_TAG = "voice_empty"
@@ -91,6 +106,7 @@ internal const val TOKEN_LOGOUT_BUTTON_TEST_TAG = "token_logout_button"
 internal const val PRESET_PRESENT_BUTTON_TEST_TAG = "preset_present_button"
 internal const val PRESET_ABSENT_BUTTON_TEST_TAG = "preset_absent_button"
 internal const val PRESET_CLEAR_BUTTON_TEST_TAG = "preset_clear_button"
+internal const val PRESET_SETTINGS_BUTTON_TEST_TAG = "preset_settings_button"
 internal const val SOURCE_LABEL_TEST_TAG = "source_label"
 
 private const val STATUS_CONFIRMED = 100
@@ -187,9 +203,14 @@ private fun ApesContent(
             userToken = state.userToken,
             meData = state.meData,
             isSubmitting = state.isSubmittingPreset,
+            presetStartTime = state.presetStartTime,
+            presetEndTime = state.presetEndTime,
             onSaveToken = { token -> onAction(RestApiViewAction.SaveUserToken(token)) },
             onClearToken = { onAction(RestApiViewAction.ClearUserToken) },
-            onApplyPreset = { preset -> onAction(RestApiViewAction.ApplyPreset(preset)) }
+            onApplyPreset = { preset -> onAction(RestApiViewAction.ApplyPreset(preset)) },
+            onSavePresetTimes = { startTime, endTime ->
+                onAction(RestApiViewAction.SavePresetTimes(startTime, endTime))
+            }
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -262,7 +283,11 @@ internal fun LiveVoiceCard(voiceData: VoiceOut?) {
                 )
             } else {
                 Text(
-                    text = stringResource(id = R.string.apes_voice_active_label, members.size),
+                    text = pluralStringResource(
+                        id = R.plurals.apes_voice_active_label,
+                        count = members.size,
+                        members.size
+                    ),
                     style = MaterialTheme.typography.bodySmall,
                     color = LiveGreenColor,
                     fontWeight = FontWeight.SemiBold
@@ -383,7 +408,12 @@ internal fun EveningTimelineCard(availabilityData: AvailabilityOut?) {
 private fun EveningPeakSection(peakCount: Int, peakSlotHour: String) {
     if (peakCount > 0) {
         Text(
-            text = stringResource(id = R.string.apes_evening_peak_label, peakCount, peakSlotHour),
+            text = pluralStringResource(
+                id = R.plurals.apes_evening_peak_label,
+                count = peakCount,
+                peakCount,
+                peakSlotHour
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = HighQuorumColor,
             fontWeight = FontWeight.Bold,
@@ -572,10 +602,15 @@ internal fun UserAvailabilityCard(
     userToken: String?,
     meData: MeOut?,
     isSubmitting: Boolean,
+    presetStartTime: String = DEFAULT_PRESET_START_TIME,
+    presetEndTime: String = DEFAULT_PRESET_END_TIME,
     onSaveToken: (String) -> Unit,
     onClearToken: () -> Unit,
-    onApplyPreset: (AvailabilityPreset) -> Unit
+    onApplyPreset: (AvailabilityPreset) -> Unit,
+    onSavePresetTimes: (String, String) -> Unit = { _, _ -> }
 ) {
+    var showTimeRangeDialog by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -589,7 +624,10 @@ internal fun UserAvailabilityCard(
                 .padding(MaterialTheme.dimensions.commonSpaceMedium),
             verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceSmall)
         ) {
+            val isConnected = !userToken.isNullOrBlank() && meData != null
+
             Row(
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceXSmall),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -600,12 +638,23 @@ internal fun UserAvailabilityCard(
                 )
                 Text(
                     text = stringResource(id = R.string.apes_dispo_section_title),
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
+                if (isConnected) {
+                    IconButton(
+                        onClick = { showTimeRangeDialog = true },
+                        modifier = Modifier.testTag(PRESET_SETTINGS_BUTTON_TEST_TAG)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = stringResource(id = R.string.apes_preset_settings_button_description),
+                            tint = MaterialTheme.colorScheme.outline
+                        )
+                    }
+                }
             }
-
-            val isConnected = !userToken.isNullOrBlank() && meData != null
 
             if (isConnected) {
                 // Authenticated state
@@ -651,7 +700,11 @@ internal fun UserAvailabilityCard(
                     ) {
                         // Preset 1: Available tonight
                         PresetButton(
-                            text = stringResource(id = R.string.apes_preset_present_button),
+                            text = stringResource(
+                                id = R.string.apes_preset_present_button,
+                                presetStartTime,
+                                presetEndTime
+                            ),
                             containerColor = MaterialTheme.colorScheme.primary,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                             testTag = PRESET_PRESENT_BUTTON_TEST_TAG,
@@ -710,7 +763,122 @@ internal fun UserAvailabilityCard(
             }
         }
     }
+
+    if (showTimeRangeDialog) {
+        TimeRangePickerDialog(
+            initialStartTime = presetStartTime,
+            initialEndTime = presetEndTime,
+            onDismiss = { showTimeRangeDialog = false },
+            onConfirm = { startTime, endTime ->
+                showTimeRangeDialog = false
+                onSavePresetTimes(startTime, endTime)
+            }
+        )
+    }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TimeRangePickerDialog(
+    initialStartTime: String,
+    initialEndTime: String,
+    onDismiss: () -> Unit,
+    onConfirm: (startTime: String, endTime: String) -> Unit
+) {
+    val (startHour, startMinute) = remember(initialStartTime) {
+        parseHourMinute(initialStartTime)
+    }
+    val (endHour, endMinute) = remember(initialEndTime) {
+        parseHourMinute(initialEndTime)
+    }
+
+    val startPickerState = rememberTimePickerState(
+        initialHour = startHour,
+        initialMinute = startMinute,
+        is24Hour = true
+    )
+    val endPickerState = rememberTimePickerState(
+        initialHour = endHour,
+        initialMinute = endMinute,
+        is24Hour = true
+    )
+
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = stringResource(id = R.string.apes_preset_settings_dialog_title),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.commonSpaceMedium)
+            ) {
+                SingleChoiceSegmentedButtonRow(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    SegmentedButton(
+                        selected = selectedTabIndex == 0,
+                        onClick = { selectedTabIndex = 0 },
+                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2)
+                    ) {
+                        Text(
+                            text = stringResource(
+                                id = R.string.apes_preset_settings_start_tab,
+                                startPickerState.formattedTime
+                            )
+                        )
+                    }
+                    SegmentedButton(
+                        selected = selectedTabIndex == 1,
+                        onClick = { selectedTabIndex = 1 },
+                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2)
+                    ) {
+                        Text(
+                            text = stringResource(
+                                id = R.string.apes_preset_settings_end_tab,
+                                endPickerState.formattedTime
+                            )
+                        )
+                    }
+                }
+
+                if (selectedTabIndex == 0) {
+                    TimePicker(state = startPickerState)
+                } else {
+                    TimePicker(state = endPickerState)
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirm(startPickerState.formattedTime, endPickerState.formattedTime)
+                }
+            ) {
+                Text(text = stringResource(id = R.string.apes_preset_settings_save).uppercase())
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(text = stringResource(id = R.string.apes_preset_settings_cancel).uppercase())
+            }
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+private val TimePickerState.formattedTime: String
+    get() = String.format(Locale.ROOT, "%02d:%02d", hour, minute)
+
+private fun parseHourMinute(time: String): Pair<Int, Int> =
+    time.substringBefore(':').toInt() to time.substringAfter(':').toInt()
 
 @Composable
 private fun PresetButton(

@@ -113,6 +113,7 @@ class RestApiViewTest {
             onNodeWithTag(TOKEN_INPUT_TEST_TAG).assertIsDisplayed()
             onNodeWithTag(TOKEN_SAVE_BUTTON_TEST_TAG).assertIsDisplayed()
             onNodeWithTag(PRESET_PRESENT_BUTTON_TEST_TAG).assertDoesNotExist()
+            onNodeWithTag(PRESET_SETTINGS_BUTTON_TEST_TAG).assertDoesNotExist()
         }
     }
 
@@ -135,6 +136,7 @@ class RestApiViewTest {
 
             onNodeWithTag(TOKEN_CARD_TEST_TAG).assertIsDisplayed()
             onNodeWithTag(TOKEN_INPUT_TEST_TAG).assertDoesNotExist()
+            onNodeWithTag(PRESET_SETTINGS_BUTTON_TEST_TAG).assertIsDisplayed()
             onNodeWithTag(PRESET_PRESENT_BUTTON_TEST_TAG).assertIsDisplayed()
             onNodeWithTag(PRESET_ABSENT_BUTTON_TEST_TAG).assertIsDisplayed()
             onNodeWithTag(PRESET_CLEAR_BUTTON_TEST_TAG).assertIsDisplayed()

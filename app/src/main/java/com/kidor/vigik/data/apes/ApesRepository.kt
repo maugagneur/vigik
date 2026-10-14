@@ -28,4 +28,17 @@ interface ApesRepository {
     suspend fun getMe(token: String): NetworkResult<MeOut>
     /** Applies a quick preset for given date. */
     suspend fun applyPreset(date: String, preset: AvailabilityPreset): NetworkResult<DayOut>
+    /** Observes saved preset start time. */
+    fun getPresetStartTime(): Flow<String>
+    /** Observes saved preset end time. */
+    fun getPresetEndTime(): Flow<String>
+    /** Saves preset start and end times into datastore preferences. */
+    suspend fun savePresetTimes(startTime: String, endTime: String)
 }
+
+/** Default start time for PRESENT_TONIGHT preset. */
+const val DEFAULT_PRESET_START_TIME = "21:30"
+
+/** Default end time for PRESENT_TONIGHT preset. */
+const val DEFAULT_PRESET_END_TIME = "01:00"
+

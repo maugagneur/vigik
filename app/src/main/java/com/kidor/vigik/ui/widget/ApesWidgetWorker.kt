@@ -106,9 +106,18 @@ class ApesWidgetWorker @AssistedInject constructor(
 
         return if (maxPlayers > 0) {
             if (peakTimeLabel.isNotEmpty()) {
-                context.getString(R.string.widget_apes_peak_players_at_time, maxPlayers, peakTimeLabel)
+                context.resources.getQuantityString(
+                    R.plurals.widget_apes_peak_players_at_time,
+                    maxPlayers,
+                    maxPlayers,
+                    peakTimeLabel
+                )
             } else {
-                context.getString(R.string.widget_apes_peak_players_tonight, maxPlayers)
+                context.resources.getQuantityString(
+                    R.plurals.widget_apes_peak_players_tonight,
+                    maxPlayers,
+                    maxPlayers
+                )
             }
         } else {
             context.getString(R.string.widget_apes_no_confirmed_availability)

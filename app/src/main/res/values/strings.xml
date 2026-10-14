@@ -175,10 +175,16 @@
     <string name="rest_api_source_label">Source: %s</string>
     <string name="apes_voice_section_title">Live voice</string>
     <string name="apes_voice_empty_label">Voice channel is empty</string>
-    <string name="apes_voice_active_label">%d member(s) in voice</string>
+    <plurals name="apes_voice_active_label">
+        <item quantity="one">%d member in voice</item>
+        <item quantity="other">%d members in voice</item>
+    </plurals>
     <string name="apes_voice_since_label">Since %s</string>
     <string name="apes_evening_title">Tonight (from 8:00 PM)</string>
-    <string name="apes_evening_peak_label">Peak: %1$d player(s) at %2$s</string>
+    <plurals name="apes_evening_peak_label">
+        <item quantity="one">Peak: %1$d player at %2$s</item>
+        <item quantity="other">Peak: %1$d players at %2$s</item>
+    </plurals>
     <string name="apes_evening_no_slots">No availability declared yet</string>
     <string name="apes_members_section_title">Group members</string>
     <string name="apes_status_available">Available (100%)</string>
@@ -192,7 +198,14 @@
     <string name="apes_token_save_button">Save token</string>
     <string name="apes_token_connected_as">Connected as: %s</string>
     <string name="apes_token_help_text">Get your personal token from the Discord bot via private message: \"donne-moi un token pour l\'API\"</string>
-    <string name="apes_preset_present_button">Available tonight (9:30 PM - 1:00 AM · 100%)</string>
+    <string name="apes_preset_present_button">Available tonight (%1$s - %2$s · 100%%)</string>
+    <string name="apes_preset_settings_dialog_title">Preset times configuration</string>
+    <string name="apes_preset_settings_start_tab">Start: %s</string>
+    <string name="apes_preset_settings_end_tab">End: %s</string>
+    <string name="apes_preset_settings_button_description">Configure preset times</string>
+    <string name="apes_preset_settings_save">Save</string>
+    <string name="apes_preset_settings_cancel">Cancel</string>
+    <string name="apes_preset_times_updated_success">Preset times updated</string>
     <string name="apes_preset_absent_button">Unavailable tonight (0%)</string>
     <string name="apes_preset_clear_button">Clear</string>
     <string name="apes_dispo_updated_success">Availability successfully updated!</string>
@@ -238,7 +251,13 @@
     <string name="widget_apes_refresh_content_description">Refresh</string>
     <string name="widget_apes_schedule_unavailable">Schedule unavailable</string>
     <string name="widget_apes_no_availability_tonight">No availability tonight</string>
-    <string name="widget_apes_peak_players_at_time">Peak at %1$d players at %2$s</string>
-    <string name="widget_apes_peak_players_tonight">Peak at %d players tonight</string>
+    <plurals name="widget_apes_peak_players_at_time">
+        <item quantity="one">Peak at %1$d player at %2$s</item>
+        <item quantity="other">Peak at %1$d players at %2$s</item>
+    </plurals>
+    <plurals name="widget_apes_peak_players_tonight">
+        <item quantity="one">Peak at %d player tonight</item>
+        <item quantity="other">Peak at %d players tonight</item>
+    </plurals>
     <string name="widget_apes_no_confirmed_availability">No confirmed availability</string>
 </resources>

@@ -8,6 +8,8 @@ import com.kidor.vigik.R
 import com.kidor.vigik.data.Localization
 import com.kidor.vigik.data.apes.ApesRepository
 import com.kidor.vigik.data.apes.AvailabilityPreset
+import com.kidor.vigik.data.apes.DEFAULT_PRESET_END_TIME
+import com.kidor.vigik.data.apes.DEFAULT_PRESET_START_TIME
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.DayOut
 import com.kidor.vigik.data.apes.model.MeOut
@@ -52,6 +54,8 @@ class RestApiViewModelTest {
     private lateinit var localization: Localization
 
     private val userTokenFlow = MutableStateFlow<String?>(null)
+    private val presetStartTimeFlow = MutableStateFlow(DEFAULT_PRESET_START_TIME)
+    private val presetEndTimeFlow = MutableStateFlow(DEFAULT_PRESET_END_TIME)
 
     private val dummyVoice = VoiceOut(now = "2026-10-13T20:00:00Z", members = emptyList())
     private val dummyNow = NowOut(now = "2026-10-13T20:00:00Z", timezone = "Europe/Paris", members = emptyList())
@@ -68,6 +72,8 @@ class RestApiViewModelTest {
     fun setUp() {
         MockKAnnotations.init(this)
         every { apesRepository.getUserToken() } returns userTokenFlow
+        every { apesRepository.getPresetStartTime() } returns presetStartTimeFlow
+        every { apesRepository.getPresetEndTime() } returns presetEndTimeFlow
         coEvery { apesRepository.getVoice() } returns NetworkResult.Success(200, dummyVoice)
         coEvery { apesRepository.getStatusNow() } returns NetworkResult.Success(200, dummyNow)
         coEvery { apesRepository.getAvailability(any(), any()) } returns NetworkResult.Success(200, dummyAvail)
@@ -78,8 +84,13 @@ class RestApiViewModelTest {
         coEvery { apesRepository.clearUserToken() } answers {
             userTokenFlow.value = null
         }
+        coEvery { apesRepository.savePresetTimes(any(), any()) } answers {
+            presetStartTimeFlow.value = firstArg()
+            presetEndTimeFlow.value = secondArg()
+        }
         every { localization.getString(R.string.apes_dispo_updated_success) } returns "Dispos mises à jour !"
         every { localization.getString(R.string.apes_dispo_update_error, any()) } returns "Erreur dispo"
+        every { localization.getString(R.string.apes_preset_times_updated_success) } returns "Horaires du preset mis à jour"
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -234,5 +245,19 @@ class RestApiViewModelTest {
         viewModel.handleAction(RestApiViewAction.DismissMessage)
         assertNull(viewModel.viewState.value?.userMessage, "User message cleared")
         assertNull(viewModel.viewState.value?.errorMessage, "Error message cleared")
+    }
+
+    @Test
+    fun `test save preset times updates state and repository`() = runTest {
+        logTestName()
+
+        buildViewModel()
+
+        viewModel.handleAction(RestApiViewAction.SavePresetTimes("20:00", "23:30"))
+
+        coVerify { apesRepository.savePresetTimes("20:00", "23:30") }
+        assertEquals("Horaires du preset mis à jour", viewModel.viewState.value?.userMessage, "User message")
+        assertEquals("20:00", viewModel.viewState.value?.presetStartTime, "Preset start time")
+        assertEquals("23:30", viewModel.viewState.value?.presetEndTime, "Preset end time")
     }
 }

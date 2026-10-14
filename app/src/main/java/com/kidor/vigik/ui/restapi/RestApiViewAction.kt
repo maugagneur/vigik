@@ -33,6 +33,14 @@ sealed class RestApiViewAction : ViewAction {
     data class ApplyPreset(val preset: AvailabilityPreset) : RestApiViewAction()
 
     /**
+     * Saves user preset start and end times for tonight.
+     *
+     * @param startTime The start time in "HH:mm" format.
+     * @param endTime   The end time in "HH:mm" format.
+     */
+    data class SavePresetTimes(val startTime: String, val endTime: String) : RestApiViewAction()
+
+    /**
      * Dismisses displayed snackbar/message.
      */
     data object DismissMessage : RestApiViewAction()

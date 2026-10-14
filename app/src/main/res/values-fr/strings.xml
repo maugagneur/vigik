@@ -166,10 +166,16 @@
     <string name="rest_api_source_label">Source : %s</string>
     <string name="apes_voice_section_title">Salon vocal en direct</string>
     <string name="apes_voice_empty_label">Le salon vocal est vide</string>
-    <string name="apes_voice_active_label">%d membre(s) en vocal</string>
+    <plurals name="apes_voice_active_label">
+        <item quantity="one">%d membre en vocal</item>
+        <item quantity="other">%d membres en vocal</item>
+    </plurals>
     <string name="apes_voice_since_label">Depuis %s</string>
     <string name="apes_evening_title">Ce soir (dès 20h00)</string>
-    <string name="apes_evening_peak_label">Pic : %1$d joueur(s) à %2$s</string>
+    <plurals name="apes_evening_peak_label">
+        <item quantity="one">Pic : %1$d joueur à %2$s</item>
+        <item quantity="other">Pic : %1$d joueurs à %2$s</item>
+    </plurals>
     <string name="apes_evening_no_slots">Aucune disponibilité déclarée pour le moment</string>
     <string name="apes_members_section_title">Membres du groupe</string>
     <string name="apes_status_available">Disponible (100%)</string>
@@ -183,7 +189,14 @@
     <string name="apes_token_save_button">Enregistrer</string>
     <string name="apes_token_connected_as">Connecté en tant que : %s</string>
     <string name="apes_token_help_text">Obtiens ton token auprès du bot Discord en message privé : « donne-moi un token pour l\'API »</string>
-    <string name="apes_preset_present_button">Présent ce soir (21h30 à 01h00 · 100%)</string>
+    <string name="apes_preset_present_button">Présent ce soir (%1$s à %2$s · 100%%)</string>
+    <string name="apes_preset_settings_dialog_title">Configuration du preset</string>
+    <string name="apes_preset_settings_start_tab">Début : %s</string>
+    <string name="apes_preset_settings_end_tab">Fin : %s</string>
+    <string name="apes_preset_settings_button_description">Configurer les horaires du preset</string>
+    <string name="apes_preset_settings_save">Enregistrer</string>
+    <string name="apes_preset_settings_cancel">Annuler</string>
+    <string name="apes_preset_times_updated_success">Horaires du preset mis à jour</string>
     <string name="apes_preset_absent_button">Absent ce soir (0%)</string>
     <string name="apes_preset_clear_button">Effacer</string>
     <string name="apes_dispo_updated_success">Disponibilités mises à jour avec succès !</string>
@@ -232,7 +245,13 @@
     <string name="widget_apes_refresh_content_description">Rafraîchir</string>
     <string name="widget_apes_schedule_unavailable">Planning non disponible</string>
     <string name="widget_apes_no_availability_tonight">Pas de dispos ce soir</string>
-    <string name="widget_apes_peak_players_at_time">Pic à %1$d joueurs à %2$s</string>
-    <string name="widget_apes_peak_players_tonight">Pic à %d joueurs ce soir</string>
+    <plurals name="widget_apes_peak_players_at_time">
+        <item quantity="one">Pic à %1$d joueur à %2$s</item>
+        <item quantity="other">Pic à %1$d joueurs à %2$s</item>
+    </plurals>
+    <plurals name="widget_apes_peak_players_tonight">
+        <item quantity="one">Pic à %d joueur ce soir</item>
+        <item quantity="other">Pic à %d joueurs ce soir</item>
+    </plurals>
     <string name="widget_apes_no_confirmed_availability">Aucune dispo confirmée</string>
 </resources>

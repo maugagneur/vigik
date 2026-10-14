@@ -43,6 +43,18 @@ class RestApiViewModel @Inject constructor(
             }
         }
 
+        // Observe preset start and end times
+        viewModelScope.launch {
+            apesRepository.getPresetStartTime().collectLatest { startTime ->
+                updateViewState { it.copy(presetStartTime = startTime) }
+            }
+        }
+        viewModelScope.launch {
+            apesRepository.getPresetEndTime().collectLatest { endTime ->
+                updateViewState { it.copy(presetEndTime = endTime) }
+            }
+        }
+
         // Initial fetch
         viewModelScope.launch {
             fetchData()
@@ -75,6 +87,16 @@ class RestApiViewModel @Inject constructor(
 
             is RestApiViewAction.ApplyPreset -> {
                 applyPreset(viewAction.preset)
+            }
+
+            is RestApiViewAction.SavePresetTimes -> {
+                viewModelScope.launch(ioDispatcher) {
+                    apesRepository.savePresetTimes(viewAction.startTime, viewAction.endTime)
+                    val successMsg = localization.getString(R.string.apes_preset_times_updated_success)
+                    updateViewState {
+                        it.copy(userMessage = successMsg, errorMessage = null)
+                    }
+                }
             }
 
             RestApiViewAction.DismissMessage -> {

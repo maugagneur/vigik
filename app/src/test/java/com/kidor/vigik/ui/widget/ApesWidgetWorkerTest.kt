@@ -1,6 +1,7 @@
 package com.kidor.vigik.ui.widget
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -51,6 +52,8 @@ class ApesWidgetWorkerTest {
     private lateinit var glanceId: GlanceId
     @MockK
     private lateinit var apesApi: ApesApi
+    @MockK
+    private lateinit var resources: Resources
 
     @Before
     fun setUp() {
@@ -63,6 +66,9 @@ class ApesWidgetWorkerTest {
             update.captured.invoke(preferences)
         }
         mockkObject(ApesWidgetStateHelper)
+        every { context.resources } returns resources
+        every { resources.getQuantityString(any(), any()) } returns ""
+        every { resources.getQuantityString(any(), any(), *anyVararg()) } returns ""
         every { context.getString(any()) } returns ""
         every { context.getString(any(), *anyVararg()) } returns ""
         every { ApesWidgetStateHelper.setLoading(preferences, any()) } returns Unit
