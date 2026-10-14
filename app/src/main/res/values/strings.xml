@@ -230,8 +230,8 @@
     <string name="widget_apes_label">APES</string>
     <string name="widget_apes_loading_data">Loading data…</string>
     <string name="widget_apes_voice_channel_content_description">Voice channel</string>
-    <string name="widget_apes_voice_count">%d in voice</string>
-    <string name="widget_apes_voice_empty">Voice empty</string>
+    <string name="widget_apes_voice_title">Voice</string>
+    <string name="widget_apes_voice_empty">Empty</string>
     <string name="widget_apes_evening_schedule_content_description">Tonight\'s schedule</string>
     <string name="widget_apes_evening_title">Tonight</string>
     <string name="widget_apes_evening_action_check">Check</string>

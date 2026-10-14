@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
@@ -12,6 +13,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.action.Action
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
@@ -29,10 +31,11 @@ import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
-import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.layout.width
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
@@ -47,6 +50,7 @@ private val WIDGET_BACKGROUND_COLOR = Color(0xFF1E2124)
 private val TEXT_PRIMARY_COLOR = Color(0xFFFFFFFF)
 private val TEXT_SECONDARY_COLOR = Color(0xFFB9BBBE)
 private val ACCENT_GREEN_COLOR = Color(0xFF57F287)
+private val APE_AVATAR_SIZE = 64.dp
 
 /**
  * 4x1 consultative widget for APES.
@@ -66,44 +70,106 @@ class ApesWidget : GlanceAppWidget() {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
 
-            Box(
-                modifier = GlanceModifier
-                    .fillMaxSize()
-                    .appWidgetBackground()
-                    .background(ColorProvider(WIDGET_BACKGROUND_COLOR))
-                    .cornerRadius(MaterialTheme.dimensions.commonSpaceMedium)
-                    .clickable(actionStartActivity(openAppIntent)),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxSize()
-                        .padding(horizontal = MaterialTheme.dimensions.commonSpaceMedium),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // Left: Voice section
-                    VoiceSection(
-                        voiceCount = state.data.voiceCount,
-                        voiceMembers = state.data.voiceMembers,
-                        modifier = GlanceModifier.defaultWeight()
-                    )
-
-                    Spacer(modifier = GlanceModifier.width(MaterialTheme.dimensions.commonSpaceSmall))
-
-                    // Middle: Evening availability summary
-                    EveningSection(
-                        summary = state.data.eveningSummary,
-                        modifier = GlanceModifier.defaultWeight()
-                    )
-
-                    Spacer(modifier = GlanceModifier.width(MaterialTheme.dimensions.commonSpaceSmall))
-
-                    // Right: Refresh button
-                    RefreshButton(isLoading = state.isLoading)
-                }
-            }
+            ApesWidgetContent(
+                state = state,
+                onWidgetClick = actionStartActivity(openAppIntent)
+            )
         }
     }
+}
+
+/**
+ * Composable displaying the content of [ApesWidget].
+ *
+ * @param state State data of the widget.
+ * @param modifier Glance modifier to apply to the root container.
+ * @param onWidgetClick Optional click action on the widget root.
+ */
+@Composable
+internal fun ApesWidgetContent(
+    state: ApesWidgetState,
+    modifier: GlanceModifier = GlanceModifier,
+    onWidgetClick: Action? = null
+) {
+    val contentModifier = GlanceModifier
+        .fillMaxSize()
+        .appWidgetBackground()
+        .background(ColorProvider(WIDGET_BACKGROUND_COLOR))
+        .cornerRadius(MaterialTheme.dimensions.commonSpaceMedium)
+        .let { baseModifier ->
+            if (onWidgetClick != null) {
+                baseModifier.clickable(onWidgetClick)
+            } else {
+                baseModifier
+            }
+        }
+
+    Box(
+        modifier = modifier.then(contentModifier),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .padding(horizontal = MaterialTheme.dimensions.commonSpaceMedium),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Left: Voice section
+            VoiceSection(
+                voiceCount = state.data.voiceCount,
+                voiceMembers = state.data.voiceMembers,
+                modifier = GlanceModifier.defaultWeight()
+            )
+
+            Spacer(modifier = GlanceModifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
+
+            // Center: Ape avatar
+            ApeAvatar(voiceCount = state.data.voiceCount)
+
+            Spacer(modifier = GlanceModifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
+
+            // Middle: Evening availability summary
+            EveningSection(
+                summary = state.data.eveningSummary,
+                modifier = GlanceModifier.defaultWeight()
+            )
+
+            // Right: Refresh button
+            RefreshButton(isLoading = state.isLoading)
+        }
+    }
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 380, heightDp = 90)
+@Composable
+private fun ApesWidgetEmptyPreview() {
+    ApesWidgetContent(
+        state = ApesWidgetState(
+            isLoading = true,
+            data = ApesWidgetData(
+                voiceCount = 0,
+                voiceMembers = "",
+                eveningSummary = ""
+            )
+        )
+    )
+}
+
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 380, heightDp = 90)
+@Composable
+private fun ApesWidgetActivePreview() {
+    ApesWidgetContent(
+        state = ApesWidgetState(
+            isLoading = false,
+            data = ApesWidgetData(
+                voiceCount = 3,
+                voiceMembers = "Kidor, Player 2, xXx-DarkSasuke-xXx, Legolas38",
+                eveningSummary = "3 dispos"
+            )
+        )
+    )
 }
 
 @Composable
@@ -127,34 +193,49 @@ private fun VoiceSection(
         )
         Spacer(modifier = GlanceModifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
         Column(
-            modifier = GlanceModifier.fillMaxWidth(),
+            modifier = GlanceModifier.defaultWeight(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (voiceCount > 0) {
-                    context.getString(R.string.widget_apes_voice_count, voiceCount)
-                } else {
-                    context.getString(R.string.widget_apes_voice_empty)
-                },
+                text = context.getString(R.string.widget_apes_voice_title),
                 style = TextStyle(
                     color = ColorProvider(if (voiceCount > 0) ACCENT_GREEN_COLOR else TEXT_PRIMARY_COLOR),
                     fontSize = MaterialTheme.dimensions.textSizeSmall,
                     fontWeight = FontWeight.Bold
                 ),
-                maxLines = 2
+                maxLines = 3
             )
-            if (voiceMembers.isNotEmpty()) {
-                Text(
-                    text = voiceMembers,
-                    style = TextStyle(
-                        color = ColorProvider(TEXT_SECONDARY_COLOR),
-                        fontSize = MaterialTheme.dimensions.textSizeXXSmall
-                    ),
-                    maxLines = 2
-                )
-            }
+            Text(
+                text = if (voiceCount > 0) {
+                    voiceMembers
+                } else {
+                    context.getString(R.string.widget_apes_voice_empty)
+                },
+                style = TextStyle(
+                    color = ColorProvider(TEXT_SECONDARY_COLOR),
+                    fontSize = MaterialTheme.dimensions.textSizeXXSmall
+                ),
+                maxLines = 3
+            )
         }
     }
+}
+
+@Composable
+private fun ApeAvatar(
+    voiceCount: Int,
+    modifier: GlanceModifier = GlanceModifier
+) {
+    val avatarRes = if (voiceCount > 0) {
+        R.drawable.widget_apes_avatar_active
+    } else {
+        R.drawable.widget_apes_avatar_empty
+    }
+    Image(
+        provider = ImageProvider(resId = avatarRes),
+        contentDescription = null,
+        modifier = modifier.size(APE_AVATAR_SIZE)
+    )
 }
 
 @Composable
@@ -175,7 +256,7 @@ private fun EveningSection(
         )
         Spacer(modifier = GlanceModifier.width(MaterialTheme.dimensions.commonSpaceXSmall))
         Column(
-            modifier = GlanceModifier.fillMaxWidth(),
+            modifier = GlanceModifier.defaultWeight(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -185,7 +266,7 @@ private fun EveningSection(
                     fontSize = MaterialTheme.dimensions.textSizeSmall,
                     fontWeight = FontWeight.Bold
                 ),
-                maxLines = 2
+                maxLines = 3
             )
             Text(
                 text = summary.ifEmpty { context.getString(R.string.widget_apes_evening_action_check) },
@@ -194,7 +275,7 @@ private fun EveningSection(
                     fontSize = MaterialTheme.dimensions.textSizeXXSmall,
                     textAlign = TextAlign.Start
                 ),
-                maxLines = 2
+                maxLines = 3
             )
         }
     }

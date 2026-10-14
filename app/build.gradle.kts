@@ -64,6 +64,8 @@ dependencies {
 
     // Widget
     implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.preview)
+    debugImplementation(libs.androidx.glance.appwidget.preview)
 
     // Worker
     implementation(libs.androidx.work.runtime)
