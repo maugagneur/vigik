@@ -3,7 +3,6 @@ package com.kidor.vigik.data.apes
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.DayOut
 import com.kidor.vigik.data.apes.model.MeOut
-import com.kidor.vigik.data.apes.model.NowOut
 import com.kidor.vigik.data.apes.model.RangesIn
 import com.kidor.vigik.data.apes.model.VoiceOut
 import retrofit2.Response
@@ -29,12 +28,6 @@ interface ApesApi {
      */
     @GET("api/v1/voice")
     suspend fun getVoice(): Response<VoiceOut>
-
-    /**
-     * Retrieves group snapshot right now.
-     */
-    @GET("api/v1/status/now")
-    suspend fun getStatusNow(): Response<NowOut>
 
     /**
      * Retrieves calculated group availability between two dates.

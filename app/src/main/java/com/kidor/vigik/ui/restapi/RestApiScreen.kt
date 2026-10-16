@@ -82,6 +82,7 @@ import com.kidor.vigik.data.apes.AvailabilityPreset
 import com.kidor.vigik.data.apes.DEFAULT_PRESET_END_TIME
 import com.kidor.vigik.data.apes.DEFAULT_PRESET_START_TIME
 import com.kidor.vigik.data.apes.model.AvailabilityOut
+import com.kidor.vigik.data.apes.model.AvailabilityStatus
 import com.kidor.vigik.data.apes.model.MeOut
 import com.kidor.vigik.data.apes.model.MemberAvailability
 import com.kidor.vigik.data.apes.model.SlotOut
@@ -109,10 +110,6 @@ internal const val PRESET_CLEAR_BUTTON_TEST_TAG = "preset_clear_button"
 internal const val PRESET_SETTINGS_BUTTON_TEST_TAG = "preset_settings_button"
 internal const val SOURCE_LABEL_TEST_TAG = "source_label"
 
-private const val STATUS_CONFIRMED = 100
-private const val STATUS_PROBABLE_THRESHOLD = 66
-private const val STATUS_POSSIBLE_THRESHOLD = 33
-private const val STATUS_UNAVAILABLE = 0
 private const val HIGH_QUORUM_THRESHOLD = 2
 
 private val LiveGreenColor = Color(0xFF22C55E)
@@ -126,6 +123,7 @@ private val ZeroQuorumColor = Color(0xFF94A3B8)
 private val StatusAvailableColor = Color(0xFF16A34A)
 private val StatusProbableColor = Color(0xFFEAB308)
 private val StatusPossibleColor = Color(0xFFF97316)
+private val StatusUncertainColor = Color(0xFFD97706)
 private val StatusUnknownColor = Color(0xFF94A3B8)
 
 /**
@@ -140,9 +138,8 @@ fun RestApiScreen(
 
     ObserveViewState(viewModel) { state ->
         // Handle Snackbar messages
-        LaunchedEffect(state.userMessage, state.errorMessage) {
-            val message = state.userMessage ?: state.errorMessage
-            if (message != null) {
+        LaunchedEffect(state.userMessage) {
+            state.userMessage?.let { message ->
                 snackbarHostState.showSnackbar(message)
                 viewModel.handleAction(RestApiViewAction.DismissMessage)
             }
@@ -379,22 +376,20 @@ internal fun EveningTimelineCard(availabilityData: AvailabilityOut?) {
             }
 
             val eveningDate = remember { ApesDateHelper.getCurrentEveningDate() }
-            val slots = availabilityData?.slots.orEmpty()
             val members = availabilityData?.members.orEmpty()
 
-            val eveningSlots = remember(slots, eveningDate) {
-                slots.mapIndexed { index, slot -> index to slot }
-                    .filter { (_, slot) -> ApesDateHelper.isSlotInEvening(slot.local, eveningDate) }
+            val eveningSlots = remember(availabilityData, eveningDate) {
+                availabilityData?.getEveningSlots(eveningDate).orEmpty()
             }
 
-            val (peakCount, peakSlotHour) = remember(eveningSlots, members) {
-                findPeakEveningSlot(eveningSlots, members)
+            val (peakCount, peakSlotHour) = remember(availabilityData, eveningSlots) {
+                availabilityData?.findPeakEveningSlot(eveningSlots) ?: (0 to "")
             }
 
             EveningPeakSection(peakCount = peakCount, peakSlotHour = peakSlotHour)
 
-            if (eveningSlots.isNotEmpty()) {
-                EveningSlotsBar(eveningSlots = eveningSlots, members = members)
+            if (availabilityData != null && eveningSlots.isNotEmpty()) {
+                EveningSlotsBar(eveningSlots = eveningSlots, availabilityData = availabilityData)
             }
 
             if (members.isNotEmpty()) {
@@ -432,7 +427,7 @@ private fun EveningPeakSection(peakCount: Int, peakSlotHour: String) {
 @Composable
 private fun EveningSlotsBar(
     eveningSlots: List<Pair<Int, SlotOut>>,
-    members: List<MemberAvailability>
+    availabilityData: AvailabilityOut
 ) {
     Row(
         modifier = Modifier
@@ -444,7 +439,7 @@ private fun EveningSlotsBar(
         eveningSlots.forEach { (index, slot) ->
             EveningSlotChip(
                 hourLabel = ApesDateHelper.formatSlotHour(slot.local),
-                playerCount = countAvailableMembers(members, index)
+                playerCount = availabilityData.countAvailableMembers(index)
             )
         }
     }
@@ -475,47 +470,12 @@ private fun MembersAvailabilitySection(
     }
 }
 
-/**
- * Finds the peak evening slot with the highest number of available members.
- *
- * @param eveningSlots The list of evening slot indexes and their metadata.
- * @param members      The list of members and their availability statuses.
- * @return A pair containing the maximum count of available members and the formatted hour of the peak slot.
- */
-private fun findPeakEveningSlot(
-    eveningSlots: List<Pair<Int, SlotOut>>,
-    members: List<MemberAvailability>
-): Pair<Int, String> {
-    var peakCount = 0
-    var peakSlotHour = ""
-    eveningSlots.forEach { (index, slot) ->
-        val count = countAvailableMembers(members, index)
-        if (count > peakCount) {
-            peakCount = count
-            peakSlotHour = ApesDateHelper.formatSlotHour(slot.local)
-        }
-    }
-    return peakCount to peakSlotHour
-}
-
-private fun countAvailableMembers(members: List<MemberAvailability>, slotIndex: Int): Int {
-    return members.count { member ->
-        val status = member.statuses?.getOrNull(slotIndex)
-        status != null && status >= STATUS_PROBABLE_THRESHOLD
-    }
-}
-
 @Composable
 private fun EveningSlotChip(hourLabel: String, playerCount: Int) {
-    val bgColor = when {
-        playerCount >= HIGH_QUORUM_THRESHOLD -> HighQuorumColor.copy(alpha = 0.2f)
-        playerCount > 0 -> MediumQuorumColor.copy(alpha = 0.2f)
-        else -> MaterialTheme.colorScheme.surfaceVariant
-    }
-    val contentColor = when {
-        playerCount >= HIGH_QUORUM_THRESHOLD -> HighQuorumColor
-        playerCount > 0 -> MediumQuorumColor
-        else -> ZeroQuorumColor
+    val (bgColor, contentColor) = when {
+        playerCount >= HIGH_QUORUM_THRESHOLD -> HighQuorumColor.copy(alpha = 0.2f) to HighQuorumColor
+        playerCount > 0 -> MediumQuorumColor.copy(alpha = 0.2f) to MediumQuorumColor
+        else -> MaterialTheme.colorScheme.surfaceVariant to ZeroQuorumColor
     }
 
     Column(
@@ -565,16 +525,13 @@ private fun MemberAvailabilityRow(
         )
 
         // Availability indicator for this evening
-        val maxStatusInEvening = eveningSlots.maxOfOrNull { (index, _) ->
-            member.statuses?.getOrNull(index) ?: -1
-        } ?: -1
-
-        val (statusTextRes, statusColor) = when {
-            maxStatusInEvening == STATUS_CONFIRMED -> R.string.apes_status_available to StatusAvailableColor
-            maxStatusInEvening >= STATUS_PROBABLE_THRESHOLD -> R.string.apes_status_probable to StatusProbableColor
-            maxStatusInEvening >= STATUS_POSSIBLE_THRESHOLD -> R.string.apes_status_possible to StatusPossibleColor
-            maxStatusInEvening == STATUS_UNAVAILABLE -> R.string.apes_status_unavailable to MaterialTheme.colorScheme.error
-            else -> R.string.apes_status_unknown to StatusUnknownColor
+        val (statusTextRes, statusColor) = when (member.getEveningStatus(eveningSlots)) {
+            AvailabilityStatus.CONFIRMED -> R.string.apes_status_available to StatusAvailableColor
+            AvailabilityStatus.PROBABLE -> R.string.apes_status_probable to StatusProbableColor
+            AvailabilityStatus.POSSIBLE -> R.string.apes_status_possible to StatusPossibleColor
+            AvailabilityStatus.UNCERTAIN -> R.string.apes_status_uncertain to StatusUncertainColor
+            AvailabilityStatus.UNAVAILABLE -> R.string.apes_status_unavailable to MaterialTheme.colorScheme.error
+            AvailabilityStatus.UNKNOWN -> R.string.apes_status_unknown to StatusUnknownColor
         }
 
         Box(
@@ -932,7 +889,7 @@ private fun MemberAvatar(
             .border(1.dp, MaterialTheme.colorScheme.outlineVariant, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        if (!fullUrl.isNullOrBlank()) {
+        if (fullUrl != null) {
             AsyncImage(
                 model = fullUrl,
                 contentDescription = name,
@@ -987,22 +944,32 @@ private fun ApesContentWithLiveVoiceAndEveningPreview() {
         MemberAvailability(
             id = "1",
             displayName = "Alice",
-            statuses = listOf(STATUS_CONFIRMED, STATUS_CONFIRMED, STATUS_CONFIRMED, STATUS_PROBABLE_THRESHOLD)
+            statuses = listOf(
+                AvailabilityStatus.CONFIRMED.threshold,
+                AvailabilityStatus.CONFIRMED.threshold,
+                AvailabilityStatus.CONFIRMED.threshold,
+                AvailabilityStatus.PROBABLE.threshold
+            )
         ),
         MemberAvailability(
             id = "2",
             displayName = "Bob",
             statuses = listOf(
-                STATUS_PROBABLE_THRESHOLD,
-                STATUS_PROBABLE_THRESHOLD,
-                STATUS_POSSIBLE_THRESHOLD,
-                STATUS_UNAVAILABLE
+                AvailabilityStatus.PROBABLE.threshold,
+                AvailabilityStatus.PROBABLE.threshold,
+                AvailabilityStatus.POSSIBLE.threshold,
+                AvailabilityStatus.UNAVAILABLE.threshold
             )
         ),
         MemberAvailability(
             id = "3",
             displayName = "Charlie",
-            statuses = listOf(STATUS_POSSIBLE_THRESHOLD, STATUS_POSSIBLE_THRESHOLD, STATUS_UNAVAILABLE, STATUS_UNAVAILABLE)
+            statuses = listOf(
+                AvailabilityStatus.POSSIBLE.threshold,
+                AvailabilityStatus.POSSIBLE.threshold,
+                AvailabilityStatus.UNAVAILABLE.threshold,
+                AvailabilityStatus.UNAVAILABLE.threshold
+            )
         )
     )
     val voiceMembers = listOf(

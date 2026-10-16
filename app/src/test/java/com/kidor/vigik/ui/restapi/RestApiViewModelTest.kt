@@ -13,7 +13,6 @@ import com.kidor.vigik.data.apes.DEFAULT_PRESET_START_TIME
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.DayOut
 import com.kidor.vigik.data.apes.model.MeOut
-import com.kidor.vigik.data.apes.model.NowOut
 import com.kidor.vigik.data.apes.model.VoiceOut
 import com.kidor.vigik.utils.AssertUtils.assertEquals
 import com.kidor.vigik.utils.AssertUtils.assertFalse
@@ -58,7 +57,6 @@ class RestApiViewModelTest {
     private val presetEndTimeFlow = MutableStateFlow(DEFAULT_PRESET_END_TIME)
 
     private val dummyVoice = VoiceOut(now = "2026-10-13T20:00:00Z", members = emptyList())
-    private val dummyNow = NowOut(now = "2026-10-13T20:00:00Z", timezone = "Europe/Paris", members = emptyList())
     private val dummyAvail = AvailabilityOut(
         fromDate = "2026-10-13",
         toDate = "2026-10-15",
@@ -75,7 +73,6 @@ class RestApiViewModelTest {
         every { apesRepository.getPresetStartTime() } returns presetStartTimeFlow
         every { apesRepository.getPresetEndTime() } returns presetEndTimeFlow
         coEvery { apesRepository.getVoice() } returns NetworkResult.Success(200, dummyVoice)
-        coEvery { apesRepository.getStatusNow() } returns NetworkResult.Success(200, dummyNow)
         coEvery { apesRepository.getAvailability(any(), any()) } returns NetworkResult.Success(200, dummyAvail)
         coEvery { apesRepository.getMe(any()) } returns NetworkResult.Success(200, dummyMe)
         coEvery { apesRepository.saveUserToken(any()) } answers {
@@ -111,12 +108,10 @@ class RestApiViewModelTest {
         val state = viewModel.viewState.value
         assertNotNull(state, "ViewState")
         assertEquals(dummyVoice, state?.voiceData, "Voice data")
-        assertEquals(dummyNow, state?.nowData, "Now data")
         assertEquals(dummyAvail, state?.availabilityData, "Availability data")
-        assertFalse(state?.isLoading == true, "Is loading should be false after init")
+        assertFalse(state?.isRefreshing == true, "Is refreshing should be false after init")
 
         coVerify { apesRepository.getVoice() }
-        coVerify { apesRepository.getStatusNow() }
         coVerify { apesRepository.getAvailability(any(), any()) }
     }
 
@@ -151,11 +146,9 @@ class RestApiViewModelTest {
             val completedState = awaitItem()
             assertFalse(completedState.isRefreshing, "Should not be refreshing")
             assertEquals(dummyVoice, completedState.voiceData, "Voice data")
-            assertEquals(dummyNow, completedState.nowData, "Now data")
             assertEquals(dummyAvail, completedState.availabilityData, "Availability data")
 
             coVerify(atLeast = 2) { apesRepository.getVoice() }
-            coVerify(atLeast = 2) { apesRepository.getStatusNow() }
             coVerify(atLeast = 2) { apesRepository.getAvailability(any(), any()) }
 
             cancelAndIgnoreRemainingEvents()
@@ -203,7 +196,6 @@ class RestApiViewModelTest {
 
         val state = viewModel.viewState.value
         assertEquals("Dispos mises à jour !", state?.userMessage, "User message")
-        assertNull(state?.errorMessage, "Error message")
         assertFalse(state?.isSubmittingPreset == true, "Is submitting preset")
 
         // Verify data was fetched again after preset
@@ -224,8 +216,7 @@ class RestApiViewModelTest {
         viewModel.handleAction(RestApiViewAction.ApplyPreset(AvailabilityPreset.ABSENT_TONIGHT))
 
         val state = viewModel.viewState.value
-        assertEquals("Erreur dispo", state?.errorMessage, "Error message")
-        assertNull(state?.userMessage, "User message")
+        assertEquals("Erreur dispo", state?.userMessage, "User message")
         assertFalse(state?.isSubmittingPreset == true, "Is submitting preset")
     }
 
@@ -244,7 +235,6 @@ class RestApiViewModelTest {
 
         viewModel.handleAction(RestApiViewAction.DismissMessage)
         assertNull(viewModel.viewState.value?.userMessage, "User message cleared")
-        assertNull(viewModel.viewState.value?.errorMessage, "Error message cleared")
     }
 
     @Test

@@ -15,8 +15,6 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
 
-private const val STATUS_PROBABLE_THRESHOLD = 66
-
 /**
  * Worker that refreshes the state of [ApesWidget].
  */
@@ -81,44 +79,20 @@ class ApesWidgetWorker @AssistedInject constructor(
     }
 
     private fun buildEveningSummary(data: AvailabilityOut?): String {
-        val slots = data?.slots.orEmpty()
-        val members = data?.members.orEmpty()
-        if (data == null || slots.isEmpty() || members.isEmpty()) {
+        if (data == null || data.slots.isNullOrEmpty() || data.members.isNullOrEmpty()) {
             return context.getString(R.string.widget_apes_no_availability_tonight)
         }
 
         val eveningDate = ApesDateHelper.getCurrentEveningDate()
-        var maxPlayers = 0
-        var peakTimeLabel = ""
-
-        slots.forEachIndexed { index, slot ->
-            if (ApesDateHelper.isSlotInEvening(slot.local, eveningDate)) {
-                val count = members.count { member ->
-                    val status = member.statuses?.getOrNull(index)
-                    status != null && status >= STATUS_PROBABLE_THRESHOLD
-                }
-                if (count > maxPlayers) {
-                    maxPlayers = count
-                    peakTimeLabel = ApesDateHelper.formatSlotHour(slot.local)
-                }
-            }
-        }
+        val (maxPlayers, peakTimeLabel) = data.findPeakEveningSlot(eveningDate)
 
         return if (maxPlayers > 0) {
-            if (peakTimeLabel.isNotEmpty()) {
-                context.resources.getQuantityString(
-                    R.plurals.widget_apes_peak_players_at_time,
-                    maxPlayers,
-                    maxPlayers,
-                    peakTimeLabel
-                )
-            } else {
-                context.resources.getQuantityString(
-                    R.plurals.widget_apes_peak_players_tonight,
-                    maxPlayers,
-                    maxPlayers
-                )
-            }
+            context.resources.getQuantityString(
+                R.plurals.widget_apes_peak_players_at_time,
+                maxPlayers,
+                maxPlayers,
+                peakTimeLabel
+            )
         } else {
             context.getString(R.string.widget_apes_no_confirmed_availability)
         }

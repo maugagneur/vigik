@@ -3,7 +3,6 @@ package com.kidor.vigik.data.apes
 import com.kidor.vigik.data.apes.model.AvailabilityOut
 import com.kidor.vigik.data.apes.model.DayOut
 import com.kidor.vigik.data.apes.model.MeOut
-import com.kidor.vigik.data.apes.model.NowOut
 import com.kidor.vigik.data.apes.model.VoiceOut
 import com.kidor.vigik.utils.NetworkResult
 import kotlinx.coroutines.flow.Flow
@@ -20,8 +19,6 @@ interface ApesRepository {
     suspend fun clearUserToken()
     /** Fetches active voice channel members. */
     suspend fun getVoice(): NetworkResult<VoiceOut>
-    /** Fetches snapshot of players right now. */
-    suspend fun getStatusNow(): NetworkResult<NowOut>
     /** Fetches group availability between two dates. */
     suspend fun getAvailability(fromDate: String, toDate: String): NetworkResult<AvailabilityOut>
     /** Fetches current user profile and slots. */

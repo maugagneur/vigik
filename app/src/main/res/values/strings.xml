@@ -190,6 +190,7 @@
     <string name="apes_status_available">Available (100%)</string>
     <string name="apes_status_probable">Probable (66%)</string>
     <string name="apes_status_possible">Possible (33%)</string>
+    <string name="apes_status_uncertain">Uncertain</string>
     <string name="apes_status_unavailable">Unavailable (0%)</string>
     <string name="apes_status_unknown">Unknown</string>
     <string name="apes_dispo_section_title">My availability tonight</string>
@@ -254,10 +255,6 @@
     <plurals name="widget_apes_peak_players_at_time">
         <item quantity="one">Peak at %1$d player at %2$s</item>
         <item quantity="other">Peak at %1$d players at %2$s</item>
-    </plurals>
-    <plurals name="widget_apes_peak_players_tonight">
-        <item quantity="one">Peak at %d player tonight</item>
-        <item quantity="other">Peak at %d players tonight</item>
     </plurals>
     <string name="widget_apes_no_confirmed_availability">No confirmed availability</string>
 </resources>

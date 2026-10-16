@@ -5,9 +5,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.kidor.vigik.data.PreferencesKeys
 import com.kidor.vigik.data.apes.model.AvailabilityOut
+import com.kidor.vigik.data.apes.model.AvailabilityStatus
 import com.kidor.vigik.data.apes.model.DayOut
 import com.kidor.vigik.data.apes.model.MeOut
-import com.kidor.vigik.data.apes.model.NowOut
 import com.kidor.vigik.data.apes.model.RangeIn
 import com.kidor.vigik.data.apes.model.RangesIn
 import com.kidor.vigik.data.apes.model.VoiceOut
@@ -49,10 +49,6 @@ class ApesRepositoryImpl @Inject constructor(
         return NetworkHelper.handleApi { apesApi.getVoice() }
     }
 
-    override suspend fun getStatusNow(): NetworkResult<NowOut> {
-        return NetworkHelper.handleApi { apesApi.getStatusNow() }
-    }
-
     override suspend fun getAvailability(fromDate: String, toDate: String): NetworkResult<AvailabilityOut> {
         return NetworkHelper.handleApi { apesApi.getAvailability(fromDate, toDate) }
     }
@@ -73,10 +69,10 @@ class ApesRepositoryImpl @Inject constructor(
 
         val ranges = when (preset) {
             AvailabilityPreset.PRESENT_TONIGHT -> listOf(
-                RangeIn(start = startTime, end = endTime, status = 100)
+                RangeIn(start = startTime, end = endTime, status = AvailabilityStatus.CONFIRMED.threshold)
             )
             AvailabilityPreset.ABSENT_TONIGHT -> listOf(
-                RangeIn(start = "20:00", end = "03:00", status = 0)
+                RangeIn(start = "20:00", end = "03:00", status = AvailabilityStatus.UNAVAILABLE.threshold)
             )
             AvailabilityPreset.CLEAR -> emptyList()
         }

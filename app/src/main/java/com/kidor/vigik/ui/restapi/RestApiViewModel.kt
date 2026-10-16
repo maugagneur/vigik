@@ -29,7 +29,7 @@ class RestApiViewModel @Inject constructor(
 ) : BaseViewModel<RestApiViewAction, RestApiViewState, Nothing>() {
 
     init {
-        _viewState.value = RestApiViewState(isLoading = true)
+        _viewState.value = RestApiViewState(isRefreshing = true)
 
         // Observe user token
         viewModelScope.launch {
@@ -94,13 +94,13 @@ class RestApiViewModel @Inject constructor(
                     apesRepository.savePresetTimes(viewAction.startTime, viewAction.endTime)
                     val successMsg = localization.getString(R.string.apes_preset_times_updated_success)
                     updateViewState {
-                        it.copy(userMessage = successMsg, errorMessage = null)
+                        it.copy(userMessage = successMsg)
                     }
                 }
             }
 
             RestApiViewAction.DismissMessage -> {
-                updateViewState { it.copy(userMessage = null, errorMessage = null) }
+                updateViewState { it.copy(userMessage = null) }
             }
         }
     }
@@ -111,34 +111,15 @@ class RestApiViewModel @Inject constructor(
         val toDate = ApesDateHelper.formatDate(eveningDate.plusDays(2))
 
         val voiceDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getVoice() }
-        val statusNowDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getStatusNow() }
         val availabilityDeferred = viewModelScope.async(ioDispatcher) { apesRepository.getAvailability(fromDate, toDate) }
 
-        val voiceResult = voiceDeferred.await()
-        val statusNowResult = statusNowDeferred.await()
-        val availabilityResult = availabilityDeferred.await()
-
-        val voice = when (voiceResult) {
-            is NetworkResult.Success -> voiceResult.data
-            else -> null
-        }
-
-        val statusNow = when (statusNowResult) {
-            is NetworkResult.Success -> statusNowResult.data
-            else -> null
-        }
-
-        val availability = when (availabilityResult) {
-            is NetworkResult.Success -> availabilityResult.data
-            else -> null
-        }
+        val voice = (voiceDeferred.await() as? NetworkResult.Success)?.data
+        val availability = (availabilityDeferred.await() as? NetworkResult.Success)?.data
 
         updateViewState { current ->
             current.copy(
-                isLoading = false,
                 isRefreshing = false,
                 voiceData = voice ?: current.voiceData,
-                nowData = statusNow ?: current.nowData,
                 availabilityData = availability ?: current.availabilityData
             )
         }
@@ -171,7 +152,6 @@ class RestApiViewModel @Inject constructor(
                     updateViewState {
                         it.copy(
                             userMessage = successMsg,
-                            errorMessage = null,
                             isSubmittingPreset = false
                         )
                     }
@@ -181,12 +161,11 @@ class RestApiViewModel @Inject constructor(
                 is NetworkResult.Error -> {
                     val errorMsg = localization.getString(
                         R.string.apes_dispo_update_error,
-                        result.errorMessage ?: "Erreur ${result.code}"
+                        result.errorMessage ?: "Error ${result.code}"
                     )
                     updateViewState {
                         it.copy(
-                            errorMessage = errorMsg,
-                            userMessage = null,
+                            userMessage = errorMsg,
                             isSubmittingPreset = false
                         )
                     }
@@ -194,12 +173,11 @@ class RestApiViewModel @Inject constructor(
                 is NetworkResult.Exception -> {
                     val errorMsg = localization.getString(
                         R.string.apes_dispo_update_error,
-                        result.throwable.localizedMessage ?: "Erreur réseau"
+                        result.throwable.localizedMessage ?: "Network error"
                     )
                     updateViewState {
                         it.copy(
-                            errorMessage = errorMsg,
-                            userMessage = null,
+                            userMessage = errorMsg,
                             isSubmittingPreset = false
                         )
                     }

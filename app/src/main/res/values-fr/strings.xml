@@ -181,6 +181,7 @@
     <string name="apes_status_available">Disponible (100%)</string>
     <string name="apes_status_probable">Probable (66%)</string>
     <string name="apes_status_possible">Possible (33%)</string>
+    <string name="apes_status_uncertain">Incertain</string>
     <string name="apes_status_unavailable">Non dispo (0%)</string>
     <string name="apes_status_unknown">Inconnu</string>
     <string name="apes_dispo_section_title">Mes disponibilités ce soir</string>
@@ -248,10 +249,6 @@
     <plurals name="widget_apes_peak_players_at_time">
         <item quantity="one">Pic à %1$d joueur à %2$s</item>
         <item quantity="other">Pic à %1$d joueurs à %2$s</item>
-    </plurals>
-    <plurals name="widget_apes_peak_players_tonight">
-        <item quantity="one">Pic à %d joueur ce soir</item>
-        <item quantity="other">Pic à %d joueurs ce soir</item>
     </plurals>
     <string name="widget_apes_no_confirmed_availability">Aucune dispo confirmée</string>
 </resources>
